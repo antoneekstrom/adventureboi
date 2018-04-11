@@ -1,4 +1,4 @@
 
 public class Test {
-	public int epicDIARRHEA = "le epic";
+	public int epicDIARRHEA = "boi";
 }
