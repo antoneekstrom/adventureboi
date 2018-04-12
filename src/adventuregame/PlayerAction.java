@@ -39,11 +39,6 @@ public class PlayerAction extends AbstractAction {
 				player.MOVACC = 1;
 			}
 		}
-		if (action == "uppressed") {
-			player.setDirection("up");
-		} else if (action == "upreleased") {
-			player.setDirection("none");
-		}
 		if (action == "optionsp") {
 			//frame.setVisible(false);
 			//frame.dispose();

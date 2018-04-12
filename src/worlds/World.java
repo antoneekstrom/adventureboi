@@ -59,22 +59,14 @@ public class World extends JPanel implements ActionListener {
 		this.getActionMap().put("leftpressed", new PlayerAction("leftpressed", p, frame));
 		//up
 		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(up1, 0, true), "upreleased");
-		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(up2, 0, true), "upreleased");
 		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(up1, 0, false), "uppressed");
-		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(up2, 0, false), "uppressed");
 		this.getActionMap().put("uppressed", new PlayerJump("uppressed", p));
 		this.getActionMap().put("upreleased", new PlayerJump("upreleased", p));
 		//down
-		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(down, 0, true), "downreleased");
-		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(down, 0, false), "downpressed");
-		this.getActionMap().put("downpressed", new PlayerJump("downpressed", p));
-		this.getActionMap().put("downreleased", new PlayerJump("downreleased", p));
-		//exit
-		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(options, 0, false), "optionsp");
-		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(options, 0, true), "optionsr");
-		this.getActionMap().put("downpressed", new PlayerAction("optionsp", p, frame));
-		this.getActionMap().put("downreleased", new PlayerAction("optionsr", p, frame));
-		
+		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(down, 0, true), "dr");
+		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(down, 0, false), "dp");
+		this.getActionMap().put("dr", new PlayerJump("dr", p));
+		this.getActionMap().put("dp", new PlayerJump("dp", p));
 	}
 	
 	public void paintComponent(Graphics g) {

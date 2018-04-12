@@ -38,6 +38,7 @@ public class Stage1 extends World {
 	private int ptomd;
 	private RectangleObject r2;
 	private Line l1;
+	private RectangleObject r3;
 	
 	public Stage1(Main f) {		
 		frame = f;
@@ -55,6 +56,7 @@ public class Stage1 extends World {
 		cl = new PlayerCollision(p);
 		c = new Camera(dim);
 		r2 = new RectangleObject(frame, this);
+		r3 = new RectangleObject(frame, this);
 		l1 = new Line(frame, this);
 		
 		ready = true;
@@ -72,6 +74,10 @@ public class Stage1 extends World {
 		
 		r2.setLocation((int)player.getX(), (int)player.getY());
 		r2.setSize(10, 10);
+		
+		r3.setLocation(200, 200);
+		r3.setSize(50, 50);
+		r3.setGravity(true);
 		
 		p.setGravity(true); 
 		p.setLocation(100, 300);
@@ -99,6 +105,7 @@ public class Stage1 extends World {
 			p.paint(g);
 			r2.paint(g);
 			l1.paint(g);
+			r3.paint(g);
 		}
 		
 	}
@@ -117,6 +124,7 @@ public class Stage1 extends World {
 		info.text("distance:" + ptomd);
 		g1.update();
 		r1.update();
+		r3.update();
 		repaint();
 	}
 	
