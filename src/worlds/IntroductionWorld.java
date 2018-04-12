@@ -22,7 +22,7 @@ public class IntroductionWorld extends World implements ActionListener, ImageObs
 
 	private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 	private Main frame;
-	private int FRAMERATE = 24; /* milliseconds, refresh timer */
+	private int FRAMERATE = 14; /* milliseconds, refresh timer */
 	public Timer timer;
 	private World nextworld;
 	//objects

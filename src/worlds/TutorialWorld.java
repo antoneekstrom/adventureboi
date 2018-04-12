@@ -18,6 +18,7 @@ import adventuregame.Player;
 import adventuregame.PlayerCollision;
 import adventuregame.RectangleObject;
 import adventuregame.Shoot;
+import adventuregame.Spike;
 import adventuregame.Text;
 
 public class TutorialWorld extends World implements ActionListener, ImageObserver {
@@ -36,6 +37,7 @@ public class TutorialWorld extends World implements ActionListener, ImageObserve
 	private RectangleObject r2;
 	private PlayerCollision cl;
 	private Text t1;
+	private Spike sp1;
 	//colors
 	private Color sky = new Color(142, 185, 255);
 	
@@ -54,6 +56,7 @@ public class TutorialWorld extends World implements ActionListener, ImageObserve
 		c = new Camera(dim);
 		t1 = new Text(frame, this, "hold UP to jump");
 		cl = new PlayerCollision(p);
+		sp1 = new Spike(frame, this);
 		//text obj
 		t1.setCOLOR(Color.BLACK);
 		t1.type("Comic Sans MS");
@@ -68,6 +71,10 @@ public class TutorialWorld extends World implements ActionListener, ImageObserve
 		r1.setLocation(500, 100);
 		r1.setSize(200, 200);
 		r1.setGravity(true);
+		
+		sp1.setLocation(1500, 100);
+		sp1.setSize(100, 100);
+		sp1.setGravity(true);
 		
 		r2.setLocation(1000, 100);
 		r2.setSize(100, 300);
@@ -84,6 +91,8 @@ public class TutorialWorld extends World implements ActionListener, ImageObserve
 		c.add(r1);
 		c.add(r2);
 		c.add(t1);
+		c.add(sp1);
+		cl.add(sp1.getObjectRect());
 		cl.add(g1.getObjectRect());
 		cl.add(r1.getObjectRect());
 		cl.add(r2.getObjectRect());
@@ -100,15 +109,21 @@ public class TutorialWorld extends World implements ActionListener, ImageObserve
 		r1.paint(g);
 		t1.paint(g);
 		p.paint(g);
+		sp1.paint(g);
 	}
 
 	//timer
 	public void actionPerformed(ActionEvent arg0) {
 		t1.update();
 		r1.update();
+		sp1.update();
 		r2.update();
+		if (p.getObjectRect().intersects(sp1.getObjectRect())) {
+			p.die();
+		}
 		g1.checkCollision(r1);
 		g1.checkCollision(r2);
+		g1.checkCollision(sp1);
 		p.update();
 		cl.pRun(p);
 		c.run(p);

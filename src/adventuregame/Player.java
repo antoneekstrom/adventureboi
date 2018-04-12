@@ -1,6 +1,7 @@
 package adventuregame;
 
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -11,6 +12,8 @@ import worlds.World;
 
 public class Player extends Object {
 
+	private Point spawnpoint;
+	
 	//images and animation
 	private BufferedImage playeractive;
 	private BufferedImage playerstill;
@@ -43,7 +46,7 @@ public class Player extends Object {
 	
 	public Player(Main f, World w) {
 		super(f, w);
-		
+		spawnpoint = new Point();
 		try {
 			playerstill = ImageIO.read(new File("manboji.png"));
 			playerright = ImageIO.read(new File("manboji2.png"));
@@ -91,6 +94,17 @@ public class Player extends Object {
 		setWidth(w);
 		setHeight(h);
 		getObjectRect().setSize(w, h + 20);
+	}
+	
+	public void die() {
+		setX(0);
+		setY(0);
+	}
+	
+	public void setLocation(int nx, int ny) {
+		setX(nx);
+		setY(ny);
+		getObjectRect().setLocation(nx, ny);
 	}
 	
 	public void update() {

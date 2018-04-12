@@ -33,8 +33,8 @@ public class Main extends JFrame {
 		IntroductionWorld intro = new IntroductionWorld(f);
 		TutorialWorld tut = new TutorialWorld(f);
 		Stage1  st1 = new Stage1(f);
-		add(tut);
-		tut.run();
+		add(intro);
+		intro.run();
 		intro.addNext(tut);
 	}
 	
