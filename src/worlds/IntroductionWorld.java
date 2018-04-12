@@ -16,6 +16,7 @@ import adventuregame.Main;
 import adventuregame.Player;
 import adventuregame.PlayerCollision;
 import adventuregame.RectangleObject;
+import adventuregame.Spike;
 import adventuregame.Text;
 
 public class IntroductionWorld extends World implements ActionListener, ImageObserver {
@@ -36,6 +37,7 @@ public class IntroductionWorld extends World implements ActionListener, ImageObs
 	private Text t3;
 	private Text t4;
 	private Camera c;
+	private Spike sp1;
 	//colors
 	private Color sky = new Color(142, 185, 255);
 	
@@ -60,6 +62,7 @@ public class IntroductionWorld extends World implements ActionListener, ImageObs
 		t3 = new Text(frame, this, "level 1");
 		t4 = new Text(frame, this, "press down to enter");
 		c = new Camera(dim);
+		sp1 = new Spike(frame, this);
 		
 		//text obj
 		t1.type("Comic Sans MS");
@@ -92,6 +95,10 @@ public class IntroductionWorld extends World implements ActionListener, ImageObs
 		r1.setLocation(0, 800);
 		r1.setCOLOR(Color.WHITE);
 		
+		sp1.setSize(150, 150);
+		sp1.setLocation(0, 450);
+		sp1.setGravity(false);
+		
 		d1.setSize(160, 200);
 		d1.setCOLOR(Color.BLACK);
 		d1.setLocation(1000, (int) g1.getObjectRect().getMinY() - d1.getHeight());
@@ -109,6 +116,7 @@ public class IntroductionWorld extends World implements ActionListener, ImageObs
 		c.add(t4);
 		c.add(d1);
 		c.add(r1);
+		c.add(sp1);
 		t3.setLocation(1000, (int) d1.getObjectRect().getMinY() - 20);
 		setSize(dim);
 		setBackground(sky);
@@ -128,6 +136,7 @@ public class IntroductionWorld extends World implements ActionListener, ImageObs
 		d1.paint(g);
 		t4.paint(g);
 		p.paint(g);
+		sp1.paint(g);
 	}
 
 	//timer

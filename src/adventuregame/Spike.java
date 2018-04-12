@@ -14,13 +14,20 @@ public class Spike extends RectangleObject {
 	
 	public Spike(Main f, World w) {
 		super(f, w);
-		setWidth(50);
-		setHeight(50);
+		setWidth(150);
+		setHeight(150);
+		setGravity(false);
 		
 		try {
 			spike = ImageIO.read(new File("spike.png"));
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+	
+	public void update(Player p) {
+		if (p.getObjectRect().intersects(getObjectRect())) {
+			p.die();
 		}
 	}
 	

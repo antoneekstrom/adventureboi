@@ -118,9 +118,7 @@ public class TutorialWorld extends World implements ActionListener, ImageObserve
 		r1.update();
 		sp1.update();
 		r2.update();
-		if (p.getObjectRect().intersects(sp1.getObjectRect())) {
-			p.die();
-		}
+		sp1.update(p);
 		g1.checkCollision(r1);
 		g1.checkCollision(r2);
 		g1.checkCollision(sp1);
