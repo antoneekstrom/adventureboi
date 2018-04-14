@@ -38,7 +38,7 @@ public class Player extends Object {
 	
 	double jcalculated;
 	double JACC = 1f;
-	double JSPEED = 2;
+	double JSPEED = 1.7;
 	public int JFUEL = 0;
 	public int JFUELMAX = 14;
 	public boolean onground = false;
@@ -93,7 +93,7 @@ public class Player extends Object {
 	public void setSize(int w, int h) {
 		setWidth(w);
 		setHeight(h);
-		getObjectRect().setSize(w, h + 20);
+		getObjectRect().setSize(w, h + 30);
 	}
 	
 	public void die() {

@@ -7,7 +7,6 @@ import java.util.ArrayList;
 public class Camera {
 	
 	private ArrayList<Object> objects;
-	
 	public int VIEWPORTSIZE_X;
 	private Object o;
 	private Point cPos;
@@ -26,7 +25,6 @@ public class Camera {
 	
 	public void run(Player p) {
 		
-		//p.setLocation((int)cPos.getX() - p.getWidth() / 2, (int)cPos.getY());
 		p.setCx((int) cPos.getX());
 		p.setCy((int) cPos.getY());
 		
@@ -43,7 +41,7 @@ public class Camera {
 				xdistance = o.getX() - p.getX();
 				o.setCx((int) (cPos.getX() + xdistance));
 			}
-			if (p.getY() > o.getY()) {
+			/*if (p.getY() > o.getY()) {
 				
 				ydistance = p.getY() - o.getY();
 				o.setCy((int) (cPos.getY() - ydistance));
@@ -52,8 +50,9 @@ public class Camera {
 				
 				ydistance = o.getY() - p.getY();
 				o.setCy((int) (cPos.getY() + ydistance));
-			}
-			
+			}*/
+			o.setCy(o.getY() + 200);
+			p.setCy(p.getY() + 200);
 		}
 	}
 	
