@@ -23,7 +23,7 @@ public class IntroductionWorld extends World implements ActionListener, ImageObs
 
 	private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 	private Main frame;
-	private int FRAMERATE = 14; /* milliseconds, refresh timer */
+	private int FRAMERATE = 12; /* milliseconds, refresh timer */
 	public Timer timer;
 	private World nextworld;
 	//objects
@@ -121,7 +121,7 @@ public class IntroductionWorld extends World implements ActionListener, ImageObs
 		setSize(dim);
 		setBackground(sky);
 		//Start timer
-		timer = new Timer(FRAMERATE, this);
+		timer = new Timer(0, this);
 		timer.start();
 		startPlayerController(p);
 	}
@@ -140,19 +140,24 @@ public class IntroductionWorld extends World implements ActionListener, ImageObs
 	}
 
 	//timer
+	private double time1, time2;
 	public void actionPerformed(ActionEvent arg0) {
-		t3.setLocation(p.getX(), p.getY());
-		t3.text("onground:" + p.onground);
-		t1.update();
-		t2.update();
-		g1.update();
-		r1.update();
-		p.update();
-		d1.update();
-		cl.pRun(p);
-		r1.checkCollision(t1);
-		r1.checkCollision(t2);
-		c.run(p);
+		time1 = System.nanoTime() / 1000000;
+		if (time1 - time2 > FRAMERATE) {
+			t3.setLocation(p.getX(), p.getY());
+			t3.text("onground:" + p.onground);
+			t1.update();
+			t2.update();
+			g1.update();
+			r1.update();
+			p.update();
+			d1.update();
+			cl.pRun(p);
+			r1.checkCollision(t1);
+			r1.checkCollision(t2);
+			c.run(p);
+			time2 = System.nanoTime() / 1000000;
+		}
 		repaint();
 	}
 	

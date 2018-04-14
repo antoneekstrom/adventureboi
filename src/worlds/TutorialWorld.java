@@ -84,7 +84,7 @@ public class TutorialWorld extends World implements ActionListener, ImageObserve
 		p.setGravity(true);
 		p.setLocation(100, 100);
 		p.setSize(150, 125);
-		p.setGRAVITY(40);
+		p.setGRAVITY(30);
 		p.JFUEL = 7;
 		//collision
 		c.add(g1);
