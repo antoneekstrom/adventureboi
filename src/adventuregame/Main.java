@@ -7,7 +7,6 @@ import java.awt.Toolkit;
 import javax.swing.JFrame;
 
 import worlds.IntroductionWorld;
-import worlds.ListWorld;
 import worlds.Stage1;
 import worlds.TutorialWorld;
 
@@ -33,10 +32,9 @@ public class Main extends JFrame {
 		//create and add world
 		IntroductionWorld intro = new IntroductionWorld(f);
 		TutorialWorld tut = new TutorialWorld(f);
-		ListWorld lw = new ListWorld(f);
 		Stage1  st1 = new Stage1(f);
-		add(lw);
-		lw.run();
+		add(intro);
+		intro.run();
 		intro.addNext(tut);
 	}
 	
