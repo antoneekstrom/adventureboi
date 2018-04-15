@@ -2,19 +2,24 @@ package worlds;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.Timer;
 
+import adventuregame.GObj;
 import adventuregame.Main;
 import adventuregame.Player;
 import adventuregame.PlayerAction;
 import adventuregame.PlayerJump;
+import adventuregame.RectangleObject;
+import adventuregame.Object;
 
 /** Basic template for worlds/stages */
 public class World extends JPanel implements ActionListener {
@@ -28,6 +33,8 @@ public class World extends JPanel implements ActionListener {
 	int down = 83;
 	int options = 27;
 	
+	public ArrayList<GObj> objs;
+	
 	public double SIZEMOD;
 	public Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 	private World nextworld;
@@ -36,13 +43,24 @@ public class World extends JPanel implements ActionListener {
 	String levelname;
 	private int FRAMERATE = 24; /* milliseconds, refresh timer */ 
 	
+	public Main getFrame() {
+		return frame;
+	}
+	
 	public void startTimer() {
 		timer = new Timer(FRAMERATE, this);
 		timer.start();
 	}
 	
 	public void run() {
-		
+		timer = new Timer(0, this);
+		timer.start();
+		objs = new ArrayList<GObj>();
+	}
+	
+	public void addGObj(RectangleObject o, Point p, Dimension d) {
+		GObj obj = new GObj(o, p, d);
+		objs.add(obj);
 	}
 	
 	//player controller
@@ -71,11 +89,9 @@ public class World extends JPanel implements ActionListener {
 	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		
 	}
 	
 	public void actionPerformed(ActionEvent arg0) {
-		
 	}
 	
 	public void addNext(World w) {
