@@ -121,7 +121,7 @@ public class IntroductionWorld extends World implements ActionListener, ImageObs
 		setSize(dim);
 		setBackground(sky);
 		//Start timer
-		timer = new Timer(0, this);
+		timer = new Timer(14, this);
 		timer.start();
 		startPlayerController(p);
 	}
