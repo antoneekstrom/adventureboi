@@ -7,7 +7,7 @@ import java.util.List;
 public class PlayerCollision {
 	
 	public List<Rectangle> collisions;
-	public int defaultMOVSPEED;
+	public int defaultMOVSPEED = 0;
 	public String side = "none";
 	public double dx, dy;
 	
