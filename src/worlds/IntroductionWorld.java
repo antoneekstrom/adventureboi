@@ -140,19 +140,24 @@ public class IntroductionWorld extends World implements ActionListener, ImageObs
 	}
 
 	//timer
+	private double time1, time2;
 	public void actionPerformed(ActionEvent arg0) {
-		t3.setLocation(p.getX(), p.getY());
-		t3.text("onground:" + p.onground);
-		t1.update();
-		t2.update();
-		g1.update();
-		r1.update();
-		p.update();
-		d1.update();
-		cl.pRun(p);
-		r1.checkCollision(t1);
-		r1.checkCollision(t2);
-		c.run(p);
+		time1 = System.nanoTime() / 1000000;
+		if (time1 - time2 > FRAMERATE) {
+			t3.setLocation(p.getX(), p.getY());
+			t3.text("onground:" + p.onground);
+			t1.update();
+			t2.update();
+			g1.update();
+			r1.update();
+			p.update();
+			d1.update();
+			cl.pRun(p);
+			r1.checkCollision(t1);
+			r1.checkCollision(t2);
+			c.run(p);
+			time2 = System.nanoTime() / 1000000;
+		}
 		repaint();
 	}
 	
