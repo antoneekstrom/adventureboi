@@ -97,7 +97,7 @@ public class TutorialWorld extends World implements ActionListener, ImageObserve
 		cl.add(r1.getObjectRect());
 		cl.add(r2.getObjectRect());
 		//Start timer
-		timer = new Timer(0, this);
+		timer = new Timer(14, this);
 		timer.start();
 		startPlayerController(p);
 	}
