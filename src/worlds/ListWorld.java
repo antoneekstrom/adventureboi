@@ -8,6 +8,7 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 import java.util.ArrayList;
 
 import javax.swing.Timer;
@@ -18,12 +19,13 @@ import adventuregame.Mouse;
 import adventuregame.Player;
 import adventuregame.PlayerCollision;
 import adventuregame.RectangleObject;
+import adventuregame.SaveWriter;
 import adventuregame.Text;
 
 public class ListWorld extends World {
 	
 	private int FRAMERATE = 12;
-	private ArrayList<RectangleObject> rects;
+	public ArrayList<RectangleObject> rects;
 	private ArrayList<Text> texts;
 	private Timer timer;
 	private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -34,6 +36,7 @@ public class ListWorld extends World {
 	private Point mouse;
 	private PlayerCollision cl;
 	private Point mousecoord;
+	public SaveWriter sw;
 	
 	public ListWorld(Main f) {
 		frame = f;
@@ -70,6 +73,7 @@ public class ListWorld extends World {
 		this.addMouseListener(m);
 		mouse = new Point();
 		mousecoord = new Point();
+		sw = new SaveWriter(new File("save.txt"));
 		p = new Player(frame, this);
 		cl = new PlayerCollision(p);
 		p.setGravity(true);
@@ -84,6 +88,7 @@ public class ListWorld extends World {
 		addRect(new Point(-1000, 800), new Dimension(3000, 50), Color.GREEN);
 		addRect(new Point(100, 100), new Dimension(100, 100), Color.GREEN);
 		addText(new Point(400, 400), new String("Comic Sans MS"), 42, new String("hejehje"), Color.WHITE, "debug");
+		sw.writeList(rects);
 		timer = new Timer(14, this);
 		timer.start();
 	}
@@ -116,12 +121,13 @@ public class ListWorld extends World {
 			cl.pRun(p);
 
 			addRect(mousecoord, new Dimension(100, 100), Color.BLACK);
-
+			
+			
 			for (int i = 0; i < texts.size(); i++) {
 				texts.get(i).update();
 
 				if (texts.get(i).getId() == "debug") {
-					texts.get(i).text(String.valueOf(mousecoord));
+					texts.get(i).text(String.valueOf(mousecoord) + " rects:" + rects.size());
 				}
 			}
 			for (int i = 0; i < rects.size(); i++) {

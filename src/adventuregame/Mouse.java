@@ -7,7 +7,6 @@ public class Mouse implements MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
-		System.out.println("clicked");
 	}
 
 	@Override
@@ -22,12 +21,12 @@ public class Mouse implements MouseListener {
 
 	@Override
 	public void mousePressed(MouseEvent arg0) {
-		
+		System.out.println("mouse pressed");
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
-		
+		System.out.println("mouse released");
 	}
 
 }

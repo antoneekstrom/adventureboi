@@ -6,6 +6,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
@@ -26,7 +27,7 @@ public class World extends JPanel implements ActionListener {
 	int up1 = 87;
 	int up2 = 32;
 	int down = 83;
-	int options = 27;
+	int esc = 27;
 	
 	public double SIZEMOD;
 	public Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -67,6 +68,12 @@ public class World extends JPanel implements ActionListener {
 		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(down, 0, false), "dp");
 		this.getActionMap().put("dr", new PlayerJump("dr", p));
 		this.getActionMap().put("dp", new PlayerJump("dp", p));
+		//esc
+		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(esc, 0, true), "escr");
+		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(esc, 0, false), "escp");
+		this.getActionMap().put("escp", new PlayerAction("escp", p, frame));
+		this.getActionMap().put("escr", new PlayerAction("escr", p, frame));
+		
 	}
 	
 	public void paintComponent(Graphics g) {

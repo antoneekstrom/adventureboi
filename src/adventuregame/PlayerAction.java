@@ -4,6 +4,9 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 
+import worlds.ListWorld;
+import worlds.World;
+
 public class PlayerAction extends AbstractAction {
 
 	private Main frame;
@@ -11,12 +14,18 @@ public class PlayerAction extends AbstractAction {
 	public String action;
 	//player object
 	private Player player;
+	private ListWorld lworld;
 	
 	//gets player object and actionstring
 	public PlayerAction(String a, Player p, Main f) {
 		action = a;
 		player = p;
 		frame = f;
+	}
+	
+	//pass world
+	public void setWorld(ListWorld w) {
+		lworld = w;
 	}
 	
 	//actions go here
@@ -34,14 +43,14 @@ public class PlayerAction extends AbstractAction {
 		if (action == "leftpressed") {
 			player.setDirection("left");
 		} else if (action == "leftreleased") {
+			
 			if (player.direction != "right") { /* this if statement allows for smooth left to right movement */
 				player.setDirection("none");
 				player.MOVACC = 1;
 			}
 		}
-		if (action == "optionsp") {
-			//frame.setVisible(false);
-			//frame.dispose();
+		if (action == "escp") {
+			System.out.println("esc");
 		}
 	}
 }
