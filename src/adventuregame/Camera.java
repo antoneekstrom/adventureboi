@@ -28,7 +28,7 @@ public class Camera {
 		
 		//distance to center of map
 		if (p.getX() < 0) {
-			d2c = -p.getX();
+			d2c = p.getX();
 		} else {
 			d2c = p.getX();
 		}

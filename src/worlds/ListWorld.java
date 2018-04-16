@@ -7,12 +7,14 @@ import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 import javax.swing.Timer;
 
 import adventuregame.Camera;
 import adventuregame.Main;
+import adventuregame.Mouse;
 import adventuregame.Player;
 import adventuregame.PlayerCollision;
 import adventuregame.RectangleObject;
@@ -31,7 +33,7 @@ public class ListWorld extends World {
 	private Camera c;
 	private Point mouse;
 	private PlayerCollision cl;
-	private int counter =  0;
+	private Point mousecoord;
 	
 	public ListWorld(Main f) {
 		frame = f;
@@ -64,11 +66,14 @@ public class ListWorld extends World {
 	}
 	
 	public void run() {
+		MouseListener m = new Mouse();
+		this.addMouseListener(m);
 		mouse = new Point();
+		mousecoord = new Point();
 		p = new Player(frame, this);
 		cl = new PlayerCollision(p);
 		p.setGravity(true);
-		p.setLocation(100, 100);
+		p.setLocation(0, 100);
 		p.setSize(150, 125);
 		p.setGRAVITY(30);
 		p.JFUEL = 7;
@@ -105,14 +110,18 @@ public class ListWorld extends World {
 		if (time1 - time2 > FRAMERATE) {
 			time2 = System.nanoTime() / 1000000;
 			mouse = MouseInfo.getPointerInfo().getLocation();
+			mousecoord.setLocation(mouse.getX() + c.getD2c() - 200, mouse.getY() - 200);
 			p.update();
 			c.run(p);
 			cl.pRun(p);
+
+			addRect(mousecoord, new Dimension(100, 100), Color.BLACK);
+
 			for (int i = 0; i < texts.size(); i++) {
 				texts.get(i).update();
-				
+
 				if (texts.get(i).getId() == "debug") {
-					texts.get(i).text(String.valueOf(mouse.getX() + c.getD2c()));
+					texts.get(i).text(String.valueOf(mousecoord));
 				}
 			}
 			for (int i = 0; i < rects.size(); i++) {

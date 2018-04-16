@@ -15,7 +15,7 @@ public class Main extends JFrame {
 	
 	Dimension fdim;
 	Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-	public static boolean fullscreen = true;
+	public static boolean fullscreen = false;
 	
 	public Main() {
 		
