@@ -12,6 +12,7 @@ public class Camera {
 	private Point cPos;
 	public int xdistance = 0;
 	public int ydistance = 0;
+	public double d2c = 0;
 	
 	public Camera(Dimension dim) {
 		objects = new ArrayList<Object>();
@@ -24,6 +25,13 @@ public class Camera {
 	}
 	
 	public void run(Player p) {
+		
+		//distance to center of map
+		if (p.getX() < 0) {
+			d2c = -p.getX();
+		} else {
+			d2c = p.getX();
+		}
 		
 		p.setCx((int) cPos.getX());
 		p.setCy((int) cPos.getY());
@@ -56,4 +64,7 @@ public class Camera {
 		}
 	}
 	
+	public double getD2c() {
+		return d2c;
+	}
 }

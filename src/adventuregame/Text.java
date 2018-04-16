@@ -14,6 +14,7 @@ public class Text extends Object {
 	private String FONT_NAME = "Comic Sans MS";
 	private Font font;
 	private int FONT_STYLE = Font.PLAIN;
+	private String id;
 	
 	public Text(Main f, World w, String t) {
 		super(f, w);
@@ -22,6 +23,14 @@ public class Text extends Object {
 	
 	public void text(String t) {
 		text = t;
+	}
+	
+	public void setId(String s) {
+		id = s;
+	}
+	
+	public String getId() {
+		return id;
 	}
 	
 	public void type(String n) {

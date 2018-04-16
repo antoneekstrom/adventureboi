@@ -16,11 +16,13 @@ import adventuregame.Main;
 import adventuregame.Player;
 import adventuregame.PlayerCollision;
 import adventuregame.RectangleObject;
+import adventuregame.Text;
 
 public class ListWorld extends World {
 	
 	private int FRAMERATE = 12;
 	private ArrayList<RectangleObject> rects;
+	private ArrayList<Text> texts;
 	private Timer timer;
 	private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 	private Player p;
@@ -33,18 +35,32 @@ public class ListWorld extends World {
 	
 	public ListWorld(Main f) {
 		frame = f;
-		setBackground(Color.WHITE);
+		setBackground(Color.CYAN);
 		setSize(dim);
+		texts = new ArrayList<Text>();
 		rects = new ArrayList<RectangleObject>();
 	}
 	
-	public void addRect(Point p, Dimension d) {
+	public void addRect(Point p, Dimension d, Color color) {
 		RectangleObject ro = new RectangleObject(frame, this);
 		ro.setLocation((int) p.getX(), (int) p.getY());
 		ro.setSize((int) d.getWidth(), (int) d.getHeight());
+		ro.setCOLOR(color);
 		rects.add(ro);
 		c.add(ro);
 		cl.add(ro.getObjectRect());
+	}
+	
+	public void addText(Point p, String font, int size, String text, Color color, String id) {
+		Text txt = new Text(frame, this, text);
+		txt.setCOLOR(color);
+		txt.type(font);
+		txt.size(size);
+		txt.setId(id);
+		txt.create();
+		txt.setLocation((int)p.getX(), (int)p.getY());
+		texts.add(txt);
+		c.add(txt);
 	}
 	
 	public void run() {
@@ -60,7 +76,9 @@ public class ListWorld extends World {
 		startPlayerController(p);
 		c = new Camera(dim);
 		c.add(p);
-		addRect(new Point(100, 100), new Dimension(100, 100));
+		addRect(new Point(-1000, 800), new Dimension(3000, 50), Color.GREEN);
+		addRect(new Point(100, 100), new Dimension(100, 100), Color.GREEN);
+		addText(new Point(400, 400), new String("Comic Sans MS"), 42, new String("hejehje"), Color.WHITE, "debug");
 		timer = new Timer(14, this);
 		timer.start();
 	}
@@ -68,11 +86,16 @@ public class ListWorld extends World {
 	public void paint(Graphics g) {
 		super.paintComponent(g);
 		if (ready == true) {
-			p.paint(g);
+			
+			for (int i = 0; i < texts.size(); i++) {
+				texts.get(i).paint(g);
+			}
 			
 			for (int i = 0; i < rects.size(); i++) {
+				rects.get(i).setCOLOR(Color.GREEN);
 				rects.get(i).paint(g);
 			}
+			p.paint(g);
 		}
 	}
 	
@@ -85,10 +108,18 @@ public class ListWorld extends World {
 			p.update();
 			c.run(p);
 			cl.pRun(p);
+			for (int i = 0; i < texts.size(); i++) {
+				texts.get(i).update();
+				
+				if (texts.get(i).getId() == "debug") {
+					texts.get(i).text(String.valueOf(mouse.getX() + c.getD2c()));
+				}
+			}
 			for (int i = 0; i < rects.size(); i++) {
 				rects.get(i).update();
 			}
 		}
 		repaint();
 	}
+	
 }
