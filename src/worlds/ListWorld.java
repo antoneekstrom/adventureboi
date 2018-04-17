@@ -11,13 +11,18 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.util.ArrayList;
 
+import javax.swing.KeyStroke;
 import javax.swing.Timer;
 
 import adventuregame.Camera;
+import adventuregame.Controller;
 import adventuregame.Main;
+import adventuregame.MethodAction;
 import adventuregame.Mouse;
 import adventuregame.Player;
+import adventuregame.PlayerAction;
 import adventuregame.PlayerCollision;
+import adventuregame.PlayerJump;
 import adventuregame.RectangleObject;
 import adventuregame.SaveWriter;
 import adventuregame.Text;
@@ -29,7 +34,7 @@ public class ListWorld extends World {
 	private ArrayList<Text> texts;
 	private Timer timer;
 	private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-	private Player p;
+	public Player p;
 	private Main frame;
 	private boolean ready = false;
 	private Camera c;
@@ -75,6 +80,7 @@ public class ListWorld extends World {
 		mousecoord = new Point();
 		sw = new SaveWriter(new File("save.txt"));
 		p = new Player(frame, this);
+		startPlayerController(p);
 		cl = new PlayerCollision(p);
 		p.setGravity(true);
 		p.setLocation(0, 100);
@@ -82,7 +88,6 @@ public class ListWorld extends World {
 		p.setGRAVITY(30);
 		p.JFUEL = 7;
 		ready = true;
-		startPlayerController(p);
 		c = new Camera(dim);
 		c.add(p);
 		addRect(new Point(-1000, 800), new Dimension(3000, 50), Color.GREEN);
@@ -121,7 +126,7 @@ public class ListWorld extends World {
 			cl.pRun(p);
 
 			addRect(mousecoord, new Dimension(100, 100), Color.BLACK);
-			
+			 
 			
 			for (int i = 0; i < texts.size(); i++) {
 				texts.get(i).update();
@@ -136,5 +141,4 @@ public class ListWorld extends World {
 		}
 		repaint();
 	}
-	
 }

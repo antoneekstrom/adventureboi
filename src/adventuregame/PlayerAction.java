@@ -14,18 +14,12 @@ public class PlayerAction extends AbstractAction {
 	public String action;
 	//player object
 	private Player player;
-	private ListWorld lworld;
 	
 	//gets player object and actionstring
 	public PlayerAction(String a, Player p, Main f) {
 		action = a;
 		player = p;
 		frame = f;
-	}
-	
-	//pass world
-	public void setWorld(ListWorld w) {
-		lworld = w;
 	}
 	
 	//actions go here

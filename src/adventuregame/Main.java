@@ -15,7 +15,7 @@ public class Main extends JFrame {
 	
 	Dimension fdim;
 	Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-	public static boolean fullscreen = false;
+	public static boolean fullscreen = true;
 	
 	public Main() {
 		
@@ -35,6 +35,8 @@ public class Main extends JFrame {
 		TutorialWorld tut = new TutorialWorld(f);
 		Stage1  st1 = new Stage1(f);
 		ListWorld lw = new ListWorld(f);
+		Controller cl = new Controller();
+		cl.startPlayerController(lw.p, this);
 		add(lw);
 		lw.run();
 		intro.addNext(tut);
