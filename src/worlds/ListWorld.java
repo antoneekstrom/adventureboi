@@ -42,6 +42,7 @@ public class ListWorld extends World {
 	private PlayerCollision cl;
 	private Point mousecoord;
 	public SaveWriter sw;
+	public Controller controller;
 	
 	public ListWorld(Main f) {
 		frame = f;
@@ -49,6 +50,10 @@ public class ListWorld extends World {
 		setSize(dim);
 		texts = new ArrayList<Text>();
 		rects = new ArrayList<RectangleObject>();
+	}
+	
+	public Player getPlayer() {
+		return p;
 	}
 	
 	public void addRect(Point p, Dimension d, Color color) {

@@ -36,10 +36,11 @@ public class Main extends JFrame {
 		Stage1  st1 = new Stage1(f);
 		ListWorld lw = new ListWorld(f);
 		Controller cl = new Controller();
-		cl.startPlayerController(lw.p, this);
 		add(lw);
 		lw.run();
-		intro.addNext(tut);
+		add(cl);
+		cl.startPlayerController(lw.getPlayer(), this);
+		intro.addNext(tut);		
 	}
 	
 	public static void main(String[] args) {
