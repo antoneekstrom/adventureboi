@@ -35,11 +35,8 @@ public class Main extends JFrame {
 		TutorialWorld tut = new TutorialWorld(f);
 		Stage1  st1 = new Stage1(f);
 		ListWorld lw = new ListWorld(f);
-		Controller cl = new Controller();
 		add(lw);
 		lw.run();
-		add(cl);
-		cl.startPlayerController(lw.getPlayer(), this);
 		intro.addNext(tut);		
 	}
 	
