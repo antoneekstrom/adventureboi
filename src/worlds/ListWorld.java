@@ -11,13 +11,18 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.util.ArrayList;
 
+import javax.swing.KeyStroke;
 import javax.swing.Timer;
 
 import adventuregame.Camera;
+import adventuregame.Controller;
 import adventuregame.Main;
+import adventuregame.MethodAction;
 import adventuregame.Mouse;
 import adventuregame.Player;
+import adventuregame.PlayerAction;
 import adventuregame.PlayerCollision;
+import adventuregame.PlayerJump;
 import adventuregame.RectangleObject;
 import adventuregame.SaveWriter;
 import adventuregame.Text;
@@ -25,18 +30,20 @@ import adventuregame.Text;
 public class ListWorld extends World {
 	
 	private int FRAMERATE = 12;
+	public String name = "lw";
 	public ArrayList<RectangleObject> rects;
 	private ArrayList<Text> texts;
 	private Timer timer;
 	private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-	private Player p;
+	public Player p;
 	private Main frame;
 	private boolean ready = false;
 	private Camera c;
-	private Point mouse;
+	public Point mouse;
 	private PlayerCollision cl;
-	private Point mousecoord;
+	public Point mousecoord;
 	public SaveWriter sw;
+	public Controller controller;
 	
 	public ListWorld(Main f) {
 		frame = f;
@@ -44,6 +51,15 @@ public class ListWorld extends World {
 		setSize(dim);
 		texts = new ArrayList<Text>();
 		rects = new ArrayList<RectangleObject>();
+	}
+	
+	public Player getPlayer() {
+		return p;
+	}
+	
+	public void addRectp(Point point1, Point point2) {
+		RectangleObject ro = new RectangleObject(frame, this);
+		
 	}
 	
 	public void addRect(Point p, Dimension d, Color color) {
@@ -69,26 +85,24 @@ public class ListWorld extends World {
 	}
 	
 	public void run() {
-		MouseListener m = new Mouse();
+		MouseListener m = new Mouse(this);
 		this.addMouseListener(m);
 		mouse = new Point();
 		mousecoord = new Point();
-		sw = new SaveWriter(new File("save.txt"));
+		sw = new SaveWriter(name);
 		p = new Player(frame, this);
+		c = new Camera(dim);
 		cl = new PlayerCollision(p);
+		sw.loadWorld(this);
+		startPlayerController(p);
 		p.setGravity(true);
 		p.setLocation(0, 100);
 		p.setSize(150, 125);
 		p.setGRAVITY(30);
 		p.JFUEL = 7;
 		ready = true;
-		startPlayerController(p);
-		c = new Camera(dim);
 		c.add(p);
-		addRect(new Point(-1000, 800), new Dimension(3000, 50), Color.GREEN);
-		addRect(new Point(100, 100), new Dimension(100, 100), Color.GREEN);
 		addText(new Point(400, 400), new String("Comic Sans MS"), 42, new String("hejehje"), Color.WHITE, "debug");
-		sw.writeList(rects);
 		timer = new Timer(14, this);
 		timer.start();
 	}
@@ -119,9 +133,6 @@ public class ListWorld extends World {
 			p.update();
 			c.run(p);
 			cl.pRun(p);
-
-			addRect(mousecoord, new Dimension(100, 100), Color.BLACK);
-			
 			
 			for (int i = 0; i < texts.size(); i++) {
 				texts.get(i).update();
@@ -137,4 +148,32 @@ public class ListWorld extends World {
 		repaint();
 	}
 	
+	//player controller
+	public void startPlayerController(Player p) {
+		//right
+		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(right, 0, true), "rightreleased");
+		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(right, 0, false), "rightpressed");
+		this.getActionMap().put("rightreleased", new PlayerAction("rightreleased", p, frame));
+		this.getActionMap().put("rightpressed", new PlayerAction("rightpressed", p, frame));
+		//left
+		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(left, 0, true), "leftreleased");
+		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(left, 0, false), "leftpressed");
+		this.getActionMap().put("leftreleased", new PlayerAction("leftreleased", p, frame));
+		this.getActionMap().put("leftpressed", new PlayerAction("leftpressed", p, frame));
+		//up
+		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(up1, 0, true), "upreleased");
+		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(up1, 0, false), "uppressed");
+		this.getActionMap().put("uppressed", new PlayerJump("uppressed", p));
+		this.getActionMap().put("upreleased", new PlayerJump("upreleased", p));
+		//down
+		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(down, 0, true), "dr");
+		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(down, 0, false), "dp");
+		this.getActionMap().put("dr", new PlayerJump("dr", p));
+		this.getActionMap().put("dp", new PlayerJump("dp", p));
+		//esc
+		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(esc, 0, true), "escr");
+		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(esc, 0, false), "escp");
+		this.getActionMap().put("escp", new MethodAction("escp", this));
+		this.getActionMap().put("escr", new MethodAction("escr", this));
+	}
 }

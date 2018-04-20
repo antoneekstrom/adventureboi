@@ -1,6 +1,7 @@
 package adventuregame;
 
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 
 import javax.swing.AbstractAction;
 
@@ -14,7 +15,7 @@ public class PlayerAction extends AbstractAction {
 	public String action;
 	//player object
 	private Player player;
-	private ListWorld lworld;
+	public ArrayList<RectangleObject> rects;
 	
 	//gets player object and actionstring
 	public PlayerAction(String a, Player p, Main f) {
@@ -23,9 +24,8 @@ public class PlayerAction extends AbstractAction {
 		frame = f;
 	}
 	
-	//pass world
-	public void setWorld(ListWorld w) {
-		lworld = w;
+	public void getList(ArrayList<RectangleObject> l) {
+		rects = l;
 	}
 	
 	//actions go here
@@ -50,7 +50,7 @@ public class PlayerAction extends AbstractAction {
 			}
 		}
 		if (action == "escp") {
-			System.out.println("esc");
+			System.out.println("world saved");
 		}
 	}
 }

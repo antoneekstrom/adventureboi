@@ -5,17 +5,19 @@ import java.awt.Graphics;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.Timer;
 
 import adventuregame.Main;
+import adventuregame.MethodAction;
 import adventuregame.Player;
 import adventuregame.PlayerAction;
 import adventuregame.PlayerJump;
+import adventuregame.RectangleObject;
+import adventuregame.SaveWriter;
 
 /** Basic template for worlds/stages */
 public class World extends JPanel implements ActionListener {
@@ -34,6 +36,7 @@ public class World extends JPanel implements ActionListener {
 	private World nextworld;
 	private Timer timer;
 	private Main frame;
+	public SaveWriter sw;
 	String levelname;
 	private int FRAMERATE = 24; /* milliseconds, refresh timer */ 
 	
@@ -43,6 +46,10 @@ public class World extends JPanel implements ActionListener {
 	}
 	
 	public void run() {
+	}
+	
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
 		
 	}
 	
@@ -71,17 +78,9 @@ public class World extends JPanel implements ActionListener {
 		//esc
 		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(esc, 0, true), "escr");
 		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(esc, 0, false), "escp");
-		this.getActionMap().put("escp", new PlayerAction("escp", p, frame));
-		this.getActionMap().put("escr", new PlayerAction("escr", p, frame));
-		
 	}
 	
-	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		
-	}
-	
-	public void actionPerformed(ActionEvent arg0) {
+	public void actionPerformed(ActionEvent e) {
 		
 	}
 	

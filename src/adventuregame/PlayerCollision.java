@@ -30,24 +30,31 @@ public class PlayerCollision {
 			Rectangle r = collisions.get(i);
 			dx = 0;
 			dy = 0;
-			
 			if (pr.intersects(r)) {
+				//if player is left of object
 				if (pr.getCenterX() < r.getCenterX()) {
 
 					side = "left";
 					dx = pr.getMaxX() - r.getX();
-
+				//if player is right of object	
 				} else if (pr.getCenterX() > r.getCenterX()) {
 
 					side = "right";
 					dx = r.getMaxX() - pr.getX();
 
 				}
+				//if player is above object
 				if (pr.getMaxY() > r.getMinY()) {
-					//down
+					
 					p.onground = true;
 					dy = pr.getMaxY() - r.getMinY();
+				//if player is under object
+				} else if (pr.getMaxY() < r.getMinY()) {
+					
+					side = "under";
+					dy = r.getMinY() - pr.getMaxY();
 				}
+				//moves player out of object
 				if (dx < dy) {
 					if (side == "left") {
 						p.setX((int) (p.getX() - dx));
@@ -56,6 +63,9 @@ public class PlayerCollision {
 						p.setX((int) (p.getX() + dx));
 					}
 				} else if (dy < dx) {
+					if (side == "under") {
+						p.setY((int) (p.getY() + dy));
+					}
 					p.setY((int) (p.getY() - dy));
 					p.onground = false;
 				} 
@@ -66,10 +76,4 @@ public class PlayerCollision {
 	public void add(Rectangle r) {
 		collisions.add(r);
 	}
-	
-	public void updateCollision() {
-		
-	}
-	
-	
 }
