@@ -30,6 +30,7 @@ import adventuregame.Text;
 public class ListWorld extends World {
 	
 	private int FRAMERATE = 12;
+	public String name = "lw";
 	public ArrayList<RectangleObject> rects;
 	private ArrayList<Text> texts;
 	private Timer timer;
@@ -38,9 +39,9 @@ public class ListWorld extends World {
 	private Main frame;
 	private boolean ready = false;
 	private Camera c;
-	private Point mouse;
+	public Point mouse;
 	private PlayerCollision cl;
-	private Point mousecoord;
+	public Point mousecoord;
 	public SaveWriter sw;
 	public Controller controller;
 	
@@ -54,6 +55,11 @@ public class ListWorld extends World {
 	
 	public Player getPlayer() {
 		return p;
+	}
+	
+	public void addRectp(Point point1, Point point2) {
+		RectangleObject ro = new RectangleObject(frame, this);
+		
 	}
 	
 	public void addRect(Point p, Dimension d, Color color) {
@@ -79,26 +85,24 @@ public class ListWorld extends World {
 	}
 	
 	public void run() {
-		MouseListener m = new Mouse();
+		MouseListener m = new Mouse(this);
 		this.addMouseListener(m);
 		mouse = new Point();
 		mousecoord = new Point();
-		sw = new SaveWriter(new File("save.txt"));
+		sw = new SaveWriter(name);
 		p = new Player(frame, this);
-		startPlayerController(p);
+		c = new Camera(dim);
 		cl = new PlayerCollision(p);
+		sw.loadWorld(this);
+		startPlayerController(p);
 		p.setGravity(true);
 		p.setLocation(0, 100);
 		p.setSize(150, 125);
 		p.setGRAVITY(30);
 		p.JFUEL = 7;
 		ready = true;
-		c = new Camera(dim);
 		c.add(p);
-		addRect(new Point(-1000, 800), new Dimension(3000, 50), Color.GREEN);
-		addRect(new Point(100, 100), new Dimension(100, 100), Color.GREEN);
 		addText(new Point(400, 400), new String("Comic Sans MS"), 42, new String("hejehje"), Color.WHITE, "debug");
-		sw.writeList(rects);
 		timer = new Timer(14, this);
 		timer.start();
 	}
@@ -129,9 +133,6 @@ public class ListWorld extends World {
 			p.update();
 			c.run(p);
 			cl.pRun(p);
-
-			//addRect(mousecoord, new Dimension(100, 100), Color.BLACK);
-			 
 			
 			for (int i = 0; i < texts.size(); i++) {
 				texts.get(i).update();

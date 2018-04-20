@@ -50,7 +50,7 @@ public class PlayerAction extends AbstractAction {
 			}
 		}
 		if (action == "escp") {
-			System.out.println("esc");
+			System.out.println("world saved");
 		}
 	}
 }

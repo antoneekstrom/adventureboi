@@ -19,7 +19,7 @@ public class MethodAction extends AbstractAction {
 	
 	public void actionPerformed(ActionEvent e) {
 		if (action == "escp") {
-			System.out.println("esc");
+			System.out.println("world saved to " + world.name + ".txt");
 			world.sw.writeList(world.rects);
 		}
 	}
