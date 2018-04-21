@@ -92,6 +92,7 @@ public class ListWorld extends World {
 		HudObj save = new HudObj(50, 50, 400, 100, Color.ORANGE);
 		save.addText("save stage");
 		quit.addText("quit");
+		options.hb.add(new HudObj(0, 0, dim.width, dim.height, new Color(0, 0, 0, (float)0.7)));
 		options.hb.add(quit);
 		options.hb.add(save);
 		

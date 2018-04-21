@@ -16,10 +16,12 @@ public class Mouse implements MouseListener {
 	Main frame;
 	ListWorld world;
 	Point p1, p2;
+	RectangleCreator rc;
 	
 	public Mouse(ListWorld w, Main f) {
 		world = w;
 		frame = f;
+		rc = new RectangleCreator(world);
 	}
 
 	@Override
@@ -38,11 +40,7 @@ public class Mouse implements MouseListener {
 
 	@Override
 	public void mousePressed(MouseEvent arg0) {
-		p1 = world.mouse;
-		p1.x -= 800;
-		p1.x += world.c.getD2c();
-		p1.y -= 200;
-		
+		rc.addp1(world.mouse);
 	}
 
 	@Override
@@ -61,14 +59,9 @@ public class Mouse implements MouseListener {
 				}
 			}
 		}
-		
-		p2 = world.mouse;
-		p2.x -= 800;
-		p2.x += world.c.getD2c();
-		p2.y -= 200;
-		Rectangle r = new Rectangle(p1);
-		r.add(p2);
-		world.addRect(new Point(r.x, r.y), new Dimension(r.width, r.height), Color.ORANGE);
+
+		rc.addp2(world.mouse);
+		rc.create();
 		
 	}
 
