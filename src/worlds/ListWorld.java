@@ -85,7 +85,7 @@ public class ListWorld extends World {
 	}
 	
 	public void run() {
-		MouseListener m = new Mouse(this);
+		MouseListener m = new Mouse(this, frame);
 		this.addMouseListener(m);
 		mouse = new Point();
 		mousecoord = new Point();

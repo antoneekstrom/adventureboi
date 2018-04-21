@@ -93,7 +93,7 @@ public class Player extends Object {
 	public void setSize(int w, int h) {
 		setWidth(w);
 		setHeight(h);
-		getObjectRect().setSize(w, h + 30);
+		getObjectRect().setSize(w, h + 55);
 	}
 	
 	public void die() {

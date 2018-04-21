@@ -17,7 +17,7 @@ public class Camera {
 	public Camera(Dimension dim) {
 		objects = new ArrayList<Object>();
 		cPos = new Point();
-		cPos.setLocation(200, 400);
+		cPos.setLocation(800, 400);
 	}
 	
 	public void add(Object o) {

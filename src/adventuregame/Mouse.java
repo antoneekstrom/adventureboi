@@ -11,11 +11,13 @@ import worlds.ListWorld;
 
 public class Mouse implements MouseListener {
 	
+	Main frame;
 	ListWorld world;
 	Point p1, p2;
 	
-	public Mouse(ListWorld w) {
+	public Mouse(ListWorld w, Main f) {
 		world = w;
+		frame = f;
 	}
 
 	@Override
@@ -36,6 +38,8 @@ public class Mouse implements MouseListener {
 	public void mousePressed(MouseEvent arg0) {
 		System.out.println("mouse pressed");
 		p1 = world.mouse;
+		p1.x -= 800;
+		p1.y -= 400;
 		
 	}
 
@@ -43,8 +47,12 @@ public class Mouse implements MouseListener {
 	public void mouseReleased(MouseEvent arg0) {
 		System.out.println("mouse released");
 		p2 = world.mouse;
+		p2.x -= 800;
+		p2.y -= 400;
 		Rectangle r = new Rectangle(p1);
 		r.add(p2);
+		world.addRect(new Point(r.x, r.y), new Dimension(r.width, r.height), Color.ORANGE);
+		
 	}
 
 }
