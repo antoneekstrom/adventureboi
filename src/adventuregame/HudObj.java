@@ -12,6 +12,7 @@ public class HudObj {
 	public Point mouse;
 	public Color colord, color2, color;
 	public String text;
+	public boolean highlight = true;
 	
 	public HudObj(int x, int y, int w, int h, Color c) {
 		colord = c;
@@ -24,13 +25,15 @@ public class HudObj {
 	public void addText(String t) {
 		text = t;
 	}
-	
+
 	public void update() {
 		mouse = MouseInfo.getPointerInfo().getLocation();
-		if (hrect.contains(mouse)) {
-			color = color2;
-		} else {
-			color = colord;
+		if (highlight == true) {
+			if (hrect.contains(mouse)) {
+				color = color2;
+			} else {
+				color = colord;
+			}
 		}
 	}
 	

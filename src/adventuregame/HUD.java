@@ -4,6 +4,8 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
+import worlds.ListWorld;
+
 public class HUD {
 	
 	public ArrayList<HudObj> hb;

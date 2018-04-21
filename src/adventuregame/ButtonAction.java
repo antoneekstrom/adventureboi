@@ -15,7 +15,7 @@ public class ButtonAction {
 		world = w;
 		frame = f;
 	}
-	
+
 	public void getClick() {
 		ArrayList<HudObj> hb = world.options.hb;
 		for (int i = 0; hb.size() > i; i++) {
@@ -27,6 +27,10 @@ public class ButtonAction {
 					
 				} else if (hb.get(i).text == "quit" && world.options.visible == true) {
 					frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+				}
+				if (hb.get(i).highlight == false) {
+					System.out.println(hb.get(i).colord);
+					world.rc.setColor(hb.get(i).colord);
 				}
 			}
 		}

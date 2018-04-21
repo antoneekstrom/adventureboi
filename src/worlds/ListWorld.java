@@ -35,7 +35,7 @@ import adventuregame.Text;
 public class ListWorld extends World {
 	
 	private int FRAMERATE = 12;
-	public String name = "lw";
+	public String name = "world1";
 	public ArrayList<RectangleObject> rects;
 	private ArrayList<Text> texts;
 	private Timer timer;
@@ -97,16 +97,25 @@ public class ListWorld extends World {
 		HudObj quit = new HudObj(50, 200, 400, 100, Color.ORANGE);
 		HudObj save = new HudObj(50, 50, 400, 100, Color.ORANGE);
 		HudObj colors = new HudObj(500, 50, 200, 100, Color.GRAY);
+		HudObj c1 = new HudObj(750, 50, 100, 100, Color.ORANGE);
+		HudObj c2 = new HudObj(850, 50, 100, 100, Color.CYAN);
+		HudObj c3 = new HudObj(950, 50, 100, 100, Color.BLACK);
+		HudObj c4 = new HudObj(1050, 50, 100, 100, Color.GREEN);
+		c1.highlight = false;
+		c2.highlight = false;
+		c3.highlight = false;
+		c4.highlight = false;
+		colors.highlight = false;
 		colors.addText("colors:");
 		save.addText("save stage");
 		quit.addText("quit");
 		
 		options.hb.add(new HudObj(0, 0, dim.width, dim.height, new Color(0, 0, 0, (float)0.7)));
-		options.hb.add(new HudObj(850, 50, 100, 100, Color.ORANGE));
-		options.hb.add(new HudObj(950, 50, 100, 100, Color.BLUE));
-		options.hb.add(new HudObj(1050, 50, 100, 100, Color.GREEN));
-		options.hb.add(new HudObj(1150, 50, 100, 100, Color.BLACK));
 		options.hb.add(colors);
+		options.hb.add(c1);
+		options.hb.add(c2);
+		options.hb.add(c3);
+		options.hb.add(c4);
 		options.hb.add(quit);
 		options.hb.add(save);
 		

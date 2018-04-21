@@ -28,6 +28,7 @@ public class Mouse implements MouseListener {
 	
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
+		ba.getClick();
 	}
 
 	@Override
@@ -48,7 +49,6 @@ public class Mouse implements MouseListener {
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
 		//checks hud clicks
-		ba.getClick();
 		
 		rc.addp2(world.mouse);
 		rc.create();
