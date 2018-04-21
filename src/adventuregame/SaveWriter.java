@@ -39,6 +39,7 @@ public class SaveWriter {
 	}
 	
 	public void writeList(ArrayList<RectangleObject> list) {
+		System.out.println("stage saved to " + file.getName());
 		BufferedWriter writer;
 		try {
 			writer = new BufferedWriter(new FileWriter(file));
@@ -47,7 +48,9 @@ public class SaveWriter {
 		
 		for (int i = 0; i < list.size(); i++) {
 			RectangleObject o = list.get(i);
-			write(o.getX() + "," + o.getY() + "," + o.getWidth() + "," + o.getHeight());
+			if (!(o.getWidth() == 0) || !(o.getHeight() == 0)) {
+				write(o.getX() + "," + o.getY() + "," + o.getWidth() + "," + o.getHeight() + "," + o.getCOLOR().hashCode());
+			}
 		}	
 	}
 	
@@ -83,6 +86,7 @@ public class SaveWriter {
 	}
 	
 	int x,y,w,h;
+	Color c;
 	public void loadWorld(ListWorld world) {
 		try {
 			world.rects.clear();
@@ -96,8 +100,9 @@ public class SaveWriter {
 				y = Integer.parseInt(a[1]);
 				w = Integer.parseInt(a[2]);
 				h = Integer.parseInt(a[3]);
+				c = Color.decode(a[4]);
 			}
-			world.addRect(new Point(x, y), new Dimension(w, h), Color.ORANGE);
+			world.addRect(new Point(x, y), new Dimension(w, h), c);
 		}
 	}
 	

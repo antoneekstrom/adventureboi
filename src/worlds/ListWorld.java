@@ -16,6 +16,8 @@ import javax.swing.Timer;
 
 import adventuregame.Camera;
 import adventuregame.Controller;
+import adventuregame.HUD;
+import adventuregame.HudObj;
 import adventuregame.Main;
 import adventuregame.MethodAction;
 import adventuregame.Mouse;
@@ -38,12 +40,13 @@ public class ListWorld extends World {
 	public Player p;
 	private Main frame;
 	private boolean ready = false;
-	private Camera c;
+	public Camera c;
 	public Point mouse;
 	private PlayerCollision cl;
 	public Point mousecoord;
 	public SaveWriter sw;
 	public Controller controller;
+	public HUD options;
 	
 	public ListWorld(Main f) {
 		frame = f;
@@ -55,11 +58,6 @@ public class ListWorld extends World {
 	
 	public Player getPlayer() {
 		return p;
-	}
-	
-	public void addRectp(Point point1, Point point2) {
-		RectangleObject ro = new RectangleObject(frame, this);
-		
 	}
 	
 	public void addRect(Point p, Dimension d, Color color) {
@@ -88,6 +86,15 @@ public class ListWorld extends World {
 		MouseListener m = new Mouse(this, frame);
 		this.addMouseListener(m);
 		mouse = new Point();
+		
+		options = new HUD();
+		HudObj quit = new HudObj(50, 200, 400, 100, Color.ORANGE);
+		HudObj save = new HudObj(50, 50, 400, 100, Color.ORANGE);
+		save.addText("save stage");
+		quit.addText("quit");
+		options.hb.add(quit);
+		options.hb.add(save);
+		
 		mousecoord = new Point();
 		sw = new SaveWriter(name);
 		p = new Player(frame, this);
@@ -116,10 +123,11 @@ public class ListWorld extends World {
 			}
 			
 			for (int i = 0; i < rects.size(); i++) {
-				rects.get(i).setCOLOR(Color.GREEN);
+				rects.get(i).setCOLOR(rects.get(i).getCOLOR());
 				rects.get(i).paint(g);
 			}
 			p.paint(g);
+			options.paint(g);
 		}
 	}
 	
@@ -133,6 +141,8 @@ public class ListWorld extends World {
 			p.update();
 			c.run(p);
 			cl.pRun(p);
+			
+			options.update();
 			
 			for (int i = 0; i < texts.size(); i++) {
 				texts.get(i).update();

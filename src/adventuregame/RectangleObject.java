@@ -13,7 +13,6 @@ public class RectangleObject extends Object {
 
 	public void paint(Graphics g) {
 		g.setColor(getCOLOR());
-
 		g.fillRect(getCx(), getCy(), getWidth(), getHeight());			
 	}
 }

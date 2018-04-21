@@ -19,8 +19,13 @@ public class MethodAction extends AbstractAction {
 	
 	public void actionPerformed(ActionEvent e) {
 		if (action == "escp") {
-			System.out.println("world saved to " + world.name + ".txt");
-			world.sw.writeList(world.rects);
+			if (world.options.visible == false) {
+				world.options.visible = true;
+			} else {
+				world.options.visible = false;
+			}
+			//System.out.println("world saved to " + world.name + ".txt");
+			//world.sw.writeList(world.rects);
 		}
 	}
 

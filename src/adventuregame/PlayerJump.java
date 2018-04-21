@@ -18,7 +18,6 @@ public class PlayerJump extends AbstractAction {
 	}
 	
 	public void actionPerformed(ActionEvent arg0) {
-		System.out.println(action);
 
 		//jump
 		if (action == "uppressed") {
