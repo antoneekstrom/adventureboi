@@ -5,12 +5,14 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.MouseInfo;
 import java.awt.Point;
+import java.awt.TextField;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.util.ArrayList;
 
+import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.Timer;
 
@@ -25,6 +27,7 @@ import adventuregame.Player;
 import adventuregame.PlayerAction;
 import adventuregame.PlayerCollision;
 import adventuregame.PlayerJump;
+import adventuregame.RectangleCreator;
 import adventuregame.RectangleObject;
 import adventuregame.SaveWriter;
 import adventuregame.Text;
@@ -47,6 +50,7 @@ public class ListWorld extends World {
 	public SaveWriter sw;
 	public Controller controller;
 	public HUD options;
+	public RectangleCreator rc;
 	
 	public ListWorld(Main f) {
 		frame = f;
@@ -83,16 +87,26 @@ public class ListWorld extends World {
 	}
 	
 	public void run() {
-		MouseListener m = new Mouse(this, frame);
+		
+		rc = new RectangleCreator(this);
+		MouseListener m = new Mouse(this, frame, rc);
 		this.addMouseListener(m);
 		mouse = new Point();
 		
 		options = new HUD();
 		HudObj quit = new HudObj(50, 200, 400, 100, Color.ORANGE);
 		HudObj save = new HudObj(50, 50, 400, 100, Color.ORANGE);
+		HudObj colors = new HudObj(500, 50, 200, 100, Color.GRAY);
+		colors.addText("colors:");
 		save.addText("save stage");
 		quit.addText("quit");
+		
 		options.hb.add(new HudObj(0, 0, dim.width, dim.height, new Color(0, 0, 0, (float)0.7)));
+		options.hb.add(new HudObj(850, 50, 100, 100, Color.ORANGE));
+		options.hb.add(new HudObj(950, 50, 100, 100, Color.BLUE));
+		options.hb.add(new HudObj(1050, 50, 100, 100, Color.GREEN));
+		options.hb.add(new HudObj(1150, 50, 100, 100, Color.BLACK));
+		options.hb.add(colors);
 		options.hb.add(quit);
 		options.hb.add(save);
 		
@@ -186,5 +200,10 @@ public class ListWorld extends World {
 		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(esc, 0, false), "escp");
 		this.getActionMap().put("escp", new MethodAction("escp", this));
 		this.getActionMap().put("escr", new MethodAction("escr", this));
+	}
+	
+	public void stopPlayerController() {
+		this.getInputMap().clear();
+		this.getActionMap().clear();
 	}
 }

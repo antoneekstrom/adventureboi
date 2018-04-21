@@ -12,9 +12,17 @@ public class RectangleCreator {
 
 	public Point p1, p2;
 	public ListWorld world;
+	public Color color;
 	
 	public RectangleCreator(ListWorld w) {
 		world = w;
+		color = Color.ORANGE;
+		p1 = new Point();
+		p2 = new Point();
+	}
+	
+	public void setColor(Color c) {
+		color = c;
 	}
 	
 	public void addp1(Point p) {
@@ -34,7 +42,7 @@ public class RectangleCreator {
 	public void create() {
 		Rectangle r = new Rectangle(p1);		
 		r.add(p2);
-		world.addRect(new Point(r.x, r.y), new Dimension(r.width, r.height), Color.ORANGE);
+		world.addRect(new Point(r.x, r.y), new Dimension(r.width, r.height), color);
 	}
 	
 }

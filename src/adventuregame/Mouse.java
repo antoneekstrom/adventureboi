@@ -17,13 +17,15 @@ public class Mouse implements MouseListener {
 	ListWorld world;
 	Point p1, p2;
 	RectangleCreator rc;
+	ButtonAction ba;
 	
-	public Mouse(ListWorld w, Main f) {
+	public Mouse(ListWorld w, Main f, RectangleCreator rc) {
 		world = w;
 		frame = f;
-		rc = new RectangleCreator(world);
+		this.rc = rc;
+		ba = new ButtonAction(w, f);
 	}
-
+	
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
 	}
@@ -46,20 +48,8 @@ public class Mouse implements MouseListener {
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
 		//checks hud clicks
-		ArrayList<HudObj> hb = world.options.hb;
-		for (int i = 0; hb.size() > i; i++) {
-			if (hb.get(i).mouseOver()) {
-				System.out.println(hb.get(i).text);
-				
-				if (hb.get(i).text == "save stage") {
-					world.sw.writeList(world.rects);
-					
-				} else if (hb.get(i).text == "quit") {
-					frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
-				}
-			}
-		}
-
+		ba.getClick();
+		
 		rc.addp2(world.mouse);
 		rc.create();
 		
