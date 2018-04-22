@@ -25,7 +25,7 @@ public class SaveWriter {
 	private int lcount;
 	
 	public SaveWriter(String name) {
-		file = new File(name + ".txt");
+		file = new File(name + ".world");
 		System.out.println(file.getName());
 		try {
 			if (!file.exists()) {
@@ -38,7 +38,7 @@ public class SaveWriter {
 
 	}
 	
-	public void writeList(ArrayList<RectangleObject> list) {
+	public void writeList(GameObjects go) {
 		System.out.println("stage saved to " + file.getName());
 		BufferedWriter writer;
 		try {
@@ -46,8 +46,8 @@ public class SaveWriter {
 			writer.close();
 		} catch (IOException e) {e.printStackTrace();}
 		
-		for (int i = 0; i < list.size(); i++) {
-			RectangleObject o = list.get(i);
+		for (int i = 0; i < go.rects.size(); i++) {
+			RectangleObject o = go.rects.get(i);
 			if (!(o.getWidth() == 0) || !(o.getHeight() == 0)) {
 				write(o.getX() + "," + o.getY() + "," + o.getWidth() + "," + o.getHeight() + "," + o.getCOLOR().hashCode());
 			}

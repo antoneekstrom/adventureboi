@@ -49,8 +49,5 @@ public class PlayerAction extends AbstractAction {
 				player.MOVACC = 1;
 			}
 		}
-		if (action == "escp") {
-			System.out.println("world saved");
-		}
 	}
 }

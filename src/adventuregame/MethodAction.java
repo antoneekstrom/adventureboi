@@ -24,8 +24,6 @@ public class MethodAction extends AbstractAction {
 			} else {
 				world.options.visible = false;
 			}
-			//System.out.println("world saved to " + world.name + ".txt");
-			//world.sw.writeList(world.rects);
 		}
 	}
 

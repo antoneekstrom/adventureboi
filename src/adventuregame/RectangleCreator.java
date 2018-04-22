@@ -26,14 +26,14 @@ public class RectangleCreator {
 	}
 	
 	public void addp1(Point p) {
-		p1 = world.mouse;
+		p1 = p;
 		p1.x -= 800;
 		p1.x += world.c.getD2c();
 		p1.y -= 200;
 	}
 	
 	public void addp2(Point p) {
-		p2 = world.mouse;
+		p2 = p;
 		p2.x -= 800;
 		p2.y -= 200;
 		p2.x += world.c.getD2c();
