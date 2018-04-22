@@ -25,7 +25,7 @@ public class SaveWriter {
 	private int lcount;
 	
 	public SaveWriter(String name) {
-		file = new File(name + ".txt");
+		file = new File(name + ".world");
 		System.out.println(file.getName());
 		try {
 			if (!file.exists()) {
