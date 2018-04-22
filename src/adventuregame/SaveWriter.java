@@ -12,9 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.stream.Stream;
-
 import worlds.ListWorld;
 
 public class SaveWriter {
@@ -36,6 +34,20 @@ public class SaveWriter {
 			e.printStackTrace();
 		}
 
+	}
+	
+	public void setWorld(String s, ListWorld w) {
+		file = new File(s + ".world");
+		System.out.println(file.getName());
+		try {
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+			writer = new BufferedWriter(new FileWriter(file, true));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		loadWorld(w);
 	}
 	
 	public void writeList(GameObjects go) {

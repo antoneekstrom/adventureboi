@@ -29,7 +29,6 @@ import adventuregame.PlayerJump;
 import adventuregame.RectangleCreator;
 import adventuregame.RectangleObject;
 import adventuregame.SaveWriter;
-import adventuregame.TField;
 import adventuregame.Text;
 import adventuregame.TextCreator;
 

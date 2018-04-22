@@ -28,7 +28,7 @@ public class GameObjects {
 			texts.get(i).update();
 			
 			if (texts.get(i).getId() == "debug") {
-				texts.get(i).text("modeIndex:" + world.m.ba.modeIndex + " mode:" + world.m.ba.mode);
+				texts.get(i).text("rectangles:" + world.go.rects.size() + " texts:" + world.go.texts.size());
 			}
 		}
 	}
