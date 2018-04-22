@@ -38,7 +38,6 @@ public class SaveWriter {
 	
 	public void setWorld(String s, ListWorld w) {
 		file = new File(s + ".world");
-		System.out.println(file.getName());
 		try {
 			if (!file.exists()) {
 				file.createNewFile();
@@ -48,6 +47,10 @@ public class SaveWriter {
 			e.printStackTrace();
 		}
 		loadWorld(w);
+	}
+	
+	public String getWorld() {
+		return file.getName();
 	}
 	
 	public void writeList(GameObjects go) {
@@ -70,7 +73,6 @@ public class SaveWriter {
 		lnum = n;
 		try (Stream<String> lines = Files.lines(Paths.get(file.getName()))) {
 		    line = lines.skip(lnum).findFirst().get();
-		    System.out.println(line);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

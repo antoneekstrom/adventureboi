@@ -106,6 +106,10 @@ public class ListWorld extends World {
 		HudObj c3 = new HudObj(950, 50, 100, 100, Color.BLACK);
 		HudObj c4 = new HudObj(1050, 50, 100, 100, Color.GREEN);
 		HudObj mode = new HudObj(500, 200, 400, 100, Color.GRAY);
+		HudObj world = new HudObj(50, 350, 400, 100, Color.ORANGE);
+		world.setId("world");
+		world.addText("Change Level");
+		world.highlight = true;
 		mode.setId("mode");
 		c1.highlight = false;
 		c2.highlight = false;
@@ -117,8 +121,8 @@ public class ListWorld extends World {
 		quit.addText("quit");
 		mode.addText("mode: " + m.ba.mode);
 		
-		
 		options.hb.add(new HudObj(0, 0, dim.width, dim.height, new Color(0, 0, 0, (float)0.7)));
+		options.hb.add(world);
 		options.hb.add(colors);
 		options.hb.add(c1);
 		options.hb.add(c2);

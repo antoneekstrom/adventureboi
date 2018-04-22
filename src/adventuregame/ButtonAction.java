@@ -43,8 +43,13 @@ public class ButtonAction {
 						
 					} else if (hb.get(i).text == "quit" && world.options.visible == true) {
 						frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+						
 					} else if (hb.get(i).id == "mode") {
 						changeMode();
+						
+					} else if (hb.get(i).id == "world") {
+						world.sw.setWorld("lw", world);
+						
 					}
 					if (hb.get(i).highlight == false) {
 						System.out.println(hb.get(i).colord);
