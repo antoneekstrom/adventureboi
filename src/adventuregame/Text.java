@@ -12,13 +12,17 @@ public class Text extends Object {
 	private String text;
 	private int FONT_SIZE = 30;
 	private String FONT_NAME = "Comic Sans MS";
-	private Font font;
+	public Font font;
 	private int FONT_STYLE = Font.PLAIN;
 	private String id;
 	
 	public Text(Main f, World w, String t) {
 		super(f, w);
 		text = t;
+	}
+	
+	public void setFont(Font f) {
+		font = f;
 	}
 	
 	public void text(String t) {

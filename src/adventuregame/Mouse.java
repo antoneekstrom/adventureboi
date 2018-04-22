@@ -1,13 +1,8 @@
 package adventuregame;
 
-import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.WindowEvent;
-import java.util.ArrayList;
 
 import worlds.ListWorld;
 
@@ -17,12 +12,14 @@ public class Mouse implements MouseListener {
 	ListWorld world;
 	Point p1, p2;
 	RectangleCreator rc;
-	ButtonAction ba;
+	TextCreator tc;
+	public ButtonAction ba;
 	
-	public Mouse(ListWorld w, Main f, RectangleCreator rc) {
+	public Mouse(ListWorld w, Main f, RectangleCreator rc, TextCreator tc) {
 		world = w;
 		frame = f;
 		this.rc = rc;
+		this.tc = tc;
 		ba = new ButtonAction(w, f);
 	}
 	
@@ -43,15 +40,27 @@ public class Mouse implements MouseListener {
 
 	@Override
 	public void mousePressed(MouseEvent arg0) {
-		rc.addp1(world.mouse);
+		
+		if (ba.mode == "rectangle") {
+			rc.addp1(world.mouse);
+			
+		} else if (ba.mode == "text") {
+			tc.setPoint(world.mouse);
+		}
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
 		//checks hud clicks
-		
-		rc.addp2(world.mouse);
-		rc.create();
+		if (world.options.visible == false) {
+			if (ba.mode == "rectangle") {
+				rc.addp2(world.mouse);
+				rc.create();
+				
+			} else if (ba.mode == "text") {
+				tc.createText();			
+			}
+		}
 		
 	}
 

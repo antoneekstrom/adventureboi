@@ -12,9 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.stream.Stream;
-
 import worlds.ListWorld;
 
 public class SaveWriter {
@@ -38,7 +36,24 @@ public class SaveWriter {
 
 	}
 	
-	public void writeList(ArrayList<RectangleObject> list) {
+	public void setWorld(String s, ListWorld w) {
+		file = new File(s + ".world");
+		try {
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+			writer = new BufferedWriter(new FileWriter(file, true));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		loadWorld(w);
+	}
+	
+	public String getWorld() {
+		return file.getName();
+	}
+	
+	public void writeList(GameObjects go) {
 		System.out.println("stage saved to " + file.getName());
 		BufferedWriter writer;
 		try {
@@ -46,8 +61,8 @@ public class SaveWriter {
 			writer.close();
 		} catch (IOException e) {e.printStackTrace();}
 		
-		for (int i = 0; i < list.size(); i++) {
-			RectangleObject o = list.get(i);
+		for (int i = 0; i < go.rects.size(); i++) {
+			RectangleObject o = go.rects.get(i);
 			if (!(o.getWidth() == 0) || !(o.getHeight() == 0)) {
 				write(o.getX() + "," + o.getY() + "," + o.getWidth() + "," + o.getHeight() + "," + o.getCOLOR().hashCode());
 			}
@@ -58,7 +73,6 @@ public class SaveWriter {
 		lnum = n;
 		try (Stream<String> lines = Files.lines(Paths.get(file.getName()))) {
 		    line = lines.skip(lnum).findFirst().get();
-		    System.out.println(line);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

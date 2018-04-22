@@ -49,8 +49,7 @@ public class PlayerCollision {
 					p.onground = true;
 					dy = pr.getMaxY() - r.getMinY();
 				//if player is under object
-				}
-				if (pr.getMaxY() < r.getMinY()) {
+				} else if (pr.getMaxY() < r.getMinY()) {
 					
 					side = "under";
 					dy = r.getMinY() - pr.getMaxY();
