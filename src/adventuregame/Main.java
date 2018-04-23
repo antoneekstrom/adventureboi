@@ -31,13 +31,11 @@ public class Main extends JFrame {
 		this.setVisible(true);
 		
 		//create and add world
-		IntroductionWorld intro = new IntroductionWorld(f);
-		TutorialWorld tut = new TutorialWorld(f);
-		Stage1  st1 = new Stage1(f);
 		ListWorld lw = new ListWorld(f);
+		Menu m = new Menu(f);
+		add(m);
 		add(lw);
-		lw.run();
-		intro.addNext(tut);		
+		m.run();
 	}
 	
 	public static void main(String[] args) {

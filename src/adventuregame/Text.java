@@ -4,6 +4,7 @@ import java.awt.Graphics;
 
 import worlds.World;
 
+import java.awt.Dimension;
 import java.awt.Font;
 
 /** Object subclass. First set font color, size and family. then createFont(). */

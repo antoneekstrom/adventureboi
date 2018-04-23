@@ -10,12 +10,14 @@ public class HUD {
 	
 	public ArrayList<HudObj> hb;
 	public ArrayList<TField> tf;
+	public ArrayList<HudText> ht;
 	public boolean visible = false;
 	private ListWorld world;
 	
 	public HUD(ListWorld lw) {
 		tf = new ArrayList<TField>();
 		hb = new ArrayList<HudObj>();
+		ht = new ArrayList<HudText>();
 		world = lw;
 	}
 
@@ -33,7 +35,6 @@ public class HUD {
 				tf.get(i).setVisible(false);
 			}
 		}
-		
 	}
 	
 	public void specificUpdate(HudObj ho) {
@@ -50,6 +51,9 @@ public class HUD {
 			for (int i = 0; i < tf.size(); i++) {
 				tf.get(i).update(g);
 				tf.get(i).paint(g);
+			}
+			for (int i = 0; i < ht.size(); i++) {
+				ht.get(i).paint(g);
 			}
 		}
 	}

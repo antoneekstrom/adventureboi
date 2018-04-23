@@ -41,7 +41,7 @@ public class ButtonAction {
 					if (hb.get(i).text == "save stage" && world.options.visible == true) {
 						world.sw.writeList(world.go);
 						
-					} else if (hb.get(i).text == "quit" && world.options.visible == true) {
+					} else if (hb.get(i).id == "quit" && world.options.visible == true) {
 						frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
 						
 					} else if (hb.get(i).id == "mode") {

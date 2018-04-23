@@ -119,6 +119,7 @@ public class ListWorld extends World {
 		colors.addText("colors:");
 		save.addText("save stage");
 		quit.addText("quit");
+		quit.setId("quit");
 		mode.addText("mode: " + m.ba.mode);
 		
 		options.hb.add(new HudObj(0, 0, dim.width, dim.height, new Color(0, 0, 0, (float)0.7)));

@@ -1,6 +1,7 @@
 package adventuregame;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.MouseInfo;
 import java.awt.Point;
@@ -14,6 +15,7 @@ public class HudObj {
 	public String text;
 	public boolean highlight = true;
 	public String id;
+	public Font font;
 	
 	public HudObj(int x, int y, int w, int h, Color c) {
 		colord = c;
@@ -25,6 +27,10 @@ public class HudObj {
 	
 	public void setId(String s) {
 		id = s;
+	}
+	
+	public void setFont(Font f) {
+		font = f;
 	}
 	
 	public void addText(String t) {
@@ -42,13 +48,14 @@ public class HudObj {
 			}
 		}
 	}
-	
+
 	public boolean mouseOver() {
 		mouse = MouseInfo.getPointerInfo().getLocation();
 		return hrect.contains(mouse);
 	}
-	
+
 	public void paint(Graphics g) {
+		g.setFont(font);
 		g.setColor(color);
 		g.fillRect(hrect.x, hrect.y, hrect.width, hrect.height);
 		if (!(text == null) ) {
@@ -56,5 +63,5 @@ public class HudObj {
 			g.drawString(text, (int) (hrect.getMinX() + (hrect.getWidth() / 2) - (g.getFontMetrics().stringWidth(text) / 2)), (int)(hrect.getMaxY() - (hrect.getHeight() / 2) + (g.getFontMetrics().getHeight() / 4)));
 		}
 	}
-	
+
 }
