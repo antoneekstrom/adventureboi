@@ -27,6 +27,9 @@ public class Menu extends ListWorld implements ActionListener {
 	public HUD levels;
 	public Point mouse;
 	public SaveWriter sw;
+	boolean hasSwitched = false;
+	boolean ready = false;
+	
 	
 	public Menu(Main f) {
 		super(f);
@@ -38,15 +41,9 @@ public class Menu extends ListWorld implements ActionListener {
 		setSize(dim);
 		setBackground(Color.CYAN);
 		
-		p = new Player(frame, this);
-		c = new Camera(dim);
-		go = new GameObjects(frame, this);
-		cl = new PlayerCollision(p);
-		
 		menu = new HUD(this);
 		levels = new HUD(this);
 		sw = new SaveWriter("menu");
-		sw.setWorld("lw", this);
 		m = new Mouse(this, frame, menu);
 		addMouseListener(m);
 		
@@ -65,7 +62,7 @@ public class Menu extends ListWorld implements ActionListener {
 		menu.visible = true;
 		levels.visible = false;
 		menu.ht.add(new HudText((dim.width /2) - 240, 200, "adventureboi", standard.deriveFont(0, 80)));
-		HudList llist = new HudList(new Rectangle((dim.width / 2) - 400, 100, 800, 900));
+		HudList llist = new HudList(new Rectangle((dim.width / 2) - 400, 100, 800, 900), frame);
 		llist.passWorld(this);
 		HudObj back = new HudObj(100, 100, 200, 100, Color.CYAN);
 		back.setHighlightColor(new Color(150, 255, 255));
@@ -73,7 +70,7 @@ public class Menu extends ListWorld implements ActionListener {
 		back.addText("back");
 		back.setId("backtomenu");
 		back.setFont(standard);
-		llist.addBackground(Color.CYAN);
+		llist.addBackground(Color.WHITE);
 		llist.addScrollbar();
 		levels.hl.add(llist);
 		levels.hb.add(back);
@@ -86,14 +83,17 @@ public class Menu extends ListWorld implements ActionListener {
 		llist.addEntry("world4", "id");
 		llist.addEntry("world5", "id");
 		llist.alignEntries();
+		ready = true;
 		timer = new Timer(14, this);
 		timer.start();
 	}
 	
 	public void paint(Graphics g) {
 		super.paintComponent(g);
-		menu.paint(g);
-		levels.paint(g);
+		if (ready == true) {
+			menu.paint(g);
+			levels.paint(g);
+		}
 	}
 
 	double time1, time2;
@@ -108,6 +108,11 @@ public class Menu extends ListWorld implements ActionListener {
 			
 			if (menu.visible == false) {
 				levels.visible = true;
+			}
+			
+			if (hasSwitched == true) {
+				hasSwitched = false;
+				frame.lw.timer.stop();
 			}
 			
 			mouse = MouseInfo.getPointerInfo().getLocation();

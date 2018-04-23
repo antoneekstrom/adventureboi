@@ -54,8 +54,8 @@ public class Scrollbar {
 		}
 		for (int i = 0; i < listobjs.size(); i++) {
 			HudObj o = listobjs.get(i);
-			o.hrect.y = (i * 200 + 100) + (int)rect.getMinY() + (rect.y - ho.hrect.y);
-			if (o.hrect.y > rect.getMaxY()) {
+			o.hrect.y = (i * 200 + 100) + (int) rect.getMinY() + (rect.y - ho.hrect.y) * (listobjs.size() / 5);
+			if (o.hrect.getMaxY() > rect.getMaxY()) {
 				o.visible = false;
 			} else if (o.hrect.y < rect.getMinY()) {
 				o.visible = false;
@@ -66,7 +66,7 @@ public class Scrollbar {
 	}
 	
 	public void paint(Graphics g) {
-		g.setColor(Color.CYAN);
+		g.setColor(Color.WHITE);
 		g.fillRect(rect.x, rect.y, rect.width, rect.height);
 		ho.paint(g);
 	}
