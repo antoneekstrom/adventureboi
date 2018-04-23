@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.MouseInfo;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,6 +22,11 @@ public class Menu extends ListWorld implements ActionListener {
 	public Main frame;
 	public String name = "menu";
 	public HUD menu;
+	public Mouse m2;
+	public Font standard = new Font("Comic Sans MS", 20 ,50);
+	public HUD levels;
+	public Point mouse;
+	public SaveWriter sw;
 	
 	public Menu(Main f) {
 		super(f);
@@ -30,28 +37,55 @@ public class Menu extends ListWorld implements ActionListener {
 		
 		setSize(dim);
 		setBackground(Color.CYAN);
-		SaveWriter sw = new SaveWriter("menu");
-		sw.loadWorld(this);
 		
-		rc = new RectangleCreator(this);
-		tc = new TextCreator(this);
-		m = new Mouse(this, frame, rc, tc);
+		p = new Player(frame, this);
+		c = new Camera(dim);
+		go = new GameObjects(frame, this);
+		cl = new PlayerCollision(p);
+		
 		menu = new HUD(this);
+		levels = new HUD(this);
+		sw = new SaveWriter("menu");
+		sw.setWorld("lw", this);
+		m = new Mouse(this, frame, menu);
+		addMouseListener(m);
 		
 		HudObj start = new HudObj((dim.width / 2) -300, 400, 600, 100, Color.ORANGE);
 		HudObj exit = new HudObj((dim.width / 2) -300, 550, 600, 100, Color.ORANGE);
 		
-		start.setFont(new Font("Comic Sans MS", 20, 35));
+		start.setFont(standard);
 		start.addText("start");
-		exit.setFont(new Font("Comic Sans MS", 20, 35));
+		start.setId("start");
+		exit.setFont(standard);
 		exit.addText("exit");
 		exit.setId("quit");
 		
 		menu.hb.add(exit);
 		menu.hb.add(start);
 		menu.visible = true;
-		menu.ht.add(new HudText((dim.width /2) - 200, 200, "adventureboi", new Font("Comic Sans MS", 20, 65)));
-		
+		levels.visible = false;
+		menu.ht.add(new HudText((dim.width /2) - 240, 200, "adventureboi", standard.deriveFont(0, 80)));
+		HudList llist = new HudList(new Rectangle((dim.width / 2) - 400, 100, 800, 900));
+		llist.passWorld(this);
+		HudObj back = new HudObj(100, 100, 200, 100, Color.CYAN);
+		back.setHighlightColor(new Color(150, 255, 255));
+		back.highlight = true;
+		back.addText("back");
+		back.setId("backtomenu");
+		back.setFont(standard);
+		llist.addBackground(Color.CYAN);
+		llist.addScrollbar();
+		levels.hl.add(llist);
+		levels.hb.add(back);
+		llist.setFont(standard);
+		llist.setEntry(new HudObj( ((int) llist.rect.getMinX()), (int) llist.rect.getMinY(), (int) (llist.rect.width * 0.7), 100, Color.ORANGE));
+		llist.addEntry("lw", "lw");
+		llist.addEntry("world1", "world1");
+		llist.addEntry("world2", "id");
+		llist.addEntry("world3", "id");
+		llist.addEntry("world4", "id");
+		llist.addEntry("world5", "id");
+		llist.alignEntries();
 		timer = new Timer(14, this);
 		timer.start();
 	}
@@ -59,6 +93,7 @@ public class Menu extends ListWorld implements ActionListener {
 	public void paint(Graphics g) {
 		super.paintComponent(g);
 		menu.paint(g);
+		levels.paint(g);
 	}
 
 	double time1, time2;
@@ -67,7 +102,14 @@ public class Menu extends ListWorld implements ActionListener {
 		time1 = System.nanoTime() / 1000000;
 		if (time1 - time2 > FRAMERATE) {
 			time2 = System.nanoTime() / 1000000;
+			
 			menu.update();
+			levels.update();
+			
+			if (menu.visible == false) {
+				levels.visible = true;
+			}
+			
 			mouse = MouseInfo.getPointerInfo().getLocation();
 			repaint();
 		}

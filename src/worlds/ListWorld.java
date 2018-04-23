@@ -41,11 +41,11 @@ public class ListWorld extends World {
 	private Timer timer;
 	private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 	public Player p;
-	private Main frame;
+	public Main frame;
 	private boolean ready = false;
 	public Camera c;
 	public Point mouse;
-	private PlayerCollision cl;
+	protected PlayerCollision cl;
 	public Point mousecoord;
 	public SaveWriter sw;
 	public Controller controller;
@@ -92,12 +92,14 @@ public class ListWorld extends World {
 		
 		rc = new RectangleCreator(this);
 		tc = new TextCreator(this);
-		m = new Mouse(this, frame, rc, tc);
-		this.addMouseListener(m);
 		mouse = new Point();
 		go =  new GameObjects(frame, this);
-		
 		options = new HUD(this);
+		m = new Mouse(this, frame, options);
+		m.addRc(rc);
+		m.addTc(tc);
+		this.addMouseListener(m);
+		
 		HudObj quit = new HudObj(50, 200, 400, 100, Color.ORANGE);
 		HudObj save = new HudObj(50, 50, 400, 100, Color.ORANGE);
 		HudObj colors = new HudObj(500, 50, 200, 100, Color.GRAY);
@@ -115,8 +117,8 @@ public class ListWorld extends World {
 		c2.highlight = false;
 		c3.highlight = false;
 		c4.highlight = false;
-		colors.highlight = false;
 		colors.addText("colors:");
+		colors.setId("color");
 		save.addText("save stage");
 		quit.addText("quit");
 		quit.setId("quit");
@@ -132,6 +134,7 @@ public class ListWorld extends World {
 		options.hb.add(quit);
 		options.hb.add(save);
 		options.hb.add(mode);
+		
 		
 		mousecoord = new Point();
 		sw = new SaveWriter(name);

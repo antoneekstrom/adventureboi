@@ -1,5 +1,6 @@
 package adventuregame;
 
+import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -14,13 +15,27 @@ public class Mouse implements MouseListener {
 	RectangleCreator rc;
 	TextCreator tc;
 	public ButtonAction ba;
+	HUD hud;
+	Point mouse;
+	boolean pressed = false;
 	
-	public Mouse(ListWorld w, Main f, RectangleCreator rc, TextCreator tc) {
+	public Mouse(ListWorld w, Main f, HUD h) {
 		world = w;
 		frame = f;
+		hud = h;
+		ba = new ButtonAction(w, f, hud);
+	}
+	
+	public boolean getPressed() {
+		return pressed;
+	}
+	
+	public void addRc(RectangleCreator rc) {
 		this.rc = rc;
+	}
+	
+	public void addTc(TextCreator tc) {
 		this.tc = tc;
-		ba = new ButtonAction(w, f);
 	}
 	
 	@Override
@@ -40,28 +55,34 @@ public class Mouse implements MouseListener {
 
 	@Override
 	public void mousePressed(MouseEvent arg0) {
-		
-		if (ba.mode == "rectangle") {
-			rc.addp1(world.mouse);
-			
-		} else if (ba.mode == "text") {
-			tc.setPoint(world.mouse);
+		mouse = MouseInfo.getPointerInfo().getLocation();
+		if (rc != null) {
+			if (ba.mode == "rectangle") {
+				rc.addp1(mouse);
+				
+			} else if (ba.mode == "text") {
+				tc.setPoint(mouse);
+			}
 		}
+		pressed = true;
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
+		mouse = MouseInfo.getPointerInfo().getLocation();
 		//checks hud clicks
-		if (world.options.visible == false) {
-			if (ba.mode == "rectangle") {
-				rc.addp2(world.mouse);
-				rc.create();
-				
-			} else if (ba.mode == "text") {
-				tc.createText();			
+		if (rc != null && tc != null) {
+			if (hud.visible == false) {
+				if (ba.mode == "rectangle") {
+					rc.addp2(mouse);
+					rc.create();
+					
+				} else if (ba.mode == "text") {
+					tc.createText();			
+				}
 			}
 		}
-		
+		pressed = false;
 	}
 
 }

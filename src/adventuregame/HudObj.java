@@ -16,13 +16,18 @@ public class HudObj {
 	public boolean highlight = true;
 	public String id;
 	public Font font;
+	public boolean visible = true;
 	
 	public HudObj(int x, int y, int w, int h, Color c) {
 		colord = c;
 		hrect = new Rectangle(w, h);
 		hrect.setLocation(x, y);
-		color2 = colord.brighter();
+			color2 = colord.brighter();			
 		color = colord;
+	}
+	
+	public void setHighlightColor(Color c) {
+		color2 = c;
 	}
 	
 	public void setId(String s) {

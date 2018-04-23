@@ -16,6 +16,7 @@ public class Main extends JFrame {
 	Dimension fdim;
 	Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 	public static boolean fullscreen = true;
+	public ListWorld lw;
 	
 	public Main() {
 		
@@ -41,11 +42,6 @@ public class Main extends JFrame {
 	public static void main(String[] args) {
 		Main frame = new Main();
 		frame.start(frame);
-	    /*Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-	        public void run() {
-	            System.out.println("In shutdown hook");
-	        }
-	    }, "Shutdown-thread"));*/
 	}
 }
 
