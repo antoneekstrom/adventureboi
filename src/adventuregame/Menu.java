@@ -51,8 +51,7 @@ public class Menu extends ListWorld implements ActionListener {
 		go = new GameObjects(frame, this);
 		p = new Player(frame, this);
 		cl = new PlayerCollision(p);
-		sw.setWorld("world1", this);
-		sw.loadWorld(this);
+		sw.setWorld("menu", this);
 		
 		HudObj start = new HudObj((dim.width / 2) -300, 400, 600, 100, Color.ORANGE);
 		HudObj exit = new HudObj((dim.width / 2) -300, 550, 600, 100, Color.ORANGE);
@@ -92,6 +91,11 @@ public class Menu extends ListWorld implements ActionListener {
 		llist.alignEntries();
 		ready = true;
 		timer = new Timer(14, this);
+		p.setGravity(true);
+		p.setLocation(0, 100);
+		p.setSize(150, 125);
+		p.setGRAVITY(30);
+		p.JFUEL = 7;
 		timer.start();
 	}
 	
@@ -100,6 +104,10 @@ public class Menu extends ListWorld implements ActionListener {
 		if (ready == true) {
 			menu.paint(g);
 			levels.paint(g);
+			go.paint(g);
+			if (p.enabled == true) {
+				p.paint(g);
+			}
 		}
 	}
 
@@ -110,8 +118,11 @@ public class Menu extends ListWorld implements ActionListener {
 		if (time1 - time2 > FRAMERATE) {
 			time2 = System.nanoTime() / 1000000;
 			
+			p.update();
 			menu.update();
 			levels.update();
+			c.run(p);
+			cl.pRun(p);
 			
 			if (menu.visible == false) {
 				levels.visible = true;

@@ -25,9 +25,9 @@ public class Scrollbar {
 		parent = r;
 		listobjs = new ArrayList<HudObj>();
 		rect = new Rectangle((int)parent.getMaxX(), (int)parent.getMinY(), 50, parent.height);
-		ho = new HudObj(rect.x, rect.y, rect.width, 100, Color.ORANGE);
+		ho = new HudObj(rect.x + 10, rect.y, rect.width - 20, 100, Color.ORANGE);
 		ho.highlight = true;
-		rail = new HudObj(parent.x + parent.width, parent.y, rect.width / 2, parent.height, Color.BLACK);
+		rail = new HudObj(parent.x + parent.width - rect.width / 2, parent.y, rect.width / 2, parent.height, Color.ORANGE);
 	}
 	
 	public void addList(ArrayList<HudObj> al) {

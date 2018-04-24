@@ -23,6 +23,7 @@ public class Player extends Object {
 	
 	private double aCounter = 0;
 	private double ANIMSPEED = 3;
+	public boolean enabled = false;
 	
 	//movement
 	public String direction = "none";
@@ -88,6 +89,11 @@ public class Player extends Object {
 		} else {
 			onground = false;
 		}
+	}
+	
+	public void isEnabled(boolean b) {
+		enabled = b;
+		
 	}
 	
 	public void setSize(int w, int h) {
