@@ -35,7 +35,7 @@ import adventuregame.TextCreator;
 public class ListWorld extends World {
 	
 	private int FRAMERATE = 12;
-	public String name = "world1";
+	public String name = "menu";
 	public ArrayList<RectangleObject> rects;
 	private ArrayList<Text> texts;
 	private Timer timer;
