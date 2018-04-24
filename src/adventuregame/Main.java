@@ -17,6 +17,8 @@ public class Main extends JFrame {
 	Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 	public static boolean fullscreen = true;
 	public ListWorld lw;
+	public Menu m;
+	public Thread t;
 	
 	public Main() {
 		
@@ -37,6 +39,13 @@ public class Main extends JFrame {
 		add(m);
 		add(lw);
 		m.run();
+		Thread t = new Thread() {
+			public void run() {
+				lw.run();
+			}
+		};
+		m.getThread(t);
+		
 	}
 	
 	public static void main(String[] args) {

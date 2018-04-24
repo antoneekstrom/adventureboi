@@ -21,9 +21,11 @@ public class HudList {
 	ArrayList<HudObj> entries;
 	Scrollbar sb;
 	ListWorld world;
+	Main frame;
 	
-	public HudList(Rectangle r) {
+	public HudList(Rectangle r, Main f) {
 		rect = r;
+		frame = f;
 		entries = new ArrayList<HudObj>();
 	}
 	
@@ -81,8 +83,7 @@ public class HudList {
 		Point mouse = MouseInfo.getPointerInfo().getLocation();
 		for (int i = 0; i < sb.listobjs.size(); i++) {
 			HudObj o = sb.listobjs.get(i);
-			if (o.id == "lw" && world.m.pressed == true && o.hrect.contains(mouse)) {
-				world.frame.lw.run();
+			if (world.m.pressed == true && o.hrect.contains(mouse)) {
 			}
 		}
 	}

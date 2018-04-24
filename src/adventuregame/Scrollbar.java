@@ -18,6 +18,7 @@ public class Scrollbar {
 	ListWorld world;
 	ArrayList<HudObj> listobjs;
 	boolean hold = false;
+	HudObj rail;
 	
 	public Scrollbar(Color c, Rectangle r) {
 		color = c;
@@ -26,6 +27,7 @@ public class Scrollbar {
 		rect = new Rectangle((int)parent.getMaxX(), (int)parent.getMinY(), 50, parent.height);
 		ho = new HudObj(rect.x, rect.y, rect.width, 100, Color.ORANGE);
 		ho.highlight = true;
+		rail = new HudObj(parent.x + parent.width, parent.y, rect.width / 2, parent.height, Color.BLACK);
 	}
 	
 	public void addList(ArrayList<HudObj> al) {
@@ -54,8 +56,8 @@ public class Scrollbar {
 		}
 		for (int i = 0; i < listobjs.size(); i++) {
 			HudObj o = listobjs.get(i);
-			o.hrect.y = (i * 200 + 100) + (int)rect.getMinY() + (rect.y - ho.hrect.y);
-			if (o.hrect.y > rect.getMaxY()) {
+			o.hrect.y = (i * 200 + 100) + (int) rect.getMinY() + (rect.y - ho.hrect.y) * (listobjs.size() / 5);
+			if (o.hrect.getMaxY() > rect.getMaxY()) {
 				o.visible = false;
 			} else if (o.hrect.y < rect.getMinY()) {
 				o.visible = false;
@@ -66,7 +68,8 @@ public class Scrollbar {
 	}
 	
 	public void paint(Graphics g) {
-		g.setColor(Color.CYAN);
+		rail.paint(g);
+		g.setColor(Color.WHITE);
 		g.fillRect(rect.x, rect.y, rect.width, rect.height);
 		ho.paint(g);
 	}

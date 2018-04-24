@@ -38,7 +38,7 @@ public class ListWorld extends World {
 	public String name = "menu";
 	public ArrayList<RectangleObject> rects;
 	private ArrayList<Text> texts;
-	private Timer timer;
+	public Timer timer;
 	private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 	public Player p;
 	public Main frame;
@@ -54,6 +54,9 @@ public class ListWorld extends World {
 	public GameObjects go;
 	public Mouse m;
 	public TextCreator tc;
+	boolean hasSwitched = false;
+	
+	public Thread t;
 	
 	public ListWorld(Main f) {
 		frame = f;
@@ -177,6 +180,11 @@ public class ListWorld extends World {
 			c.run(p);
 			cl.pRun(p);
 			
+			if (hasSwitched == true) {
+				hasSwitched = false;
+				frame.m.timer.stop();
+			}
+			
 			options.update();
 			go.update();
 			
@@ -216,5 +224,14 @@ public class ListWorld extends World {
 	public void stopPlayerController() {
 		this.getInputMap().clear();
 		this.getActionMap().clear();
+	}
+	
+	public void getThread(Thread t) {
+		this.t = t;
+	}
+
+	public void switchToWorld() {
+		t.start();
+		timer.stop();
 	}
 }
