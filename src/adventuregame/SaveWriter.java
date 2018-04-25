@@ -22,6 +22,10 @@ public class SaveWriter {
 	private int lnum;
 	private int lcount;
 	
+	public void ping() {
+		System.out.println("ping");
+	}
+	
 	public SaveWriter(String name) {
 		file = new File(name + ".world");
 		System.out.println(file.getName());
@@ -38,6 +42,7 @@ public class SaveWriter {
 	
 	public void setWorld(String s, ListWorld w) {
 		file = new File(s + ".world");
+		System.out.println(w.go.rects.size());
 		try {
 			if (!file.exists()) {
 				file.createNewFile();
@@ -103,7 +108,8 @@ public class SaveWriter {
 	Color c;
 	public void loadWorld(ListWorld world) {
 		try {
-			world.rects.clear();
+			world.go.rects.clear();
+			world.cl.collisions.clear();
 			lcount = countLines(file.getName());
 		} catch (IOException e) {e.printStackTrace();}
 		for (int i = 0; i < lcount; i++) {
@@ -118,6 +124,7 @@ public class SaveWriter {
 			}
 			world.addRect(new Point(x, y), new Dimension(w, h), c);
 		}
+		System.out.println(world.go.rects.size());
 	}
 	
 	public void write(String s) {

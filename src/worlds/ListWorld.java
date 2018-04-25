@@ -45,7 +45,7 @@ public class ListWorld extends World {
 	private boolean ready = false;
 	public Camera c;
 	public Point mouse;
-	protected PlayerCollision cl;
+	public PlayerCollision cl;
 	public Point mousecoord;
 	public SaveWriter sw;
 	public Controller controller;
@@ -55,6 +55,7 @@ public class ListWorld extends World {
 	public Mouse m;
 	public TextCreator tc;
 	boolean hasSwitched = false;
+	protected ArrayList<HUD> huds;
 	
 	public Thread t;
 	
@@ -64,6 +65,18 @@ public class ListWorld extends World {
 		setSize(dim);
 		texts = new ArrayList<Text>();
 		rects = new ArrayList<RectangleObject>();
+	}
+	
+	public void switchHud(String s) {
+		for (int i = 0; i < huds.size(); i++) {
+			
+			if (huds.get(i).id.equals(s)) {
+				huds.get(i).visible = true;
+				
+			} else {
+				huds.get(i).visible = false;
+			}
+		}
 	}
 	
 	public Player getPlayer() {
@@ -78,6 +91,14 @@ public class ListWorld extends World {
 		go.rects.add(ro);
 		c.add(ro);
 		cl.add(ro.getObjectRect());
+	}
+	
+	public SaveWriter getSw() {
+		return sw;
+	}
+	
+	public ListWorld getWorld() {
+		return this;
 	}
 	
 	public void addText(Point p, Font font, String text, String id, Color color) {
@@ -103,6 +124,28 @@ public class ListWorld extends World {
 		m.addTc(tc);
 		this.addMouseListener(m);
 		
+		createOptions();
+		
+		mousecoord = new Point();
+		sw = new SaveWriter(name);
+		p = new Player(frame, this);
+		c = new Camera(dim);
+		cl = new PlayerCollision(p);
+		sw.loadWorld(this);
+		startPlayerController(p);
+		p.setGravity(true);
+		p.setLocation(0, 100);
+		p.setSize(150, 125);
+		p.setGRAVITY(30);
+		p.JFUEL = 7;
+		ready = true;
+		c.add(p);
+		addText(new Point(400, 400), new Font("Comic Sans MS", 20, 20), "hejhej", "debug", Color.WHITE);
+		timer = new Timer(14, this);
+		timer.start();
+	}
+	
+	public void createOptions() {
 		HudObj quit = new HudObj(50, 200, 400, 100, Color.ORANGE);
 		HudObj save = new HudObj(50, 50, 400, 100, Color.ORANGE);
 		HudObj colors = new HudObj(500, 50, 200, 100, Color.GRAY);
@@ -126,7 +169,6 @@ public class ListWorld extends World {
 		quit.addText("quit");
 		quit.setId("quit");
 		mode.addText("mode: " + m.ba.mode);
-		
 		options.hb.add(new HudObj(0, 0, dim.width, dim.height, new Color(0, 0, 0, (float)0.7)));
 		options.hb.add(world);
 		options.hb.add(colors);
@@ -137,25 +179,6 @@ public class ListWorld extends World {
 		options.hb.add(quit);
 		options.hb.add(save);
 		options.hb.add(mode);
-		
-		
-		mousecoord = new Point();
-		sw = new SaveWriter(name);
-		p = new Player(frame, this);
-		c = new Camera(dim);
-		cl = new PlayerCollision(p);
-		sw.loadWorld(this);
-		startPlayerController(p);
-		p.setGravity(true);
-		p.setLocation(0, 100);
-		p.setSize(150, 125);
-		p.setGRAVITY(30);
-		p.JFUEL = 7;
-		ready = true;
-		c.add(p);
-		addText(new Point(400, 400), new Font("Comic Sans MS", 20, 20), "hejhej", "debug", Color.WHITE);
-		timer = new Timer(14, this);
-		timer.start();
 	}
 	
 	public void paint(Graphics g) {

@@ -10,6 +10,7 @@ import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.Timer;
 
@@ -30,20 +31,42 @@ public class Menu extends ListWorld implements ActionListener {
 	boolean hasSwitched = false;
 	boolean ready = false;
 	
-	
 	public Menu(Main f) {
 		super(f);
 		frame = f;
+	}
+	
+	public void switchHud(String s) {
+		for (int i = 0; i < huds.size(); i++) {
+			
+			if (huds.get(i).id.equals(s)) {
+				huds.get(i).visible = true;
+				System.out.println(true);
+				
+			} else {
+				huds.get(i).visible = false;
+				System.out.println(false);
+			}
+			setBackground(Color.CYAN);
+		}
 	}
 	
 	public void run() {
 		
 		setSize(dim);
 		setBackground(Color.CYAN);
+		sw = new SaveWriter("menu");
+		huds = new ArrayList<HUD>();
 		
 		menu = new HUD(this);
+		menu.id = "menu";
 		levels = new HUD(this);
-		sw = new SaveWriter("menu");
+		levels.id = "levels";
+		options = new HUD(this);
+		options.id = "options";
+		huds.add(menu);
+		huds.add(levels);
+		
 		m = new Mouse(this, frame, menu);
 		addMouseListener(m);
 		
@@ -51,7 +74,8 @@ public class Menu extends ListWorld implements ActionListener {
 		go = new GameObjects(frame, this);
 		p = new Player(frame, this);
 		cl = new PlayerCollision(p);
-		sw.setWorld("menu", this);
+		
+		createOptions();
 		
 		HudObj start = new HudObj((dim.width / 2) -300, 400, 600, 100, Color.ORANGE);
 		HudObj exit = new HudObj((dim.width / 2) -300, 550, 600, 100, Color.ORANGE);
@@ -69,9 +93,12 @@ public class Menu extends ListWorld implements ActionListener {
 		levels.visible = false;
 		menu.ht.add(new HudText((dim.width /2) - 240, 200, "adventureboi", standard.deriveFont(0, 80)));
 		HudList llist = new HudList(new Rectangle((dim.width / 2) - 400, 100, 800, 900), frame);
+		levels.ht.add(new HudText(50, 50, "rects", standard));
 		llist.passWorld(this);
-		HudObj back = new HudObj(100, 100, 200, 100, Color.CYAN);
-		back.setHighlightColor(new Color(150, 255, 255));
+		llist.passSw(sw);
+		llist.huds.add(menu);
+		llist.huds.add(levels);
+		HudObj back = new HudObj(100, 100, 200, 100, Color.ORANGE);
 		back.highlight = true;
 		back.addText("back");
 		back.setId("backtomenu");
@@ -89,12 +116,17 @@ public class Menu extends ListWorld implements ActionListener {
 		llist.addEntry("world4", "id");
 		llist.addEntry("world5", "id");
 		llist.alignEntries();
+		llist.huds.add(levels);
+		llist.huds.add(menu);
+		switchHud("menu");
 		ready = true;
 		timer = new Timer(14, this);
 		p.setGravity(true);
 		p.setLocation(0, 100);
 		p.setSize(150, 125);
 		p.setGRAVITY(30);
+		p.isEnabled(true);
+		startPlayerController(p);
 		p.JFUEL = 7;
 		timer.start();
 	}
@@ -122,11 +154,8 @@ public class Menu extends ListWorld implements ActionListener {
 			menu.update();
 			levels.update();
 			c.run(p);
+			go.update();
 			cl.pRun(p);
-			
-			if (menu.visible == false) {
-				levels.visible = true;
-			}
 			
 			if (hasSwitched == true) {
 				hasSwitched = false;

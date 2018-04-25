@@ -55,10 +55,10 @@ public class ButtonAction {
 
 					} else if (hb.get(i).id == "start") {
 						world.setBackground(Color.ORANGE);
-						hud.visible = false;
+						world.switchHud("levels");
 						
 					} else if (hb.get(i).id == "backtomenu") {
-						
+						world.switchHud("menu");
 					}
 					if (hb.get(i).highlight == false) {
 						System.out.println(hb.get(i).colord);

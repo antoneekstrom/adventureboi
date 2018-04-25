@@ -14,7 +14,7 @@ public class HUD {
 	public ArrayList<HudText> ht;
 	public boolean visible = false;
 	private ListWorld world;
-	String id;
+	public String id;
 	
 	public HUD(ListWorld lw) {
 		tf = new ArrayList<TField>();
@@ -43,14 +43,27 @@ public class HUD {
 				hl.get(i).update();
 			}
 		}
+		for (int i = 0; i < ht.size(); i++) {
+			if (visible == true) {
+				if (ht.get(i).text == "rects") {
+					world = world.getWorld();
+					ht.get(i).text = String.valueOf(world.go.rects.size());
+				}
+			}
+		}
 	}
-	
+
 	public void specificUpdate(HudObj ho) {
 		if (ho.id == "mode") {
 			ho.text = "mode: " + world.m.ba.mode;
 		}
 		if (ho.id == "color") {
 			ho.colord = world.rc.color;
+		}
+		if (world.m.pressed && ho.hrect.contains(world.m.mouse)) {
+			if (ho.id == "backtomenu") {
+				world.switchHud("menu");
+			}
 		}
 	}
 	

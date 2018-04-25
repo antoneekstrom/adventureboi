@@ -19,14 +19,18 @@ public class HudList {
 	HudObj entry;
 	Font font;
 	ArrayList<HudObj> entries;
+	public ArrayList<HUD> huds;
 	Scrollbar sb;
 	ListWorld world;
 	Main frame;
+	SaveWriter sw;
+	boolean switched;
 	
 	public HudList(Rectangle r, Main f) {
 		rect = r;
 		frame = f;
 		entries = new ArrayList<HudObj>();
+		huds = new ArrayList<HUD>();
 	}
 	
 	public void addScrollbar() {
@@ -36,6 +40,10 @@ public class HudList {
 	
 	public void passWorld(ListWorld w) {
 		world = w;
+	}
+	
+	public void passSw(SaveWriter sw) {
+		this.sw = sw;
 	}
 	
 	public void addBackground(Color c) {
@@ -84,6 +92,12 @@ public class HudList {
 		for (int i = 0; i < sb.listobjs.size(); i++) {
 			HudObj o = sb.listobjs.get(i);
 			if (world.m.pressed == true && o.hrect.contains(mouse)) {
+				if (world.getName() != o.id) {
+					world = world.getWorld();
+					sw.setWorld(o.id, world);
+					world.startPlayerController(world.p);
+					world.switchHud("");
+				}
 			}
 		}
 	}
