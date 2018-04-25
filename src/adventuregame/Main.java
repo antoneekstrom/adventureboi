@@ -39,13 +39,6 @@ public class Main extends JFrame {
 		add(m);
 		add(lw);
 		m.run();
-		Thread t = new Thread() {
-			public void run() {
-				lw.run();
-			}
-		};
-		m.getThread(t);
-		
 	}
 	
 	public static void main(String[] args) {

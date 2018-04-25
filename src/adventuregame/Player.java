@@ -72,22 +72,33 @@ public class Player extends Object {
 			CALCMOV = MOVACC * MOVSPEED;
 			setX((int) (getX() - CALCMOV));
 
-		} else if (direction == "none") {CALCMOV = BASEMOV;}
-		else if (direction == "down") {}
+		} else if (direction == "none") {
+			CALCMOV = BASEMOV;
+		}
+		
 		else {System.out.println("Invalid direction");}
+		
 	}
 
 	public void jump() {
 		jcalculated = getGRAVITY() * JSPEED * JACC;
-		if (jump == true && JFUEL != 0) {
+		if (jump == true && JFUEL != 0 && hasGravity() == true) {
 			JFUEL--;
 			setY((int) (getY() - jcalculated));
+			
+		} else if (jump == true && hasGravity() == false) {
+			setY((int) (getY() - 20));
 		}
-		if (!onground == true) {
+		
+		if (!onground == true || hasGravity() == false) {
 			JFUEL = JFUELMAX;
 			onground = true;
 		} else {
 			onground = false;
+		}
+		
+		if (direction == "down" && hasGravity() == false) {
+			setY( (int) (getY() + 20));
 		}
 	}
 	

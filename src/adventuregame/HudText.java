@@ -8,12 +8,17 @@ public class HudText {
 	public String text;
 	public int x,y;
 	public Font font;
+	public String id;
 	
 	public HudText(int x, int y, String t, Font f) {
 		text = t;
 		this.x = x;
 		this.y = y;
 		font = f;
+	}
+	
+	public void setId(String s) {
+		id = s;
 	}
 	
 	public void paint(Graphics g) {

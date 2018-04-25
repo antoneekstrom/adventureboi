@@ -10,7 +10,7 @@ public class ButtonAction {
 
 	private Main frame;
 	private ListWorld world;
-	private HUD hud;
+	ArrayList<HUD> huds;
 	
 	public int modeIndex = 0;
 	public String mode = "rectangle";
@@ -22,7 +22,8 @@ public class ButtonAction {
 	public ButtonAction(ListWorld w, Main f, HUD h) {
 		world = w;
 		frame = f;
-		hud = h;
+		huds = new ArrayList<HUD>();
+		huds.add(h);
 	}
 
 	public void changeMode() {
@@ -35,35 +36,48 @@ public class ButtonAction {
 	}
 	
 	public void getClick() {
-		ArrayList<HudObj> hb = hud.hb;
-		if (hud.visible == true) {
-			for (int i = 0; hb.size() > i; i++) {
-				if (hb.get(i).mouseOver()) {
-					System.out.println(hb.get(i).text);
-					
-					if (hb.get(i).text == "save stage" && hud.visible == true) {
-						world.sw.writeList(world.go);
+		for (int k = 0; k < huds.size(); k++) {
+			HUD hud = huds.get(k);
+			ArrayList<HudObj>hb = hud.hb;
+			if (hud.visible == true) {
+				for (int i = 0; hb.size() > i; i++) {
+					if (hb.get(i).mouseOver()) {
+						System.out.println(hb.get(i).text);
 						
-					} else if (hb.get(i).id == "quit" && hud.visible == true) {
-						frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
-						
-					} else if (hb.get(i).id == "mode") {
-						changeMode();
-						
-					} else if (hb.get(i).id == "world") {
-						world.sw.setWorld("lw", world);
-
-					} else if (hb.get(i).id == "start") {
-						world.setBackground(Color.ORANGE);
-						world.switchHud("levels");
-						
-					} else if (hb.get(i).id == "backtomenu") {
-						world.switchHud("menu");
-					}
-					if (hb.get(i).highlight == false) {
-						System.out.println(hb.get(i).colord);
-						world.rc.setColor(hb.get(i).colord);
-						world.tc.setColor(hb.get(i).colord);
+						if (hb.get(i).text == "save stage" && hud.visible == true) {
+							world.sw.writeList(world.go);
+							
+						} else if (hb.get(i).id == "quit" && hud.visible == true) {
+							frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+							
+						} else if (hb.get(i).id == "mode") {
+							changeMode();
+							
+						} else if (hb.get(i).id == "world") {
+							world.switchHud("levels");
+							
+						} else if (hb.get(i).id == "start") {
+							world.setBackground(Color.ORANGE);
+							world.switchHud("levels");
+							
+						} else if (hb.get(i).id == "back") {
+							world.switchHud(world.lastHud);
+							
+						} else if (hb.get(i).id == "quit") {
+							System.out.println("quit");
+							frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+						} else if (hb.get(i).id == "gravity") {
+							if (world.p.hasGravity()) {
+								world.p.setGravity(false);
+							} else {
+								world.p.setGravity(true);
+							}
+						}
+						if (hb.get(i).id == "color") {
+							System.out.println(hb.get(i).colord);
+							world.rc.setColor(hb.get(i).colord);
+							world.tc.setColor(hb.get(i).colord);
+						}
 					}
 				}
 			}

@@ -42,20 +42,23 @@ public class ListWorld extends World {
 	private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 	public Player p;
 	public Main frame;
-	private boolean ready = false;
+	public boolean ready = false;
 	public Camera c;
 	public Point mouse;
 	public PlayerCollision cl;
 	public Point mousecoord;
 	public SaveWriter sw;
 	public Controller controller;
+	public Font standard = new Font("Comic Sans MS", 20 ,50);
 	public HUD options;
 	public RectangleCreator rc;
 	public GameObjects go;
 	public Mouse m;
 	public TextCreator tc;
-	boolean hasSwitched = false;
+	public boolean optionsactive = false;
 	protected ArrayList<HUD> huds;
+	public String currentHud = "menu";
+	public String lastHud;
 	
 	public Thread t;
 	
@@ -68,19 +71,31 @@ public class ListWorld extends World {
 	}
 	
 	public void switchHud(String s) {
+		lastHud = currentHud;
 		for (int i = 0; i < huds.size(); i++) {
 			
 			if (huds.get(i).id.equals(s)) {
+				currentHud = huds.get(i).id;
 				huds.get(i).visible = true;
 				
 			} else {
 				huds.get(i).visible = false;
 			}
+			
+			setBackground(Color.CYAN);
 		}
 	}
 	
 	public Player getPlayer() {
 		return p;
+	}
+	
+	public void isHudVisible(String s, boolean b) {
+		for (int i = 0; i < huds.size(); i++) {
+			if (huds.get(i).id.equals(s)) {
+				huds.get(i).visible = b;
+			}
+		}
 	}
 	
 	public void addRect(Point p, Dimension d, Color color) {
@@ -146,6 +161,7 @@ public class ListWorld extends World {
 	}
 	
 	public void createOptions() {
+		options.font = standard.deriveFont(10, 35);
 		HudObj quit = new HudObj(50, 200, 400, 100, Color.ORANGE);
 		HudObj save = new HudObj(50, 50, 400, 100, Color.ORANGE);
 		HudObj colors = new HudObj(500, 50, 200, 100, Color.GRAY);
@@ -155,6 +171,9 @@ public class ListWorld extends World {
 		HudObj c4 = new HudObj(1050, 50, 100, 100, Color.GREEN);
 		HudObj mode = new HudObj(500, 200, 400, 100, Color.GRAY);
 		HudObj world = new HudObj(50, 350, 400, 100, Color.ORANGE);
+		HudObj noclip = new HudObj((int) (dim.getWidth() - 350), 50, 300, 100, Color.ORANGE);
+		noclip.addText("gravity");
+		noclip.id = "gravity";
 		world.setId("world");
 		world.addText("Change Level");
 		world.highlight = true;
@@ -163,8 +182,12 @@ public class ListWorld extends World {
 		c2.highlight = false;
 		c3.highlight = false;
 		c4.highlight = false;
+		c1.id = "color";
+		c2.id = "color";
+		c3.id = "color";
+		c4.id = "color";
 		colors.addText("colors:");
-		colors.setId("color");
+		colors.setId("currentcolor");
 		save.addText("save stage");
 		quit.addText("quit");
 		quit.setId("quit");
@@ -179,6 +202,7 @@ public class ListWorld extends World {
 		options.hb.add(quit);
 		options.hb.add(save);
 		options.hb.add(mode);
+		options.hb.add(noclip);
 	}
 	
 	public void paint(Graphics g) {
@@ -202,11 +226,6 @@ public class ListWorld extends World {
 			p.update();
 			c.run(p);
 			cl.pRun(p);
-			
-			if (hasSwitched == true) {
-				hasSwitched = false;
-				frame.m.timer.stop();
-			}
 			
 			options.update();
 			go.update();
@@ -247,14 +266,5 @@ public class ListWorld extends World {
 	public void stopPlayerController() {
 		this.getInputMap().clear();
 		this.getActionMap().clear();
-	}
-	
-	public void getThread(Thread t) {
-		this.t = t;
-	}
-
-	public void switchToWorld() {
-		t.start();
-		timer.stop();
 	}
 }

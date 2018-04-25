@@ -21,15 +21,16 @@ public class Menu extends ListWorld implements ActionListener {
 	public Timer timer;
 	private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 	public Main frame;
-	public String name = "menu";
-	public HUD menu;
 	public Mouse m2;
 	public Font standard = new Font("Comic Sans MS", 20 ,50);
+	public HUD menu;
 	public HUD levels;
+	public HUD actualhud;
 	public Point mouse;
 	public SaveWriter sw;
-	boolean hasSwitched = false;
 	boolean ready = false;
+	
+	boolean optionsactive = false;
 	
 	public Menu(Main f) {
 		super(f);
@@ -37,27 +38,39 @@ public class Menu extends ListWorld implements ActionListener {
 	}
 	
 	public void switchHud(String s) {
+		lastHud = currentHud;
 		for (int i = 0; i < huds.size(); i++) {
 			
 			if (huds.get(i).id.equals(s)) {
+				currentHud = huds.get(i).id;
 				huds.get(i).visible = true;
-				System.out.println(true);
 				
 			} else {
 				huds.get(i).visible = false;
-				System.out.println(false);
 			}
+			
 			setBackground(Color.CYAN);
 		}
 	}
 	
+	public void isHudVisible(String s, boolean b) {
+		for (int i = 0; i < huds.size(); i++) {
+			if (huds.get(i).id.equals(s)) {
+				huds.get(i).visible = b;
+			}
+		}
+	}
+	
 	public void run() {
+		lastHud = "menu";
 		
 		setSize(dim);
 		setBackground(Color.CYAN);
 		sw = new SaveWriter("menu");
 		huds = new ArrayList<HUD>();
 		
+		actualhud = new HUD(this);
+		actualhud.id = "actualhud";
 		menu = new HUD(this);
 		menu.id = "menu";
 		levels = new HUD(this);
@@ -66,8 +79,16 @@ public class Menu extends ListWorld implements ActionListener {
 		options.id = "options";
 		huds.add(menu);
 		huds.add(levels);
+		huds.add(options);
+		
+		rc = new RectangleCreator(this);
+		tc =  new TextCreator(this);
 		
 		m = new Mouse(this, frame, menu);
+		m.ba.huds.add(options);
+		m.ba.huds.add(levels);
+		m.addRc(rc);
+		m.addTc(tc);
 		addMouseListener(m);
 		
 		c = new Camera(dim);
@@ -87,6 +108,15 @@ public class Menu extends ListWorld implements ActionListener {
 		exit.addText("exit");
 		exit.setId("quit");
 		
+		HudText debug = new HudText(100, 100, "debug", standard);
+		HudText debug2 = new HudText(100, 200, "debug", standard);
+		debug2.setId("debug2");
+		debug.setId("debug");
+		debug.font = standard;
+		actualhud.ht.add(debug);
+		actualhud.ht.add(debug2);
+		actualhud.visible = true;
+		
 		menu.hb.add(exit);
 		menu.hb.add(start);
 		menu.visible = true;
@@ -101,7 +131,7 @@ public class Menu extends ListWorld implements ActionListener {
 		HudObj back = new HudObj(100, 100, 200, 100, Color.ORANGE);
 		back.highlight = true;
 		back.addText("back");
-		back.setId("backtomenu");
+		back.setId("back");
 		back.setFont(standard);
 		llist.addBackground(Color.WHITE);
 		llist.addScrollbar();
@@ -125,7 +155,6 @@ public class Menu extends ListWorld implements ActionListener {
 		p.setLocation(0, 100);
 		p.setSize(150, 125);
 		p.setGRAVITY(30);
-		p.isEnabled(true);
 		startPlayerController(p);
 		p.JFUEL = 7;
 		timer.start();
@@ -134,12 +163,14 @@ public class Menu extends ListWorld implements ActionListener {
 	public void paint(Graphics g) {
 		super.paintComponent(g);
 		if (ready == true) {
-			menu.paint(g);
-			levels.paint(g);
 			go.paint(g);
 			if (p.enabled == true) {
 				p.paint(g);
 			}
+			menu.paint(g);
+			levels.paint(g);
+			options.paint(g);
+			actualhud.paint(g);
 		}
 	}
 
@@ -153,14 +184,11 @@ public class Menu extends ListWorld implements ActionListener {
 			p.update();
 			menu.update();
 			levels.update();
+			options.update();
+			actualhud.update();
 			c.run(p);
 			go.update();
 			cl.pRun(p);
-			
-			if (hasSwitched == true) {
-				hasSwitched = false;
-				frame.lw.timer.stop();
-			}
 			
 			mouse = MouseInfo.getPointerInfo().getLocation();
 			repaint();

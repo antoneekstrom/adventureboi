@@ -51,6 +51,7 @@ public class SaveWriter {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		w.setName(s);
 		loadWorld(w);
 	}
 	

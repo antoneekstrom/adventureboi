@@ -93,10 +93,14 @@ public class HudList {
 			HudObj o = sb.listobjs.get(i);
 			if (world.m.pressed == true && o.hrect.contains(mouse)) {
 				if (world.getName() != o.id) {
+					System.out.println("level:" + o.id);
 					world = world.getWorld();
 					sw.setWorld(o.id, world);
 					world.startPlayerController(world.p);
 					world.switchHud("");
+					world.currentHud = "";
+					world.p.isEnabled(true);
+					world.p.setLocation(0,0);
 				}
 			}
 		}
