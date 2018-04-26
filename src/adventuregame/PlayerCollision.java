@@ -68,8 +68,9 @@ public class PlayerCollision {
 					}
 				}
 				if (dy < dx) {
-					if (side == "under") {
-						p.setY((int) (p.getY() + dy));
+					if (pr.getMinY() < r.getMaxY() && !(pr.getMinY() < r.getMinY())) {
+						p.setY((int) (p.getY() + dy * p.JSPEED));
+						side = "under";
 					}
 					p.setY((int) (p.getY() - dy));
 					p.onground = false;

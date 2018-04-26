@@ -1,11 +1,17 @@
 package adventuregame;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Rectangle;
+
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+import worlds.World;
 
 public class HudObj {
 
@@ -22,7 +28,7 @@ public class HudObj {
 		colord = c;
 		hrect = new Rectangle(w, h);
 		hrect.setLocation(x, y);
-			color2 = colord.brighter();			
+		color2 = colord.brighter();			
 		color = colord;
 	}
 	

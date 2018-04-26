@@ -24,7 +24,9 @@ public class HudList {
 	ListWorld world;
 	Main frame;
 	SaveWriter sw;
+	public int margintop;
 	boolean switched;
+	public String id;
 	
 	public HudList(Rectangle r, Main f) {
 		rect = r;
@@ -33,9 +35,14 @@ public class HudList {
 		huds = new ArrayList<HUD>();
 	}
 	
+	public Rectangle getRect() {
+		return rect;
+	}
+	
 	public void addScrollbar() {
 		sb = new Scrollbar(barcolor, rect);
 		sb.passWorld(world);
+		sb.addList(entries);
 	}
 	
 	public void passWorld(ListWorld w) {
@@ -69,13 +76,12 @@ public class HudList {
 	}
 	
 	public void alignEntries() {
-		for (int i = 0; i < entries.size(); i++) {
-			HudObj e = entries.get(i);
-			
-			e.hrect.x = (rect.width / 2) + (e.hrect.width / 2);
-			e.hrect.y = i * 200 + 200;
-			System.out.println(e.hrect.y);
-		}
+			for (int i = 0; i < entries.size(); i++) {
+				HudObj e = entries.get(i);
+				
+				e.hrect.x += (rect.width / 2) - (e.hrect.width / 2);
+				e.hrect.y += i * 200 + margintop;
+			}
 	}
 	
 	public void update() {
@@ -87,12 +93,16 @@ public class HudList {
 		specificUpdate();
 	}
 	
+	public void setId(String s) {
+		id = s;
+	}
+	
 	public void specificUpdate() {
 		Point mouse = MouseInfo.getPointerInfo().getLocation();
 		for (int i = 0; i < sb.listobjs.size(); i++) {
 			HudObj o = sb.listobjs.get(i);
 			if (world.m.pressed == true && o.hrect.contains(mouse)) {
-				if (world.getName() != o.id) {
+				if (world.getName() != o.id && id == "levels") {
 					System.out.println("level:" + o.id);
 					world = world.getWorld();
 					sw.setWorld(o.id, world);

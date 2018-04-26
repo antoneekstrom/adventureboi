@@ -18,6 +18,10 @@ public class TextCreator {
 		text = "boiboi";
 		id = "";
 	}
+	
+	public String getText() {
+		return text;
+	}
 
 	public void setColor(Color c) {
 		color = c;

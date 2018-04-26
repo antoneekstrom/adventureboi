@@ -70,6 +70,7 @@ public class HUD {
 			ho.addText("gravity: " + world.p.hasGravity());
 		}
 		if (world.m.pressed && ho.hrect.contains(world.m.mouse)) {
+			
 		}
 	}
 	

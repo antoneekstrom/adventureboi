@@ -72,6 +72,7 @@ public class ButtonAction {
 							} else {
 								world.p.setGravity(true);
 							}
+						} else if (hb.get(i).id == "field") {
 						}
 						if (hb.get(i).id == "color") {
 							System.out.println(hb.get(i).colord);

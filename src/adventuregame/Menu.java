@@ -7,11 +7,14 @@ import java.awt.Graphics;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.TextField;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.Timer;
 
 import worlds.ListWorld;
@@ -83,6 +86,7 @@ public class Menu extends ListWorld implements ActionListener {
 		
 		rc = new RectangleCreator(this);
 		tc =  new TextCreator(this);
+		this.setFocusable(true);
 		
 		m = new Mouse(this, frame, menu);
 		m.ba.huds.add(options);
@@ -140,6 +144,7 @@ public class Menu extends ListWorld implements ActionListener {
 		llist.setFont(standard);
 		llist.setEntry(new HudObj( ((int) llist.rect.getMinX()), (int) llist.rect.getMinY(), (int) (llist.rect.width * 0.7), 100, Color.ORANGE));
 		llist.addEntry("lw", "lw");
+		llist.margintop = 200;
 		llist.addEntry("world1", "world1");
 		llist.addEntry("world2", "id");
 		llist.addEntry("world3", "id");
@@ -147,6 +152,7 @@ public class Menu extends ListWorld implements ActionListener {
 		llist.addEntry("world5", "id");
 		llist.alignEntries();
 		llist.huds.add(levels);
+		llist.setId("levels");
 		llist.huds.add(menu);
 		switchHud("menu");
 		ready = true;
