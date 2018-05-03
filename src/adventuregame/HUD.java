@@ -2,6 +2,8 @@ package adventuregame;
 
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
@@ -14,6 +16,7 @@ public class HUD {
 	public ArrayList<TField> tf;
 	public ArrayList<HudList> hl;
 	public ArrayList<HudText> ht;
+	public ArrayList<HudBar> hbr;
 	public boolean visible = false;
 	private ListWorld world;
 	public String id;
@@ -25,6 +28,7 @@ public class HUD {
 		hb = new ArrayList<HudObj>();
 		hl = new ArrayList<HudList>();
 		ht = new ArrayList<HudText>();
+		hbr = new ArrayList<HudBar>();
 		world = lw;
 		font = world.standard;
 	}
@@ -57,6 +61,9 @@ public class HUD {
 				}
 			}
 		}
+		for (int i = 0; i < hbr.size(); i++) {
+			barUpdate(hbr.get(i));
+		}
 	}
 	
 	public void specificUpdate(HudObj ho) {
@@ -69,8 +76,16 @@ public class HUD {
 		if (ho.id == "gravity") {
 			ho.addText("gravity: " + world.p.hasGravity());
 		}
-		if (world.m.pressed && ho.hrect.contains(world.m.mouse)) {
-			
+		Point mouse = MouseInfo.getPointerInfo().getLocation();
+		if (world.m.pressed && ho.hrect.contains(mouse)) {
+			if (ho.id == "modhp") {
+				for (int i = 0; i < hbr.size(); i++) {
+					if (hbr.get(i).id == "hp") {
+						System.out.println("hp");
+						hbr.get(i).modifier = hbr.get(i).modifier -0.01;
+					}
+				}
+			}
 		}
 	}
 	
@@ -80,6 +95,17 @@ public class HUD {
 		}
 		if (ht.id == "debug2") {
 			ht.text = "dx:" + world.cl.dx + " dy:" + world.cl.dy;
+		}
+	}
+	
+	public void passWorld(ListWorld lw) {
+		world = lw;
+	}
+	
+	public void barUpdate(HudBar hb) {
+		if (hb.getId().equals("hp") && hb.modifier <= 0) {
+			hb.modifier = 1;
+			world.p.die();
 		}
 	}
 	
@@ -98,6 +124,9 @@ public class HUD {
 			}
 			for (int i = 0; i < hl.size(); i++) {
 				hl.get(i).paint(g);
+			}
+			for (int i = 0; i < hbr.size(); i++) {
+				hbr.get(i).paint(g);
 			}
 		}
 	}

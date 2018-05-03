@@ -9,12 +9,14 @@ public class GameObjects {
 
 	public ArrayList<RectangleObject> rects;
 	public ArrayList<Text> texts;
+	public ArrayList<HudBar> bars;
 	private Main frame;
 	private ListWorld world;
 	
 	public GameObjects(Main f, ListWorld lw) {
 		rects = new ArrayList<RectangleObject>();
 		texts = new ArrayList<Text>();
+		bars = new ArrayList<HudBar>();
 		frame = f;
 		world = lw;
 		

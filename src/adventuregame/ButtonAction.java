@@ -79,6 +79,9 @@ public class ButtonAction {
 							world.rc.setColor(hb.get(i).colord);
 							world.tc.setColor(hb.get(i).colord);
 						}
+						if(hb.get(i).id == "modhp") {
+							System.out.println("pressed");
+						}
 					}
 				}
 			}

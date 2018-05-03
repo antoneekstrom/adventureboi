@@ -137,7 +137,7 @@ public class Player extends Object {
 	
 	public void voidCheck() {
 		if (getY() > 3000) {
-			setLocation(0, 0);
+			die();
 		}
 	}
 	
