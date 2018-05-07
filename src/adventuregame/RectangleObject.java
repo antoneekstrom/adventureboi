@@ -1,11 +1,10 @@
 package adventuregame;
 
 import java.awt.Graphics;
-import java.awt.Rectangle;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.io.File;
 
-import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 
 import worlds.ListWorld;
 import worlds.World;
@@ -31,12 +30,20 @@ public class RectangleObject extends Object {
 	public void givetype(String s) {
 		type = s;
 	}
-	
+
 	public void update() {
-		if (type == "spike") {
-			if (getObjectRect().intersects(lw.p.getObjectRect())) {
+		
+		if (getObjectRect().intersects(lw.p.getObjectRect())) {
+			
+			if (type == "spike") {
 				lw.p.damage((int) (lw.p.maxhealth * 0.5));
+				
+			} else if (type == "health") {
+				lw.go.rects.remove(this);
+				lw.cl.collisions.remove(getObjectRect());
+				lw.p.health += 20;
 			}
+			
 		}
 	}
 	

@@ -35,13 +35,11 @@ public class GameObjects {
 			}
 		}
 	}
-	
+
 	public void specificUpdate(RectangleObject ro) {
-		if (ro.type.equals("spike")) {
-			ro.passWorld(world);
-		}
+		ro.passWorld(world);
 	}
-	
+
 	public void paint(Graphics g) {
 		
 		for (int i = 0; i < rects.size(); i++) {

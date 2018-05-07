@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -11,8 +12,11 @@ import java.awt.TextField;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.Timer;
@@ -32,6 +36,7 @@ public class Menu extends ListWorld implements ActionListener {
 	public Point mouse;
 	public SaveWriter sw;
 	boolean ready = false;
+	
 	
 	boolean optionsactive = false;
 	
@@ -65,6 +70,7 @@ public class Menu extends ListWorld implements ActionListener {
 	}
 	
 	public void run() {
+		
 		lastHud = "menu";
 		
 		setSize(dim);

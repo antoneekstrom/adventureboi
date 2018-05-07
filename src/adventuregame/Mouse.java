@@ -66,6 +66,9 @@ public class Mouse implements MouseListener {
 			} else if (ba.mode == "spike") {
 				rc.addp1(mouse);
 				rc.mode = "spike";
+			} else {
+				rc.addp1(mouse);
+				rc.mode = "health";
 			}
 		}
 		pressed = true;
@@ -85,6 +88,8 @@ public class Mouse implements MouseListener {
 					tc.createText();
 					
 				} else if (ba.mode == "spike") {
+					rc.create();
+				} else {
 					rc.create();
 				}
 			}

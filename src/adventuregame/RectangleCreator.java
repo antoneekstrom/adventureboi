@@ -18,17 +18,14 @@ public class RectangleCreator {
 	public ListWorld world;
 	public Color color;
 	String mode = "rectangle";
-	BufferedImage spike;
+	BufferedImage sprite;
+	
 	
 	public RectangleCreator(ListWorld w) {
 		world = w;
 		color = Color.ORANGE;
 		p1 = new Point();
 		p2 = new Point();
-		
-		try {
-			spike = ImageIO.read(new File("spike.png"));
-		} catch (Exception e) {e.printStackTrace();}
 	}
 	
 	public void setColor(Color c) {
@@ -54,13 +51,19 @@ public class RectangleCreator {
 		if (mode == "rectangle") {
 			r.add(p2);
 			world.addRect(new Point(r.x, r.y), new Dimension(r.width, r.height), color);
-		} else if (mode == "spike") {
+		} else {
 			
 			RectangleObject ro = new RectangleObject(world.frame, world);
 			ro.setLocation((int)p1.getX(), (int)p1.getY());
+			ro.getObjectRect().setLocation((int)p1.getX(), (int)p1.getY());
 			ro.setSize(100, 100);
-			ro.type = "spike";
-			ro.sprite(spike);
+			ro.type = mode;
+			
+			try {
+				sprite = ImageIO.read(new File(mode + ".png"));
+				ro.sprite(sprite);
+			} catch (Exception e) {e.printStackTrace();}
+			
 			world.addRo(ro);
 			
 			//prevent spike intersecting with other objects
@@ -68,6 +71,7 @@ public class RectangleCreator {
 				RectangleObject o2 = world.go.rects.get(i);
 				if (ro.getObjectRect().intersects(o2.getObjectRect())) {
 					ro.setLocation((int) ro.getObjectRect().getX(), (int) (o2.getObjectRect().getMinY() - ro.getHeight() / 2));
+					ro.getObjectRect().setLocation((int) ro.getObjectRect().getX(), (int) (o2.getObjectRect().getMinY() - ro.getHeight() / 2));
 					System.out.println("i");
 				}
 			}
