@@ -25,6 +25,9 @@ public class Player extends Object {
 	private double ANIMSPEED = 3;
 	public boolean enabled = false;
 	
+	double maxhealth = 100;
+	double health = 100;
+	
 	//movement
 	public String direction = "none";
 	public float CALCMOV = 1;
@@ -116,6 +119,7 @@ public class Player extends Object {
 	public void die() {
 		setX(0);
 		setY(0);
+		health = maxhealth;
 	}
 	
 	public void setLocation(int nx, int ny) {
@@ -133,11 +137,18 @@ public class Player extends Object {
 		move();
 		jump();
 		voidCheck();
+		hpCheck();
+	}
+	
+	public void hpCheck() {
+		if (health <= 0) {
+			die();
+		}
 	}
 	
 	public void voidCheck() {
 		if (getY() > 3000) {
-			die();
+			health = 0;
 		}
 	}
 	

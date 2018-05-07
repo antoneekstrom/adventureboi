@@ -22,6 +22,7 @@ public class HUD {
 	public String id;
 	public Font font;
 	private Main frame;
+	Player p;
 	
 	public HUD(ListWorld lw) {
 		tf = new ArrayList<TField>();
@@ -81,20 +82,24 @@ public class HUD {
 			if (ho.id == "modhp") {
 				for (int i = 0; i < hbr.size(); i++) {
 					if (hbr.get(i).id == "hp") {
-						System.out.println("hp");
-						hbr.get(i).modifier = hbr.get(i).modifier -0.01;
+						
+						p.maxhealth = p.maxhealth + 100;
 					}
 				}
 			}
 		}
 	}
 	
+	public void passPlayer(Player p) {
+		this.p = p;
+	}
+	
 	public void textUpdate(HudText ht) {
 		if (ht.id == "debug") {
-			ht.text = world.cl.side;
+			ht.text = String.valueOf(p.health);
 		}
 		if (ht.id == "debug2") {
-			ht.text = "dx:" + world.cl.dx + " dy:" + world.cl.dy;
+			ht.text = "max" + String.valueOf(p.maxhealth);
 		}
 	}
 	
@@ -103,9 +108,11 @@ public class HUD {
 	}
 	
 	public void barUpdate(HudBar hb) {
-		if (hb.getId().equals("hp") && hb.modifier <= 0) {
-			hb.modifier = 1;
-			world.p.die();
+		
+		if (hb.getId().equals("hp")) {
+			hb.passPlayer(p);
+			hb.update();
+			
 		}
 	}
 	

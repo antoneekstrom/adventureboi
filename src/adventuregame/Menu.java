@@ -112,24 +112,20 @@ public class Menu extends ListWorld implements ActionListener {
 		exit.addText("exit");
 		exit.setId("quit");
 		
-		HudText debug = new HudText(100, 100, "debug", standard);
-		HudText debug2 = new HudText(100, 200, "debug", standard);
 		HudBar hp = new HudBar((int) ((dim.width / 2) - 200), 100, 400, 50);
 		HudObj modhp = new HudObj(100, 350, 200, 100, Color.ORANGE);
 		hp.setText("Health");
 		hp.fg = Color.RED;
 		hp.modifier = 1;
 		hp.setId("hp");
-		debug2.setId("debug2");
-		debug.setId("debug");
-		debug.font = standard;
 		modhp.addText("decrease hp");
 		modhp.setId("modhp");
-		actualhud.ht.add(debug);
 		actualhud.hb.add(modhp);
 		actualhud.hbr.add(hp);
-		actualhud.ht.add(debug2);
 		actualhud.visible = true;
+		
+		RectangleObject spike = new RectangleObject(frame, this);
+		go.rects.add(spike);
 		
 		menu.hb.add(exit);
 		menu.hb.add(start);
@@ -201,6 +197,7 @@ public class Menu extends ListWorld implements ActionListener {
 			menu.update();
 			levels.update();
 			options.update();
+			actualhud.passPlayer(p);
 			actualhud.update();
 			c.run(p);
 			go.update();

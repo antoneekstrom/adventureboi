@@ -58,10 +58,14 @@ public class Mouse implements MouseListener {
 		mouse = MouseInfo.getPointerInfo().getLocation();
 		if (rc != null) {
 			if (ba.mode == "rectangle") {
+				rc.mode = "rectangle";
 				rc.addp1(mouse);
 				
 			} else if (ba.mode == "text") {
 				tc.setPoint(mouse);
+			} else if (ba.mode == "spike") {
+				rc.addp1(mouse);
+				rc.mode = "spike";
 			}
 		}
 		pressed = true;
@@ -78,7 +82,10 @@ public class Mouse implements MouseListener {
 					rc.create();
 					
 				} else if (ba.mode == "text") {
-					tc.createText();			
+					tc.createText();
+					
+				} else if (ba.mode == "spike") {
+					rc.create();
 				}
 			}
 		}

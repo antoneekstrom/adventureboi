@@ -110,6 +110,12 @@ public class ListWorld extends World {
 		cl.add(ro.getObjectRect());
 	}
 	
+	public void addRo(RectangleObject ro) {
+		go.rects.add(ro);
+		c.add(ro);
+		cl.add(ro.getObjectRect());
+	}
+	
 	public SaveWriter getSw() {
 		return sw;
 	}

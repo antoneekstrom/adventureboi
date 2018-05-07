@@ -16,7 +16,8 @@ public class ButtonAction {
 	public String mode = "rectangle";
 	String[] modes = new String[] {
 			"rectangle",
-			"text"
+			"text",
+			"spike"
 	};
 	
 	public ButtonAction(ListWorld w, Main f, HUD h) {

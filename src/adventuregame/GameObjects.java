@@ -24,6 +24,7 @@ public class GameObjects {
 	
 	public void update() {
 		for (int i = 0; i < rects.size(); i++) {
+			specificUpdate(rects.get(i));
 			rects.get(i).update();
 		}
 		for (int i = 0; i < texts.size(); i++) {
@@ -32,6 +33,12 @@ public class GameObjects {
 			if (texts.get(i).getId() == "debug") {
 				texts.get(i).text("rectangles:" + world.go.rects.size() + " texts:" + world.go.texts.size());
 			}
+		}
+	}
+	
+	public void specificUpdate(RectangleObject ro) {
+		if (ro.type.equals("spike")) {
+			ro.passWorld(world);
 		}
 	}
 	
