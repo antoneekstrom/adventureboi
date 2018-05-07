@@ -62,6 +62,15 @@ public class RectangleCreator {
 			ro.type = "spike";
 			ro.sprite(spike);
 			world.addRo(ro);
+			
+			//prevent spike intersecting with other objects
+			for (int i = 0; i < world.go.rects.size(); i++) {
+				RectangleObject o2 = world.go.rects.get(i);
+				if (ro.getObjectRect().intersects(o2.getObjectRect())) {
+					ro.setLocation((int) ro.getObjectRect().getX(), (int) (o2.getObjectRect().getMinY() - ro.getHeight() / 2));
+					System.out.println("i");
+				}
+			}
 		}
 	}
 	

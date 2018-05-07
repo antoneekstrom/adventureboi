@@ -35,7 +35,7 @@ public class RectangleObject extends Object {
 	public void update() {
 		if (type == "spike") {
 			if (getObjectRect().intersects(lw.p.getObjectRect())) {
-				lw.p.health = lw.p.health - 10;
+				lw.p.damage((int) (lw.p.maxhealth * 0.5));
 			}
 		}
 	}

@@ -25,8 +25,11 @@ public class Player extends Object {
 	private double ANIMSPEED = 3;
 	public boolean enabled = false;
 	
+	//hp
 	double maxhealth = 100;
 	double health = 100;
+	int dmgcooldown = 50;
+	boolean invulnerable = false;
 	
 	//movement
 	public String direction = "none";
@@ -144,12 +147,33 @@ public class Player extends Object {
 		if (health <= 0) {
 			die();
 		}
+		
+		if (invulnerable == true) {
+			dmgcooldown -= 1;
+			
+			if (dmgcooldown <= 0) {
+				invulnerable = false;
+				dmgcooldown = 50;
+			}
+		}
+	}
+	
+	public void damage(int d) {
+		if (invulnerable == false) {
+			health = health - d;
+			invulnerable = true;
+		}
 	}
 	
 	public void voidCheck() {
 		if (getY() > 3000) {
 			health = 0;
 		}
+	}
+	
+	public void setMaxHealth(int i) {
+		maxhealth = i;
+		health = maxhealth;
 	}
 	
 	public void animation() {

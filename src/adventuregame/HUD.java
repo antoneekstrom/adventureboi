@@ -83,9 +83,11 @@ public class HUD {
 				for (int i = 0; i < hbr.size(); i++) {
 					if (hbr.get(i).id == "hp") {
 						
-						p.maxhealth = p.maxhealth + 100;
+						p.setMaxHealth((int) (p.maxhealth + 20));
 					}
 				}
+			} else if (ho.id == "dmgdebug") {
+				
 			}
 		}
 	}
@@ -96,7 +98,7 @@ public class HUD {
 	
 	public void textUpdate(HudText ht) {
 		if (ht.id == "debug") {
-			ht.text = String.valueOf(p.health);
+			ht.text = "";
 		}
 		if (ht.id == "debug2") {
 			ht.text = "max" + String.valueOf(p.maxhealth);
