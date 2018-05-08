@@ -1,9 +1,12 @@
 package adventuregame;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.io.File;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 import worlds.ListWorld;
@@ -18,6 +21,7 @@ public class RectangleObject extends Object {
 
 	public RectangleObject(Main f, World w) {
 		super(f, w);
+		setCOLOR(Color.WHITE);
 	}
 	
 	public void sprite(BufferedImage bf) {
@@ -29,33 +33,75 @@ public class RectangleObject extends Object {
 	
 	public void givetype(String s) {
 		type = s;
+		
+		try {
+			sprite = ImageIO.read(new File(type + ".png"));
+			sprite(sprite);
+		} catch (Exception e) {e.printStackTrace();}
+		
+		if (type.equals("ultrahealth")) {
+			setSize(150, 150);
+			setY(getY() - 50);
+		}
+		if (type.equals("spikeboi")) {
+			setSize(150, 150);
+			setGravity(true);
+		}
+		if (type.equals("spike")) {
+			setWidth(200);
+		}
+		if (type.equals("donut")) {
+			setSize(120, 120);
+		}
 	}
 
 	public void update() {
-		
+		super.update();
 		if (getObjectRect().intersects(lw.p.getObjectRect())) {
-			
-			if (type == "spike") {
+			if (type.equals("spike")) {
 				lw.p.damage((int) (lw.p.maxhealth * 0.5));
 
-			} else if (type == "health") {
+			}
+			else if (type.equals("health") && lw.p.health < lw.p.maxhealth) {
 				lw.go.rects.remove(this);
 				lw.cl.collisions.remove(getObjectRect());
-				lw.p.health += 20;
+				lw.p.addHealth(20, false);
+			}
+			else if (type.equals("ultrahealth")) {
+				lw.go.rects.remove(this);
+				lw.cl.collisions.remove(getObjectRect());
+				lw.p.addHealth(50, true);
+			}
+			else if (type.equals("donut")) {
+				lw.go.rects.remove(this);
+				HudObj ho = new HudObj((int) lw.inv.getRect().getMinX(), (int)lw.inv.getRect().getMinY(), 200, 100, Color.ORANGE);
+				ho.addImage("donut");
+				lw.inv.setEntry(ho);
+				lw.inv.addEntry("donut", "");
+				lw.inv.alignEntries();
 			}
 		}
-		if (type == "fire") {
-			setX(getX() + 5);
-			if (getObjectRect().intersects(lw.p.getObjectRect())) {				
-				lw.p.setX(lw.p.getX() + 5);
+		
+		if (type.equals("fire")) {
+			setX(getX() + 10);
+			
+			if (getObjectRect().intersects(lw.p.getObjectRect())) {		
+				lw.p.setX(lw.p.getX() + 10);
+				
 			}
-			super.updateObjectRect();
-			for (int i = 0; i < lw.go.rects.size(); i++) {
-				if (getObjectRect().intersects(lw.go.rects.get(i).getObjectRect()) ) {
-					//lw.go.rects.remove(this);
+			
+			updateObjectRect();
+			
+			for (int i = 0; i < lw.go.rects.size(); i++) {	
+				
+				if (getObjectRect().intersects(lw.go.rects.get(i).getObjectRect()) && !(lw.go.rects.get(i).type == "fire")) {
+					
+					lw.go.rects.remove(this);
+					lw.cl.collisions.remove(getObjectRect());
 				}
 			}
 		}
+		
 	}
 	
 	public void passWorld(ListWorld lw) {
@@ -67,8 +113,9 @@ public class RectangleObject extends Object {
 		if (hasImg == false) {
 			g.fillRect(getCx(), getCy(), getWidth(), getHeight());			
 		} else {
-			g.drawRect(getCx(), getCy(), getWidth(), getHeight());
 			g.drawImage(sprite, getCx(), getCy(), getWidth(), getHeight(), null);
+			
+			//debug
 		}
 	}
 }

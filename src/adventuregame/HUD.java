@@ -100,7 +100,7 @@ public class HUD {
 	
 	public void textUpdate(HudText ht) {
 		if (ht.id == "debug") {
-			ht.text = "x: " + p.getX();
+			ht.text = "mode: " + world.m.ba.mode;
 		}
 		if (ht.id == "debug2") {
 			ht.text = "max" + String.valueOf(p.maxhealth);

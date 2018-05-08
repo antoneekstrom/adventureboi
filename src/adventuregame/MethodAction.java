@@ -31,7 +31,11 @@ public class MethodAction extends AbstractAction {
 			if (!(world.getName() == "menu") && !(world.getName() == "levels")) {
 				world.lastHud = "";
 			}
+			
 		}
-
+		//actualhud
+		if (world.optionsactive == false || world.currentHud == "") {
+			world.switchHud("actualhud");
+		}
 	}
 }

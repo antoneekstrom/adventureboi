@@ -101,7 +101,9 @@ public class Player extends Object {
 		}
 		
 		if (!onground == true || hasGravity() == false) {
-			JFUEL = JFUELMAX;
+			if (!(lw.cl.side.equals("under"))) {
+				JFUEL = JFUELMAX;
+			}
 			onground = true;
 		} else {
 			onground = false;
@@ -120,7 +122,7 @@ public class Player extends Object {
 	public void setSize(int w, int h) {
 		setWidth(w);
 		setHeight(h);
-		getObjectRect().setSize(w, h + 55);
+		getObjectRect().setSize(w, h + 105); //55 without collisionCorrection() active
 	}
 	
 	public void die() {
@@ -133,7 +135,7 @@ public class Player extends Object {
 		this.lw = lw;
 	}
 	
-	int firecm = 100;
+	int firecm = 70;
 	int firec = firecm;
 	
 	public void fireCounter() {
@@ -155,13 +157,17 @@ public class Player extends Object {
 		}
 	}
 	
+	public void collisionCorrection() {
+		getObjectRect().y = (int) (getObjectRect().getY() - 50);
+	}
+	
 	public void setLocation(int nx, int ny) {
 		setX(nx);
 		setY(ny);
 		getObjectRect().setLocation(nx, ny);
 	}
 	
-	public void update() {
+	public void update() {	
 		setLocation(getX(), getY());
 		updateObjectRect();
 		gravity();
@@ -172,6 +178,7 @@ public class Player extends Object {
 		voidCheck();
 		hpCheck();
 		fireCounter();
+		collisionCorrection();
 	}
 	
 	public void hpCheck() {
@@ -205,6 +212,21 @@ public class Player extends Object {
 	public void setMaxHealth(int i) {
 		maxhealth = i;
 		health = maxhealth;
+	}
+	
+	public void addHealth(int h, boolean b) {
+		if (b) {
+			health += h;
+		}
+		else {
+			if (health + h <= maxhealth) {
+				health += h;
+			} else {
+				if (health <= maxhealth) {
+					health = maxhealth;
+				}
+			}
+		}
 	}
 	
 	public void animation() {
@@ -262,7 +284,7 @@ public class Player extends Object {
 	}
 	
 	public void paint(Graphics g) {
-		g.drawRect(getCx(), getCy(), getWidth(), getHeight());
+		g.drawRect(getCx(), getCy(), (int) getObjectRect().getWidth(), (int) getObjectRect().getHeight());
 		g.drawImage(playeractive, getCx(), getCy(), getWidth(), getHeight(), null);
 	}
 }

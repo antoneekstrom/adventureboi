@@ -71,6 +71,12 @@ public class SaveWriter {
 			RectangleObject o = go.rects.get(i);
 			if (!(o.getWidth() == 0) || !(o.getHeight() == 0)) {
 				write(o.getX() + "," + o.getY() + "," + o.getWidth() + "," + o.getHeight() + "," + o.getCOLOR().hashCode());
+				
+				//additional properties
+				if (o.type != null && o.type != "") {
+					write("," + o.type);
+					newLine();
+				}
 			}
 		}	
 	}
@@ -106,14 +112,17 @@ public class SaveWriter {
 	}
 	
 	int x,y,w,h;
+	String t = "";
 	Color c;
 	public void loadWorld(ListWorld world) {
 		try {
+			//clears current world
 			world.go.rects.clear();
 			world.cl.collisions.clear();
 			lcount = countLines(file.getName());
 		} catch (IOException e) {e.printStackTrace();}
-		for (int i = 0; i < lcount; i++) {
+		//parse rectangleobject from .world file
+		for (int i = 0; i <= lcount; i++) {
 			readLine(i);
 			String[] a = line.split(",");
 			for (int k = 0; k < a.length; k++) {
@@ -122,19 +131,41 @@ public class SaveWriter {
 				w = Integer.parseInt(a[2]);
 				h = Integer.parseInt(a[3]);
 				c = Color.decode(a[4]);
+				
+				//additional properties
+				if (a.length > 5) {
+					t = String.valueOf(a[5]);
+				}
 			}
-			world.addRect(new Point(x, y), new Dimension(w, h), c);
+			
+			//create object and put it into game world
+			RectangleObject ro = new RectangleObject(world.frame, world);
+			ro.setLocation(x, y);
+			ro.setSize(w, h);
+			ro.setCOLOR(c);
+			if (!(t.equals("rectangle")) && !(t.equals(""))) {
+				ro.hasImg = true;
+				ro.givetype(t);
+			}
+			world.addRo(ro);
+			
+			//world.addRect(new Point(x, y), new Dimension(w, h), c);
 		}
-		System.out.println(world.go.rects.size());
 	}
 	
 	public void write(String s) {
 		try {
 			writer.write(s);
-			writer.newLine();
 			writer.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
+	
+	public void newLine() {
+		try {
+			writer.newLine();
+		} catch (Exception e) {e.printStackTrace();}
+	}
+	
 }

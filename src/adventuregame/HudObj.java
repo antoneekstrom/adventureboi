@@ -7,7 +7,10 @@ import java.awt.Graphics;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
+import java.io.File;
 
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -23,6 +26,8 @@ public class HudObj {
 	public String id;
 	public Font font;
 	public boolean visible = true;
+	boolean hasImage = false;
+	BufferedImage bf;
 	
 	public HudObj(int x, int y, int w, int h, Color c) {
 		colord = c;
@@ -59,6 +64,13 @@ public class HudObj {
 			}
 		}
 	}
+	
+	public void addImage(String s) {
+		try {
+			bf = ImageIO.read(new File(s + ".png"));
+			hasImage = true;
+		} catch (Exception e) {e.printStackTrace();}
+	}
 
 	public boolean mouseOver() {
 		mouse = MouseInfo.getPointerInfo().getLocation();
@@ -72,6 +84,9 @@ public class HudObj {
 		if (!(text == null) ) {
 			g.setColor(Color.WHITE);
 			g.drawString(text, (int) (hrect.getMinX() + (hrect.getWidth() / 2) - (g.getFontMetrics().stringWidth(text) / 2)), (int)(hrect.getMaxY() - (hrect.getHeight() / 2) + (g.getFontMetrics().getHeight() / 4)));
+		}
+		if (hasImage == true) {
+			g.drawImage(bf, (int) hrect.x, (int) hrect.y, hrect.width, hrect.height, null);
 		}
 	}
 
