@@ -88,6 +88,8 @@ public class HUD {
 				}
 			} else if (ho.id == "dmgdebug") {
 				
+			} else if (ho.id == "shoot") {
+				world.p.fire();
 			}
 		}
 	}
@@ -98,7 +100,7 @@ public class HUD {
 	
 	public void textUpdate(HudText ht) {
 		if (ht.id == "debug") {
-			ht.text = "";
+			ht.text = "x: " + p.getX();
 		}
 		if (ht.id == "debug2") {
 			ht.text = "max" + String.valueOf(p.maxhealth);

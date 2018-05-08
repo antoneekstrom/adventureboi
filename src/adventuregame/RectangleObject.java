@@ -37,13 +37,24 @@ public class RectangleObject extends Object {
 			
 			if (type == "spike") {
 				lw.p.damage((int) (lw.p.maxhealth * 0.5));
-				
+
 			} else if (type == "health") {
 				lw.go.rects.remove(this);
 				lw.cl.collisions.remove(getObjectRect());
 				lw.p.health += 20;
 			}
-			
+		}
+		if (type == "fire") {
+			setX(getX() + 5);
+			if (getObjectRect().intersects(lw.p.getObjectRect())) {				
+				lw.p.setX(lw.p.getX() + 5);
+			}
+			super.updateObjectRect();
+			for (int i = 0; i < lw.go.rects.size(); i++) {
+				if (getObjectRect().intersects(lw.go.rects.get(i).getObjectRect()) ) {
+					//lw.go.rects.remove(this);
+				}
+			}
 		}
 	}
 	
@@ -56,6 +67,7 @@ public class RectangleObject extends Object {
 		if (hasImg == false) {
 			g.fillRect(getCx(), getCy(), getWidth(), getHeight());			
 		} else {
+			g.drawRect(getCx(), getCy(), getWidth(), getHeight());
 			g.drawImage(sprite, getCx(), getCy(), getWidth(), getHeight(), null);
 		}
 	}

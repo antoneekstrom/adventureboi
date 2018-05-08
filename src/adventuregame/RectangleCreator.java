@@ -47,32 +47,34 @@ public class RectangleCreator {
 	}
 	
 	public void create() {
-		Rectangle r = new Rectangle(p1);		
-		if (mode == "rectangle") {
-			r.add(p2);
-			world.addRect(new Point(r.x, r.y), new Dimension(r.width, r.height), color);
-		} else {
-			
-			RectangleObject ro = new RectangleObject(world.frame, world);
-			ro.setLocation((int)p1.getX(), (int)p1.getY());
-			ro.getObjectRect().setLocation((int)p1.getX(), (int)p1.getY());
-			ro.setSize(100, 100);
-			ro.type = mode;
-			
-			try {
-				sprite = ImageIO.read(new File(mode + ".png"));
-				ro.sprite(sprite);
-			} catch (Exception e) {e.printStackTrace();}
-			
-			world.addRo(ro);
-			
-			//prevent spike intersecting with other objects
-			for (int i = 0; i < world.go.rects.size(); i++) {
-				RectangleObject o2 = world.go.rects.get(i);
-				if (ro.getObjectRect().intersects(o2.getObjectRect())) {
-					ro.setLocation((int) ro.getObjectRect().getX(), (int) (o2.getObjectRect().getMinY() - ro.getHeight() / 2));
-					ro.getObjectRect().setLocation((int) ro.getObjectRect().getX(), (int) (o2.getObjectRect().getMinY() - ro.getHeight() / 2));
-					System.out.println("i");
+		if (world.currentHud != "options" || world.currentHud != "menu" || world.currentHud != "levels") {
+			Rectangle r = new Rectangle(p1);		
+			if (mode == "rectangle") {
+				r.add(p2);
+				world.addRect(new Point(r.x, r.y), new Dimension(r.width, r.height), color);
+			} else {
+				
+				RectangleObject ro = new RectangleObject(world.frame, world);
+				ro.setLocation((int)p1.getX(), (int)p1.getY());
+				ro.getObjectRect().setLocation((int)p1.getX(), (int)p1.getY());
+				ro.setSize(100, 100);
+				ro.type = mode;
+				
+				try {
+					sprite = ImageIO.read(new File(mode + ".png"));
+					ro.sprite(sprite);
+				} catch (Exception e) {e.printStackTrace();}
+				
+				world.addRo(ro);
+				
+				//prevent spike intersecting with other objects
+				for (int i = 0; i < world.go.rects.size(); i++) {
+					RectangleObject o2 = world.go.rects.get(i);
+					if (ro.getObjectRect().intersects(o2.getObjectRect())) {
+						ro.setLocation((int) ro.getObjectRect().getX(), (int) (o2.getObjectRect().getMinY() - ro.getHeight() / 2));
+						ro.getObjectRect().setLocation((int) ro.getObjectRect().getX(), (int) (o2.getObjectRect().getMinY() - ro.getHeight() / 2));
+						System.out.println("i");
+					}
 				}
 			}
 		}

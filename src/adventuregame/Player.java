@@ -8,6 +8,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import worlds.ListWorld;
 import worlds.World;
 
 public class Player extends Object {
@@ -20,10 +21,12 @@ public class Player extends Object {
 	private BufferedImage playerright;
 	private BufferedImage playerfall;
 	private BufferedImage playerleft;
+	private BufferedImage fire;
 	
 	private double aCounter = 0;
 	private double ANIMSPEED = 3;
 	public boolean enabled = false;
+	ListWorld lw;
 	
 	//hp
 	double maxhealth = 100;
@@ -59,6 +62,7 @@ public class Player extends Object {
 			playerright = ImageIO.read(new File("manboji2.png"));
 			playerfall = ImageIO.read(new File("manboji5.png"));
 			playerleft = ImageIO.read(new File("manboji3.png"));
+			fire = ImageIO.read(new File("fire.png"));
 		} catch (IOException e) {e.printStackTrace();}
 		
 	}
@@ -125,6 +129,32 @@ public class Player extends Object {
 		health = maxhealth;
 	}
 	
+	public void passWorld(ListWorld lw) {
+		this.lw = lw;
+	}
+	
+	int firecm = 100;
+	int firec = firecm;
+	
+	public void fireCounter() {
+		
+		if (firec != firecm) {
+			firec++;
+		}
+	}
+	
+	public void fire() {
+		if (firec == firecm) {
+			RectangleObject ro = new RectangleObject(lw.frame, lw);
+			ro.setLocation(getX() + 200, getY());
+			ro.setSize(100, 100);
+			ro.givetype("fire");
+			ro.sprite(fire);
+			lw.addRo(ro);
+			firec = 0;
+		}
+	}
+	
 	public void setLocation(int nx, int ny) {
 		setX(nx);
 		setY(ny);
@@ -141,6 +171,7 @@ public class Player extends Object {
 		jump();
 		voidCheck();
 		hpCheck();
+		fireCounter();
 	}
 	
 	public void hpCheck() {
@@ -231,6 +262,7 @@ public class Player extends Object {
 	}
 	
 	public void paint(Graphics g) {
+		g.drawRect(getCx(), getCy(), getWidth(), getHeight());
 		g.drawImage(playeractive, getCx(), getCy(), getWidth(), getHeight(), null);
 	}
 }
