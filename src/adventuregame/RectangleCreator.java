@@ -47,7 +47,7 @@ public class RectangleCreator {
 	}
 	
 	public void create() {
-		if (world.currentHud != "options" || world.currentHud != "menu" || world.currentHud != "levels") {
+		if (world.optionsactive != true) {
 			Rectangle r = new Rectangle(p1);		
 			if (mode == "rectangle") {
 				r.add(p2);
@@ -58,24 +58,32 @@ public class RectangleCreator {
 				ro.setLocation((int)p1.getX(), (int)p1.getY());
 				ro.getObjectRect().setLocation((int)p1.getX(), (int)p1.getY());
 				ro.setSize(100, 100);
-				ro.type = mode;
-				
+				ro.givetype(mode);
+
 				try {
 					sprite = ImageIO.read(new File(mode + ".png"));
 					ro.sprite(sprite);
 				} catch (Exception e) {e.printStackTrace();}
-				
+
 				world.addRo(ro);
-				
+
 				//prevent spike intersecting with other objects
 				for (int i = 0; i < world.go.rects.size(); i++) {
 					RectangleObject o2 = world.go.rects.get(i);
+
 					if (ro.getObjectRect().intersects(o2.getObjectRect())) {
+						
 						ro.setLocation((int) ro.getObjectRect().getX(), (int) (o2.getObjectRect().getMinY() - ro.getHeight() / 2));
 						ro.getObjectRect().setLocation((int) ro.getObjectRect().getX(), (int) (o2.getObjectRect().getMinY() - ro.getHeight() / 2));
-						System.out.println("i");
+						
+						//if object is a spike : spike correction, without this user can walk through spikes
+						if (ro.type.equals("spike")) {
+							ro.setLocation((int)ro.getObjectRect().getX(), (int)ro.getObjectRect().getY() + 5);
+						}
 					}
+					
 				}
+				
 			}
 		}
 	}

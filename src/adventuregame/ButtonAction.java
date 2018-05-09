@@ -11,6 +11,7 @@ public class ButtonAction {
 	private Main frame;
 	private ListWorld world;
 	ArrayList<HUD> huds;
+	SaveWriter sw;
 	
 	public int modeIndex = 0;
 	public String mode = "rectangle";
@@ -18,7 +19,10 @@ public class ButtonAction {
 			"rectangle",
 			"text",
 			"spike",
-			"health"
+			"health",
+			"ultrahealth",
+			"spikeboi",
+			"donut"
 	};
 	
 	public ButtonAction(ListWorld w, Main f, HUD h) {
@@ -37,6 +41,10 @@ public class ButtonAction {
 		mode = modes[modeIndex];
 	}
 	
+	public void passSaveWriter(SaveWriter lw) {
+		this.sw = lw;
+	}
+	
 	public void getClick() {
 		for (int k = 0; k < huds.size(); k++) {
 			HUD hud = huds.get(k);
@@ -47,7 +55,7 @@ public class ButtonAction {
 						System.out.println(hb.get(i).text);
 						
 						if (hb.get(i).text == "save stage" && hud.visible == true) {
-							world.sw.writeList(world.go);
+							sw.writeList(world.go);
 							
 						} else if (hb.get(i).id == "quit" && hud.visible == true) {
 							frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));

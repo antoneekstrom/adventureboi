@@ -61,6 +61,7 @@ public class ListWorld extends World {
 	protected ArrayList<HUD> huds;
 	public String currentHud = "menu";
 	public String lastHud;
+	public HudList inv;
 	
 	public Thread t;
 	
@@ -181,21 +182,13 @@ public class ListWorld extends World {
 		HudObj world = new HudObj(50, 350, 400, 100, Color.ORANGE);
 		HudObj noclip = new HudObj((int) (dim.getWidth() - 350), 50, 300, 100, Color.ORANGE);
 		HudObj text = new HudObj((int) (dim.getWidth() - 400), 200, 350, 100, Color.ORANGE);
-		HudList inv = new HudList(new Rectangle((int) (dim.getWidth() - 400), 330, 300, 600), frame);
+		inv = new HudList(new Rectangle((int) (dim.getWidth() - 400), 330, 300, 600), frame);
 		inv.addBackground(Color.WHITE);
 		inv.passWorld(this);
 		inv.setFont(standard.deriveFont(0, 30));
 		inv.setEntry(new HudObj((int) inv.getRect().getMinX(), (int)inv.getRect().getMinY(), 200, 100, Color.ORANGE));
 		inv.margintop = -200;
 		inv.addScrollbar();
-		inv.addEntry("diarrhea", "diarrhea");
-		inv.addEntry("diarrhea", "diarrhea");
-		inv.addEntry("diarrhea", "diarrhea");
-		inv.addEntry("diarrhea", "diarrhea");
-		inv.addEntry("diarrhea", "diarrhea");
-		inv.addEntry("diarrhea", "diarrhea");
-		inv.addEntry("diarrhea", "diarrhea");
-		inv.addEntry("diarrhea", "diarrhea");
 		inv.alignEntries();
 		options.hl.add(inv);
 		noclip.addText("gravity");

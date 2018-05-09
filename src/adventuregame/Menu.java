@@ -4,21 +4,18 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Image;
+
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.TextField;
+
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
+
 import java.util.ArrayList;
 
-import javax.swing.ImageIcon;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+
 import javax.swing.Timer;
 
 import worlds.ListWorld;
@@ -86,6 +83,7 @@ public class Menu extends ListWorld implements ActionListener {
 		levels.id = "levels";
 		options = new HUD(this);
 		options.id = "options";
+		huds.add(actualhud);
 		huds.add(menu);
 		huds.add(levels);
 		huds.add(options);
@@ -119,7 +117,7 @@ public class Menu extends ListWorld implements ActionListener {
 		exit.setId("quit");
 		
 		HudBar hp = new HudBar((int) ((dim.width / 2) - 200), 100, 400, 50);
-		HudText debug = new HudText(50, 300, "debug", standard);
+		HudText debug = new HudText(50, 400, "debug", standard);
 		HudObj shoot = new HudObj(200, 200, 200, 100, Color.ORANGE);
 		debug.setId("debug");
 		actualhud.ht.add(debug);
@@ -161,7 +159,7 @@ public class Menu extends ListWorld implements ActionListener {
 		llist.addEntry("lw", "lw");
 		llist.margintop = 200;
 		llist.addEntry("world1", "world1");
-		llist.addEntry("world2", "id");
+		llist.addEntry("world2", "world2");
 		llist.addEntry("world3", "id");
 		llist.addEntry("world4", "id");
 		llist.addEntry("world5", "id");
@@ -202,6 +200,7 @@ public class Menu extends ListWorld implements ActionListener {
 		if (time1 - time2 > FRAMERATE) {
 			time2 = System.nanoTime() / 1000000;
 			
+			m.ba.passSaveWriter(sw);
 			p.passWorld(this);
 			p.update();
 			menu.update();

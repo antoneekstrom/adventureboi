@@ -43,7 +43,9 @@ public class TextCreator {
 	}
 	
 	public void createText() {
-		world.addText(new Point(p.x, p.y), new Font("Comic Sans MS", 100, 40), text, id, color);
+		if (world.optionsactive == false) {
+			world.addText(new Point(p.x, p.y), new Font("Comic Sans MS", 100, 40), text, id, color);
+		}
 	}
 	
 }

@@ -68,7 +68,7 @@ public class Mouse implements MouseListener {
 				rc.mode = "spike";
 			} else {
 				rc.addp1(mouse);
-				rc.mode = "health";
+				rc.mode = ba.mode;
 			}
 		}
 		pressed = true;
