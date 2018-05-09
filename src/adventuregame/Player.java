@@ -33,6 +33,7 @@ public class Player extends Object {
 	double health = 100;
 	int dmgcooldown = 50;
 	boolean invulnerable = false;
+	public boolean invincible = false;
 	
 	//movement
 	public String direction = "none";
@@ -50,7 +51,7 @@ public class Player extends Object {
 	double JACC = 1f;
 	double JSPEED = 1.7;
 	public int JFUEL = 0;
-	public int JFUELMAX = 14;
+	public int JFUELMAX = 15;
 	public boolean onground = false;
 	
 	
@@ -122,7 +123,7 @@ public class Player extends Object {
 	public void setSize(int w, int h) {
 		setWidth(w);
 		setHeight(h);
-		getObjectRect().setSize(w, h + 105); //55 without collisionCorrection() active
+		getObjectRect().setSize(w, h + 25); //55 without collisionCorrection() active
 	}
 	
 	public void die() {
@@ -135,7 +136,7 @@ public class Player extends Object {
 		this.lw = lw;
 	}
 	
-	int firecm = 40;
+	int firecm = 30;
 	int firec = firecm;
 	
 	public void fireCounter() {
@@ -149,7 +150,7 @@ public class Player extends Object {
 		if (firec == firecm) {
 			RectangleObject ro = new RectangleObject(lw.frame, lw);
 			ro.giveHealthModule(100);
-			ro.hm.setDamage(200);
+			ro.hm.setDamage(20);
 			ro.setSize(100, 100);
 			if (s.equals("right")) {
 				ro.setLocation(getX() + 150, getY());
@@ -170,7 +171,7 @@ public class Player extends Object {
 	}
 	
 	public void collisionCorrection() {
-		getObjectRect().y = (int) (getObjectRect().getY() - 50);
+		getObjectRect().y = (int) (getY() - 25);
 	}
 	
 	public void setLocation(int nx, int ny) {
@@ -180,17 +181,16 @@ public class Player extends Object {
 	}
 	
 	public void update() {	
+		animation();
+		gravity();
+		jump();
 		setLocation(getX(), getY());
 		updateObjectRect();
-		gravity();
 		calculateYVelocity();
-		animation();
 		move();
-		jump();
 		voidCheck();
 		hpCheck();
 		fireCounter();
-		collisionCorrection();
 	}
 	
 	public void hpCheck() {
@@ -209,7 +209,7 @@ public class Player extends Object {
 	}
 	
 	public void damage(int d) {
-		if (invulnerable == false) {
+		if (invulnerable == false && !invincible) {
 			health = health - d;
 			invulnerable = true;
 		}
@@ -296,7 +296,7 @@ public class Player extends Object {
 	}
 	
 	public void paint(Graphics g) {
-		g.drawRect(getCx(), getCy(), (int) getObjectRect().getWidth(), (int) getObjectRect().getHeight());
+		//g.drawRect(getCx(), getCy(), (int) getObjectRect().getWidth(), (int) getObjectRect().getHeight());
 		g.drawImage(playeractive, getCx(), getCy(), getWidth(), getHeight(), null);
 	}
 }

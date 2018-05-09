@@ -181,6 +181,7 @@ public class ListWorld extends World {
 		HudObj mode = new HudObj(500, 200, 400, 100, Color.GRAY);
 		HudObj world = new HudObj(50, 350, 400, 100, Color.ORANGE);
 		HudObj noclip = new HudObj((int) (dim.getWidth() - 350), 50, 300, 100, Color.ORANGE);
+		HudObj invincible = new HudObj((int) (dim.getWidth() - 700), 50, 300, 100, Color.ORANGE);
 		HudObj text = new HudObj((int) (dim.getWidth() - 400), 200, 350, 100, Color.ORANGE);
 		inv = new HudList(new Rectangle((int) (dim.getWidth() - 400), 330, 300, 600), frame);
 		inv.addBackground(Color.WHITE);
@@ -213,7 +214,10 @@ public class ListWorld extends World {
 		quit.addText("quit");
 		quit.setId("quit");
 		mode.addText("mode: " + m.ba.mode);
+		invincible.setId("invincible");
+		invincible.addText("invincible: false");
 		options.hb.add(new HudObj(0, 0, dim.width, dim.height, new Color(0, 0, 0, (float)0.7)));
+		options.hb.add(invincible);
 		options.hb.add(world);
 		options.hb.add(text);
 		options.hb.add(colors);

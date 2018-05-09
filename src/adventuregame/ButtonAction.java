@@ -57,32 +57,45 @@ public class ButtonAction {
 						if (hb.get(i).text == "save stage" && hud.visible == true) {
 							sw.writeList(world.go);
 							
-						} else if (hb.get(i).id == "quit" && hud.visible == true) {
+						}
+						else if (hb.get(i).id == "quit" && hud.visible == true) {
 							frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
 							
-						} else if (hb.get(i).id == "mode") {
+						}
+						else if (hb.get(i).id == "mode") {
 							changeMode();
 							
-						} else if (hb.get(i).id == "world") {
+						}
+						else if (hb.get(i).id == "world") {
 							world.switchHud("levels");
 							
-						} else if (hb.get(i).id == "start") {
+						}
+						else if (hb.get(i).id == "start") {
 							world.setBackground(Color.ORANGE);
 							world.switchHud("levels");
 							
-						} else if (hb.get(i).id == "back") {
+						}
+						else if (hb.get(i).id == "back") {
 							world.switchHud(world.lastHud);
 							
-						} else if (hb.get(i).id == "quit") {
+						}
+						else if (hb.get(i).id == "quit") {
 							System.out.println("quit");
 							frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
-						} else if (hb.get(i).id == "gravity") {
+						}
+						else if (hb.get(i).id == "gravity") {
 							if (world.p.hasGravity()) {
 								world.p.setGravity(false);
 							} else {
 								world.p.setGravity(true);
 							}
-						} else if (hb.get(i).id == "field") {
+						}
+						else if (hb.get(i).id == "invincible") {
+							if (world.p.invincible) {
+								world.p.invincible = false;
+							} else {
+								world.p.invincible = true;
+							}
 						}
 						if (hb.get(i).id == "color") {
 							System.out.println(hb.get(i).colord);

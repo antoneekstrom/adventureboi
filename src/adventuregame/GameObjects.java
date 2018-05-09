@@ -12,6 +12,7 @@ public class GameObjects {
 	public ArrayList<HudBar> bars;
 	private Main frame;
 	private ListWorld world;
+	ObjectCollision oc;
 	
 	public GameObjects(Main f, ListWorld lw) {
 		rects = new ArrayList<RectangleObject>();
@@ -20,9 +21,12 @@ public class GameObjects {
 		frame = f;
 		world = lw;
 		
+		oc = new ObjectCollision(rects);
+		
 	}
 	
 	public void update() {
+		
 		for (int i = 0; i < rects.size(); i++) {
 			specificUpdate(rects.get(i));
 			rects.get(i).update();
@@ -34,6 +38,11 @@ public class GameObjects {
 				texts.get(i).text("rectangles:" + world.go.rects.size() + " texts:" + world.go.texts.size());
 			}
 		}
+		
+		//collision for objects other than player
+		oc.updateList(rects);
+		oc.update();
+		
 	}
 
 	public void specificUpdate(RectangleObject ro) {

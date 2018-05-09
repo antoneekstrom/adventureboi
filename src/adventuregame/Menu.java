@@ -118,16 +118,12 @@ public class Menu extends ListWorld implements ActionListener {
 		
 		HudBar hp = new HudBar((int) ((dim.width / 2) - 200), 100, 400, 50);
 		HudText debug = new HudText(50, 400, "debug", standard);
-		HudObj shoot = new HudObj(200, 200, 200, 100, Color.ORANGE);
 		debug.setId("debug");
 		actualhud.ht.add(debug);
 		hp.setText("Health");
 		hp.fg = Color.RED;
 		hp.modifier = 1;
 		hp.setId("hp");
-		shoot.setId("shoot");
-		shoot.addText("shoot");
-		actualhud.hb.add(shoot);
 		actualhud.hbr.add(hp);
 		actualhud.visible = true;
 		

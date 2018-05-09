@@ -12,11 +12,17 @@ public class HudBar {
 	Color bg, fg, tc;
 	String text = "";
 	String id;
-	int hp;
+	int hp, maxhp = 10;
 	Player p;
-	boolean stats = false;
+	public boolean stats = false;
 	String numbers = "0/0";
 	Rectangle rect;
+	int numberoffset = 0;
+	int textwidth = 0;
+	
+	
+	int ox, oy;
+	boolean offset = false;
 	
 	public HudBar(int x, int y, int w, int h) {
 		bg = Color.WHITE;
@@ -28,6 +34,7 @@ public class HudBar {
 		this.h = h;
 		modifier = 1;
 		rect = new Rectangle(x, y, w, h);
+		id = "";
 	}
 	
 	public void setText(String s) {
@@ -46,11 +53,31 @@ public class HudBar {
 		return id;
 	}
 	
+	public void offSet(int x, int y) {
+		offset = true;
+		ox = x;
+		oy = y;
+	}
+	
+	public void updateHp(int hp, int mhp) {
+		this.hp = hp;
+		maxhp = mhp;
+	}
+	
 	public void update() {
 		
 		fw = w * modifier;
 		percent = fw / w;
 		
+		ppercent = (float) hp / maxhp;
+		fw = w * ppercent;
+		
+		if (stats) {
+			numbers = hp + "/" + maxhp;
+		}
+	}
+	
+	public void updatePlayer() {
 		if (id.equals("hp")) {
 			
 			//percentages
@@ -67,6 +94,15 @@ public class HudBar {
 		}
 	}
 	
+	public void setPos(int x, int y) {
+		if (!offset) {
+			ox = 0;
+			oy = 0;
+		}
+		this.x = x + ox;
+		this.y = y + oy;
+	}
+	
 	public void paint(Graphics g) {
 		//background
 		g.setColor(bg);
@@ -76,10 +112,10 @@ public class HudBar {
 		g.fillRect(x, y, (int)fw, h);
 		//text
 		g.drawString(text, x + (w / 2) - (g.getFontMetrics().stringWidth(text) / 2), y - 20);
-		if (id == "hp") {
+		if (id == "hp" || stats) {
 			g.setColor(tc);
 			g.setFont(g.getFont().deriveFont(40f));
-			g.drawString(numbers, x - g.getFontMetrics().stringWidth(numbers) - 10, y + (g.getFontMetrics().getHeight() / 2) + (h / 4));
+			g.drawString(numbers, (int) (x - g.getFontMetrics().stringWidth(numbers) - 10), y + (g.getFontMetrics().getHeight() / 2) + (h / 4));
 		}
 	}
 }

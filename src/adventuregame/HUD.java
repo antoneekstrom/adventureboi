@@ -77,6 +77,9 @@ public class HUD {
 		if (ho.id == "gravity") {
 			ho.addText("gravity: " + world.p.hasGravity());
 		}
+		if (ho.id == "invincible") {
+			ho.addText("invincible: " + world.p.invincible);
+		}
 		Point mouse = MouseInfo.getPointerInfo().getLocation();
 		if (world.m.pressed && ho.hrect.contains(mouse)) {
 			if (ho.id == "modhp") {
@@ -100,7 +103,7 @@ public class HUD {
 	
 	public void textUpdate(HudText ht) {
 		if (ht.id == "debug") {
-			ht.text = "mode: " + world.m.ba.mode;
+			ht.text = "";
 		}
 		if (ht.id == "debug2") {
 			ht.text = "max" + String.valueOf(p.maxhealth);
@@ -115,7 +118,7 @@ public class HUD {
 		
 		if (hb.getId().equals("hp")) {
 			hb.passPlayer(p);
-			hb.update();
+			hb.updatePlayer();
 			
 		}
 	}
