@@ -143,8 +143,10 @@ public class SaveWriter {
 			ro.setLocation(x, y);
 			ro.setSize(w, h);
 			ro.setCOLOR(c);
-			if (!(t.equals("rectangle")) && !(t.equals(""))) {
-				ro.hasImg = true;
+			if (!(t.equals(""))) {
+				if (!t.equals("rectangle")) {
+					ro.hasImg = true;
+				}
 				ro.givetype(t);
 			}
 			world.addRo(ro);

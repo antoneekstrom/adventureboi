@@ -291,7 +291,7 @@ public class ListWorld extends World {
 		//a-right
 		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(a_right, 0, true), "a-rightr");
 		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(a_right, 0, false), "a-rightp");
-		this.getActionMap().put("a-rightr", new PlayerAbility("a-rightp", this));
+		this.getActionMap().put("a-rightp", new PlayerAbility("a-rightp", this));
 		this.getActionMap().put("a-rightr", new PlayerAbility("a-rightr", this));
 		
 	}

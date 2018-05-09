@@ -135,7 +135,7 @@ public class Player extends Object {
 		this.lw = lw;
 	}
 	
-	int firecm = 70;
+	int firecm = 40;
 	int firec = firecm;
 	
 	public void fireCounter() {
@@ -148,13 +148,16 @@ public class Player extends Object {
 	public void fire(String s) {
 		if (firec == firecm) {
 			RectangleObject ro = new RectangleObject(lw.frame, lw);
-			ro.setLocation(getX() + 200, getY());
+			ro.giveHealthModule(100);
+			ro.hm.setDamage(200);
 			ro.setSize(100, 100);
 			if (s.equals("right")) {
+				ro.setLocation(getX() + 150, getY());
 				ro.givetype("fire");
 				ro.setDirection("right");
 			}
 			else if (s.equals("left")) {
+				ro.setLocation(getX() - 150, getY());
 				ro.givetype("fire");
 				ro.setDirection("left");
 				

@@ -2,12 +2,10 @@ package adventuregame;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 
 import worlds.ListWorld;
 import worlds.World;
@@ -19,7 +17,9 @@ public class RectangleObject extends Object {
 	String type = "rectangle";
 	ListWorld lw;
 	String direction;
-	int velocity = 5;
+	int velocity = 15;
+	HealthModule hm;
+	boolean hasHealth = false;
 	
 	public RectangleObject(Main f, World w) {
 		super(f, w);
@@ -33,6 +33,11 @@ public class RectangleObject extends Object {
 		} catch (Exception e) {e.printStackTrace();}
 	}
 	
+	public void giveHealthModule(int i) {
+		hm = new HealthModule(i);
+		hasHealth = true;
+	}
+	
 	public void givetype(String s) {
 		type = s;
 		
@@ -41,6 +46,10 @@ public class RectangleObject extends Object {
 			sprite(sprite);
 		} catch (Exception e) {e.printStackTrace();}
 		
+		if (type.equals("rectangle")) {
+			hm = new HealthModule(10);
+			hasHealth = true;
+		}
 		if (type.equals("ultrahealth")) {
 			setSize(150, 150);
 			setY(getY() - 50);
@@ -48,9 +57,11 @@ public class RectangleObject extends Object {
 		if (type.equals("spikeboi")) {
 			setSize(150, 150);
 			setGravity(true);
+			hm = new HealthModule(100);
+			hasHealth = true;
 		}
 		if (type.equals("spike")) {
-			setWidth(200);
+			
 		}
 		if (type.equals("donut")) {
 			setSize(120, 120);
@@ -63,6 +74,13 @@ public class RectangleObject extends Object {
 
 	public void update() {
 		super.update();
+		if (hasHealth) {
+			hm.update();
+			if (hm.getHealth() <= 0) {
+				lw.go.rects.remove(this);
+				lw.cl.collisions.remove(getObjectRect());
+			}
+		}
 		if (getObjectRect().intersects(lw.p.getObjectRect())) {
 			if (type.equals("spike")) {
 				lw.p.damage((int) (lw.p.maxhealth * 0.5));
@@ -86,13 +104,13 @@ public class RectangleObject extends Object {
 				lw.inv.addEntry("donut", "");
 				lw.inv.alignEntries();
 			}
+			
 		}
-<<<<<<< HEAD
 		if (type == "fire") {
 			if (direction.equals("left")) {
-				
+
 				setX(getX() - velocity);
-				if (getObjectRect().intersects(lw.p.getObjectRect())) {				
+				if (getObjectRect().intersects(lw.p.getObjectRect())) {
 					lw.p.setX(lw.p.getX() - velocity);
 				}
 			}
@@ -101,31 +119,25 @@ public class RectangleObject extends Object {
 				if (getObjectRect().intersects(lw.p.getObjectRect())) {				
 					lw.p.setX(lw.p.getX() + velocity);
 				}
-=======
-		
-		if (type.equals("fire")) {
-			setX(getX() + 10);
-			
-			if (getObjectRect().intersects(lw.p.getObjectRect())) {		
-				lw.p.setX(lw.p.getX() + 10);
-				
->>>>>>> branch 'newgameloop' of https://github.com/zimbosaurus/adventureboi.git
 			}
-			
 			updateObjectRect();
-			
-			for (int i = 0; i < lw.go.rects.size(); i++) {	
-				
+		}
+		for (int i = 0; i < lw.go.rects.size(); i++) {
+			if (type.equals("fire")) {
 				if (getObjectRect().intersects(lw.go.rects.get(i).getObjectRect()) && !(lw.go.rects.get(i).type == "fire")) {
 					
 					lw.go.rects.remove(this);
 					lw.cl.collisions.remove(getObjectRect());
 				}
 			}
+			if (type.equals("fire") && lw.go.rects.get(i).hasHealth && !(lw.go.rects.get(i).type.equals(type))) {
+				if (lw.go.rects.get(i).getObjectRect().intersects(getObjectRect())) {
+					lw.go.rects.get(i).hm.decreaseHealth(hm.damage);
+				}
+			}
 		}
-		
 	}
-	
+
 	public void passWorld(ListWorld lw) {
 		this.lw = lw;
 	}
@@ -138,6 +150,10 @@ public class RectangleObject extends Object {
 			g.drawImage(sprite, getCx(), getCy(), getWidth(), getHeight(), null);
 			
 			//debug
-		}
+			if (hasHealth) {
+				g.setFont(lw.standard);
+				g.drawString(String.valueOf(hm.getHealth()), (int) getCx(), (int) getCy());
+			}
+		} 
 	}
 }

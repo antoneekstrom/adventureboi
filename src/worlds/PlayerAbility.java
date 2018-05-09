@@ -18,9 +18,11 @@ public class PlayerAbility extends AbstractAction {
 	public void actionPerformed(ActionEvent a) {
 		if (action.equals("a-rightp")) {
 			world.p.fire("right");
+			System.out.println("right");
 		}
 		if (action.equals("a-leftp")) {
-			world.p.setDirection("left");
+			world.p.fire("left");
+			System.out.println("left");
 		}
 	}
 
