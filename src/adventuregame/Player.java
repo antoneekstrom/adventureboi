@@ -143,12 +143,21 @@ public class Player extends Object {
 		}
 	}
 	
-	public void fire() {
+	public void fire(String s) {
 		if (firec == firecm) {
 			RectangleObject ro = new RectangleObject(lw.frame, lw);
 			ro.setLocation(getX() + 200, getY());
 			ro.setSize(100, 100);
-			ro.givetype("fire");
+			if (s.equals("right")) {
+				ro.givetype("fire");
+				ro.setDirection("right");
+			}
+			else if (s.equals("left")) {
+				ro.givetype("fire");
+				ro.setDirection("left");
+				
+			} else {System.out.println("invalid direction");}
+			
 			ro.sprite(fire);
 			lw.addRo(ro);
 			firec = 0;

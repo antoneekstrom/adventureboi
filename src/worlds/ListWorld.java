@@ -290,6 +290,17 @@ public class ListWorld extends World {
 		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(esc, 0, false), "escp");
 		this.getActionMap().put("escp", new MethodAction("escp", this));
 		this.getActionMap().put("escr", new MethodAction("escr", this));
+		//a-left
+		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(a_left, 0, true), "a-leftr");
+		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(a_left, 0, false), "a-leftp");
+		this.getActionMap().put("a-leftp", new PlayerAbility("a-leftp", this));
+		this.getActionMap().put("a-leftr", new PlayerAbility("a-leftr", this));
+		//a-right
+		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(a_right, 0, true), "a-rightr");
+		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(a_right, 0, false), "a-rightp");
+		this.getActionMap().put("a-rightr", new PlayerAbility("a-rightp", this));
+		this.getActionMap().put("a-rightr", new PlayerAbility("a-rightr", this));
+		
 	}
 	
 	public void stopPlayerController() {

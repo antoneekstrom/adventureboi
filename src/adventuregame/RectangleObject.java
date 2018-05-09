@@ -15,7 +15,9 @@ public class RectangleObject extends Object {
 	BufferedImage sprite;
 	String type = "rectangle";
 	ListWorld lw;
-
+	String direction;
+	int velocity = 5;
+	
 	public RectangleObject(Main f, World w) {
 		super(f, w);
 	}
@@ -29,6 +31,10 @@ public class RectangleObject extends Object {
 	
 	public void givetype(String s) {
 		type = s;
+	}
+	
+	public void setDirection(String s) {
+		direction = s;
 	}
 
 	public void update() {
@@ -45,9 +51,18 @@ public class RectangleObject extends Object {
 			}
 		}
 		if (type == "fire") {
-			setX(getX() + 5);
-			if (getObjectRect().intersects(lw.p.getObjectRect())) {				
-				lw.p.setX(lw.p.getX() + 5);
+			if (direction.equals("left")) {
+				
+				setX(getX() - velocity);
+				if (getObjectRect().intersects(lw.p.getObjectRect())) {				
+					lw.p.setX(lw.p.getX() - velocity);
+				}
+			}
+			else if (direction.equals("right")) {
+				setX(getX() + velocity);
+				if (getObjectRect().intersects(lw.p.getObjectRect())) {				
+					lw.p.setX(lw.p.getX() + velocity);
+				}
 			}
 			super.updateObjectRect();
 			for (int i = 0; i < lw.go.rects.size(); i++) {

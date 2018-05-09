@@ -89,7 +89,7 @@ public class HUD {
 			} else if (ho.id == "dmgdebug") {
 				
 			} else if (ho.id == "shoot") {
-				world.p.fire();
+				world.p.fire("right");
 			}
 		}
 	}
