@@ -48,7 +48,7 @@ public class AI {
 	}
 	
 	public void passGround(Rectangle g) {
-		if (g.getMinY() > nr.getWidth()) {
+		if (nr != null && g.getMinY() > nr.getWidth()) {
 			ground = g;
 		}
 	}
