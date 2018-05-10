@@ -117,6 +117,7 @@ public class Menu extends ListWorld implements ActionListener {
 		exit.setId("quit");
 		
 		HudBar hp = new HudBar((int) ((dim.width / 2) - 200), 100, 400, 50);
+		HudBar ep = new HudBar(50, 100, 400, 50);
 		HudText debug = new HudText(50, 400, "debug", standard);
 		debug.setId("debug");
 		actualhud.ht.add(debug);
@@ -124,6 +125,14 @@ public class Menu extends ListWorld implements ActionListener {
 		hp.fg = Color.RED;
 		hp.modifier = 1;
 		hp.setId("hp");
+		ep.tc = Color.WHITE;
+		ep.tf = standard.deriveFont(40f);
+		ep.fg = Color.BLUE;
+		ep.xoffset = -120;
+		ep.bg = Color.WHITE;
+		ep.setText("Energy");
+		ep.setId("energy");
+		actualhud.hbr.add(ep);
 		actualhud.hbr.add(hp);
 		actualhud.visible = true;
 		

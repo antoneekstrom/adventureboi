@@ -48,7 +48,7 @@ public class Camera {
 				
 				xdistance = o.getX() - p.getX();
 				o.setCx((int) (cPos.getX() + xdistance));
-			}
+			}/*
 			if (p.getY() > o.getY()) {
 				
 				ydistance = p.getY() - o.getY();
@@ -58,9 +58,9 @@ public class Camera {
 				
 				ydistance = o.getY() - p.getY();
 				o.setCy((int) (cPos.getY() + ydistance));
-			}
-			//o.setCy(o.getY() + 200);
-			//p.setCy(p.getY() + 200);
+			}*/
+			o.setCy(o.getY() + 200);
+			p.setCy(p.getY() + 200);
 		}
 	}
 	

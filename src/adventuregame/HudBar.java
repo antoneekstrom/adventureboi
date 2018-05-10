@@ -1,6 +1,7 @@
 package adventuregame;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
@@ -19,7 +20,10 @@ public class HudBar {
 	Rectangle rect;
 	int numberoffset = 0;
 	int textwidth = 0;
-	
+	public Font standard = new Font("Comic Sans MS", 20 ,50);
+	Font tf = standard;
+	int xoffset = 0;
+	int yoffset = 0;
 	
 	int ox, oy;
 	boolean offset = false;
@@ -59,7 +63,7 @@ public class HudBar {
 		oy = y;
 	}
 	
-	public void updateHp(int hp, int mhp) {
+	public void updateValues(int hp, int mhp) {
 		this.hp = hp;
 		maxhp = mhp;
 	}
@@ -111,10 +115,12 @@ public class HudBar {
 		g.setColor(fg);
 		g.fillRect(x, y, (int)fw, h);
 		//text
-		g.drawString(text, x + (w / 2) - (g.getFontMetrics().stringWidth(text) / 2), y - 20);
+		g.setFont(tf);
+		g.setColor(tc);
+		g.drawString(text, x + (w / 2) - (g.getFontMetrics().stringWidth(text) / 2) + xoffset, y - 20 + yoffset);
 		if (id == "hp" || stats) {
 			g.setColor(tc);
-			g.setFont(g.getFont().deriveFont(40f));
+			g.setFont(standard.deriveFont(40f));
 			g.drawString(numbers, (int) (x - g.getFontMetrics().stringWidth(numbers) - 10), y + (g.getFontMetrics().getHeight() / 2) + (h / 4));
 		}
 	}

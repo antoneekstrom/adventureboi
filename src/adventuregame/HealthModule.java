@@ -53,9 +53,11 @@ public class HealthModule {
 	}
 	
 	public void updateBarHp() {
-		if (hb.stats && showHp) {
-			hb.updateHp(hp, maxhp);
-			hb.update();
+		if (hb != null) {
+			if (hb.stats && showHp) {
+				hb.updateValues(hp, maxhp);
+				hb.update();
+			}
 		}
 	}
 	

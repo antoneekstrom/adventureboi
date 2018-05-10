@@ -23,10 +23,22 @@ public class Player extends Object {
 	private BufferedImage playerleft;
 	private BufferedImage fire;
 	
+	Animator animator;
+	int ay = 0;
+	BufferedImage aura;
+	BufferedImage aura1;
+	BufferedImage aura2;
+	BufferedImage aura3;
+	
 	private double aCounter = 0;
 	private double ANIMSPEED = 3;
 	public boolean enabled = false;
 	ListWorld lw;
+	
+	//energy
+	double maxenergy = 100;
+	double energy = maxenergy;
+	double energyrate = 0.2;
 	
 	//hp
 	double maxhealth = 100;
@@ -58,14 +70,24 @@ public class Player extends Object {
 	public Player(Main f, World w) {
 		super(f, w);
 		spawnpoint = new Point();
+		
 		try {
 			playerstill = ImageIO.read(new File("manboji.png"));
 			playerright = ImageIO.read(new File("manboji2.png"));
 			playerfall = ImageIO.read(new File("manboji5.png"));
 			playerleft = ImageIO.read(new File("manboji3.png"));
 			fire = ImageIO.read(new File("fire.png"));
+			aura1 = ImageIO.read(new File("assets/animated_sprites/aura/aura1.png"));
+			aura2 = ImageIO.read(new File("assets/animated_sprites/aura/aura2.png"));
+			aura3 = ImageIO.read(new File("assets/animated_sprites/aura/aura3.png"));
 		} catch (IOException e) {e.printStackTrace();}
 		
+		//effect animation
+		animator = new Animator(aura1);
+		animator.speed(10);
+		animator.addImage(aura1, 0);
+		animator.addImage(aura2, 1);
+		animator.addImage(aura3, 2);
 	}
 	
 	public void move() {
@@ -136,8 +158,9 @@ public class Player extends Object {
 		this.lw = lw;
 	}
 	
-	int firecm = 30;
+	int firecm = 20;
 	int firec = firecm;
+	int firecost = 25;
 	
 	public void fireCounter() {
 		
@@ -145,31 +168,33 @@ public class Player extends Object {
 			firec++;
 		}
 	}
-	
+
+	/* Idea: spawn fireball close enough to player and it will grab the player = another item */
 	public void fire(String s) {
-		if (firec == firecm) {
+		if (firec == firecm && useEnergy(firecost)) {
 			RectangleObject ro = new RectangleObject(lw.frame, lw);
 			ro.giveHealthModule(100);
+			ro.velocity = 15;
 			ro.hm.setDamage(20);
 			ro.setSize(100, 100);
 			if (s.equals("right")) {
-				ro.setLocation(getX() + 150, getY());
+				ro.setLocation((int) (getObjectRect().getCenterX() + 120), getY());
 				ro.givetype("fire");
 				ro.setDirection("right");
 			}
 			else if (s.equals("left")) {
-				ro.setLocation(getX() - 150, getY());
+				ro.setLocation((int) (getObjectRect().getCenterX() - 210), getY());
 				ro.givetype("fire");
 				ro.setDirection("left");
-				
+
 			} else {System.out.println("invalid direction");}
-			
+
 			ro.sprite(fire);
 			lw.addRo(ro);
 			firec = 0;
 		}
 	}
-	
+
 	public void collisionCorrection() {
 		getObjectRect().y = (int) (getY() - 25);
 	}
@@ -180,7 +205,7 @@ public class Player extends Object {
 		getObjectRect().setLocation(nx, ny);
 	}
 	
-	public void update() {	
+	public void update() {
 		animation();
 		gravity();
 		jump();
@@ -191,6 +216,26 @@ public class Player extends Object {
 		voidCheck();
 		hpCheck();
 		fireCounter();
+		energy();
+	}
+	
+	public void energy() {
+		if (energy + energyrate <= maxenergy) {
+			energy += energyrate;
+		}
+		else if (energy + energyrate > maxenergy) {
+			energy = maxenergy;
+		}
+	}
+	
+	public boolean useEnergy(double e) {
+		if (energy - e >= 0) {
+			energy -= e;
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 	
 	public void hpCheck() {
@@ -289,6 +334,18 @@ public class Player extends Object {
 		if (direction == "down") {
 			playeractive = playerfall;
 		}
+		
+		//effects
+		if (animator != null && invincible) {
+			animator.update();
+			aura = animator.getSprite();
+			if (playeractive.equals(playerfall)) {
+				ay = getCy() + 10;
+			}
+			else {
+				ay = getCy();
+			}
+		}
 	}
 	
 	public void setDirection(String d) {
@@ -298,5 +355,8 @@ public class Player extends Object {
 	public void paint(Graphics g) {
 		//g.drawRect(getCx(), getCy(), (int) getObjectRect().getWidth(), (int) getObjectRect().getHeight());
 		g.drawImage(playeractive, getCx(), getCy(), getWidth(), getHeight(), null);
+		if (invincible) {
+			g.drawImage(aura, getCx(), ay, getWidth(), getHeight(), null);
+		}
 	}
 }

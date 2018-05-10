@@ -121,6 +121,11 @@ public class HUD {
 			hb.updatePlayer();
 			
 		}
+		if (hb.getId().equals("energy")) {
+			hb.passPlayer(p);
+			hb.updateValues((int) world.p.energy, (int) world.p.maxenergy);
+			hb.update();
+		}
 	}
 	
 	public void paint(Graphics g) {

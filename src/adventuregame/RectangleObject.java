@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
@@ -16,12 +17,14 @@ public class RectangleObject extends Object {
 	boolean hasImg = false;
 	BufferedImage sprite;
 	String type = "rectangle";
+	String subtype = "none";
 	ListWorld lw;
 	String direction;
 	int velocity = 15;
 	HealthModule hm;
 	boolean hasHealth = false;
 	AI ai;
+	Animator animator;
 	
 	public RectangleObject(Main f, World w) {
 		super(f, w);
@@ -53,7 +56,11 @@ public class RectangleObject extends Object {
 		}
 		if (type.equals("ultrahealth")) {
 			setSize(150, 150);
+			subtype = "pickup";
 			setY(getY() - 50);
+		}
+		if (type.equals("health")) {
+			subtype = "pickup";
 		}
 		if (type.equals("spikeboi")) {
 			setSize(150, 150);
@@ -64,15 +71,27 @@ public class RectangleObject extends Object {
 			hm.showHp();
 			hm.hb.offSet(75 - hm.hb.w / 2, -70);
 			ai = new AI(getGRAVITY());
+			animator = new Animator(sprite);
+			animator.createList(getPathList());
 		}
 		if (type.equals("spike")) {
-			
+			subtype = "pickup";
 		}
 		if (type.equals("donut")) {
 			setSize(120, 120);
+			subtype = "pickup";
 		}
 		if (type.equals("fire")) {
-			ai = new AI(getGRAVITY());
+			
+		}
+		if (type.equals("star")) {
+			setSize(250, 250);
+			sprite(sprite);
+			hm = new HealthModule(40);
+			hasHealth = true;
+			animator = new Animator(sprite);
+			animator.speed(35);
+			animator.createList(getPathList());
 		}
 	}
 	
@@ -116,6 +135,7 @@ public class RectangleObject extends Object {
 			}
 			else if (type.equals("donut")) {
 				lw.go.rects.remove(this);
+				lw.cl.collisions.remove(getObjectRect());
 				HudObj ho = new HudObj((int) lw.inv.getRect().getMinX(), (int)lw.inv.getRect().getMinY(), 200, 100, Color.ORANGE);
 				ho.addImage("donut");
 				lw.inv.setEntry(ho);
@@ -124,9 +144,17 @@ public class RectangleObject extends Object {
 			}
 			else if (type.equals("spikeboi")) {
 				lw.p.damage(20);
-				lw.p.setX(getX());
+				if (lw.p.getY() < getY() && ai.move) {
+					lw.p.setX(getX());
+					animator.setIndexRange(3, 5);
+				}
 			}
 			
+		}
+		else {
+			if (type.equals("spikeboi")) {
+				animator.setIndexRange(0, 2);
+			}
 		}
 		if (type == "fire") {
 			if (direction.equals("left")) {
@@ -146,7 +174,7 @@ public class RectangleObject extends Object {
 		}
 		for (int i = 0; i < lw.go.rects.size(); i++) {
 			if (type.equals("fire")) {
-				if (getObjectRect().intersects(lw.go.rects.get(i).getObjectRect()) && !(lw.go.rects.get(i).type == "fire")) {
+				if (getObjectRect().intersects(lw.go.rects.get(i).getObjectRect()) && !(lw.go.rects.get(i).type == "fire") && !lw.go.rects.get(i).subtype.equals("pickup")) {
 					
 					lw.go.rects.remove(this);
 					lw.cl.collisions.remove(getObjectRect());
@@ -160,10 +188,6 @@ public class RectangleObject extends Object {
 			if (type.equals("fire") && lw.go.rects.get(i).hasHealth && !(lw.go.rects.get(i).type.equals(type))) {
 				if (lw.go.rects.get(i).getObjectRect().intersects(getObjectRect())) {
 					lw.go.rects.get(i).hm.decreaseHealth(hm.damage);
-					if (lw.go.rects.get(i).ai != null) {
-						lw.go.rects.get(i).ai.move = true;
-						lw.go.rects.get(i).ai.move();
-					}
 				}
 			}
 			if (type.equals("spikeboi") && lw.go.rects.get(i).type.equals("spikeboi") && lw.go.rects.get(i).ai != null && ai != null && !(getObjectRect().equals(lw.go.rects.get(i).getObjectRect())) && lw.go.rects.get(i).getObjectRect().intersects(getObjectRect())) {
@@ -172,8 +196,6 @@ public class RectangleObject extends Object {
 					if (lw.go.rects.get(i).getY() > getY()) {
 						setX((int) (lw.go.rects.get(i).ai.nr.getX()) + 10);
 					}
-					//setY((int) lw.go.rects.get(i).ai.nr.getY());
-					//setX(getX() - (int) (lw.go.rects.get(i).ai.nr.getX() - lw.go.rects.get(i).ai.r.getX()));
 				}
 			}
 		}
@@ -184,6 +206,11 @@ public class RectangleObject extends Object {
 			setX(ai.returnPos().x);
 			setY(ai.returnPos().y);
 		}
+		//animation
+		if (animator != null) {
+			animator.update();
+			sprite = animator.getSprite();
+		}
 	}
 
 	public void passWorld(ListWorld lw) {
@@ -193,6 +220,33 @@ public class RectangleObject extends Object {
 	public void voidCheck() {
 		if (getY() > 3000) {
 			hm.decreaseHealth(hm.getHealth());
+		}
+	}
+	
+	public String[] getPathList() {
+		if (type.equals("spikeboi")) {
+			String path = "assets/animated_sprites/spikeboi/";
+			String[] l = new String[] {
+					path + "sb1",
+					path + "sb2",
+					path + "sb3",
+					path + "sbh1",
+					path + "sbh2",
+					path + "sbh3"
+			};
+			return l;
+		}
+		else if (type.equals("star")) {
+			String path = "assets/animated_sprites/star/";
+			String[] l = new String[] {
+					path + "star1",
+					path + "star2",
+					path + "star3",
+			};
+			return l;
+		}
+		else {
+			return null;
 		}
 	}
 
@@ -207,9 +261,6 @@ public class RectangleObject extends Object {
 			g.fillRect(getCx(), getCy(), getWidth(), getHeight());			
 		} else {
 			g.drawImage(sprite, getCx(), getCy(), getWidth(), getHeight(), null);
-		}
-		if (type.equals("spikeboi")) {
-			g.drawString(ai.direction, getCx(), getCy() - 50);
 		}
 	}
 }

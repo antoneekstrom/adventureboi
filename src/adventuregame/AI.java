@@ -12,6 +12,8 @@ public class AI {
 	Rectangle prevground;
 	Rectangle ground;
 	
+	boolean ready = true;
+	
 	int speed = 5;
 	String direction = "right";
 	boolean move = false;
@@ -25,6 +27,11 @@ public class AI {
 	public void update(Rectangle r) {
 		this.r = r;
 		nr = r;
+		
+		if (ready) {
+			start();
+			ready = false;
+		}
 		
 		if (q.size() > 0) {
 			if (q.get(0).equals("jump")) {
@@ -88,6 +95,18 @@ public class AI {
 		else {
 			direction = d;
 		}
+	}
+	
+	public void start() {
+		System.out.println("start");
+		if (Math.random() < 0.5) {
+			direction("left");
+		}
+		else {
+			direction("right");
+		}
+		move = true;
+		move();
 	}
 
 	public void jump(boolean b) {
