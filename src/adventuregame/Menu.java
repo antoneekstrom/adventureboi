@@ -33,6 +33,7 @@ public class Menu extends ListWorld implements ActionListener {
 	public Point mouse;
 	public SaveWriter sw;
 	boolean ready = false;
+	Color black = new Color(0, 0, 0, 150);
 	
 	
 	boolean optionsactive = false;
@@ -69,6 +70,9 @@ public class Menu extends ListWorld implements ActionListener {
 	public void run() {
 		
 		lastHud = "menu";
+		typelistener = new TypeListener();
+		addKeyListener(typelistener);
+		
 		
 		setSize(dim);
 		setBackground(Color.CYAN);
@@ -119,6 +123,7 @@ public class Menu extends ListWorld implements ActionListener {
 		HudBar hp = new HudBar((int) ((dim.width / 2) - 200), 100, 400, 50);
 		HudBar ep = new HudBar(50, 100, 400, 50);
 		HudText debug = new HudText(50, 400, "debug", standard);
+		HudText console = new HudText(0, (int) dim.getHeight() - 100, "", standard.deriveFont(40f));
 		debug.setId("debug");
 		actualhud.ht.add(debug);
 		hp.setText("Health");
@@ -132,6 +137,10 @@ public class Menu extends ListWorld implements ActionListener {
 		ep.bg = Color.WHITE;
 		ep.setText("Energy");
 		ep.setId("energy");
+		console.setId("console");
+		console.setTextColor(Color.WHITE);
+		console.setBackground(black, 0, (int) dim.getWidth());
+		actualhud.ht.add(console);
 		actualhud.hbr.add(ep);
 		actualhud.hbr.add(hp);
 		actualhud.visible = true;

@@ -37,5 +37,14 @@ public class MethodAction extends AbstractAction {
 		if (world.optionsactive == false || world.currentHud == "") {
 			world.switchHud("actualhud");
 		}
+		//console
+		if (action.equals("consolep") && world.typelistener.getEnabled()) {
+			world.typelistener.disable();
+			world.startPlayerController(world.p);
+		}
+		else if (action.equals("consolep") && world.typelistener.getEnabled() == false) {
+			world.typelistener.enable();
+			world.stopPlayerController();
+		}
 	}
 }

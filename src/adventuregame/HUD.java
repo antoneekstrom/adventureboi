@@ -95,6 +95,9 @@ public class HUD {
 				world.p.fire("right");
 			}
 		}
+		if (ho.id == "console") {
+			ho.addText(world.typelistener.text);
+		}
 	}
 	
 	public void passPlayer(Player p) {
@@ -103,10 +106,19 @@ public class HUD {
 	
 	public void textUpdate(HudText ht) {
 		if (ht.id == "debug") {
-			ht.text = "";
+			ht.text = "output: " + world.typelistener.getOutput();
 		}
 		if (ht.id == "debug2") {
 			ht.text = "max" + String.valueOf(p.maxhealth);
+		}
+		if (ht.id == "console") {
+			if (world.typelistener.getEnabled()) {
+				ht.setVisible(true);
+			}
+			else {
+				ht.setVisible(false);
+			}
+			ht.text = world.typelistener.text;
 		}
 	}
 	

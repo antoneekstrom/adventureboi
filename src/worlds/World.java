@@ -33,6 +33,7 @@ public class World extends JPanel implements ActionListener {
 	int a_left = 37;
 	int a_right = 39;
 	int a_up = 38;
+	int console = 0;
 	
 	public double SIZEMOD;
 	public Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -41,7 +42,7 @@ public class World extends JPanel implements ActionListener {
 	private Main frame;
 	public SaveWriter sw;
 	String levelname;
-	private int FRAMERATE = 24; /* milliseconds, refresh timer */ 
+	private int FRAMERATE = 24; /* millisecodnds, refresh timer */ 
 	
 	public void startTimer() {
 		timer = new Timer(FRAMERATE, this);

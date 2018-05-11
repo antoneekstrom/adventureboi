@@ -33,6 +33,7 @@ import adventuregame.RectangleObject;
 import adventuregame.SaveWriter;
 import adventuregame.Text;
 import adventuregame.TextCreator;
+import adventuregame.TypeListener;
 
 public class ListWorld extends World {
 	
@@ -62,6 +63,7 @@ public class ListWorld extends World {
 	public String currentHud = "menu";
 	public String lastHud;
 	public HudList inv;
+	public TypeListener typelistener;
 	
 	public Thread t;
 	
@@ -297,11 +299,19 @@ public class ListWorld extends World {
 		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(a_right, 0, false), "a-rightp");
 		this.getActionMap().put("a-rightp", new PlayerAbility("a-rightp", this));
 		this.getActionMap().put("a-rightr", new PlayerAbility("a-rightr", this));
-		
+		//console
+		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(console, 0, true), "consoler");
+		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(console, 0, false), "consolep");
+		this.getActionMap().put("consoler", new MethodAction("consoler", this));
+		this.getActionMap().put("consolep", new MethodAction("consolep", this));
 	}
 	
 	public void stopPlayerController() {
 		this.getInputMap().clear();
 		this.getActionMap().clear();
+		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(console, 0, true), "consoler");
+		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(console, 0, false), "consolep");
+		this.getActionMap().put("consoler", new MethodAction("consoler", this));
+		this.getActionMap().put("consolep", new MethodAction("consolep", this));
 	}
 }

@@ -108,9 +108,6 @@ public class Player extends Object {
 		} else if (direction == "none") {
 			CALCMOV = BASEMOV;
 		}
-		
-		else {System.out.println("Invalid direction");}
-		
 	}
 
 	public void jump() {
@@ -187,7 +184,7 @@ public class Player extends Object {
 				ro.givetype("fire");
 				ro.setDirection("left");
 
-			} else {System.out.println("invalid direction");}
+			}
 
 			ro.sprite(fire);
 			lw.addRo(ro);
