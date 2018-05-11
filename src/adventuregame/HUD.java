@@ -65,6 +65,7 @@ public class HUD {
 		for (int i = 0; i < hbr.size(); i++) {
 			barUpdate(hbr.get(i));
 		}
+		hudUpdate();
 	}
 	
 	public void specificUpdate(HudObj ho) {
@@ -95,8 +96,16 @@ public class HUD {
 				world.p.fire("right");
 			}
 		}
-		if (ho.id == "console") {
-			ho.addText(world.typelistener.text);
+	}
+	
+	public void hudUpdate() {
+		if (id.equals("console")) {
+			if (world.typelistener.getEnabled()) {
+				setVisible(true);
+			}
+			else {
+				setVisible(false);
+			}
 		}
 	}
 	
@@ -104,21 +113,22 @@ public class HUD {
 		this.p = p;
 	}
 	
+	public void setVisible(boolean b) {
+		visible = b;
+	}
+	
 	public void textUpdate(HudText ht) {
 		if (ht.id == "debug") {
-			ht.text = "output: " + world.typelistener.getOutput();
+			ht.text = "";
 		}
 		if (ht.id == "debug2") {
 			ht.text = "max" + String.valueOf(p.maxhealth);
 		}
 		if (ht.id == "console") {
-			if (world.typelistener.getEnabled()) {
-				ht.setVisible(true);
-			}
-			else {
-				ht.setVisible(false);
-			}
-			ht.text = world.typelistener.text;
+			ht.text = ">>" + world.typelistener.text;
+		}
+		if (ht.id == "consoleresponse") {
+			ht.text = world.typelistener.c.getResponse();
 		}
 	}
 	

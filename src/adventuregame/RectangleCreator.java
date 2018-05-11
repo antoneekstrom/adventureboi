@@ -75,11 +75,6 @@ public class RectangleCreator {
 						
 						ro.setLocation((int) ro.getObjectRect().getX(), (int) (o2.getObjectRect().getMinY() - ro.getHeight() / 2));
 						ro.getObjectRect().setLocation((int) ro.getObjectRect().getX(), (int) (o2.getObjectRect().getMinY() - ro.getHeight() / 2));
-						
-						//if object is a spike : spike correction, without this user can walk through spikes
-						if (ro.type.equals("spike")) {
-							ro.setLocation((int)ro.getObjectRect().getX(), (int)ro.getObjectRect().getY() + 5);
-						}
 					}
 					
 				}

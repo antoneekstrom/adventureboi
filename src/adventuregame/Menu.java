@@ -29,6 +29,7 @@ public class Menu extends ListWorld implements ActionListener {
 	public Font standard = new Font("Comic Sans MS", 20 ,50);
 	public HUD menu;
 	public HUD levels;
+	public HUD console;
 	public HUD actualhud;
 	public Point mouse;
 	public SaveWriter sw;
@@ -70,7 +71,7 @@ public class Menu extends ListWorld implements ActionListener {
 	public void run() {
 		
 		lastHud = "menu";
-		typelistener = new TypeListener();
+		typelistener = new TypeListener(this);
 		addKeyListener(typelistener);
 		
 		
@@ -91,6 +92,9 @@ public class Menu extends ListWorld implements ActionListener {
 		huds.add(menu);
 		huds.add(levels);
 		huds.add(options);
+		
+		console = new HUD(this);
+		console.id = "console";
 		
 		rc = new RectangleCreator(this);
 		tc =  new TextCreator(this);
@@ -123,7 +127,8 @@ public class Menu extends ListWorld implements ActionListener {
 		HudBar hp = new HudBar((int) ((dim.width / 2) - 200), 100, 400, 50);
 		HudBar ep = new HudBar(50, 100, 400, 50);
 		HudText debug = new HudText(50, 400, "debug", standard);
-		HudText console = new HudText(0, (int) dim.getHeight() - 100, "", standard.deriveFont(40f));
+		HudText cfield = new HudText(0, (int) dim.getHeight() - 100, "", standard.deriveFont(40f));
+		HudText cval = new HudText(0, (int) dim.getHeight() - 170, "", standard.deriveFont(40f));
 		debug.setId("debug");
 		actualhud.ht.add(debug);
 		hp.setText("Health");
@@ -137,10 +142,14 @@ public class Menu extends ListWorld implements ActionListener {
 		ep.bg = Color.WHITE;
 		ep.setText("Energy");
 		ep.setId("energy");
-		console.setId("console");
-		console.setTextColor(Color.WHITE);
-		console.setBackground(black, 0, (int) dim.getWidth());
-		actualhud.ht.add(console);
+		cfield.setId("console");
+		cfield.setTextColor(Color.WHITE);
+		cfield.setBackground(black, 0, (int) dim.getWidth());
+		cval.setBackground(black, 0, (int) dim.getWidth());
+		cval.setId("consoleresponse");
+		cval.autoWidth(true);
+		console.ht.add(cfield);
+		console.ht.add(cval);
 		actualhud.hbr.add(ep);
 		actualhud.hbr.add(hp);
 		actualhud.visible = true;
@@ -202,6 +211,7 @@ public class Menu extends ListWorld implements ActionListener {
 			}
 			menu.paint(g);
 			levels.paint(g);
+			console.paint(g);
 			options.paint(g);
 			actualhud.paint(g);
 		}
@@ -222,6 +232,7 @@ public class Menu extends ListWorld implements ActionListener {
 			options.update();
 			actualhud.passPlayer(p);
 			actualhud.update();
+			console.update();
 			c.run(p);
 			go.update();
 			cl.pRun(p);

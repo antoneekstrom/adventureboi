@@ -25,6 +25,10 @@ public class RectangleObject extends Object {
 	boolean hasHealth = false;
 	AI ai;
 	Animator animator;
+	int index = -1;
+	boolean showrect = false;
+	boolean visible = true;
+	private boolean selected = false;
 	
 	public RectangleObject(Main f, World w) {
 		super(f, w);
@@ -62,6 +66,11 @@ public class RectangleObject extends Object {
 		if (type.equals("health")) {
 			subtype = "pickup";
 		}
+		if (type.equals("invis")) {
+			visible = false;
+			hasImg = false;
+			
+		}
 		if (type.equals("spikeboi")) {
 			setSize(150, 150);
 			setGravity(true);
@@ -98,9 +107,21 @@ public class RectangleObject extends Object {
 	public void setDirection(String s) {
 		direction = s;
 	}
+	
+	public void updateIndex() {
+			for (int i = 0; i < lw.go.rects.size(); i++) {
+				if (lw.go.rects.get(i).getObjectRect().equals(this.getObjectRect())) {
+					index = i;
+				}
+			}
+	}
 
 	public void update() {
 		super.update();
+		
+		if (index == -1) {
+			updateIndex();
+		}
 		
 		if (hasGravity()) {
 			voidCheck();
@@ -217,6 +238,15 @@ public class RectangleObject extends Object {
 		this.lw = lw;
 	}
 	
+	public void deselect() {
+		selected = false;
+	}
+	
+	public void destroy() {
+		lw.go.rects.remove(index);
+		lw.cl.collisions.remove(getObjectRect());
+	}
+	
 	public void voidCheck() {
 		if (getY() > 3000) {
 			hm.decreaseHealth(hm.getHealth());
@@ -249,6 +279,15 @@ public class RectangleObject extends Object {
 			return null;
 		}
 	}
+	
+	public void select() {
+		for (int i = 0; i < lw.go.rects.size(); i++) {
+			if (lw.go.rects.get(i).selected) {
+				lw.go.rects.get(i).selected = false;
+			}
+		}
+		selected = true;
+	}
 
 	public void paint(Graphics g) {
 		g.setColor(getCOLOR());
@@ -257,10 +296,26 @@ public class RectangleObject extends Object {
 				hm.paint(g);
 			}
 		}
-		if (hasImg == false) {
-			g.fillRect(getCx(), getCy(), getWidth(), getHeight());			
-		} else {
-			g.drawImage(sprite, getCx(), getCy(), getWidth(), getHeight(), null);
+		if (visible) {
+			if (hasImg == false) {
+				g.fillRect(getCx(), getCy(), getWidth(), getHeight());			
+			} else {
+				g.drawImage(sprite, getCx(), getCy(), getWidth(), getHeight(), null);
+			}
+		}
+		if (showrect) {
+			g.drawRect(getCx(), getCy(), getWidth(), getHeight());
+		}
+		if (lw.typelistener.c.showIndex) {
+			g.setColor(Color.BLACK);
+			g.setFont(lw.standard);
+			if (!selected) {
+				g.drawString(String.valueOf(index), getCx(), getCy());
+			}
+			else {
+				g.setColor(Color.ORANGE);
+				g.drawString("selected", getCx(), getCy());
+			}
 		}
 	}
 }
