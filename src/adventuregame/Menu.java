@@ -128,7 +128,6 @@ public class Menu extends ListWorld implements ActionListener {
 		HudBar ep = new HudBar(50, 100, 400, 50);
 		HudText debug = new HudText(50, 400, "debug", standard);
 		HudText cfield = new HudText(0, (int) dim.getHeight() - 100, "", standard.deriveFont(40f));
-		HudText cval = new HudText(0, (int) dim.getHeight() - 170, "", standard.deriveFont(40f));
 		debug.setId("debug");
 		actualhud.ht.add(debug);
 		hp.setText("Health");
@@ -145,11 +144,33 @@ public class Menu extends ListWorld implements ActionListener {
 		cfield.setId("console");
 		cfield.setTextColor(Color.WHITE);
 		cfield.setBackground(black, 0, (int) dim.getWidth());
+		
+		/*HudText cval = new HudText(0, (int) dim.getHeight() - 170, "", standard.deriveFont(40f));
 		cval.setBackground(black, 0, (int) dim.getWidth());
 		cval.setId("consoleresponse");
 		cval.autoWidth(true);
+		console.ht.add(cval);*/
+		List response = new List(new Rectangle(0, dim.height - 700, 800, 500), "text");
+		HudText responseentry = new HudText(0, 0, "", standard);
+		responseentry.text = "response entry";
+		responseentry.textcolor = Color.WHITE;
+		response.setBackground(black);
+		response.hasEntry = true;
+		response.setSpacing(10);
+		response.setPadding(15);
+		response.setPaddingTop(40);
+		response.setTextEntry(responseentry);
+		response.addEntry("");
+		response.addEntry("");
+		response.addEntry("");
+		response.addEntry("");
+		response.addEntry("");
+		response.addEntry("");
+		response.addEntry("");
+		response.id = "response";
+		
 		console.ht.add(cfield);
-		console.ht.add(cval);
+		console.lists.add(response);
 		actualhud.hbr.add(ep);
 		actualhud.hbr.add(hp);
 		actualhud.visible = true;

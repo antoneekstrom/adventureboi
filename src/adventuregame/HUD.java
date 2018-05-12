@@ -17,6 +17,7 @@ public class HUD {
 	public ArrayList<HudList> hl;
 	public ArrayList<HudText> ht;
 	public ArrayList<HudBar> hbr;
+	public ArrayList<List> lists;
 	public boolean visible = false;
 	private ListWorld world;
 	public String id;
@@ -30,6 +31,8 @@ public class HUD {
 		hl = new ArrayList<HudList>();
 		ht = new ArrayList<HudText>();
 		hbr = new ArrayList<HudBar>();
+		lists = new ArrayList<List>();
+		
 		world = lw;
 		font = world.standard;
 	}
@@ -41,6 +44,12 @@ public class HUD {
 				specificUpdate(hb.get(i));
 			}
 		}
+		
+		for (int i = 0; i < lists.size(); i++) {
+			lists.get(i).update();
+			listUpdate(lists.get(i));
+		}
+		
 		for (int i = 0; i < tf.size(); i++) {
 			if (visible == true) {
 				tf.get(i).setVisible(true);
@@ -117,6 +126,16 @@ public class HUD {
 		visible = b;
 	}
 	
+	public void listUpdate(List l) {
+		if (l.id == "response") {
+			for (int i = 0; i < l.textlist.size(); i++) {
+				if (i < world.typelistener.c.responsehistory.size()) {
+					l.textlist.get(i).text = world.typelistener.c.responsehistory.get(i);
+				}
+			}
+		}
+	}
+	
 	public void textUpdate(HudText ht) {
 		if (ht.id == "debug") {
 			ht.text = "";
@@ -128,7 +147,7 @@ public class HUD {
 			ht.text = ">>" + world.typelistener.text;
 		}
 		if (ht.id == "consoleresponse") {
-			ht.text = world.typelistener.c.getResponse();
+			//ht.text = world.typelistener.c.getResponse();
 		}
 	}
 	
@@ -168,6 +187,9 @@ public class HUD {
 			}
 			for (int i = 0; i < hbr.size(); i++) {
 				hbr.get(i).paint(g);
+			}
+			for (int i = 0; i < lists.size(); i++) {
+				lists.get(i).paint(g);
 			}
 		}
 	}

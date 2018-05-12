@@ -10,14 +10,15 @@ public class HudText {
 	public int x,y;
 	public Font font;
 	public String id;
-	private Color textcolor = Color.ORANGE;
-	private Color bgcolor = Color.BLACK;
+	public Color textcolor = Color.ORANGE;
+	public Color bgcolor = Color.BLACK;
 	boolean background = false;
 	int padding = 0;
 	int fontwidth, fontheight;
 	int width = 0;
 	boolean autowidth = false;
 	private boolean visible = true;
+	int correction = 10;
 	
 	public HudText(int x, int y, String t, Font f) {
 		text = t;
@@ -41,8 +42,25 @@ public class HudText {
 		autowidth = b;
 	}
 	
+	public void setX(int i) {
+		x = i;
+	}
+	
+	public void setY(int i) {
+		y = i;
+	}
+	
+	public HudText copy(HudText t) {
+		t = this;
+		return t;
+	}
+	
 	public void setId(String s) {
 		id = s;
+	}
+	
+	public int getTotalHeight() {
+		return fontheight + padding;
 	}
 	
 	public boolean getVisible() {
@@ -63,7 +81,7 @@ public class HudText {
 				if (autowidth) {
 					width = fontwidth;
 				}
-				g.fillRect(x, y - fontheight + 20, width + padding, fontheight + padding);
+				g.fillRect(x - padding, y - fontheight + correction, width + padding, fontheight + padding);
 			}
 			g.setColor(textcolor);
 			g.drawString(text, x, y);

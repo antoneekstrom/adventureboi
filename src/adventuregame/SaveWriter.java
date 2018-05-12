@@ -124,8 +124,8 @@ public class SaveWriter {
 		//parse rectangleobject from .world file
 		for (int i = 0; i <= lcount; i++) {
 			readLine(i);
-			if (i == 1 && line.equals("")) {
-				write("0,0,0,0,0,rectangle");
+			if (i == 1 && !(line.contains(","))) {
+				write("-6043,275,0,0,-1,rectangle");
 			}
 			String[] a = line.split(",");
 			for (int k = 0; k < a.length; k++) {

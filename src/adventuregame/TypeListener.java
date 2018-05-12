@@ -47,8 +47,8 @@ public class TypeListener implements KeyListener {
 		}
 		if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
 			output = text;
-			c.enter(output);
 			text = "";
+			c.enter(output);
 			c.currentIndex = c.history.size();
 		}
 		if (arg0.getKeyCode() == KeyEvent.VK_UP) {

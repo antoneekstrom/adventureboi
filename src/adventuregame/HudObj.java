@@ -30,6 +30,7 @@ public class HudObj {
 	BufferedImage bf;
 	boolean center = true;
 	int tx, ty;
+	private int index = 0;
 	Color textcolor = Color.WHITE;
 	
 	public HudObj(int x, int y, int w, int h, Color c) {
@@ -46,6 +47,19 @@ public class HudObj {
 	
 	public void setId(String s) {
 		id = s;
+	}
+	
+	public void updatePos(Rectangle r) {
+		hrect = r;
+	}
+	
+	public void setIndex(int i) {
+		index = i;
+	}
+	
+	public HudObj copy(HudObj o) {
+		o = this;
+		return o;
 	}
 	
 	public void setFont(Font f) {
