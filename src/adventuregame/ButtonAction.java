@@ -23,7 +23,9 @@ public class ButtonAction {
 			"ultrahealth",
 			"spikeboi",
 			"donut",
-			"star"
+			"star",
+			"solidstar",
+			"kantarell"
 	};
 	
 	public ButtonAction(ListWorld w, Main f, HUD h) {

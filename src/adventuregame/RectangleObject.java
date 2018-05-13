@@ -8,6 +8,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
+import javax.swing.Timer;
 
 import worlds.ListWorld;
 import worlds.World;
@@ -29,6 +30,17 @@ public class RectangleObject extends Object {
 	boolean showrect = false;
 	boolean visible = true;
 	private boolean selected = false;
+	String stype = "none";
+	private String text = "boioioing";
+	boolean hasText = false;
+	Color tc = Color.BLACK;
+	boolean hasStarted = false;
+	
+	int shrinkcounter = 100;
+	Counter counter;
+	Counter appear;
+	
+	Rectangle iniRect = new Rectangle();
 	
 	public RectangleObject(Main f, World w) {
 		super(f, w);
@@ -47,11 +59,27 @@ public class RectangleObject extends Object {
 		hasHealth = true;
 	}
 	
+	public void text(String s) {
+		text = s;
+	}
+	
+	public String getText() {
+		return text;
+	}
+	
+	public void setSprite(String path) {
+		hasImg = true;
+		try {
+			sprite = ImageIO.read(new File(path));
+		} catch (Exception e) {e.printStackTrace();}
+	}
+	
 	public void givetype(String s) {
 		type = s;
+		stype = type;
 		
 		try {
-			sprite = ImageIO.read(new File(type + ".png"));
+			sprite = ImageIO.read(new File("assets/sprites/" + type + ".png"));
 			sprite(sprite);
 		} catch (Exception e) {e.printStackTrace();}
 		
@@ -71,6 +99,10 @@ public class RectangleObject extends Object {
 			hasImg = false;
 			
 		}
+		if (type.equals("text")) {
+			hasText = true;
+			visible = false;
+		}
 		if (type.equals("spikeboi")) {
 			setSize(150, 150);
 			setGravity(true);
@@ -86,6 +118,12 @@ public class RectangleObject extends Object {
 		if (type.equals("spike")) {
 			subtype = "pickup";
 		}
+		if (type.equals("kantarell")) {
+			setSize(300, 300);
+			updateObjectRect();
+			iniRect = new Rectangle(getObjectRect());
+			setSprite("assets/sprites/kantarell.png");
+		}
 		if (type.equals("donut")) {
 			setSize(120, 120);
 			subtype = "pickup";
@@ -98,6 +136,17 @@ public class RectangleObject extends Object {
 			sprite(sprite);
 			hm = new HealthModule(40);
 			hasHealth = true;
+			animator = new Animator(sprite);
+			animator.speed(35);
+			animator.createList(getPathList());
+		}
+		if (type.equals("solidstar")) {
+			stype = "star";
+			hasText = true;
+			text = "";
+			
+			setSize(250, 250);
+			sprite(sprite);
 			animator = new Animator(sprite);
 			animator.speed(35);
 			animator.createList(getPathList());
@@ -119,6 +168,10 @@ public class RectangleObject extends Object {
 	public void update() {
 		super.update();
 		
+		if (hasImg && type.contains("info")) {
+			lw.cl.collisions.remove(getObjectRect());
+		}
+		
 		if (index == -1) {
 			updateIndex();
 		}
@@ -139,6 +192,32 @@ public class RectangleObject extends Object {
 			}
 		}
 		
+		if (counter != null && counter.id.equals("kantarell") && counter.done) {
+			if (shrinkcounter > 0) {
+				shrinkcounter--;
+				setWidth((int) (getWidth() - iniRect.getWidth() * 0.01));
+				setHeight((int) (getHeight() - iniRect.getHeight() * 0.01));
+				setX((int) (getX() + (iniRect.getWidth() * 0.005)));
+				setY((int) (getY() + (iniRect.getHeight() * 0.005)));
+			}
+			else if (shrinkcounter <= 0) {
+				shrinkcounter = 100;
+				lw.cl.collisions.remove(getObjectRect());
+				appear = new Counter(1000, 10, "appear");
+				appear.start();
+				counter.done = false;
+			}
+		}
+
+		if (appear != null && appear.done && type.equals("kantarell")) {
+			setX(iniRect.x);
+			setY(iniRect.y);
+			setSize(iniRect.width, iniRect.height);
+			lw.cl.add(getObjectRect());
+			appear.done = false;
+			hasStarted = false;
+		}
+		
 		if (getObjectRect().intersects(lw.p.getObjectRect())) {
 			if (type.equals("spike")) {
 				lw.p.damage((int) (lw.p.maxhealth * 0.5));
@@ -153,6 +232,11 @@ public class RectangleObject extends Object {
 				lw.go.rects.remove(this);
 				lw.cl.collisions.remove(getObjectRect());
 				lw.p.addHealth(50, true);
+			}
+			else if (type.equals("star")) {
+				lw.go.rects.remove(this);
+				lw.cl.collisions.remove(getObjectRect());
+				lw.p.invinciblecounter = 1500;
 			}
 			else if (type.equals("donut")) {
 				lw.go.rects.remove(this);
@@ -169,6 +253,11 @@ public class RectangleObject extends Object {
 					lw.p.setX(getX());
 					animator.setIndexRange(3, 5);
 				}
+			}
+			else if (type.equals("kantarell") && !hasStarted) {
+				counter = new Counter(1000, 3, "kantarell");
+				counter.start();
+				hasStarted = counter.hasStarted();
 			}
 			
 		}
@@ -254,7 +343,7 @@ public class RectangleObject extends Object {
 	}
 	
 	public String[] getPathList() {
-		if (type.equals("spikeboi")) {
+		if (stype.equals("spikeboi")) {
 			String path = "assets/animated_sprites/spikeboi/";
 			String[] l = new String[] {
 					path + "sb1",
@@ -266,7 +355,7 @@ public class RectangleObject extends Object {
 			};
 			return l;
 		}
-		else if (type.equals("star")) {
+		else if (stype.equals("star")) {
 			String path = "assets/animated_sprites/star/";
 			String[] l = new String[] {
 					path + "star1",
@@ -306,7 +395,12 @@ public class RectangleObject extends Object {
 		if (showrect) {
 			g.drawRect(getCx(), getCy(), getWidth(), getHeight());
 		}
-		if (lw.typelistener.c.showIndex) {
+		if (hasText) {
+			g.setFont(lw.standard);
+			g.setColor(tc);
+			g.drawString(text, getCx(), getCy());
+		}
+		if (lw.typelistener != null && lw.typelistener.c.showIndex) {
 			g.setColor(Color.BLACK);
 			g.setFont(lw.standard);
 			if (!selected) {

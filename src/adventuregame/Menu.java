@@ -153,7 +153,7 @@ public class Menu extends ListWorld implements ActionListener {
 		List response = new List(new Rectangle(0, dim.height - 700, 800, 500), "text");
 		HudText responseentry = new HudText(0, 0, "", standard);
 		responseentry.text = "response entry";
-		responseentry.textcolor = Color.WHITE;
+		responseentry.textcolor = Color.ORANGE;
 		response.setBackground(black);
 		response.hasEntry = true;
 		response.setSpacing(10);

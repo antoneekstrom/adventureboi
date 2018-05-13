@@ -72,6 +72,9 @@ public class Console {
 			"gettype",
 			"givetype",
 			
+			//change text
+			"changetext",
+			
 			//teleport player to x,y
 			"teleport",
 			
@@ -266,34 +269,43 @@ public class Console {
 		}
 		if (key.equals("addx")) {
 			lw.go.rects.get(selected).setX(lw.go.rects.get(selected).getX() + parameters.get(0));
+			giveResponse("x: " + (parameters.get(0) + lw.go.rects.get(selected).getX()));
 		}
 		if (key.equals("addy")) {
 			lw.go.rects.get(selected).setY(lw.go.rects.get(selected).getY() + parameters.get(0));
+			giveResponse("y: " + (parameters.get(0) + lw.go.rects.get(selected).getY()));
 		}
 		if (key.equals("addw")) {
 			lw.go.rects.get(selected).setWidth(lw.go.rects.get(selected).getWidth() + parameters.get(0));
 			lw.go.rects.get(selected).getObjectRect().width = lw.go.rects.get(selected).getWidth();
+			giveResponse("w: " + (parameters.get(0) + lw.go.rects.get(selected).getWidth()));
 		}
 		if (key.equals("addh")) {
+			giveResponse("h: " + (parameters.get(0) + lw.go.rects.get(selected).getHeight()));
 			lw.go.rects.get(selected).setHeight(lw.go.rects.get(selected).getHeight() + parameters.get(0));
 			lw.go.rects.get(selected).getObjectRect().height = lw.go.rects.get(selected).getHeight();
 		}
 		if (key.equals("setx")) {
+			giveResponse("x: " + parameters.get(0));
 			lw.go.rects.get(selected).setX(parameters.get(0));
 		}
 		if (key.equals("sety")) {
+			giveResponse("y: " + parameters.get(0));
 			lw.go.rects.get(selected).setY(parameters.get(0));
 		}
 		if (key.equals("setw")) {
+			giveResponse("w: " + parameters.get(0));
 			lw.go.rects.get(selected).setWidth(parameters.get(0));
 		}
 		if (key.equals("seth")) {
+			giveResponse("h: " + parameters.get(0));
 			lw.go.rects.get(selected).setHeight(parameters.get(0));
 		}
 		if (key.equals("gettype")) {
 			giveResponse(lw.go.rects.get(selected).type);
 		}
 		if (key.equals("givetype")) {
+			giveResponse("object " + selected + " is now of the type " + stringparameters.get(0));
 			lw.go.rects.get(selected).givetype(stringparameters.get(0));
 		}
 		if (key.equals("showrect")) {
@@ -315,6 +327,22 @@ public class Console {
 				giveResponse("added " + parameters.get(0) + " health to player");
 			}
 		}
+		if (key.equals("changetext")) {
+			if (!hasParameters()) {
+				giveResponse(String.valueOf(lw.go.rects.get(selected).getText()));
+			}
+			else if (stringparameters.size() > 0 && parameters.size() == 0) {
+				System.out.println("text");
+				if (lw.go.rects.get(selected).hasText) {
+					String s = "";
+					for (int i = 0; i < stringparameters.size(); i++) {
+						s = s + " " + stringparameters.get(i);
+					}
+					lw.go.rects.get(selected).text(s);
+					giveResponse("object " + selected + ":" + s);
+				}
+			}
+		}
 		if (key.equals("teleport")) {
 			if (parameters.size() >= 2) {
 				lw.p.setLocation(parameters.get(0), parameters.get(1));
@@ -327,8 +355,8 @@ public class Console {
 		if (key.equals("updateindex")) {
 			for (int i = 0; i < lw.go.rects.size(); i++) {
 				lw.go.rects.get(i).updateIndex();
-				giveResponse("updated all object indexes");
 			}
+			giveResponse("updated all object indexes");
 		}
 		if (key.equals("energy")) {
 			energy();
@@ -368,6 +396,15 @@ public class Console {
 				giveResponse("energy filled");
 				p.energy = p.maxenergy;
 			}
+		}
+	}
+	
+	public boolean hasParameters() {
+		if (totalparameters < 1) {
+			return false;
+		}
+		else {
+			return true;
 		}
 	}
 	

@@ -75,8 +75,16 @@ public class SaveWriter {
 				//additional properties
 				if (o.type != null && o.type != "") {
 					write("," + o.type);
-					newLine();
 				}
+				else {
+					write(",none");
+				}
+				if (o.hasText) {
+					write("," + o.getText());
+				} else {
+					write(",boing");
+				}
+				newLine();
 			}
 		}	
 	}
@@ -113,6 +121,7 @@ public class SaveWriter {
 	
 	int x,y,w,h;
 	String t = "";
+	String txt = "";
 	Color c;
 	public void loadWorld(ListWorld world) {
 		try {
@@ -124,8 +133,8 @@ public class SaveWriter {
 		//parse rectangleobject from .world file
 		for (int i = 0; i <= lcount; i++) {
 			readLine(i);
-			if (i == 1 && !(line.contains(","))) {
-				write("-6043,275,0,0,-1,rectangle");
+			if (!(line.contains(","))) {
+				line = "0,0,0,0,-1,rectangle";
 			}
 			String[] a = line.split(",");
 			for (int k = 0; k < a.length; k++) {
@@ -139,6 +148,9 @@ public class SaveWriter {
 				if (a.length > 5) {
 					t = String.valueOf(a[5]);
 				}
+				if (a.length > 6) {
+					txt = String.valueOf(a[6]);
+				}
 			}
 			
 			//create object and put it into game world
@@ -151,6 +163,9 @@ public class SaveWriter {
 					ro.hasImg = true;
 				}
 				ro.givetype(t);
+			}
+			if (!txt.equals("")) {
+				ro.text(txt);
 			}
 			world.addRo(ro);
 			

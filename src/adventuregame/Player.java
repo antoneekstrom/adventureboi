@@ -45,6 +45,7 @@ public class Player extends Object {
 	double health = 100;
 	int dmgcooldown = 50;
 	boolean invulnerable = false;
+	int invinciblecounter = 0;
 	public boolean invincible = false;
 	
 	//movement
@@ -214,6 +215,18 @@ public class Player extends Object {
 		hpCheck();
 		fireCounter();
 		energy();
+		invincible();
+	}
+	
+	public void invincible() {
+		if (invinciblecounter > 0) {
+			invinciblecounter--;
+			invincible = true;
+		}
+		else if (invinciblecounter == 0) {
+			invincible = false;
+			invinciblecounter = -1;
+		}
 	}
 	
 	public void energy() {
@@ -235,9 +248,22 @@ public class Player extends Object {
 		}
 	}
 	
+	int deathdelay = 50;
+	Point deathpos = new Point();
 	public void hpCheck() {
+		
 		if (health <= 0) {
-			die();
+			health = 0;
+			deathdelay--;
+			setLocation((int)deathpos.getX(), (int)deathpos.getY());
+			if (deathdelay <= 0) {
+				setLocation(0,0);
+				die();
+				deathdelay = 100;
+			}
+		}
+		else {
+			deathpos.setLocation(getX(), getY());
 		}
 		
 		if (invulnerable == true) {
