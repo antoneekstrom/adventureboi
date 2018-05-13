@@ -24,6 +24,8 @@ public class Console {
 	ArrayList<String> stringparameters = new ArrayList<String>();
 	
 	boolean showIndex = false;
+	boolean saving = false;
+	boolean visible = false;
 	
 	String key = "none";
 	
@@ -68,9 +70,15 @@ public class Console {
 			"ymin",
 			"ymax",
 			
+			//save world
+			"save",
+			
 			//type
 			"gettype",
 			"givetype",
+			
+			//get ai variables and logic
+			"getai",
 			
 			//change text
 			"changetext",
@@ -78,11 +86,17 @@ public class Console {
 			//teleport player to x,y
 			"teleport",
 			
+			//toggle player gravity
+			"fly",
+			
 			//update objectrect/hitbox for selected object
 			"updaterect",
 			
 			//update index of all objects
 			"updateindex",
+			
+			//change place mode
+			"mode",
 			
 			//heal player : addHealth(amount, [bool] surpass max)
 			"healplayer",
@@ -351,6 +365,38 @@ public class Console {
 				lw.p.setLocation(lw.go.rects.get(selected).getX(), (int) lw.go.rects.get(selected).getObjectRect().getMaxY());
 			}
 			
+		}
+		if (key.equals("fly")) {
+			if (lw.p.hasGravity()) {
+				lw.p.setGravity(false);
+			}
+			else {
+				lw.p.setGravity(true);
+			}
+			giveResponse("gravity: " + lw.p.hasGravity());
+		}
+		if (key.equals("getai")) {
+			System.out.println("ai");
+			if (parameters.size() == 1 && checkIndexSize()) {
+				if (lw.go.rects.get(0).ai != null) {
+					giveResponse(lw.go.rects.get(parameters.get(0)).ai.getLogic());
+				}
+			}
+			if (totalparameters == 0) {
+				if (lw.go.rects.get(selected).ai != null) {
+					giveResponse(lw.go.rects.get(selected).ai.getLogic());
+				}
+			}
+		}
+		if (key.equals("mode")) {
+			if (stringparameters.size() == 1) {
+				lw.m.ba.mode = stringparameters.get(0);
+			}
+			giveResponse(lw.m.ba.mode);
+		}
+		if (key.equals("save")) {
+			saving = true;
+			giveResponse("world saved to " + lw.name);
 		}
 		if (key.equals("updateindex")) {
 			for (int i = 0; i < lw.go.rects.size(); i++) {

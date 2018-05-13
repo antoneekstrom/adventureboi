@@ -47,7 +47,7 @@ public class RectangleCreator {
 	}
 	
 	public void create() {
-		if (world.optionsactive != true) {
+		if (world.optionsactive != true && !world.currentHud.equals("levels")) {
 			Rectangle r = new Rectangle(p1);		
 			if (mode == "rectangle") {
 				r.add(p2);

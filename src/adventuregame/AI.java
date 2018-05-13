@@ -11,8 +11,18 @@ public class AI {
 	int gravity;
 	Rectangle prevground;
 	Rectangle ground;
+	Rectangle obstacle;
+	String lastobstacle = "";
+	
+	String[] excluded = new String[] {
+		"fire",
+		"spike",
+		"pickup",
+	};
 	
 	boolean ready = true;
+	
+	Counter c = new Counter(1000, 2, "start");
 	
 	int speed = 5;
 	String direction = "right";
@@ -21,6 +31,7 @@ public class AI {
 	public AI(int g) {
 		q = new ArrayList<String>();
 		gravity = g;
+		obstacle = new Rectangle();
 		ground = new Rectangle();
 	}
 
@@ -29,8 +40,13 @@ public class AI {
 		nr = r;
 		
 		if (ready) {
-			start();
-			ready = false;
+			if (!c.hasStarted()) {
+				c.start();
+			}
+			if (c.done) {
+				start();
+				ready = false;
+			}
 		}
 		
 		if (q.size() > 0) {
@@ -43,18 +59,32 @@ public class AI {
 		if (move) {
 			move();
 		}
-		
 		pathfind();
 	}
 	
-	public void passGround(Rectangle g) {
-		if (nr != null && g.getMinY() > nr.getWidth()) {
+	public void passCollision(RectangleObject ro) {
+		Rectangle g = ro.getObjectRect();
+		if (nr != null && g.getMinY() > nr.getMinY()) {
 			ground = g;
+		}
+		else {
+			if (!isExcluded(ro)) {
+				obstacle = g;
+				lastobstacle = ro.type;
+			}
 		}
 	}
 
 	public Rectangle returnPos() {		
 		return r;
+	}
+	
+	public String getLogic() {
+		String s = "";
+		
+		s = s + "Ground equals Obstacle:" + ground.equals(obstacle);
+		
+		return s;
 	}
 	
 	public String getQ() {
@@ -65,12 +95,27 @@ public class AI {
 		return q;
 	}
 	
+	public boolean isExcluded(RectangleObject ro) {
+		boolean b = false;
+		for (int i = 0; i < excluded.length; i++) {
+			if (ro.type.equals(excluded[i]) || ro.subtype.equals(excluded[i])) {
+				b = true;
+			}
+		}
+		return b;
+	}
+	
 	public void pathfind() {
 		if (ground.getMinX() >= nr.getMinX()) {
 			direction("right");
 		}
 		if (ground.getMaxX() <= nr.getMaxX()) {
 			direction("left");
+		}
+		if (obstacle.intersects(nr) && !ground.equals(obstacle)) {
+			if (obstacle.getMaxX() > nr.getMinX()) {
+				direction("switch");
+			}
 		}
 	}
 
@@ -98,7 +143,8 @@ public class AI {
 	}
 	
 	public void start() {
-		System.out.println("start");
+		
+		System.out.println("spikeboi has started");
 		if (Math.random() < 0.5) {
 			direction("left");
 		}

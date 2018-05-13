@@ -40,7 +40,6 @@ public class Mouse implements MouseListener {
 	
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
-		ba.getClick();
 	}
 
 	@Override
@@ -76,6 +75,7 @@ public class Mouse implements MouseListener {
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
+		ba.getClick();
 		mouse = MouseInfo.getPointerInfo().getLocation();
 		//checks hud clicks
 		if (rc != null && tc != null) {

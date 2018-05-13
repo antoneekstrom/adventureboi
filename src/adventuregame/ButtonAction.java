@@ -51,36 +51,37 @@ public class ButtonAction {
 	public void getClick() {
 		for (int k = 0; k < huds.size(); k++) {
 			HUD hud = huds.get(k);
-			ArrayList<HudObj>hb = hud.hb;
+			ArrayList<HudObj> hb = hud.hb;
+			ArrayList<List> hl = hud.lists;
 			if (hud.visible == true) {
 				for (int i = 0; hb.size() > i; i++) {
 					if (hb.get(i).mouseOver()) {
 						System.out.println(hb.get(i).text);
-						
+
 						if (hb.get(i).text == "save stage" && hud.visible == true) {
 							sw.writeList(world.go);
-							
+
 						}
 						else if (hb.get(i).id == "quit" && hud.visible == true) {
 							frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
-							
+
 						}
 						else if (hb.get(i).id == "mode") {
 							changeMode();
-							
+
 						}
 						else if (hb.get(i).id == "world") {
 							world.switchHud("levels");
-							
+
 						}
 						else if (hb.get(i).id == "start") {
 							world.setBackground(Color.ORANGE);
 							world.switchHud("levels");
-							
+
 						}
 						else if (hb.get(i).id == "back") {
 							world.switchHud(world.lastHud);
-							
+
 						}
 						else if (hb.get(i).id == "quit") {
 							System.out.println("quit");
@@ -108,10 +109,32 @@ public class ButtonAction {
 						if(hb.get(i).id == "modhp") {
 							System.out.println("pressed");
 						}
+						if (hb.get(i).id == "newlevel") {
+							if (world.typelistener.getEnabled()) {
+								world.typelistener.disable();
+							}
+							else {
+								hb.get(i).color = hb.get(i).colord.darker();
+								world.typelistener.enable();
+							}
+						}
+					}
+				}
+				for (int i = 0; i < hl.size(); i++) {
+					for (int r = 0; r < hl.get(i).list.size(); r++) {
+						if (hl.get(i).visible && hl.get(i).id.equals("levels") && hl.get(i).list.get(r).hasMouse) {
+							world = world.getWorld();
+							sw.setWorld(hl.get(i).ids.get(r), world);
+							world.startPlayerController(world.p);
+							world.switchHud("");
+							world.currentHud = "";
+							world.p.isEnabled(true);
+							world.p.setLocation(0,0);
+						}
 					}
 				}
 			}
 		}
 	}
-	
+
 }

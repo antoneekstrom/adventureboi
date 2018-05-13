@@ -8,16 +8,20 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
+
 import worlds.ListWorld;
 
 public class SaveWriter {
 	private BufferedWriter writer;
 	private File file;
+	private File directory;
+	private File[] levels;
 	public String line;
 	private int lnum;
 	private int lcount;
@@ -27,8 +31,8 @@ public class SaveWriter {
 	}
 	
 	public SaveWriter(String name) {
-		file = new File(name + ".world");
-		System.out.println(file.getName());
+		file = new File("data/levels/" + name + ".world");
+		System.out.println(file.getPath());
 		try {
 			if (!file.exists()) {
 				file.createNewFile();
@@ -41,13 +45,21 @@ public class SaveWriter {
 	}
 	
 	public void setWorld(String s, ListWorld w) {
-		file = new File(s + ".world");
-		System.out.println(w.go.rects.size());
+		file = new File("data/levels/" + s + ".world");
+		System.out.println(file.getPath());
 		try {
 			if (!file.exists()) {
 				file.createNewFile();
+				writer = new BufferedWriter(new FileWriter(file, true));
+				System.out.println("newfile");
+				write("-1550,607,3000,148,-14336,rectangle,boing\r\n");
+				newLine();
+				write("-424,374,250,250,-14336,solidstar, what is up dog");
 			}
-			writer = new BufferedWriter(new FileWriter(file, true));
+			else {
+				System.out.println("write");
+				writer = new BufferedWriter(new FileWriter(file, true));
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -55,12 +67,30 @@ public class SaveWriter {
 		loadWorld(w);
 	}
 	
+	public void setDirectory(File f) {
+		directory = f;
+	}
+	
+	public File[] getDirWorlds() {
+		return levels;
+	}
+	
+	public void findWorlds() {
+		directory = new File("data/levels");
+		levels = directory.listFiles(new FilenameFilter() {
+
+			public boolean accept(File dir, String name) {
+				return name.endsWith(".world");
+			}
+		});
+	}
+	
 	public String getWorld() {
 		return file.getName();
 	}
 	
 	public void writeList(GameObjects go) {
-		System.out.println("stage saved to " + file.getName());
+		System.out.println("stage saved to " + file.getPath());
 		BufferedWriter writer;
 		try {
 			writer = new BufferedWriter(new FileWriter(file));
@@ -91,7 +121,7 @@ public class SaveWriter {
 	
 	public void readLine(int n) {
 		lnum = n;
-		try (Stream<String> lines = Files.lines(Paths.get(file.getName()))) {
+		try (Stream<String> lines = Files.lines(Paths.get(file.getPath()))) {
 		    line = lines.skip(lnum).findFirst().get();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -128,7 +158,7 @@ public class SaveWriter {
 			//clears current world
 			world.go.rects.clear();
 			world.cl.collisions.clear();
-			lcount = countLines(file.getName());
+			lcount = countLines(file.getPath());
 		} catch (IOException e) {e.printStackTrace();}
 		//parse rectangleobject from .world file
 		for (int i = 0; i <= lcount; i++) {

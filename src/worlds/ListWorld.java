@@ -21,6 +21,7 @@ import adventuregame.GameObjects;
 import adventuregame.HUD;
 import adventuregame.HudList;
 import adventuregame.HudObj;
+import adventuregame.List;
 import adventuregame.Main;
 import adventuregame.MethodAction;
 import adventuregame.Mouse;
@@ -64,6 +65,8 @@ public class ListWorld extends World {
 	public String lastHud;
 	public HudList inv;
 	public TypeListener typelistener;
+	public List llist;
+	public HUD console;
 	
 	public Thread t;
 	
@@ -300,8 +303,8 @@ public class ListWorld extends World {
 		this.getActionMap().put("a-rightp", new PlayerAbility("a-rightp", this));
 		this.getActionMap().put("a-rightr", new PlayerAbility("a-rightr", this));
 		//console
-		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(console, 0, true), "consoler");
-		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(console, 0, false), "consolep");
+		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(consolebutton, 0, true), "consoler");
+		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(consolebutton, 0, false), "consolep");
 		this.getActionMap().put("consoler", new MethodAction("consoler", this));
 		this.getActionMap().put("consolep", new MethodAction("consolep", this));
 	}
@@ -309,8 +312,8 @@ public class ListWorld extends World {
 	public void stopPlayerController() {
 		this.getInputMap().clear();
 		this.getActionMap().clear();
-		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(console, 0, true), "consoler");
-		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(console, 0, false), "consolep");
+		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(consolebutton, 0, true), "consoler");
+		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(consolebutton, 0, false), "consolep");
 		this.getActionMap().put("consoler", new MethodAction("consoler", this));
 		this.getActionMap().put("consolep", new MethodAction("consolep", this));
 	}

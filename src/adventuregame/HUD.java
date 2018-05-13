@@ -1,5 +1,6 @@
 package adventuregame;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.MouseInfo;
@@ -44,27 +45,10 @@ public class HUD {
 				specificUpdate(hb.get(i));
 			}
 		}
-		
-		for (int i = 0; i < lists.size(); i++) {
-			lists.get(i).update();
-			listUpdate(lists.get(i));
-		}
-		
-		for (int i = 0; i < tf.size(); i++) {
-			if (visible == true) {
-				tf.get(i).setVisible(true);
-			} else {
-				tf.get(i).setVisible(false);
-			}
-		}
-		for (int i = 0; i < hl.size(); i++) {
-			if (visible == true) {
-				hl.get(i).update();
-			}
-		}
 		for (int i = 0; i < ht.size(); i++) {
 			if (visible == true) {
 				textUpdate(ht.get(i));
+				ht.get(i).update();
 				if (ht.get(i).text == "rects") {
 					world = world.getWorld();
 					ht.get(i).text = String.valueOf(world.go.rects.size());
@@ -73,6 +57,13 @@ public class HUD {
 		}
 		for (int i = 0; i < hbr.size(); i++) {
 			barUpdate(hbr.get(i));
+		}
+		for (int i = 0; i < lists.size(); i++) {
+			lists.get(i).update();
+			for (int k = 0; k < lists.get(i).list.size(); k++) {
+				lists.get(i).list.get(k).update();
+			}
+			listUpdate(lists.get(i));
 		}
 		hudUpdate();
 	}
@@ -105,16 +96,33 @@ public class HUD {
 				world.p.fire("right");
 			}
 		}
+		if (ho.id == "newlevel") {
+			if (world.typelistener.getEnabled()) {
+				ho.color = ho.color2;
+			}
+			
+			if (!world.typelistener.text.equals("")) {
+				ho.text = world.typelistener.text;
+			}
+			else {
+				ho.text = "new level";
+			}
+		}
 	}
 	
 	public void hudUpdate() {
 		if (id.equals("console")) {
-			if (world.typelistener.getEnabled()) {
+			if (world.typelistener.c.visible) {
 				setVisible(true);
 			}
 			else {
 				setVisible(false);
 			}
+		}
+		if (id.equals("menu") && world.name.equals("menu.world") && !world.currentHud.equals("levels")) {
+			world.switchHud("menu");
+			world.p.enabled = false;
+			world.stopPlayerController();
 		}
 	}
 	
@@ -128,12 +136,13 @@ public class HUD {
 	
 	public void listUpdate(List l) {
 		if (l.id == "response") {
-			for (int i = 0; i < l.textlist.size(); i++) {
+			for (int i = 0; i < l.list.size(); i++) {
 				if (i < world.typelistener.c.responsehistory.size()) {
-					l.textlist.get(i).text = world.typelistener.c.responsehistory.get(i);
+					l.list.get(i).text = world.typelistener.c.responsehistory.get(i);
 				}
 			}
 		}
+		l.visible = visible;
 	}
 	
 	public void textUpdate(HudText ht) {
@@ -145,9 +154,6 @@ public class HUD {
 		}
 		if (ht.id == "console") {
 			ht.text = ">>" + world.typelistener.text;
-		}
-		if (ht.id == "consoleresponse") {
-			//ht.text = world.typelistener.c.getResponse();
 		}
 	}
 	
@@ -175,15 +181,8 @@ public class HUD {
 			for (int i = 0; hb.size() > i; i++) {
 				hb.get(i).paint(g);
 			}
-			for (int i = 0; i < tf.size(); i++) {
-				tf.get(i).update(g);
-				tf.get(i).paint(g);
-			}
 			for (int i = 0; i < ht.size(); i++) {
 				ht.get(i).paint(g);
-			}
-			for (int i = 0; i < hl.size(); i++) {
-				hl.get(i).paint(g);
 			}
 			for (int i = 0; i < hbr.size(); i++) {
 				hbr.get(i).paint(g);

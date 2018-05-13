@@ -291,8 +291,8 @@ public class RectangleObject extends Object {
 				}
 			}
 			
-			if (ai != null && lw.go.rects.get(i).getObjectRect().intersects(getObjectRect()) && !(lw.go.rects.get(i).getObjectRect().equals(getObjectRect())) && (lw.go.rects.get(i).type.equals("rectangle"))) {
-				ai.passGround(lw.go.rects.get(i).getObjectRect());
+			if (ai != null && lw.go.rects.get(i).getObjectRect().intersects(getObjectRect()) && !(lw.go.rects.get(i).getObjectRect().equals(getObjectRect()))) {
+				ai.passCollision(lw.go.rects.get(i));
 			}
 			
 			if (type.equals("fire") && lw.go.rects.get(i).hasHealth && !(lw.go.rects.get(i).type.equals(type))) {

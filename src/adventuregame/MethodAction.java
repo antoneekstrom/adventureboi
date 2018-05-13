@@ -40,10 +40,12 @@ public class MethodAction extends AbstractAction {
 		//console
 		if (action.equals("consolep") && world.typelistener.getEnabled()) {
 			world.typelistener.disable();
+			world.typelistener.c.visible = false;
 			world.startPlayerController(world.p);
 		}
 		else if (action.equals("consolep") && world.typelistener.getEnabled() == false) {
 			world.typelistener.enable();
+			world.typelistener.c.visible = true;
 			world.stopPlayerController();
 		}
 	}

@@ -33,7 +33,7 @@ public class World extends JPanel implements ActionListener {
 	int a_left = 37;
 	int a_right = 39;
 	int a_up = 38;
-	int console = 0;
+	int consolebutton = 0;
 	
 	public double SIZEMOD;
 	public Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();

@@ -17,7 +17,6 @@ import adventuregame.Main;
 import adventuregame.Player;
 import adventuregame.PlayerCollision;
 import adventuregame.RectangleObject;
-import adventuregame.Shoot;
 import adventuregame.Spike;
 import adventuregame.Text;
 

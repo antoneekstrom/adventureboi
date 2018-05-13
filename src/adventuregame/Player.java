@@ -73,11 +73,11 @@ public class Player extends Object {
 		spawnpoint = new Point();
 		
 		try {
-			playerstill = ImageIO.read(new File("manboji.png"));
-			playerright = ImageIO.read(new File("manboji2.png"));
-			playerfall = ImageIO.read(new File("manboji5.png"));
-			playerleft = ImageIO.read(new File("manboji3.png"));
-			fire = ImageIO.read(new File("fire.png"));
+			playerstill = ImageIO.read(new File("assets/animated_sprites/aboi/manboji.png"));
+			playerright = ImageIO.read(new File("assets/animated_sprites/aboi/manboji2.png"));
+			playerfall = ImageIO.read(new File("assets/animated_sprites/aboi/manboji5.png"));
+			playerleft = ImageIO.read(new File("assets/animated_sprites/aboi/manboji3.png"));
+			fire = ImageIO.read(new File("assets/sprites/fire.png"));
 			aura1 = ImageIO.read(new File("assets/animated_sprites/aura/aura1.png"));
 			aura2 = ImageIO.read(new File("assets/animated_sprites/aura/aura2.png"));
 			aura3 = ImageIO.read(new File("assets/animated_sprites/aura/aura3.png"));

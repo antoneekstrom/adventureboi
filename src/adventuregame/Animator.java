@@ -83,10 +83,6 @@ public class Animator {
 			else {
 				currentimg = images.get(firstIndex);
 			}
-			
-			if (currentimg.equals(null)) {
-				currentimg = backup;
-			}
 		}
 	}
 	

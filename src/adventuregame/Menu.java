@@ -114,15 +114,19 @@ public class Menu extends ListWorld implements ActionListener {
 		
 		createOptions();
 		
-		HudObj start = new HudObj((dim.width / 2) -300, 400, 600, 100, Color.ORANGE);
-		HudObj exit = new HudObj((dim.width / 2) -300, 550, 600, 100, Color.ORANGE);
+		HudObj start = new HudObj((dim.width / 2) -300, 550, 600, 100, Color.ORANGE);
+		HudObj exit = new HudObj((dim.width / 2) -300, 700, 600, 100, Color.ORANGE);
+		HudObj play = new HudObj((dim.width / 2) -300, 400, 600, 100, Color.ORANGE);
 		
 		start.setFont(standard);
-		start.addText("start");
+		start.addText("Custom levels");
 		start.setId("start");
 		exit.setFont(standard);
-		exit.addText("exit");
+		exit.addText("Quit");
 		exit.setId("quit");
+		play.addText("Play");
+		play.setId("play");
+		menu.hb.add(play);
 		
 		HudBar hp = new HudBar((int) ((dim.width / 2) - 200), 100, 400, 50);
 		HudBar ep = new HudBar(50, 100, 400, 50);
@@ -145,12 +149,7 @@ public class Menu extends ListWorld implements ActionListener {
 		cfield.setTextColor(Color.WHITE);
 		cfield.setBackground(black, 0, (int) dim.getWidth());
 		
-		/*HudText cval = new HudText(0, (int) dim.getHeight() - 170, "", standard.deriveFont(40f));
-		cval.setBackground(black, 0, (int) dim.getWidth());
-		cval.setId("consoleresponse");
-		cval.autoWidth(true);
-		console.ht.add(cval);*/
-		List response = new List(new Rectangle(0, dim.height - 700, 800, 500), "text");
+		List response = new List(new Rectangle(0, dim.height - 700, 800, 500), "text", this);
 		HudText responseentry = new HudText(0, 0, "", standard);
 		responseentry.text = "response entry";
 		responseentry.textcolor = Color.ORANGE;
@@ -178,39 +177,50 @@ public class Menu extends ListWorld implements ActionListener {
 		RectangleObject spike = new RectangleObject(frame, this);
 		go.rects.add(spike);
 		
+		llist = new List(new Rectangle(dim.width / 2 - 600, dim.height / 2 - 500, 1200, 1000), "text", this);
+		sw.findWorlds();
+		ArrayList<String> l = new ArrayList<String>();
+		for (int i = 0; i < sw.getDirWorlds().length; i++) {
+			String s = "";
+			if (sw.getDirWorlds()[i].getName().endsWith(".world")) {
+				s = sw.getDirWorlds()[i].getName().replace(".world", "");
+				l.add(s);
+			}
+		}
+		HudText llistentry = new HudText(0,0,"",standard);
+		llistentry.setBackground(Color.ORANGE, 0, 450);
+		llistentry.padding = 25;
+		llistentry.setTextColor(Color.WHITE);
+		llistentry.update = true;
+		llistentry.type = "level";
+		llistentry.hover = true;
+		llist.setTextEntry(llistentry);
+		llist.scrollBar();
+		llist.id = "levels";
+		llist.setPadding(380);
+		llist.setPaddingTop(150);
+		llist.setSpacing(50);
+		llist.addEntryList(l);
+		llist.addIdList(l);
+		llist.fill();
+		levels.lists.add(llist);
+		HudObj newlevel = new HudObj(50, dim.height - 150, 250, 100, Color.ORANGE);
+		newlevel.addText("new level");
+		newlevel.setId("newlevel");
+		levels.hb.add(newlevel);
+		
 		menu.hb.add(exit);
 		menu.hb.add(start);
 		menu.visible = true;
 		levels.visible = false;
 		menu.ht.add(new HudText((dim.width /2) - 240, 200, "adventureboi", standard.deriveFont(0, 80)));
-		HudList llist = new HudList(new Rectangle((dim.width / 2) - 400, 100, 800, 900), frame);
 		levels.ht.add(new HudText(50, 50, "rects", standard));
-		llist.passWorld(this);
-		llist.passSw(sw);
-		llist.huds.add(menu);
-		llist.huds.add(levels);
 		HudObj back = new HudObj(100, 100, 200, 100, Color.ORANGE);
 		back.highlight = true;
 		back.addText("back");
 		back.setId("back");
 		back.setFont(standard);
-		llist.addBackground(Color.WHITE);
-		llist.addScrollbar();
-		levels.hl.add(llist);
 		levels.hb.add(back);
-		llist.setFont(standard);
-		llist.setEntry(new HudObj( ((int) llist.rect.getMinX()), (int) llist.rect.getMinY(), (int) (llist.rect.width * 0.7), 100, Color.ORANGE));
-		llist.addEntry("lw", "lw");
-		llist.margintop = 200;
-		llist.addEntry("world1", "world1");
-		llist.addEntry("world2", "world2");
-		llist.addEntry("world3", "id");
-		llist.addEntry("world4", "id");
-		llist.addEntry("world5", "id");
-		llist.alignEntries();
-		llist.huds.add(levels);
-		llist.setId("levels");
-		llist.huds.add(menu);
 		switchHud("menu");
 		ready = true;
 		timer = new Timer(14, this);
@@ -245,7 +255,9 @@ public class Menu extends ListWorld implements ActionListener {
 		if (time1 - time2 > FRAMERATE) {
 			time2 = System.nanoTime() / 1000000;
 			
+			name = sw.getWorld();
 			m.ba.passSaveWriter(sw);
+			llist.passSw(sw);
 			p.passWorld(this);
 			p.update();
 			menu.update();
@@ -254,9 +266,15 @@ public class Menu extends ListWorld implements ActionListener {
 			actualhud.passPlayer(p);
 			actualhud.update();
 			console.update();
+			console.passWorld(this);
 			c.run(p);
 			go.update();
 			cl.pRun(p);
+			
+			if (typelistener.c.saving) {
+				typelistener.c.saving = false;
+				sw.writeList(go);
+			}
 			
 			mouse = MouseInfo.getPointerInfo().getLocation();
 			repaint();

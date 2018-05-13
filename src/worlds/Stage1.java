@@ -11,7 +11,6 @@ import java.awt.event.ActionEvent;
 import javax.swing.Timer;
 
 import adventuregame.Camera;
-import adventuregame.Line;
 import adventuregame.Main;
 import adventuregame.Player;
 import adventuregame.PlayerCollision;
@@ -37,7 +36,6 @@ public class Stage1 extends World {
 	private Point player;
 	private int ptomd;
 	private RectangleObject r2;
-	private Line l1;
 	private RectangleObject r3;
 	
 	public Stage1(Main f) {		
@@ -57,7 +55,6 @@ public class Stage1 extends World {
 		c = new Camera(dim);
 		r2 = new RectangleObject(frame, this);
 		r3 = new RectangleObject(frame, this);
-		l1 = new Line(frame, this);
 		
 		ready = true;
 		
@@ -104,7 +101,6 @@ public class Stage1 extends World {
 			r1.paint(g);
 			p.paint(g);
 			r2.paint(g);
-			l1.paint(g);
 			r3.paint(g);
 		}
 		
@@ -115,7 +111,6 @@ public class Stage1 extends World {
 		player.setLocation(p.getX(), p.getY());
 		ptomd = (int) mouse.distance(player);
 		r2.setLocation((int)player.getX(), (int)player.getY());
-		l1.setPoints(mouse, player);
 		//c.run(p);
 		p.update();
 		cl.pRun(p);
