@@ -20,9 +20,6 @@ public class RectangleObject extends Object {
 	String type = "rectangle";
 	String subtype = "none";
 	ListWorld lw;
-	String direction;
-	int velocity = 15;
-	int range = 500;
 	HealthModule hm;
 	boolean hasHealth = false;
 	AI ai;
@@ -36,9 +33,15 @@ public class RectangleObject extends Object {
 	boolean hasText = false;
 	Color tc = Color.BLACK;
 	boolean hasStarted = false;
+	boolean started = false;
 	boolean charged = false;
 	
+	//fireball
 	int shrinkcounter = 100;
+	int velocity = 15;
+	int range = 500;
+	
+	String direction;
 	Counter counter;
 	Counter appear;
 	
@@ -132,7 +135,6 @@ public class RectangleObject extends Object {
 			subtype = "pickup";
 		}
 		if (type.equals("fire")) {
-			
 		}
 		if (type.equals("star")) {
 			setSize(250, 250);
@@ -156,6 +158,13 @@ public class RectangleObject extends Object {
 		}
 	}
 	
+	public void start() {
+		if (type.equals("fire") && charged) {
+			System.out.println("charged");
+			setSprite("assets/sprites/chargedfire.png");
+		}
+	}
+	
 	public void setDirection(String s) {
 		direction = s;
 	}
@@ -170,6 +179,11 @@ public class RectangleObject extends Object {
 
 	public void update() {
 		super.update();
+		
+		if (!started) {
+			started = true;
+			start();
+		}
 		
 		if (hasImg && type.contains("info")) {
 			lw.cl.collisions.remove(getObjectRect());

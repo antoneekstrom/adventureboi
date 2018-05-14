@@ -55,6 +55,7 @@ public class Player extends Object {
 	double chargepercentage;
 	
 	int firerange = 400;
+	int firevelocity = 5;
 	int unchargedfiresize = 70;
 	int firesize = 0;
 	int firedamage = 20;
@@ -242,7 +243,7 @@ public class Player extends Object {
 			firesize = (int) (unchargedfiresize * (chargemultiplier * 0.8));
 			RectangleObject ro = new RectangleObject(lw.frame, lw);
 			ro.giveHealthModule(100);
-			ro.velocity = (int) (15 * chargemultiplier);
+			ro.velocity = (int) (firevelocity * chargemultiplier);
 			ro.range = (int) (firerange * chargemultiplier);
 			ro.hm.setDamage((int) (firedamage * chargemultiplier));
 			ro.charged = ((charged) ? (true) : (false));
