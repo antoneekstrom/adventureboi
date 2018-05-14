@@ -55,11 +55,13 @@ public class Player extends Object {
 	double chargepercentage;
 	
 	int firerange = 400;
-	int firevelocity = 5;
+	int chargedrange = 700;
+	int firevelocity = 7;
 	int unchargedfiresize = 70;
 	int firesize = 0;
 	int firedamage = 20;
 	
+	int fireyoffset = 20;
 	int firecm = 20;
 	int firec = firecm;
 	int firecost = 1;
@@ -244,17 +246,22 @@ public class Player extends Object {
 			RectangleObject ro = new RectangleObject(lw.frame, lw);
 			ro.giveHealthModule(100);
 			ro.velocity = (int) (firevelocity * chargemultiplier);
-			ro.range = (int) (firerange * chargemultiplier);
+			if (charged) {
+				ro.range = (int) (chargedrange * chargemultiplier);
+			}
+			else {
+				ro.range = (int) ((firerange * chargemultiplier));
+			}
 			ro.hm.setDamage((int) (firedamage * chargemultiplier));
 			ro.charged = ((charged) ? (true) : (false));
 			ro.setSize(firesize, firesize);
 			if (s.equals("right")) {
-				ro.setLocation((int) (getObjectRect().getCenterX() + firesize + 20), (int) (getY() - ((70 * (chargemultiplier * 0.8)) - 70)));
+				ro.setLocation((int) (getObjectRect().getCenterX() + firesize + 20), (int) (getY() - ((70 * (chargemultiplier * 0.8)) - 70 - fireyoffset)));
 				ro.givetype("fire");
 				ro.setDirection("right");
 			}
 			else if (s.equals("left")) {
-				ro.setLocation((int) (getObjectRect().getCenterX() - (firesize * 2) - 20), (int) (getY() - ((70 * (chargemultiplier * 0.8)) - 70)));
+				ro.setLocation((int) (getObjectRect().getCenterX() - (firesize * 2) - 20), (int) (getY() - ((70 * (chargemultiplier * 0.8)) - 70 - fireyoffset)));
 				ro.givetype("fire");
 				ro.setDirection("left");
 
@@ -464,6 +471,5 @@ public class Player extends Object {
 		if (charging) {
 			g.drawImage(chargeimg, getCx(), ay, getWidth(), getHeight(), null);
 		}
-		g.drawString(String.valueOf(chargepercentage), getCx(), getCy() - 50);
 	}
 }

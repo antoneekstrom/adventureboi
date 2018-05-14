@@ -111,7 +111,7 @@ public class RectangleObject extends Object {
 		if (type.equals("spikeboi")) {
 			setSize(150, 150);
 			setGravity(true);
-			hm = new HealthModule(400);
+			hm = new HealthModule(100);
 			hasHealth = true;
 			setCollision(true);
 			hm.showHp();
@@ -272,7 +272,7 @@ public class RectangleObject extends Object {
 				}
 			}
 			else if (type.equals("kantarell") && !hasStarted) {
-				counter = new Counter(1000, 3, "kantarell");
+				counter = new Counter(1000, 2, "kantarell");
 				counter.start();
 				hasStarted = counter.hasStarted();
 			}
