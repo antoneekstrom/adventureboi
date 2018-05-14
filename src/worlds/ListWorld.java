@@ -302,6 +302,12 @@ public class ListWorld extends World {
 		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(a_right, 0, false), "a-rightp");
 		this.getActionMap().put("a-rightp", new PlayerAbility("a-rightp", this));
 		this.getActionMap().put("a-rightr", new PlayerAbility("a-rightr", this));
+		//a-up
+		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(a_up, 0, true), "a-upr");
+		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(a_up, 0, false), "a-upp");
+		this.getActionMap().put("a-upp", new PlayerAbility("a-upp", this));
+		this.getActionMap().put("a-upr", new PlayerAbility("a-upr", this));
+		
 		//console
 		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(consolebutton, 0, true), "consoler");
 		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(consolebutton, 0, false), "consolep");

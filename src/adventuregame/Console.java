@@ -64,6 +64,9 @@ public class Console {
 			"addw",
 			"addh",
 			
+			//spikeboi jump
+			"jump",
+			
 			//get object values
 			"xmin",
 			"xmax",
@@ -246,6 +249,11 @@ public class Console {
 		}
 		if (key.equals("xmin")) {
 			giveResponse(String.valueOf(lw.go.rects.get(selected).getObjectRect().getMinX()));
+		}
+		if (key.equals("jump")) {
+			if (totalparameters == 0 && lw.go.rects.get(selected).ai != null) {
+				lw.go.rects.get(selected).ai.jump(true);
+			}
 		}
 		if (key.equals("xmax")) {
 			giveResponse(String.valueOf(lw.go.rects.get(selected).getObjectRect().getMaxX()));

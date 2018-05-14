@@ -25,6 +25,7 @@ public class AI {
 	Counter c = new Counter(1000, 2, "start");
 	
 	int speed = 5;
+	int jumptrigger = 100;
 	String direction = "right";
 	boolean move = false;
 
@@ -106,6 +107,7 @@ public class AI {
 	}
 	
 	public void pathfind() {
+		//switch direction
 		if (ground.getMinX() >= nr.getMinX()) {
 			direction("right");
 		}
@@ -155,6 +157,7 @@ public class AI {
 		move();
 	}
 
+	/** ai jump, true: add to queue, false: jump */
 	public void jump(boolean b) {
 		int jduration = 25;
 		double jspeed = 15;

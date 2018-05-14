@@ -22,6 +22,7 @@ public class RectangleObject extends Object {
 	ListWorld lw;
 	String direction;
 	int velocity = 15;
+	int range = 500;
 	HealthModule hm;
 	boolean hasHealth = false;
 	AI ai;
@@ -270,17 +271,25 @@ public class RectangleObject extends Object {
 			if (direction.equals("left")) {
 
 				setX(getX() - velocity);
+				range -= velocity;
 				if (getObjectRect().intersects(lw.p.getObjectRect())) {
 					lw.p.setX(lw.p.getX() - velocity);
 				}
 			}
 			else if (direction.equals("right")) {
 				setX(getX() + velocity);
+				range -= velocity;
 				if (getObjectRect().intersects(lw.p.getObjectRect())) {				
 					lw.p.setX(lw.p.getX() + velocity);
 				}
 			}
 			updateObjectRect();
+			System.out.println(range);
+			if (range <= 0) {
+				
+				lw.go.rects.remove(this);
+				lw.cl.collisions.remove(getObjectRect());
+			}
 		}
 		for (int i = 0; i < lw.go.rects.size(); i++) {
 			if (type.equals("fire")) {

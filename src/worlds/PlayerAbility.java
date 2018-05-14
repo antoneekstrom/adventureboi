@@ -24,6 +24,12 @@ public class PlayerAbility extends AbstractAction {
 			world.p.fire("left");
 			System.out.println("left");
 		}
+		if (action.equals("a-upp")) {
+			world.p.charging(true);
+		}
+		if (action.equals("a-upr")) {
+			world.p.charging(false);
+		}
 	}
 
 }

@@ -17,7 +17,7 @@ public class Animator {
 	private int lastIndex = 0;
 	
 	private int counter = 0;
-	private int countergoal = 15;
+	private int countergoal = 5;
 	
 	public Animator(BufferedImage b) {
 		images = new ArrayList<BufferedImage>();

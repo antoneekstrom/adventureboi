@@ -40,6 +40,17 @@ public class Player extends Object {
 	double energy = maxenergy;
 	double energyrate = 0.2;
 	
+	//charging
+	boolean charging = false;
+	double cmodifier = 0.02;
+	int chargelimit = 2;
+	double cbase = 1;
+	int firerange = 300;
+	
+	//stamina
+	double maxstamina = 100;
+	double stamina = maxstamina;
+	
 	//hp
 	double maxhealth = 100;
 	double health = 100;
@@ -166,15 +177,40 @@ public class Player extends Object {
 			firec++;
 		}
 	}
+	
+	public void charging(boolean b) {
+		if (b) {
+			useEnergy(firecost);
+		}
+		charging = b;
+	}
+	
+	public void charge() {
+		if (charging && cbase + cmodifier <= chargelimit) {
+			cbase += cmodifier;
+			energy -= cmodifier;
+		}
+		else if (charging && cbase + cmodifier > chargelimit) {
+			cbase = chargelimit;
+		}
+		if (!charging && cbase != 1) {
+			release();
+		}
+	}
 
-	/* Idea: spawn fireball close enough to player and it will grab the player = another item */
+	public void release() {
+		fire("right");
+		cbase = 1;
+	}
+
 	public void fire(String s) {
-		if (firec == firecm && useEnergy(firecost)) {
+		if (firec == firecm) {
 			RectangleObject ro = new RectangleObject(lw.frame, lw);
 			ro.giveHealthModule(100);
 			ro.velocity = 15;
-			ro.hm.setDamage(20);
-			ro.setSize(100, 100);
+			ro.range = (int) (firerange * cbase);
+			ro.hm.setDamage((int) (10 * cbase));
+			ro.setSize((int) (50 * cbase), (int) (50 * cbase));
 			if (s.equals("right")) {
 				ro.setLocation((int) (getObjectRect().getCenterX() + 120), getY());
 				ro.givetype("fire");
@@ -216,6 +252,7 @@ public class Player extends Object {
 		fireCounter();
 		energy();
 		invincible();
+		charge();
 	}
 	
 	public void invincible() {
@@ -376,10 +413,10 @@ public class Player extends Object {
 	}
 	
 	public void paint(Graphics g) {
-		//g.drawRect(getCx(), getCy(), (int) getObjectRect().getWidth(), (int) getObjectRect().getHeight());
 		g.drawImage(playeractive, getCx(), getCy(), getWidth(), getHeight(), null);
 		if (invincible) {
 			g.drawImage(aura, getCx(), ay, getWidth(), getHeight(), null);
 		}
+		g.drawString(String.valueOf(cbase), getCx(), getCy() - 50);
 	}
 }
