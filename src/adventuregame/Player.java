@@ -22,13 +22,16 @@ public class Player extends Object {
 	private BufferedImage playerfall;
 	private BufferedImage playerleft;
 	private BufferedImage fire;
+	private BufferedImage charge1;
 	
-	Animator animator;
+	Animator auranimaton;
+	Animator chargeanim;
 	int ay = 0;
-	BufferedImage aura;
-	BufferedImage aura1;
-	BufferedImage aura2;
-	BufferedImage aura3;
+	private BufferedImage aura;
+	private BufferedImage aura1;
+	private BufferedImage aura2;
+	private BufferedImage aura3;
+	private BufferedImage chargeimg;
 	
 	private double aCounter = 0;
 	private double ANIMSPEED = 3;
@@ -38,14 +41,28 @@ public class Player extends Object {
 	//energy
 	double maxenergy = 100;
 	double energy = maxenergy;
-	double energyrate = 0.2;
+	double energyrate = 0.4;
+	boolean energyregen = true;
 	
-	//charging
+	
+	//fire
 	boolean charging = false;
-	double cmodifier = 0.02;
-	int chargelimit = 2;
-	double cbase = 1;
-	int firerange = 300;
+	boolean charged = false;
+	
+	double cmodifier = 0.04;
+	int chargelimit = 3;
+	double chargemultiplier = 1;
+	double chargepercentage;
+	
+	int firerange = 400;
+	int unchargedfiresize = 70;
+	int firesize = 0;
+	int firedamage = 20;
+	
+	int firecm = 20;
+	int firec = firecm;
+	int firecost = 1;
+	private String firedirection = "none";
 	
 	//stamina
 	double maxstamina = 100;
@@ -78,6 +95,8 @@ public class Player extends Object {
 	public int JFUELMAX = 15;
 	public boolean onground = false;
 	
+	boolean spritesLoaded = false;
+	
 	
 	public Player(Main f, World w) {
 		super(f, w);
@@ -92,14 +111,25 @@ public class Player extends Object {
 			aura1 = ImageIO.read(new File("assets/animated_sprites/aura/aura1.png"));
 			aura2 = ImageIO.read(new File("assets/animated_sprites/aura/aura2.png"));
 			aura3 = ImageIO.read(new File("assets/animated_sprites/aura/aura3.png"));
+			charge1 = ImageIO.read(new File("assets/animated_sprites/boicharge/charge1.png"));
 		} catch (IOException e) {e.printStackTrace();}
 		
 		//effect animation
-		animator = new Animator(aura1);
-		animator.speed(10);
-		animator.addImage(aura1, 0);
-		animator.addImage(aura2, 1);
-		animator.addImage(aura3, 2);
+		auranimaton = new Animator(aura1);
+		auranimaton.speed(10);
+		auranimaton.addImage(aura1, 0);
+		auranimaton.addImage(aura2, 1);
+		auranimaton.addImage(aura3, 2);
+		
+		chargeanim = new Animator(charge1);
+		chargeanim.speed(5);
+		chargeanim.doesCycle(false);
+		for (int i = 0; i < 11; i++) {
+			try {
+				chargeanim.addImage(ImageIO.read(new File("assets/animated_sprites/boicharge/charge" + i + ".png")), i);
+			} catch (IOException e) {e.printStackTrace();}
+		}
+		spritesLoaded = true;
 	}
 	
 	public void move() {
@@ -167,10 +197,6 @@ public class Player extends Object {
 		this.lw = lw;
 	}
 	
-	int firecm = 20;
-	int firec = firecm;
-	int firecost = 25;
-	
 	public void fireCounter() {
 		
 		if (firec != firecm) {
@@ -178,46 +204,56 @@ public class Player extends Object {
 		}
 	}
 	
+	public void fireDirection(String s) {
+		firedirection = s;
+	}
+	
 	public void charging(boolean b) {
-		if (b) {
-			useEnergy(firecost);
-		}
 		charging = b;
 	}
 	
 	public void charge() {
-		if (charging && cbase + cmodifier <= chargelimit) {
-			cbase += cmodifier;
-			energy -= cmodifier;
+		if (charging && chargemultiplier + cmodifier <= chargelimit && useEnergy(firecost)) {
+			chargemultiplier += cmodifier;
+			energyregen = false;
+			chargepercentage = Math.round(((chargemultiplier - 1) / (chargelimit - 1)) * 10);
 		}
-		else if (charging && cbase + cmodifier > chargelimit) {
-			cbase = chargelimit;
+		else if (charging && chargemultiplier + cmodifier > chargelimit) {
+			chargemultiplier = chargelimit;
+			charged = true;
 		}
-		if (!charging && cbase != 1) {
+		if (!charging && chargemultiplier != 1) {
 			release();
 		}
 	}
 
 	public void release() {
-		fire("right");
-		cbase = 1;
+		fire(firedirection);
+		chargemultiplier = 1;
+		chargepercentage = 0;
+		energyregen = true;
+		chargeanim.setIndex(0);
+		charged = false;
+		chargeanim.setImageToIndex();
 	}
 
 	public void fire(String s) {
 		if (firec == firecm) {
+			firesize = (int) (unchargedfiresize * (chargemultiplier * 0.8));
 			RectangleObject ro = new RectangleObject(lw.frame, lw);
 			ro.giveHealthModule(100);
-			ro.velocity = 15;
-			ro.range = (int) (firerange * cbase);
-			ro.hm.setDamage((int) (10 * cbase));
-			ro.setSize((int) (50 * cbase), (int) (50 * cbase));
+			ro.velocity = (int) (15 * chargemultiplier);
+			ro.range = (int) (firerange * chargemultiplier);
+			ro.hm.setDamage((int) (firedamage * chargemultiplier));
+			ro.charged = ((charged) ? (true) : (false));
+			ro.setSize(firesize, firesize);
 			if (s.equals("right")) {
-				ro.setLocation((int) (getObjectRect().getCenterX() + 120), getY());
+				ro.setLocation((int) (getObjectRect().getCenterX() + firesize + 20), (int) (getY() - ((70 * (chargemultiplier * 0.8)) - 70)));
 				ro.givetype("fire");
 				ro.setDirection("right");
 			}
 			else if (s.equals("left")) {
-				ro.setLocation((int) (getObjectRect().getCenterX() - 210), getY());
+				ro.setLocation((int) (getObjectRect().getCenterX() - (firesize * 2) - 20), (int) (getY() - ((70 * (chargemultiplier * 0.8)) - 70)));
 				ro.givetype("fire");
 				ro.setDirection("left");
 
@@ -267,11 +303,13 @@ public class Player extends Object {
 	}
 	
 	public void energy() {
-		if (energy + energyrate <= maxenergy) {
-			energy += energyrate;
-		}
-		else if (energy + energyrate > maxenergy) {
-			energy = maxenergy;
+		if (energyregen) {
+			if (energy + energyrate <= maxenergy) {
+				energy += energyrate;
+			}
+			else if (energy + energyrate > maxenergy) {
+				energy = maxenergy;
+			}
 		}
 	}
 	
@@ -396,15 +434,20 @@ public class Player extends Object {
 		}
 		
 		//effects
-		if (animator != null && invincible) {
-			animator.update();
-			aura = animator.getSprite();
-			if (playeractive.equals(playerfall)) {
-				ay = getCy() + 10;
-			}
-			else {
-				ay = getCy();
-			}
+		if (playeractive.equals(playerfall)) {
+			ay = getCy() + 10;
+		}
+		else {
+			ay = getCy();
+		}
+		if (auranimaton != null && invincible) {
+			auranimaton.update();
+			aura = auranimaton.getSprite();
+		}
+		if (charging && chargeanim != null && spritesLoaded) {
+			chargeanim.setIndex((int)chargepercentage);
+			chargeanim.update();
+			chargeimg = chargeanim.getSprite();
 		}
 	}
 	
@@ -417,6 +460,9 @@ public class Player extends Object {
 		if (invincible) {
 			g.drawImage(aura, getCx(), ay, getWidth(), getHeight(), null);
 		}
-		g.drawString(String.valueOf(cbase), getCx(), getCy() - 50);
+		if (charging) {
+			g.drawImage(chargeimg, getCx(), ay, getWidth(), getHeight(), null);
+		}
+		g.drawString(String.valueOf(chargepercentage), getCx(), getCy() - 50);
 	}
 }

@@ -1,8 +1,10 @@
-package worlds;
+package adventuregame;
 
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
+
+import worlds.ListWorld;
 
 public class PlayerAbility extends AbstractAction {
 	
@@ -17,18 +19,22 @@ public class PlayerAbility extends AbstractAction {
 	@Override
 	public void actionPerformed(ActionEvent a) {
 		if (action.equals("a-rightp")) {
-			world.p.fire("right");
-			System.out.println("right");
-		}
-		if (action.equals("a-leftp")) {
-			world.p.fire("left");
-			System.out.println("left");
-		}
-		if (action.equals("a-upp")) {
 			world.p.charging(true);
 		}
-		if (action.equals("a-upr")) {
+		if (action.equals("a-rightr")) {
+			world.p.fireDirection("right");
 			world.p.charging(false);
+		}
+		if (action.equals("a-leftp")) {
+			world.p.charging(true);
+		}
+		if (action.equals("a-leftr")) {
+			world.p.fireDirection("left");
+			world.p.charging(false);
+		}
+		if (action.equals("a-upp")) {
+		}
+		if (action.equals("a-upr")) {
 		}
 	}
 

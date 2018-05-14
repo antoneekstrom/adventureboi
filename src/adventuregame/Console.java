@@ -83,6 +83,10 @@ public class Console {
 			//get ai variables and logic
 			"getai",
 			
+			//healthmodule
+			"setmaxhp",
+			"sethp",
+			
 			//change text
 			"changetext",
 			
@@ -250,11 +254,6 @@ public class Console {
 		if (key.equals("xmin")) {
 			giveResponse(String.valueOf(lw.go.rects.get(selected).getObjectRect().getMinX()));
 		}
-		if (key.equals("jump")) {
-			if (totalparameters == 0 && lw.go.rects.get(selected).ai != null) {
-				lw.go.rects.get(selected).ai.jump(true);
-			}
-		}
 		if (key.equals("xmax")) {
 			giveResponse(String.valueOf(lw.go.rects.get(selected).getObjectRect().getMaxX()));
 		}
@@ -339,6 +338,26 @@ public class Console {
 					lw.go.rects.get(i).showrect = true;
 				}
 			}
+		}
+		if (key.equals("jump")) {
+			if (totalparameters == 0 && lw.go.rects.get(selected).ai != null) {
+				lw.go.rects.get(selected).ai.jump(true);
+			}
+			giveResponse("queued jump to" + lw.go.rects.get(selected).type + selected);
+		}
+		if (key.equals("sethp")) {
+			if (lw.go.rects.get(selected).hasHealth && parameters.size() == 1) {
+				lw.go.rects.get(selected).hm.hp = parameters.get(0);
+				giveResponse("set hp to " + parameters.get(0) + " for " + lw.go.rects.get(selected).type + selected);
+			}
+			
+		}
+		if (key.equals("setmaxhp")) {
+			if (lw.go.rects.get(selected).hasHealth && parameters.size() == 1) {
+				lw.go.rects.get(selected).hm.maxhp = parameters.get(0);
+				giveResponse("set maxhp to " + parameters.get(0) + " for " + lw.go.rects.get(selected).type + selected);
+			}
+			
 		}
 		if (key.equals("healplayer")) {
 			if (parameters.size() < 1) {

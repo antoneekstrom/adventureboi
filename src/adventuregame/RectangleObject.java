@@ -36,6 +36,7 @@ public class RectangleObject extends Object {
 	boolean hasText = false;
 	Color tc = Color.BLACK;
 	boolean hasStarted = false;
+	boolean charged = false;
 	
 	int shrinkcounter = 100;
 	Counter counter;
@@ -107,10 +108,11 @@ public class RectangleObject extends Object {
 		if (type.equals("spikeboi")) {
 			setSize(150, 150);
 			setGravity(true);
-			hm = new HealthModule(100);
+			hm = new HealthModule(400);
 			hasHealth = true;
 			setCollision(true);
 			hm.showHp();
+			subtype = "enemy";
 			hm.hb.offSet(75 - hm.hb.w / 2, -70);
 			ai = new AI(getGRAVITY());
 			animator = new Animator(sprite);
@@ -284,7 +286,6 @@ public class RectangleObject extends Object {
 				}
 			}
 			updateObjectRect();
-			System.out.println(range);
 			if (range <= 0) {
 				
 				lw.go.rects.remove(this);
@@ -294,9 +295,12 @@ public class RectangleObject extends Object {
 		for (int i = 0; i < lw.go.rects.size(); i++) {
 			if (type.equals("fire")) {
 				if (getObjectRect().intersects(lw.go.rects.get(i).getObjectRect()) && !(lw.go.rects.get(i).type == "fire") && !lw.go.rects.get(i).subtype.equals("pickup")) {
-					
-					lw.go.rects.remove(this);
-					lw.cl.collisions.remove(getObjectRect());
+					if (charged && lw.go.rects.get(i).subtype.equals("enemy")) {
+					}
+					else {
+						lw.cl.collisions.remove(getObjectRect());
+						lw.go.rects.remove(this);
+					}
 				}
 			}
 			

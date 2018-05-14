@@ -10,7 +10,8 @@ public class HealthModule {
 	
 	private boolean showHp = false;
 	boolean invulnerable = false;
-	int dmgcooldown = 10;
+	int dmgcooldown = 20;
+	int cooldowncounter = dmgcooldown;
 	HudBar hb;
 	
 	public HealthModule(int mhp) {
@@ -34,12 +35,12 @@ public class HealthModule {
 	
 	public void hpCheck() {
 		
-		if (invulnerable == true) {
-			dmgcooldown -= 1;
+		if (invulnerable) {
+			cooldowncounter -= 1;
 			
-			if (dmgcooldown <= 0) {
+			if (cooldowncounter <= 0) {
 				invulnerable = false;
-				dmgcooldown = 50;
+				cooldowncounter = dmgcooldown;
 			}
 		}
 	}
@@ -62,9 +63,9 @@ public class HealthModule {
 	}
 	
 	public void decreaseHealth(int h) {
-		hp = hp - h;
-		if (invulnerable == false) {
-			h = hp - h;
+		if (!invulnerable) {
+			System.out.println(h);
+			hp -= h;
 			invulnerable = true;
 		}
 		updateBarHp();

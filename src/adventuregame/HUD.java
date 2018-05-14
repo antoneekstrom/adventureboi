@@ -124,6 +124,9 @@ public class HUD {
 			world.p.enabled = false;
 			world.stopPlayerController();
 		}
+		if (id.equals("actualhud") && !world.currentHud.equals("menu") && !world.currentHud.equals("levels") && !world.currentHud.equals("options")) {
+			setVisible(true);
+		}
 	}
 	
 	public void passPlayer(Player p) {

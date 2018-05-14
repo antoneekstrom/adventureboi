@@ -15,9 +15,13 @@ public class Animator {
 	
 	private int firstIndex = 0;
 	private int lastIndex = 0;
+	private int currentIndex;
 	
 	private int counter = 0;
 	private int countergoal = 5;
+	
+	//determines if images should cycle through index range or use external integer to choose image
+	private boolean cycle = true;
 	
 	public Animator(BufferedImage b) {
 		images = new ArrayList<BufferedImage>();
@@ -63,27 +67,46 @@ public class Animator {
 		countergoal = i;
 	}
 	
+	public void setImageToIndex() {
+		currentimg = images.get(currentIndex);
+	}
+	
 	public String getIndexRange() {
 		return "firstIndex:" + firstIndex + " lastIndex:" + lastIndex;
+	}
+	
+	public void doesCycle(boolean b) {
+		cycle = b;
+	}
+	
+	public void setIndex(int i) {
+		currentIndex = i;
 	}
 	
 	public int getLastIndex() {
 		return lastIndex;
 	}
-	
+
 	public void update() {
 		counter++;
 		if (counter >= countergoal) {
 			counter = 0;
-			
-			int currentIndex = images.indexOf(currentimg);
-			if (currentIndex + 1 < lastIndex) {
-				currentimg = images.get(currentIndex + 1);
+
+			//cycles through images
+			if (cycle) {
+				currentIndex = images.indexOf(currentimg);
+				if (currentIndex + 1 < lastIndex) {
+					currentimg = images.get(currentIndex + 1);
+				}
+				else {
+					currentimg = images.get(firstIndex);
+				}
 			}
-			else {
-				currentimg = images.get(firstIndex);
+			//chooses index from external integer
+			if (!cycle) {
+				currentimg = images.get(currentIndex);
 			}
 		}
 	}
-	
+
 }

@@ -74,7 +74,6 @@ public class Menu extends ListWorld implements ActionListener {
 		typelistener = new TypeListener(this);
 		addKeyListener(typelistener);
 		
-		
 		setSize(dim);
 		setBackground(Color.CYAN);
 		sw = new SaveWriter("menu");
@@ -99,6 +98,7 @@ public class Menu extends ListWorld implements ActionListener {
 		rc = new RectangleCreator(this);
 		tc =  new TextCreator(this);
 		this.setFocusable(true);
+		this.requestFocus();
 		
 		m = new Mouse(this, frame, menu);
 		m.ba.huds.add(options);

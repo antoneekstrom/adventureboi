@@ -26,6 +26,7 @@ import adventuregame.Main;
 import adventuregame.MethodAction;
 import adventuregame.Mouse;
 import adventuregame.Player;
+import adventuregame.PlayerAbility;
 import adventuregame.PlayerAction;
 import adventuregame.PlayerCollision;
 import adventuregame.PlayerJump;
