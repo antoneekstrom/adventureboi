@@ -130,6 +130,7 @@ public class Menu extends ListWorld implements ActionListener {
 		
 		HudBar hp = new HudBar((int) ((dim.width / 2) - 200), 100, 400, 50);
 		HudBar ep = new HudBar(50, 100, 400, 50);
+		HudBar sp = new HudBar(50, 250, 400, 50);
 		HudText debug = new HudText(50, 400, "debug", standard);
 		HudText cfield = new HudText(0, (int) dim.getHeight() - 100, "", standard.deriveFont(40f));
 		debug.setId("debug");
@@ -144,6 +145,12 @@ public class Menu extends ListWorld implements ActionListener {
 		ep.xoffset = -120;
 		ep.bg = Color.WHITE;
 		ep.setText("Energy");
+		sp.setText("Stamina");
+		sp.xoffset = -110;
+		sp.tf = standard.deriveFont(40f);
+		sp.fg = Color.GREEN;
+		sp.setId("stamina");
+		sp.bg = Color.WHITE;
 		ep.setId("energy");
 		cfield.setId("console");
 		cfield.setTextColor(Color.WHITE);
@@ -172,6 +179,7 @@ public class Menu extends ListWorld implements ActionListener {
 		console.lists.add(response);
 		actualhud.hbr.add(ep);
 		actualhud.hbr.add(hp);
+		actualhud.hbr.add(sp);
 		actualhud.visible = true;
 		
 		RectangleObject spike = new RectangleObject(frame, this);

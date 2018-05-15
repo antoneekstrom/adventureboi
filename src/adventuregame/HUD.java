@@ -171,6 +171,11 @@ public class HUD {
 			hb.updatePlayer();
 			
 		}
+		if(hb.getId().equals("stamina")) {
+			hb.passPlayer(p);
+			hb.updateValues((int) world.p.stamina, (int) world.p.maxstamina);
+			hb.update();
+		}
 		if (hb.getId().equals("energy")) {
 			hb.passPlayer(p);
 			hb.updateValues((int) world.p.energy, (int) world.p.maxenergy);

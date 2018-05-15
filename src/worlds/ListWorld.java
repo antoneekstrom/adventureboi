@@ -9,6 +9,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
@@ -308,7 +309,11 @@ public class ListWorld extends World {
 		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(a_up, 0, false), "a-upp");
 		this.getActionMap().put("a-upp", new PlayerAbility("a-upp", this));
 		this.getActionMap().put("a-upr", new PlayerAbility("a-upr", this));
-		
+		//shift
+		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(shift, 0, true), "shiftr");
+		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(shift, shiftmask, false), "shiftp");
+		this.getActionMap().put("shiftp", new MethodAction("shiftp", this));
+		this.getActionMap().put("shiftr", new MethodAction("shiftr", this));
 		//console
 		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(consolebutton, 0, true), "consoler");
 		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(consolebutton, 0, false), "consolep");

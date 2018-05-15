@@ -13,7 +13,7 @@ import worlds.World;
 
 public class Player extends Object {
 
-	private Point spawnpoint;
+	Point spawnpoint;
 	
 	//images and animation
 	private BufferedImage playeractive;
@@ -70,6 +70,13 @@ public class Player extends Object {
 	//stamina
 	double maxstamina = 100;
 	double stamina = maxstamina;
+	double staminarate = 1;
+	boolean staminaregen = true;
+	
+	double sprintspeed = 1.5;
+	double sprintmod = 1;
+	boolean sprint = false;
+	double sprintcost = 0.4;
 	
 	//hp
 	double maxhealth = 100;
@@ -140,14 +147,14 @@ public class Player extends Object {
 			if (MOVACC * MOVMOD <= MOVMAX) {
 				MOVACC *= MOVMOD;
 			}
-			CALCMOV = MOVACC * MOVSPEED;
+			CALCMOV = (float) (MOVACC * MOVSPEED * sprintspeed);
 			setX((int) (getX() + CALCMOV));
 
 		} else if (direction == "left") {
 			if (MOVACC * MOVMOD <= MOVMAX) {
 				MOVACC *= MOVMOD;
 			}
-			CALCMOV = MOVACC * MOVSPEED;
+			CALCMOV = (float) (MOVACC * MOVSPEED * sprintspeed);
 			setX((int) (getX() - CALCMOV));
 
 		} else if (direction == "none") {
@@ -295,6 +302,7 @@ public class Player extends Object {
 		hpCheck();
 		fireCounter();
 		energy();
+		stamina();
 		invincible();
 		charge();
 	}
@@ -307,6 +315,42 @@ public class Player extends Object {
 		else if (invinciblecounter == 0) {
 			invincible = false;
 			invinciblecounter = -1;
+		}
+	}
+	
+	public void sprint(boolean b) {
+		sprint = b;
+	}
+	
+	public void stamina() {
+		//sprint drain
+		if (sprint && useStamina(sprintcost)) {
+			sprintspeed = sprintmod;
+			staminaregen = false;
+		}
+		else {
+			sprintspeed = 1;
+			staminaregen = true;
+		}
+		
+		//regen
+		if (staminaregen) {
+			if (stamina + staminarate <= maxenergy) {
+				stamina += maxstamina; 
+			}
+			else if (stamina + staminarate > maxstamina) {
+				stamina = maxstamina;
+			}
+		}
+	}
+	
+	public boolean useStamina(double s) {
+		if (stamina - s >= 0) {
+			stamina -= s;
+			return true;
+		}
+		else {
+			return false;
 		}
 	}
 	
@@ -471,5 +515,6 @@ public class Player extends Object {
 		if (charging) {
 			g.drawImage(chargeimg, getCx(), ay, getWidth(), getHeight(), null);
 		}
+		g.drawString(String.valueOf(sprint), getCx(), getCy() - 50);
 	}
 }

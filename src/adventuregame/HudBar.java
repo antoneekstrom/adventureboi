@@ -13,7 +13,7 @@ public class HudBar {
 	Color bg, fg, tc;
 	String text = "";
 	String id;
-	int hp, maxhp = 10;
+	int value, maxvalue = 10;
 	Player p;
 	public boolean stats = false;
 	String numbers = "0/0";
@@ -63,9 +63,9 @@ public class HudBar {
 		oy = y;
 	}
 	
-	public void updateValues(int hp, int mhp) {
-		this.hp = hp;
-		maxhp = mhp;
+	public void updateValues(int val, int mval) {
+		this.value = val;
+		maxvalue = mval;
 	}
 	
 	public void update() {
@@ -73,11 +73,11 @@ public class HudBar {
 		fw = w * modifier;
 		percent = fw / w;
 		
-		ppercent = (float) hp / maxhp;
+		ppercent = (float) value / maxvalue;
 		fw = w * ppercent;
 		
 		if (stats) {
-			numbers = hp + "/" + maxhp;
+			numbers = value + "/" + maxvalue;
 		}
 	}
 	

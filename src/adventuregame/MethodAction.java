@@ -48,5 +48,12 @@ public class MethodAction extends AbstractAction {
 			world.typelistener.c.visible = true;
 			world.stopPlayerController();
 		}
+		//shift (sprint)
+		if (action.equals("shiftp")) {
+			world.p.sprint(true);
+		}
+		if (action.equals("shiftr")) {
+			world.p.sprint(false);
+		}
 	}
 }

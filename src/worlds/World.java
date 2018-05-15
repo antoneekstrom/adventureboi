@@ -5,6 +5,9 @@ import java.awt.Graphics;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.awt.im.spi.InputMethod;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
@@ -34,6 +37,8 @@ public class World extends JPanel implements ActionListener {
 	int a_right = 39;
 	int a_up = 38;
 	int consolebutton = 0;
+	int shift = KeyEvent.VK_SHIFT;
+	int shiftmask = InputEvent.SHIFT_DOWN_MASK;
 	
 	public double SIZEMOD;
 	public Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
