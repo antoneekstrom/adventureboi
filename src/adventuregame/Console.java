@@ -76,6 +76,9 @@ public class Console {
 			//save world
 			"save",
 			
+			//delete world
+			"deleteworld",
+			
 			//type
 			"gettype",
 			"givetype",

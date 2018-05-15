@@ -1,6 +1,7 @@
 package adventuregame;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
 
 import javax.swing.AbstractAction;
 
@@ -17,16 +18,16 @@ public class PlayerJump extends AbstractAction {
 		player = p;
 	}
 	
-	public void actionPerformed(ActionEvent arg0) {
+	public void actionPerformed(ActionEvent e) {
 
 		//jump
-		if (action == "uppressed") {
+		if (action == "uppressed" && (e.getModifiers() & InputEvent.SHIFT_DOWN_MASK) == 0) {
 			player.jump = true;
 		} else if (action == "upreleased") {
 			player.jump = false;
 		}
 		//sit
-		if (action == "dp") {
+		if (action == "dp" && (e.getModifiers() & InputEvent.SHIFT_DOWN_MASK) == 0) {
 			player.setDirection("down");
 		}
 		if (action == "dr") {

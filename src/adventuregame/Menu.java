@@ -185,16 +185,7 @@ public class Menu extends ListWorld implements ActionListener {
 		RectangleObject spike = new RectangleObject(frame, this);
 		go.rects.add(spike);
 		
-		llist = new List(new Rectangle(dim.width / 2 - 600, dim.height / 2 - 500, 1200, 1000), "text", this);
-		sw.findWorlds();
-		ArrayList<String> l = new ArrayList<String>();
-		for (int i = 0; i < sw.getDirWorlds().length; i++) {
-			String s = "";
-			if (sw.getDirWorlds()[i].getName().endsWith(".world")) {
-				s = sw.getDirWorlds()[i].getName().replace(".world", "");
-				l.add(s);
-			}
-		}
+		llist = new List(new Rectangle(dim.width / 2 - 600, dim.height / 2 - 450, 1200, 900), "text", this);
 		HudText llistentry = new HudText(0,0,"",standard);
 		llistentry.setBackground(Color.ORANGE, 0, 450);
 		llistentry.padding = 25;
@@ -204,18 +195,23 @@ public class Menu extends ListWorld implements ActionListener {
 		llistentry.hover = true;
 		llist.setTextEntry(llistentry);
 		llist.scrollBar();
+		llist.setHideOverflow(true);
 		llist.id = "levels";
 		llist.setPadding(380);
 		llist.setPaddingTop(150);
 		llist.setSpacing(50);
-		llist.addEntryList(l);
-		llist.addIdList(l);
+		llist.addEntryList(sw.getWorldList());
+		llist.addIdList(sw.getWorldList());
 		llist.fill();
 		levels.lists.add(llist);
-		HudObj newlevel = new HudObj(50, dim.height - 150, 250, 100, Color.ORANGE);
+		HudObj newlevel = new HudObj(dim.width - 300, dim.height - 150, 250, 100, Color.ORANGE);
+		HudObj deletelevel = new HudObj(dim.width - 300, dim.height - 300, 250, 100, Color.ORANGE);
 		newlevel.addText("new level");
 		newlevel.setId("newlevel");
+		deletelevel.setId("deletelevel");
+		deletelevel.addText("delete");
 		levels.hb.add(newlevel);
+		levels.hb.add(deletelevel);
 		
 		menu.hb.add(exit);
 		menu.hb.add(start);
@@ -283,6 +279,7 @@ public class Menu extends ListWorld implements ActionListener {
 				typelistener.c.saving = false;
 				sw.writeList(go);
 			}
+			levels.passSw(sw);
 			
 			mouse = MouseInfo.getPointerInfo().getLocation();
 			repaint();

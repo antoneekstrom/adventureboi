@@ -22,6 +22,7 @@ import adventuregame.GameObjects;
 import adventuregame.HUD;
 import adventuregame.HudList;
 import adventuregame.HudObj;
+import adventuregame.HudText;
 import adventuregame.List;
 import adventuregame.Main;
 import adventuregame.MethodAction;
@@ -65,7 +66,6 @@ public class ListWorld extends World {
 	protected ArrayList<HUD> huds;
 	public String currentHud = "menu";
 	public String lastHud;
-	public HudList inv;
 	public TypeListener typelistener;
 	public List llist;
 	public HUD console;
@@ -189,24 +189,34 @@ public class ListWorld extends World {
 		HudObj world = new HudObj(50, 350, 400, 100, Color.ORANGE);
 		HudObj noclip = new HudObj((int) (dim.getWidth() - 350), 50, 300, 100, Color.ORANGE);
 		HudObj invincible = new HudObj((int) (dim.getWidth() - 700), 50, 300, 100, Color.ORANGE);
-		HudObj text = new HudObj((int) (dim.getWidth() - 400), 200, 350, 100, Color.ORANGE);
-		inv = new HudList(new Rectangle((int) (dim.getWidth() - 400), 330, 300, 600), frame);
-		inv.addBackground(Color.WHITE);
-		inv.passWorld(this);
-		inv.setFont(standard.deriveFont(0, 30));
-		inv.setEntry(new HudObj((int) inv.getRect().getMinX(), (int)inv.getRect().getMinY(), 200, 100, Color.ORANGE));
-		inv.margintop = -200;
-		inv.addScrollbar();
-		inv.alignEntries();
-		options.hl.add(inv);
+		
+		List inv = new List(new Rectangle(dim.width - 400, (dim.height / 2) - 300, 350, 700), "text", this);
+		HudText inventry = new HudText(0,0,"", standard);
+		options.lists.add(inv);
+		inventry.setBackground(Color.ORANGE, 0, 200);
+		inventry.setPadding(25);
+		inventry.setTextColor(Color.WHITE);
+		inventry.update = true;
+		inventry.hover = true;
+		inv.setPadding(50);
+		inv.setSpacing(50);
+		inv.setPaddingTop(100);
+		inv.setTextEntry(inventry);
+		ArrayList<String> invl = new ArrayList<String>();
+		for (int i = 0; i < 15; i++) {
+			invl.add("item");
+		}
+		inv.addEntryList(invl);
+		inv.scrollBar();
+		inv.setHideOverflow(true);
+		inv.fill();
+		
 		noclip.addText("gravity");
 		noclip.id = "gravity";
 		world.setId("world");
 		world.addText("Change Level");
 		world.highlight = true;
 		mode.setId("mode");
-		text.id = "field";
-		text.addText("items");
 		c1.highlight = false;
 		c2.highlight = false;
 		c3.highlight = false;
@@ -226,7 +236,6 @@ public class ListWorld extends World {
 		options.hb.add(new HudObj(0, 0, dim.width, dim.height, new Color(0, 0, 0, (float)0.7)));
 		options.hb.add(invincible);
 		options.hb.add(world);
-		options.hb.add(text);
 		options.hb.add(colors);
 		options.hb.add(c1);
 		options.hb.add(c2);
@@ -310,10 +319,12 @@ public class ListWorld extends World {
 		this.getActionMap().put("a-upp", new PlayerAbility("a-upp", this));
 		this.getActionMap().put("a-upr", new PlayerAbility("a-upr", this));
 		//shift
-		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(shift, 0, true), "shiftr");
-		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(shift, shiftmask, false), "shiftp");
-		this.getActionMap().put("shiftp", new MethodAction("shiftp", this));
-		this.getActionMap().put("shiftr", new MethodAction("shiftr", this));
+		
+		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(sprint, 0, true), "shiftr");
+		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(sprint, 0, false), "shiftp");
+		this.getActionMap().put("shiftp", new PlayerAbility("shiftp", this));
+		this.getActionMap().put("shiftr", new PlayerAbility("shiftr", this));
+		
 		//console
 		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(consolebutton, 0, true), "consoler");
 		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(consolebutton, 0, false), "consolep");

@@ -38,6 +38,10 @@ public class Animator {
 		lastIndex = images.size();
 	}
 	
+	public int size() {
+		return images.size();
+	}
+	
 	public void createList(String[] patharray) {
 		for (int i = 0; i < patharray.length; i++) {
 			try {

@@ -27,6 +27,7 @@ public class List {
 	ListWorld world;
 	SaveWriter sw;
 	boolean visible = false;
+	private boolean hideoverflow = false;
 	
 	private boolean scrollbar = false;
 	HudObj bar;
@@ -35,6 +36,10 @@ public class List {
 	int listheight = 0;
 	int entryheight = 95;
 	Point mouse;
+	
+	int blockHeight = 50;
+	HudObj blockTop;
+	HudObj blockBottom;
 	
 	private boolean baractive = false;
 	private boolean barpress = false;
@@ -117,6 +122,30 @@ public class List {
 		list.add(t);
 		hasEntry = true;
 	}
+	
+	public void setHideOverflow(boolean b) {
+		hideoverflow = b;
+		if (b) {
+			blockTop = new HudObj((int) rect.getMinX(), (int) rect.getMinY() - blockHeight, rect.width, blockHeight, bg);
+			blockBottom = new HudObj((int) rect.getMinX(), (int) rect.getMaxY(), rect.width, blockHeight, bg);
+		}
+	}
+
+	public void hideOverflow() {
+		if (hideoverflow) {
+			for (int i = 0; i < list.size(); i++) {
+				if (list.get(i).r.getMaxY() > rect.getMaxY() + blockHeight) {
+					list.get(i).setVisible(false);
+				}
+				else if (list.get(i).r.getMinY() < rect.getMinY() - blockHeight) {
+					list.get(i).setVisible(false);
+				}
+				else {
+					list.get(i).setVisible(true);
+				}
+			}
+		}
+	}
 
 	public int getEntries() {
 		return list.size();
@@ -194,6 +223,7 @@ public class List {
 
 	public void update() {
 		if (hasEntry) {
+			hideOverflow();
 			align();
 		}
 		if (scrollbar) {
@@ -214,6 +244,10 @@ public class List {
 		}
 		if (scrollbar) {
 			bar.paint(g);
+		}
+		if (hideoverflow) {
+			blockTop.paint(g);
+			blockBottom.paint(g);
 		}
 	}
 

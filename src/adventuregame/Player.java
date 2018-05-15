@@ -32,10 +32,12 @@ public class Player extends Object {
 	private BufferedImage aura2;
 	private BufferedImage aura3;
 	private BufferedImage chargeimg;
+	private BufferedImage greenboi;
 	
 	private double aCounter = 0;
 	private double ANIMSPEED = 3;
 	public boolean enabled = false;
+	private boolean animation = false;
 	ListWorld lw;
 	
 	//energy
@@ -70,13 +72,16 @@ public class Player extends Object {
 	//stamina
 	double maxstamina = 100;
 	double stamina = maxstamina;
-	double staminarate = 1;
+	double staminarate = 0.5;
 	boolean staminaregen = true;
 	
-	double sprintspeed = 1.5;
+	int staminacooldown = 90;
+	int staminacounter = 0;
+	
+	double sprintspeed = 2;
 	double sprintmod = 1;
 	boolean sprint = false;
-	double sprintcost = 0.4;
+	double sprintcost = 0.5;
 	
 	//hp
 	double maxhealth = 100;
@@ -89,7 +94,7 @@ public class Player extends Object {
 	//movement
 	public String direction = "none";
 	public float CALCMOV = 1;
-	public int MOVSPEED = 7;
+	public int MOVSPEED = 14;
 	public float MOVACC = 1.3f;
 	public float BASEMOV = 1;
 	public float MOVMOD = 1.05f;
@@ -122,6 +127,7 @@ public class Player extends Object {
 			aura2 = ImageIO.read(new File("assets/animated_sprites/aura/aura2.png"));
 			aura3 = ImageIO.read(new File("assets/animated_sprites/aura/aura3.png"));
 			charge1 = ImageIO.read(new File("assets/animated_sprites/boicharge/charge1.png"));
+			greenboi = ImageIO.read(new File("assets/boi/stamina_boi.png"));
 		} catch (IOException e) {e.printStackTrace();}
 		
 		//effect animation
@@ -139,6 +145,8 @@ public class Player extends Object {
 				chargeanim.addImage(ImageIO.read(new File("assets/animated_sprites/boicharge/charge" + i + ".png")), i);
 			} catch (IOException e) {e.printStackTrace();}
 		}
+		chargeanim.addImage(greenboi, chargeanim.size());
+		chargeanim.setIndexRange(0, chargeanim.size() - 2);
 		spritesLoaded = true;
 	}
 	
@@ -147,14 +155,14 @@ public class Player extends Object {
 			if (MOVACC * MOVMOD <= MOVMAX) {
 				MOVACC *= MOVMOD;
 			}
-			CALCMOV = (float) (MOVACC * MOVSPEED * sprintspeed);
+			CALCMOV = (float) (MOVSPEED * sprintmod);
 			setX((int) (getX() + CALCMOV));
 
 		} else if (direction == "left") {
 			if (MOVACC * MOVMOD <= MOVMAX) {
 				MOVACC *= MOVMOD;
 			}
-			CALCMOV = (float) (MOVACC * MOVSPEED * sprintspeed);
+			CALCMOV = (float) (MOVSPEED * sprintmod);
 			setX((int) (getX() - CALCMOV));
 
 		} else if (direction == "none") {
@@ -323,25 +331,42 @@ public class Player extends Object {
 	}
 	
 	public void stamina() {
+		
+		if (staminacounter > 0) {
+			staminacounter--;
+			
+		}
+		else if (staminacounter == 0) {
+			stamina = 1;
+			staminacounter = -1;
+		}
+		
 		//sprint drain
 		if (sprint && useStamina(sprintcost)) {
-			sprintspeed = sprintmod;
+			sprintmod = sprintspeed;
 			staminaregen = false;
 		}
 		else {
-			sprintspeed = 1;
+			sprintmod = 1;
 			staminaregen = true;
 		}
 		
 		//regen
-		if (staminaregen) {
-			if (stamina + staminarate <= maxenergy) {
-				stamina += maxstamina; 
+		if (staminaregen && staminacounter == -1) {
+			if (stamina + staminarate <= maxstamina) {
+				stamina += staminarate;
 			}
 			else if (stamina + staminarate > maxstamina) {
 				stamina = maxstamina;
 			}
 		}
+		
+		//cooldown
+		if (stamina == 0) {
+			staminacounter = staminacooldown;
+			stamina = -1;
+		}
+		
 	}
 	
 	public boolean useStamina(double s) {
@@ -484,7 +509,6 @@ public class Player extends Object {
 		if (direction == "down") {
 			playeractive = playerfall;
 		}
-		
 		//effects
 		if (playeractive.equals(playerfall)) {
 			ay = getCy() + 10;
@@ -500,6 +524,21 @@ public class Player extends Object {
 			chargeanim.setIndex((int)chargepercentage);
 			chargeanim.update();
 			chargeimg = chargeanim.getSprite();
+			animation = true;
+		}
+		if (sprint && stamina > 0 && !charging) {
+			chargeanim.setIndex(chargeanim.size() - 1);
+			chargeanim.update();
+			chargeimg = chargeanim.getSprite();
+			animation = true;
+		}
+		else {
+			chargeanim.setIndex((int) chargepercentage);
+			chargeanim.setImageToIndex();
+			chargeimg = chargeanim.getSprite();
+		}
+		if (!sprint && !charging) {
+			animation = false;
 		}
 	}
 	
@@ -512,9 +551,9 @@ public class Player extends Object {
 		if (invincible) {
 			g.drawImage(aura, getCx(), ay, getWidth(), getHeight(), null);
 		}
-		if (charging) {
+		if (animation) {
 			g.drawImage(chargeimg, getCx(), ay, getWidth(), getHeight(), null);
 		}
-		g.drawString(String.valueOf(sprint), getCx(), getCy() - 50);
+		g.drawString(String.valueOf(""), getCx(), getCy() - 50);
 	}
 }

@@ -65,6 +65,10 @@ public class HudText {
 		x = i;
 	}
 	
+	public void setPadding(int i) {
+		padding = i;
+	}
+	
 	public void setY(int i) {
 		y = i;
 	}

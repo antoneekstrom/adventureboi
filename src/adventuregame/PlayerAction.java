@@ -1,6 +1,7 @@
 package adventuregame;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
 import java.util.ArrayList;
 
 import javax.swing.AbstractAction;
@@ -31,7 +32,7 @@ public class PlayerAction extends AbstractAction {
 	//actions go here
 	public void actionPerformed(ActionEvent e) {
 		//move right
-		if (action == "rightpressed") {
+		if (action == "rightpressed")  {
 			player.setDirection("right");
 		} else if (action == "rightreleased") {
 			if (player.direction != "left") { /* this if statement allows for smooth left to right movement */

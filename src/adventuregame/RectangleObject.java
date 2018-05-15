@@ -40,6 +40,7 @@ public class RectangleObject extends Object {
 	int shrinkcounter = 100;
 	int velocity = 15;
 	int range = 500;
+	Rectangle inceptiverect;
 	
 	String direction;
 	Counter counter;
@@ -162,6 +163,7 @@ public class RectangleObject extends Object {
 		if (type.equals("fire") && charged) {
 			System.out.println("charged");
 			setSprite("assets/sprites/chargedfire.png");
+			inceptiverect = getObjectRect();
 		}
 	}
 	
@@ -258,11 +260,6 @@ public class RectangleObject extends Object {
 			else if (type.equals("donut")) {
 				lw.go.rects.remove(this);
 				lw.cl.collisions.remove(getObjectRect());
-				HudObj ho = new HudObj((int) lw.inv.getRect().getMinX(), (int)lw.inv.getRect().getMinY(), 200, 100, Color.ORANGE);
-				ho.addImage("donut");
-				lw.inv.setEntry(ho);
-				lw.inv.addEntry("donut", "");
-				lw.inv.alignEntries();
 			}
 			else if (type.equals("spikeboi")) {
 				lw.p.damage(20);

@@ -25,6 +25,7 @@ public class HUD {
 	public Font font;
 	private Main frame;
 	Player p;
+	SaveWriter sw;
 	
 	public HUD(ListWorld lw) {
 		tf = new ArrayList<TField>();
@@ -36,6 +37,10 @@ public class HUD {
 		
 		world = lw;
 		font = world.standard;
+	}
+	
+	public void passSw(SaveWriter sw) {
+		this.sw = sw;
 	}
 
 	public void update() {
@@ -96,7 +101,7 @@ public class HUD {
 				world.p.fire("right");
 			}
 		}
-		if (ho.id == "newlevel") {
+		if (ho.id == "newlevel" && world.typelistener.getSource().equals("createlevel")) {
 			if (world.typelistener.getEnabled()) {
 				ho.color = ho.color2;
 			}
@@ -106,6 +111,40 @@ public class HUD {
 			}
 			else {
 				ho.text = "new level";
+			}
+			if (world.currentHud.equals("levels") && world.typelistener.hasNewOutput()) {
+				world.typelistener.newOutput(false);
+				sw.createWorld(world.typelistener.output);
+				for (int i = 0; i < lists.size(); i++) {
+					if (lists.get(i).id.equals("levels")) {
+						lists.get(i).addIdList(sw.getWorldList());
+						lists.get(i).addEntryList(sw.getWorldList());
+						lists.get(i).fill();
+					}
+				}
+			}
+		}
+		if (ho.id == "deletelevel" && world.typelistener.getSource().equals("deletelevel")) {
+			if (world.typelistener.getEnabled()) {
+				ho.color = ho.color2;
+			}
+			
+			if (!world.typelistener.text.equals("")) {
+				ho.text = world.typelistener.text;
+			}
+			else {
+				ho.text = "delete";
+			}
+			if (world.currentHud.equals("levels") && world.typelistener.hasNewOutput()) {
+				world.typelistener.newOutput(false);
+				sw.deleteWorld(world.typelistener.output);
+				for (int i = 0; i < lists.size(); i++) {
+					if (lists.get(i).id.equals("levels")) {
+						lists.get(i).addIdList(sw.getWorldList());
+						lists.get(i).addEntryList(sw.getWorldList());
+						lists.get(i).fill();
+					}
+				}
 			}
 		}
 	}

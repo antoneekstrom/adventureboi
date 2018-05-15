@@ -112,10 +112,27 @@ public class ButtonAction {
 						if (hb.get(i).id == "newlevel") {
 							if (world.typelistener.getEnabled()) {
 								world.typelistener.disable();
+								world.typelistener.setText("");
+								world.typelistener.setSource("none");
 							}
 							else {
 								hb.get(i).color = hb.get(i).colord.darker();
 								world.typelistener.enable();
+								world.typelistener.setSource("createlevel");
+								world.typelistener.setText("");
+							}
+						}
+						if (hb.get(i).id == "deletelevel") {
+							if (world.typelistener.getEnabled()) {
+								world.typelistener.disable();
+								world.typelistener.setText("");
+								world.typelistener.setSource("none");
+							}
+							else {
+								hb.get(i).color = hb.get(i).colord.darker();
+								world.typelistener.enable();
+								world.typelistener.setSource("deletelevel");
+								world.typelistener.setText("");
 							}
 						}
 					}

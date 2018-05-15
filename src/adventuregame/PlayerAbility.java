@@ -36,6 +36,13 @@ public class PlayerAbility extends AbstractAction {
 		}
 		if (action.equals("a-upr")) {
 		}
+		//sprint
+		if (action.equals("shiftr")) {
+			world.p.sprint(false);
+		}
+		if (action.equals("shiftp")) {
+			world.p.sprint(true);
+		}
 	}
 
 }

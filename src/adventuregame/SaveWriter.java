@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.stream.Stream;
 
 import worlds.ListWorld;
@@ -67,12 +68,52 @@ public class SaveWriter {
 		loadWorld(w);
 	}
 	
+	public void createWorld(String s) {
+		File f = new File(directory.getPath() + "/" + s + ".world");
+		if (!f.exists() && !s.equals("") && !s.equals(" ")) {
+			try {
+				f.createNewFile();
+				writer = new BufferedWriter(new FileWriter(f, true));
+				System.out.println("newfile");
+				write("-1550,607,3000,148,-14336,rectangle,boing\r\n");
+				newLine();
+				write("-424,374,250,250,-14336,solidstar, what is up dog");
+			}
+			catch (Exception e) {e.printStackTrace();}
+		}
+	}
+	
+	public void deleteWorld(String s) {
+		File f = new File(directory.getPath() + "/" + s + ".world");
+		if (f.exists()) {
+			try {
+				f.delete();
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	public void setDirectory(File f) {
 		directory = f;
 	}
 	
 	public File[] getDirWorlds() {
 		return levels;
+	}
+	
+	public ArrayList<String> getWorldList() {
+		findWorlds();
+		ArrayList<String> l = new ArrayList<String>();
+		for (int i = 0; i < getDirWorlds().length; i++) {
+			String s = "";
+			if (getDirWorlds()[i].getName().endsWith(".world")) {
+				s = getDirWorlds()[i].getName().replace(".world", "");
+				l.add(s);
+			}
+		}
+		return l;
 	}
 	
 	public void findWorlds() {

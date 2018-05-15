@@ -1,6 +1,7 @@
 package adventuregame;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
 
 import javax.swing.AbstractAction;
 
@@ -47,13 +48,6 @@ public class MethodAction extends AbstractAction {
 			world.typelistener.enable();
 			world.typelistener.c.visible = true;
 			world.stopPlayerController();
-		}
-		//shift (sprint)
-		if (action.equals("shiftp")) {
-			world.p.sprint(true);
-		}
-		if (action.equals("shiftr")) {
-			world.p.sprint(false);
 		}
 	}
 }

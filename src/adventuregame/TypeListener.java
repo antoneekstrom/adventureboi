@@ -11,8 +11,10 @@ public class TypeListener implements KeyListener {
 	String text = "";
 	String output = "";
 	private boolean enabled = false;
+	private boolean hasNewOutput = false;
 	Console c;
-	ListWorld lw;
+	private ListWorld lw;
+	private String source = "none";
 	
 	public TypeListener(ListWorld w) {
 		lw = w;
@@ -35,6 +37,26 @@ public class TypeListener implements KeyListener {
 		return output;
 	}
 	
+	public void setSource(String s) {
+		source = s;
+	}
+	
+	public String getSource() {
+		return source;
+	}
+	
+	public void newOutput(boolean b) {
+		hasNewOutput = b;
+	}
+	
+	public void setText(String s) {
+		text = s;
+	}
+	
+	public boolean hasNewOutput() {
+		return hasNewOutput;
+	}
+	
 	@Override
 	public void keyPressed(KeyEvent arg0) {
 		if (enabled && arg0.getKeyCode() != 8 && arg0.getKeyChar() != '§' && arg0.getKeyCode() != KeyEvent.VK_ENTER && arg0.getKeyCode() != KeyEvent.VK_UP && arg0.getKeyCode() != KeyEvent.VK_DOWN) {
@@ -51,6 +73,9 @@ public class TypeListener implements KeyListener {
 			if (c.visible) {
 				c.enter(output);
 				c.currentIndex = c.history.size();
+			}
+			if (lw.currentHud.equals("levels")) {
+				newOutput(true);
 			}
 		}
 		if (arg0.getKeyCode() == KeyEvent.VK_UP) {
