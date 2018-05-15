@@ -190,7 +190,7 @@ public class ListWorld extends World {
 		HudObj noclip = new HudObj((int) (dim.getWidth() - 350), 50, 300, 100, Color.ORANGE);
 		HudObj invincible = new HudObj((int) (dim.getWidth() - 700), 50, 300, 100, Color.ORANGE);
 		
-		List inv = new List(new Rectangle(dim.width - 400, (dim.height / 2) - 300, 350, 700), "text", this);
+		List inv = new List(new Rectangle(dim.width - 400, (dim.height / 2) - 300, 350, 800), "text", this);
 		HudText inventry = new HudText(0,0,"", standard);
 		options.lists.add(inv);
 		inventry.setBackground(Color.ORANGE, 0, 200);
@@ -208,7 +208,7 @@ public class ListWorld extends World {
 		}
 		inv.addEntryList(invl);
 		inv.scrollBar();
-		inv.setHideOverflow(true);
+		inv.setHideOverflow(true, 50);
 		inv.fill();
 		
 		noclip.addText("gravity");

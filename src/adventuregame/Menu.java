@@ -185,7 +185,7 @@ public class Menu extends ListWorld implements ActionListener {
 		RectangleObject spike = new RectangleObject(frame, this);
 		go.rects.add(spike);
 		
-		llist = new List(new Rectangle(dim.width / 2 - 600, dim.height / 2 - 450, 1200, 900), "text", this);
+		llist = new List(new Rectangle(dim.width / 2 - 600, dim.height / 2 - 450, 1200, 1000), "text", this);
 		HudText llistentry = new HudText(0,0,"",standard);
 		llistentry.setBackground(Color.ORANGE, 0, 450);
 		llistentry.padding = 25;
@@ -195,7 +195,7 @@ public class Menu extends ListWorld implements ActionListener {
 		llistentry.hover = true;
 		llist.setTextEntry(llistentry);
 		llist.scrollBar();
-		llist.setHideOverflow(true);
+		llist.setHideOverflow(true, 50);
 		llist.id = "levels";
 		llist.setPadding(380);
 		llist.setPaddingTop(150);

@@ -37,7 +37,7 @@ public class List {
 	int entryheight = 95;
 	Point mouse;
 	
-	int blockHeight = 50;
+	int blockHeight = 0;
 	HudObj blockTop;
 	HudObj blockBottom;
 	
@@ -123,8 +123,10 @@ public class List {
 		hasEntry = true;
 	}
 	
-	public void setHideOverflow(boolean b) {
+	public void setHideOverflow(boolean b, int h) {
 		hideoverflow = b;
+		blockHeight = h;
+		rect.height = rect.height - (blockHeight * 2);
 		if (b) {
 			blockTop = new HudObj((int) rect.getMinX(), (int) rect.getMinY() - blockHeight, rect.width, blockHeight, bg);
 			blockBottom = new HudObj((int) rect.getMinX(), (int) rect.getMaxY(), rect.width, blockHeight, bg);
