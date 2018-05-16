@@ -233,6 +233,8 @@ public class Menu extends ListWorld implements ActionListener {
 		p.setSize(150, 125);
 		p.setGRAVITY(30);
 		startPlayerController(p);
+		sw.setWorld("menu", this);
+		sw.loadWorld(this);
 		p.JFUEL = 7;
 		timer.start();
 	}

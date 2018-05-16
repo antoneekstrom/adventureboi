@@ -57,6 +57,10 @@ public class List {
 		textentry = t;
 	}
 	
+	public void setId(String s) {
+		id = s;
+	}
+	
 	public void setPaddingTop(int i) {
 		paddingTop = i;
 	}
@@ -112,13 +116,21 @@ public class List {
 		t.text = s;
 		t.setBackground(textentry.bgcolor, 0, textentry.fontwidth);
 		t.autoWidth(textentry.autowidth);
-		t.setId(id + (list.size()));
+		if (textentry.id == null) {
+			t.setId(id + (list.size()));
+		}
+		else {
+			t.setId(textentry.id);
+		}
 		t.width = textentry.width;
 		t.padding = textentry.padding;
 		t.update = textentry.update;
 		t.hover = textentry.hover;
 		t.textcolor = textentry.textcolor;
 		t.type = textentry.type;
+		if (textentry.hasTooltip()) {
+			t.toolTip();
+		}
 		list.add(t);
 		hasEntry = true;
 	}

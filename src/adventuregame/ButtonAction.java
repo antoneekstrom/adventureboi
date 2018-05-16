@@ -1,6 +1,7 @@
 package adventuregame;
 
 import java.awt.Color;
+import java.awt.MouseInfo;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
@@ -139,7 +140,9 @@ public class ButtonAction {
 				}
 				for (int i = 0; i < hl.size(); i++) {
 					for (int r = 0; r < hl.get(i).list.size(); r++) {
-						if (hl.get(i).visible && hl.get(i).id.equals("levels") && hl.get(i).list.get(r).hasMouse) {
+						HudText ht = hl.get(i).list.get(r);
+						
+						if (hl.get(i).visible && hl.get(i).id.equals("levels") && ht.hasMouse) {
 							world = world.getWorld();
 							sw.setWorld(hl.get(i).ids.get(r), world);
 							world.startPlayerController(world.p);
@@ -148,9 +151,13 @@ public class ButtonAction {
 							world.p.isEnabled(true);
 							world.p.setLocation(0,0);
 						}
+						
+						if (hl.get(i).visible && hl.get(i).id.equals("inventory") && ht.hasMouse) {
+						}
 					}
 				}
 			}
+			
 		}
 	}
 

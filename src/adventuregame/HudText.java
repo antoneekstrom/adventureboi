@@ -31,12 +31,40 @@ public class HudText {
 	String type = "none";
 	Rectangle r = new Rectangle();
 	public boolean update = false;
+	InfoBox ib;
+	private boolean hasTooltip = false;
+	int ttoffsetx = 400;
 	
 	public HudText(int x, int y, String t, Font f) {
 		text = t;
 		this.x = x;
 		this.y = y;
 		font = f;
+	}
+	
+	public void setText(String s) {
+		text = s;
+	}
+	
+	public void toolTip() {
+		ib = new InfoBox(new Rectangle(0, 0, 300, 200), font);
+		ib.addText(text);
+		ib.setBackground(Color.WHITE);
+		ib.setId(id);
+		hasTooltip = true;
+		if (id.equals("item")) {
+			ib.addText(Items.getDescription(text));
+		}
+	}
+	
+	public void centerHorizontally(Rectangle parent) {
+		x = parent.x + (parent.width / 2) - (r.width / 2);
+	}
+	
+	public void centerText() {
+		if (background) {
+			
+		}
 	}
 	
 	public void setTextColor(Color c) {
@@ -83,6 +111,12 @@ public class HudText {
 			currentcolor = bgcolor;
 			hasMouse = false;
 		}
+		if (hover && r.contains(mouse) && hasTooltip) {
+			ib.place(new Point(r.x - ttoffsetx, r.y));
+		}
+		else if (hasTooltip) {
+			ib.setVisible(false);
+		}
 	}
 	
 	public void updateRect() {
@@ -104,6 +138,10 @@ public class HudText {
 	
 	public void setId(String s) {
 		id = s;
+	}
+	
+	public boolean hasTooltip() {
+		return hasTooltip;
 	}
 	
 	public int getTotalHeight() {
@@ -132,6 +170,9 @@ public class HudText {
 			}
 			g.setColor(textcolor);
 			g.drawString(text, x, y);
+			if (hasTooltip) {
+				ib.paint(g);
+			}
 		}
 	}
 }

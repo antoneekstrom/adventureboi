@@ -23,6 +23,7 @@ import adventuregame.HUD;
 import adventuregame.HudList;
 import adventuregame.HudObj;
 import adventuregame.HudText;
+import adventuregame.InfoBox;
 import adventuregame.List;
 import adventuregame.Main;
 import adventuregame.MethodAction;
@@ -68,6 +69,8 @@ public class ListWorld extends World {
 	public String lastHud;
 	public TypeListener typelistener;
 	public List llist;
+	public List inv;
+	public ArrayList<String> inventory;
 	public HUD console;
 	
 	public Thread t;
@@ -176,6 +179,13 @@ public class ListWorld extends World {
 		timer.start();
 	}
 	
+	public void addItem(String name) {
+		inventory.add(name);
+		inv.addIdList(inventory);
+		inv.addEntryList(inventory);
+		inv.fill();
+	}
+	
 	public void createOptions() {
 		options.font = standard.deriveFont(10, 35);
 		HudObj quit = new HudObj(50, 200, 400, 100, Color.ORANGE);
@@ -190,22 +200,25 @@ public class ListWorld extends World {
 		HudObj noclip = new HudObj((int) (dim.getWidth() - 350), 50, 300, 100, Color.ORANGE);
 		HudObj invincible = new HudObj((int) (dim.getWidth() - 700), 50, 300, 100, Color.ORANGE);
 		
-		List inv = new List(new Rectangle(dim.width - 400, (dim.height / 2) - 300, 350, 800), "text", this);
+		inventory = new ArrayList<String>();
+		
+		inv = new List(new Rectangle(dim.width - 400, (dim.height / 2) - 300, 350, 800), "text", this);
 		HudText inventry = new HudText(0,0,"", standard);
 		options.lists.add(inv);
 		inventry.setBackground(Color.ORANGE, 0, 200);
 		inventry.setPadding(25);
 		inventry.setTextColor(Color.WHITE);
 		inventry.update = true;
+		inventry.setId("item");
 		inventry.hover = true;
+		inventry.toolTip();
 		inv.setPadding(50);
 		inv.setSpacing(50);
-		inv.setPaddingTop(100);
+		inv.setId("inventory");
+		inv.setPaddingTop(50);
 		inv.setTextEntry(inventry);
+		inv.setHideOverflow(true, 50);
 		ArrayList<String> invl = new ArrayList<String>();
-		for (int i = 0; i < 15; i++) {
-			invl.add("item");
-		}
 		inv.addEntryList(invl);
 		inv.scrollBar();
 		inv.setHideOverflow(true, 50);
@@ -268,6 +281,7 @@ public class ListWorld extends World {
 			p.update();
 			c.run(p);
 			cl.pRun(p);
+			
 			
 			options.update();
 			go.update();

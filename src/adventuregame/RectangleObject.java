@@ -260,6 +260,8 @@ public class RectangleObject extends Object {
 			else if (type.equals("donut")) {
 				lw.go.rects.remove(this);
 				lw.cl.collisions.remove(getObjectRect());
+				lw.addItem("donut");
+				lw.p.checkInventory();
 			}
 			else if (type.equals("spikeboi")) {
 				lw.p.damage(20);

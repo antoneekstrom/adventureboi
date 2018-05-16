@@ -91,6 +91,8 @@ public class Player extends Object {
 	int invinciblecounter = 0;
 	public boolean invincible = false;
 	
+	double maxhealthbonus = 0;
+	
 	//movement
 	public String direction = "none";
 	public float CALCMOV = 1;
@@ -286,6 +288,20 @@ public class Player extends Object {
 			lw.addRo(ro);
 			firec = 0;
 		}
+	}
+	
+	public void checkInventory() {
+		maxhealthbonus = 0;
+		
+		for (int i = 0; i < lw.inventory.size(); i++) {
+			String s = lw.inventory.get(i);
+			
+			if (s.equals("donut")) {
+				maxhealthbonus += 20;
+			}
+		}
+		
+		maxhealth += maxhealthbonus;
 	}
 
 	public void collisionCorrection() {
