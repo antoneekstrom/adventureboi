@@ -75,7 +75,7 @@ public class Player extends Object {
 	double staminarate = 0.5;
 	boolean staminaregen = true;
 	
-	int staminacooldown = 90;
+	int staminacooldown = 120;
 	int staminacounter = 0;
 	
 	double sprintspeed = 2;
