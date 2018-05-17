@@ -124,6 +124,7 @@ public class RectangleObject extends Object {
 			ai.setSpeed(3);
 			setCollision(true);
 			setGravity(true);
+			hm.hb.offSet(Position.centerX(getObjectRect(), hm.hb.rect).x, hm.hb.rect.y - 100);
 			setSprite("assets/animated_sprites/bigmush/bigmush_idle.png");
 			stype = "bigmush";
 			animator = new Animator(sprite);
@@ -473,12 +474,14 @@ public class RectangleObject extends Object {
 	}
 
 	public void paint(Graphics g) {
+		//healthbar
 		g.setColor(getCOLOR());
 		if (hasHealth) {
 			if (hm.hpVisible()) {
 				hm.paint(g);
 			}
 		}
+		//other
 		if (visible) {
 			if (hasImg == false) {
 				g.fillRect(getCx(), getCy(), getWidth(), getHeight());			
