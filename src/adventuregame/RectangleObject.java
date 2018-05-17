@@ -34,6 +34,10 @@ public class RectangleObject extends Object {
 	boolean started = false;
 	boolean charged = false;
 	boolean doesCarry = false;
+	boolean imgRepeat = false;
+	
+	int repeatCount = 0;
+	int imgWidth = 0;
 	
 	//fireball
 	int shrinkcounter = 100;
@@ -86,6 +90,7 @@ public class RectangleObject extends Object {
 		try {
 			sprite = ImageIO.read(new File("assets/sprites/" + type + ".png"));
 			sprite(sprite);
+			imgWidth = ImageIO.read(new File("assets/sprites/" + type + ".png")).getWidth();
 		} catch (Exception e) {e.printStackTrace();}
 		
 		if (type.equals("rectangle")) {
@@ -110,6 +115,9 @@ public class RectangleObject extends Object {
 		}
 		if (type.equals("energyshroom")) {
 			
+		}
+		if (type.equals("dangerfloor")) {
+			setSize(200, 100);
 		}
 		if (type.equals("bigmush")) {
 			setSize(350, 300);
@@ -193,6 +201,9 @@ public class RectangleObject extends Object {
 			setSprite("assets/sprites/chargedfire.png");
 			inceptiverect = getObjectRect();
 		}
+		if (type.equals("dangerfloor")) {
+			//imgRepeat();
+		}
 	}
 	
 	public void setDirection(String s) {
@@ -205,6 +216,13 @@ public class RectangleObject extends Object {
 					index = i;
 				}
 			}
+	}
+	
+	public void imgRepeat() {
+		imgRepeat = true;
+		if (imgWidth != 0 && imgWidth > getWidth()) {
+			repeatCount = Math.round(getWidth() % imgWidth);
+		}
 	}
 
 	public void update() {
@@ -307,6 +325,9 @@ public class RectangleObject extends Object {
 				counter = new Counter(1000, 2, "kantarell");
 				counter.start();
 				hasStarted = counter.hasStarted();
+			}
+			else if (type.equals("dangerfloor")) {
+				lw.p.damage((int) lw.p.health);
 			}
 			if (doesCarry) {
 				if (lw.p.getY() < getY() && ai != null && ai.getMove()) {
@@ -484,7 +505,14 @@ public class RectangleObject extends Object {
 			if (hasImg == false) {
 				g.fillRect(getCx(), getCy(), getWidth(), getHeight());			
 			} else {
-				g.drawImage(sprite, getCx(), getCy(), getWidth(), getHeight(), null);
+				if (!imgRepeat) {
+					g.drawImage(sprite, getCx(), getCy(), getWidth(), getHeight(), null);
+				}
+				else if (imgRepeat){
+					for (int i = 0; i < repeatCount; i++) {
+						g.drawImage(sprite, getCx() + ( i * getWidth() ), getCy(), getWidth(), getHeight(), null);
+					}
+				}
 			}
 		}
 		if (showrect) {
