@@ -205,7 +205,7 @@ public class Menu extends ListWorld implements ActionListener {
 		llistentry.padding = 25;
 		llistentry.setTextColor(Color.WHITE);
 		llistentry.update = true;
-		llistentry.type = "level";
+		llistentry.setType("level");
 		llistentry.hover = true;
 		llist.setTextEntry(llistentry);
 		llist.scrollBar();

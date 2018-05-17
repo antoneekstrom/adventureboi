@@ -28,12 +28,14 @@ public class HudText {
 	public boolean hover = false;
 	public boolean hasMouse = false;
 	Point mouse;
-	String type = "none";
+	private String type = "none";
 	Rectangle r = new Rectangle();
 	public boolean update = false;
 	InfoBox ib;
+	int paddingLeft = 10;
+	private String alignment = "none";
 	private boolean hasTooltip = false;
-	int ttoffsetx = 400;
+	int ttoffsetx = 50;
 	
 	public HudText(int x, int y, String t, Font f) {
 		text = t;
@@ -47,14 +49,28 @@ public class HudText {
 	}
 	
 	public void toolTip() {
-		ib = new InfoBox(new Rectangle(0, 0, 300, 200), font);
+		ib = new InfoBox(new Rectangle(0, 0, 400, 200), font);
 		ib.addText(text);
 		ib.setBackground(Color.WHITE);
 		ib.setId(id);
+		ib.autoWidth(true);
 		hasTooltip = true;
 		if (id.equals("item")) {
-			ib.addText(Items.getDescription(text));
+			ib.addParagraph(Items.getDescription(text));
+			ib.addParagraph(Items.getEffect(text));
 		}
+	}
+	
+	public void setType(String s) {
+		type = s;
+	}
+	
+	public String getAlignment() {
+		return alignment;
+	}
+	
+	public String getType() {
+		return type;
 	}
 	
 	public void centerHorizontally(Rectangle parent) {
@@ -131,6 +147,9 @@ public class HudText {
 	
 	public void update() {
 		if (update) {
+			if (ib != null) {
+				ib.update();
+			}
 			updateRect();
 			hover();
 		}
@@ -143,6 +162,11 @@ public class HudText {
 	
 	public void setId(String s) {
 		id = s;
+	}
+	
+	public void alignLeft(Rectangle parent) {
+		alignment = "left";
+		x = parent.x + paddingLeft;
 	}
 	
 	public boolean hasTooltip() {

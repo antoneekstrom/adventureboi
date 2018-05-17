@@ -127,7 +127,7 @@ public class List {
 		t.update = textentry.update;
 		t.hover = textentry.hover;
 		t.textcolor = textentry.textcolor;
-		t.type = textentry.type;
+		t.setType(textentry.getType());
 		if (textentry.hasTooltip()) {
 			t.toolTip();
 		}

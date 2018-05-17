@@ -5,16 +5,16 @@ import java.util.ArrayList;
 
 public class AI {
 
-	Rectangle r;
-	Rectangle nr;
-	ArrayList<String> q;
-	int gravity;
-	Rectangle prevground;
-	Rectangle ground;
-	Rectangle obstacle;
-	String lastobstacle = "";
+	private Rectangle r;
+	private Rectangle nr;
+	private ArrayList<String> q;
+	private int gravity;
+	private Rectangle prevground;
+	private Rectangle ground;
+	private Rectangle obstacle;
+	private String lastobstacle = "";
 	
-	Counter rcounter = new Counter(1000, 5000, "randomizer");
+	private Counter rcounter = new Counter(1000, 5000, "randomizer");
 	
 	String[] excluded = new String[] {
 		"fire",
@@ -22,20 +22,28 @@ public class AI {
 		"pickup",
 	};
 	
-	boolean ready = true;
+	private boolean ready = true;
 	
-	Counter c = new Counter(1000, 2, "start");
+	private Counter c = new Counter(1000, 2, "start");
 	
-	int speed = 5;
-	int jumptrigger = 100;
-	String direction = "right";
-	boolean move = false;
+	private int speed = 5;
+	private int jumptrigger = 100;
+	private String direction = "right";
+	private boolean move = false;
 
 	public AI(int g) {
 		q = new ArrayList<String>();
 		gravity = g;
 		obstacle = new Rectangle();
 		ground = new Rectangle();
+	}
+	
+	public void setSpeed(int s) {
+		speed = s;
+	}
+	
+	public int getSpeed() {
+		return speed;
 	}
 
 	public void update(Rectangle r) {
@@ -64,6 +72,14 @@ public class AI {
 		}
 		randomizer();
 		pathfind();
+	}
+	
+	public boolean getMove() {
+		return move;
+	}
+	
+	public Rectangle getNewRect() {
+		return nr;
 	}
 	
 	public void passCollision(RectangleObject ro) {
@@ -157,6 +173,10 @@ public class AI {
 		else {
 			direction = d;
 		}
+	}
+	
+	public String getDirection() {
+		return direction;
 	}
 	
 	public void start() {

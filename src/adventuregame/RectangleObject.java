@@ -35,6 +35,7 @@ public class RectangleObject extends Object {
 	boolean hasStarted = false;
 	boolean started = false;
 	boolean charged = false;
+	boolean doesCarry = false;
 	
 	//fireball
 	int shrinkcounter = 100;
@@ -111,6 +112,22 @@ public class RectangleObject extends Object {
 		}
 		if (type.equals("energyshroom")) {
 			
+		}
+		if (type.equals("bigmush")) {
+			setSize(350, 300);
+			hm = new HealthModule(350);
+			hasHealth = true;
+			hm.showHp();
+			subtype = "enemy";
+			ai = new AI(getGRAVITY());
+			doesCarry = true;
+			ai.setSpeed(3);
+			setCollision(true);
+			setGravity(true);
+			setSprite("assets/animated_sprites/bigmush/bigmush_idle.png");
+			stype = "bigmush";
+			animator = new Animator(sprite);
+			animator.createList(getPathList());
 		}
 		if (type.equals("spikeboi")) {
 			setSize(150, 150);
@@ -284,17 +301,26 @@ public class RectangleObject extends Object {
 			}
 			else if (type.equals("spikeboi")) {
 				lw.p.damage(20);
-				if (lw.p.getY() < getY() && ai.move) {
-					lw.p.setX(getX());
-					animator.setIndexRange(3, 5);
-				}
+				lw.p.setX(getX());
+				animator.setIndexRange(3, 5);
 			}
 			else if (type.equals("kantarell") && !hasStarted) {
 				counter = new Counter(1000, 2, "kantarell");
 				counter.start();
 				hasStarted = counter.hasStarted();
 			}
-			
+			if (doesCarry) {
+				if (lw.p.getY() < getY() && ai != null && ai.getMove()) {
+					if (getObjectRect().intersects(lw.p.getObjectRect())) {
+						if (ai.getDirection().equals("left")) {
+							lw.p.setX(lw.p.getX() - ai.getSpeed());
+						}
+						else if (ai.getDirection().equals("right")) {
+							lw.p.setX(lw.p.getX() + ai.getSpeed());
+						}
+					}
+				}
+			}
 		}
 		else {
 			if (type.equals("spikeboi")) {
@@ -324,7 +350,9 @@ public class RectangleObject extends Object {
 				lw.cl.collisions.remove(getObjectRect());
 			}
 		}
+		//collision with all objects
 		for (int i = 0; i < lw.go.rects.size(); i++) {
+			RectangleObject ro = lw.go.rects.get(i);
 			if (type.equals("fire")) {
 				if (getObjectRect().intersects(lw.go.rects.get(i).getObjectRect()) && !(lw.go.rects.get(i).type == "fire") && !lw.go.rects.get(i).subtype.equals("pickup")) {
 					if (charged && lw.go.rects.get(i).subtype.equals("enemy")) {
@@ -346,10 +374,22 @@ public class RectangleObject extends Object {
 				}
 			}
 			if (type.equals("spikeboi") && lw.go.rects.get(i).type.equals("spikeboi") && lw.go.rects.get(i).ai != null && ai != null && !(getObjectRect().equals(lw.go.rects.get(i).getObjectRect())) && lw.go.rects.get(i).getObjectRect().intersects(getObjectRect())) {
-				if (ai.nr != null && lw.go.rects.get(i).ai.nr != null) {
+				if (ai.getNewRect() != null && lw.go.rects.get(i).ai.getNewRect() != null) {
 					
 					if (lw.go.rects.get(i).getY() > getY()) {
-						setX((int) (lw.go.rects.get(i).ai.nr.getX()) + 10);
+						setX((int) (lw.go.rects.get(i).ai.getNewRect().getX()) + 10);
+					}
+				}
+			}
+			if (doesCarry) {
+				if (ro.getY() < getY() && ai != null && ai.getMove()) {
+					if (getObjectRect().intersects(ro.getObjectRect())) {
+						if (ai.getDirection().equals("left")) {
+							ro.setX(ro.getX() - ai.getSpeed());
+						}
+						else if (ai.getDirection().equals("right")) {
+							ro.setX(ro.getX() + ai.getSpeed());
+						}
 					}
 				}
 			}
@@ -409,6 +449,15 @@ public class RectangleObject extends Object {
 			};
 			return l;
 		}
+		else if (stype.equals("bigmush")) {
+			String path = "assets/animated_sprites/bigmush/";
+			String[] l = new String[] {
+					path + "bigmush_idle",
+					path + "bigmush_left",
+					path + "bigmush_right"
+			};
+			return l;
+		}
 		else {
 			return null;
 		}
@@ -455,9 +504,6 @@ public class RectangleObject extends Object {
 				g.setColor(Color.ORANGE);
 				g.drawString("selected", getCx(), getCy());
 			}
-		}
-		if (ai != null) {
-			g.drawString(String.valueOf(ai.rcounter.done), getCx(), getCy());
 		}
 	}
 }

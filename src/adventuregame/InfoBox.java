@@ -12,6 +12,7 @@ public class InfoBox {
 	private ArrayList<HudText> tlist;
 	private Rectangle r;
 	private boolean visible = false;
+	private boolean autoWidth = false;
 	
 	private String id;
 	private Font f;
@@ -59,12 +60,30 @@ public class InfoBox {
 		tlist.add(t);
 	}
 	
+	public void addParagraph(String id) {
+		HudText t = new HudText(r.x, r.y, id, f);
+		t.update = true;
+		t.setTextColor(Color.ORANGE);
+		t.setId(id);
+		t.alignLeft(r);
+		tlist.add(t);
+	}
+	
+	public void addTextObject(HudText ht) {
+		tlist.add(ht);
+	}
+	
 	public void place(Point p) {
-		r.setLocation(p);
+		r.setLocation(p.x - r.width, p.y);
 		
 		for (int i = 0; i < tlist.size(); i++) {
 			tlist.get(i).update();
-			tlist.get(i).centerHorizontally(r);
+			if (tlist.get(i).getAlignment().equals("left")) {
+				tlist.get(i).alignLeft(r);
+			}
+			else {
+				tlist.get(i).centerHorizontally(r);
+			}
 			tlist.get(i).y = (int) (r.getMinY() + 50 + i * (tlist.get(i).getTotalHeight() + 10) );
 		}
 		
@@ -73,6 +92,26 @@ public class InfoBox {
 	
 	public void setVisible(boolean b) {
 		visible = b;
+	}
+	
+	public void autoWidth(boolean b) {
+		autoWidth = b;
+	}
+	
+	public void adjustWidth() {
+		int largestwidth = 0;
+		int padding = 0;
+		for (int i = 0; i < tlist.size(); i++) {
+			if (tlist.get(i).fontwidth > largestwidth) {
+				largestwidth = tlist.get(i).fontwidth;
+			}
+			if (tlist.get(i).getAlignment().equals("left")) {
+				padding = tlist.get(i).paddingLeft;
+			}
+		}
+		if (largestwidth > r.width) {
+			r.width = largestwidth + padding * 2;
+		}
 	}
 	
 	public HudText getText(String id) {
@@ -87,6 +126,9 @@ public class InfoBox {
 	public void update() {
 		for (int i = 0; i < tlist.size(); i++) {
 			tlist.get(i).update();
+		}
+		if (autoWidth) {
+			adjustWidth();
 		}
 	}
 	
