@@ -1,8 +1,7 @@
 # adventureboi
 Adventure with the most epic boi of them all, epicswagboiman.
 
-## Download
-[Download Latest Version](https://www.github.com/zimbosaurus/adventureboi/releases/latest "Latest Version")
+### [Download Latest Version](https://www.github.com/zimbosaurus/adventureboi/releases/latest "Latest Version")
 
 ## Notes
 Actual source code is in "new game loop" branch. I haven't bothered to move it to master.
