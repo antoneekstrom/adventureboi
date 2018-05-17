@@ -112,18 +112,24 @@ public class TutorialWorld extends World implements ActionListener, ImageObserve
 	}
 
 	//timer
+	double time1;
+	double time2;
 	public void actionPerformed(ActionEvent arg0) {
-		t1.update();
-		r1.update();
-		sp1.update();
-		r2.update();
-		sp1.update(p);
-		g1.checkCollision(r1);
-		g1.checkCollision(r2);
-		g1.checkCollision(sp1);
-		p.update();
-		cl.pRun(p);
-		c.run(p);
+		time1 = System.nanoTime() / 1000000;
+		if (time1 - time2 > FRAMERATE) {
+			t1.update();
+			r1.update();
+			sp1.update();
+			r2.update();
+			sp1.update(p);
+			g1.checkCollision(r1);
+			g1.checkCollision(r2);
+			g1.checkCollision(sp1);
+			p.update();
+			cl.pRun(p);
+			c.run(p);
+			time2 = System.nanoTime() / 1000000;
+		}
 		repaint();
 	}
 }
