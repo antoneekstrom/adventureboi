@@ -5,10 +5,8 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
-import javax.swing.Timer;
 
 import worlds.ListWorld;
 import worlds.World;
