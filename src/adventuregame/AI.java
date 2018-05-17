@@ -14,6 +14,8 @@ public class AI {
 	Rectangle obstacle;
 	String lastobstacle = "";
 	
+	Counter rcounter = new Counter(1000, 5000, "randomizer");
+	
 	String[] excluded = new String[] {
 		"fire",
 		"spike",
@@ -60,6 +62,7 @@ public class AI {
 		if (move) {
 			move();
 		}
+		randomizer();
 		pathfind();
 	}
 	
@@ -73,6 +76,18 @@ public class AI {
 				obstacle = g;
 				lastobstacle = ro.type;
 			}
+		}
+	}
+	
+	public void randomizer() {
+		double r = Math.random();
+		if (rcounter.isDone()) {
+			if (r < 0.5) {
+				jump(false);
+			}
+		}
+		else {
+			rcounter.start();
 		}
 	}
 

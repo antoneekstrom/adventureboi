@@ -67,6 +67,11 @@ public class HudText {
 		}
 	}
 	
+	public void setLocation(Point p) {
+		setX(p.x);
+		setY(p.y);
+	}
+	
 	public void setTextColor(Color c) {
 		textcolor = c;
 		currentcolor = bgcolor;

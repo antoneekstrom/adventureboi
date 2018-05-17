@@ -84,6 +84,12 @@ public class InfoBox {
 		return null;
 	}
 	
+	public void update() {
+		for (int i = 0; i < tlist.size(); i++) {
+			tlist.get(i).update();
+		}
+	}
+	
 	public void paint(Graphics g) {
 		if (visible) {
 			if (hasBackground) {

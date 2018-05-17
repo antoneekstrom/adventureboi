@@ -19,6 +19,7 @@ public class HUD {
 	public ArrayList<HudText> ht;
 	public ArrayList<HudBar> hbr;
 	public ArrayList<List> lists;
+	public ArrayList<InfoBox> ib;
 	public boolean visible = false;
 	private ListWorld world;
 	public String id;
@@ -34,6 +35,7 @@ public class HUD {
 		ht = new ArrayList<HudText>();
 		hbr = new ArrayList<HudBar>();
 		lists = new ArrayList<List>();
+		ib = new ArrayList<InfoBox>();
 		
 		world = lw;
 		font = world.standard;
@@ -70,7 +72,15 @@ public class HUD {
 			}
 			listUpdate(lists.get(i));
 		}
+		for (int i = 0; i < ib.size(); i++) {
+			infoupdate(ib.get(i));
+		}
 		hudUpdate();
+	}
+	
+	public void infoupdate(InfoBox ib) {
+		ib.getText("energymax").setText(String.valueOf("max energy: " + world.p.maxenergy));
+		ib.getText("energyrate").setText("energyrate: " + world.p.energyrate + "e/tick");
 	}
 	
 	public void specificUpdate(HudObj ho) {
@@ -163,7 +173,7 @@ public class HUD {
 			world.p.enabled = false;
 			world.stopPlayerController();
 		}
-		if (id.equals("actualhud") && !world.currentHud.equals("menu") && !world.currentHud.equals("levels") && !world.currentHud.equals("options")) {
+		if (id.equals("actualhud") && !world.currentHud.equals("menu") && !world.currentHud.equals("levels") && !world.currentHud.equals("options") && !world.currentHud.equals("stats")) {
 			setVisible(true);
 		}
 	}
@@ -236,6 +246,9 @@ public class HUD {
 			}
 			for (int i = 0; i < lists.size(); i++) {
 				lists.get(i).paint(g);
+			}
+			for (int i = 0; i < ib.size(); i++) {
+				ib.get(i).paint(g);
 			}
 		}
 	}

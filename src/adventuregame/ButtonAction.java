@@ -136,6 +136,9 @@ public class ButtonAction {
 								world.typelistener.setText("");
 							}
 						}
+						if (hb.get(i).id == "stats") {
+							world.switchHud("stats");
+						}
 					}
 				}
 				for (int i = 0; i < hl.size(); i++) {

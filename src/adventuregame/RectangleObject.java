@@ -109,6 +109,9 @@ public class RectangleObject extends Object {
 			hasText = true;
 			visible = false;
 		}
+		if (type.equals("energyshroom")) {
+			
+		}
 		if (type.equals("spikeboi")) {
 			setSize(150, 150);
 			setGravity(true);
@@ -121,6 +124,15 @@ public class RectangleObject extends Object {
 			ai = new AI(getGRAVITY());
 			animator = new Animator(sprite);
 			animator.createList(getPathList());
+		}
+		if (type.equals("shroom")) {
+			setGravity(true);
+			setCollision(true);
+			subtype = "enemy";
+			setSize(150, 150);
+			ai = new AI(getGRAVITY());
+			hm = new HealthModule(1337);
+			hasHealth = true;
 		}
 		if (type.equals("spike")) {
 			subtype = "pickup";
@@ -261,6 +273,13 @@ public class RectangleObject extends Object {
 				lw.go.rects.remove(this);
 				lw.cl.collisions.remove(getObjectRect());
 				lw.addItem("donut");
+				lw.p.checkInventory();
+				lw.p.addHealth(20, false);
+			}
+			else if (type.equals("shroom")) {
+				lw.go.rects.remove(this);
+				lw.cl.collisions.remove(this.getObjectRect());
+				lw.addItem("shroom");
 				lw.p.checkInventory();
 			}
 			else if (type.equals("spikeboi")) {
@@ -436,6 +455,9 @@ public class RectangleObject extends Object {
 				g.setColor(Color.ORANGE);
 				g.drawString("selected", getCx(), getCy());
 			}
+		}
+		if (ai != null) {
+			g.drawString(String.valueOf(ai.rcounter.done), getCx(), getCy());
 		}
 	}
 }

@@ -30,7 +30,7 @@ public class Menu extends ListWorld implements ActionListener {
 	public HUD menu;
 	public HUD levels;
 	public HUD console;
-	public HUD actualhud;
+	public HUD statistics;
 	public Point mouse;
 	public SaveWriter sw;
 	boolean ready = false;
@@ -79,6 +79,8 @@ public class Menu extends ListWorld implements ActionListener {
 		sw = new SaveWriter("menu");
 		huds = new ArrayList<HUD>();
 		
+		statistics = new HUD(this);
+		statistics.id = "stats";
 		actualhud = new HUD(this);
 		actualhud.id = "actualhud";
 		menu = new HUD(this);
@@ -87,6 +89,7 @@ public class Menu extends ListWorld implements ActionListener {
 		levels.id = "levels";
 		options = new HUD(this);
 		options.id = "options";
+		huds.add(statistics);
 		huds.add(actualhud);
 		huds.add(menu);
 		huds.add(levels);
@@ -127,6 +130,17 @@ public class Menu extends ListWorld implements ActionListener {
 		play.addText("Play");
 		play.setId("play");
 		menu.hb.add(play);
+		
+		InfoBox stats = new InfoBox(new Rectangle((int) ((dim.width / 2) - (dim.width * 0.8) / 2), (int) ((dim.height / 2) - (dim.height * 0.8) / 2), (int) (dim.width * 0.8), (int) (dim.height * 0.8)), standard);
+		stats.addText("energymax");
+		stats.addText("energyrate");
+		HudText erate = stats.getText("energyrate");
+		erate.setLocation(new Point(erate.x - 600, erate.y + 250));
+		HudText emax = stats.getText("energymax");
+		emax.setLocation(new Point(emax.x - 600, emax.y + 150));
+		stats.setBackground(Color.WHITE);
+		stats.setVisible(true);
+		statistics.ib.add(stats);
 		
 		HudBar hp = new HudBar((int) ((dim.width / 2) - 200), 100, 400, 50);
 		HudBar ep = new HudBar(50, 100, 400, 50);
@@ -250,6 +264,7 @@ public class Menu extends ListWorld implements ActionListener {
 			levels.paint(g);
 			console.paint(g);
 			options.paint(g);
+			statistics.paint(g);
 			actualhud.paint(g);
 		}
 	}
@@ -272,6 +287,7 @@ public class Menu extends ListWorld implements ActionListener {
 			actualhud.passPlayer(p);
 			actualhud.update();
 			console.update();
+			statistics.update();
 			console.passWorld(this);
 			c.run(p);
 			go.update();

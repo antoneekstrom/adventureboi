@@ -69,6 +69,7 @@ public class ListWorld extends World {
 	public String lastHud;
 	public TypeListener typelistener;
 	public List llist;
+	public HUD actualhud;
 	public List inv;
 	public ArrayList<String> inventory;
 	public HUD console;
@@ -201,6 +202,9 @@ public class ListWorld extends World {
 		HudObj invincible = new HudObj((int) (dim.getWidth() - 700), 50, 300, 100, Color.ORANGE);
 		
 		inventory = new ArrayList<String>();
+		HudObj stats = new HudObj(50, 500, 400, 100, Color.ORANGE);
+		stats.addText("Statistics");
+		stats.setId("stats");
 		
 		inv = new List(new Rectangle(dim.width - 400, (dim.height / 2) - 300, 350, 800), "text", this);
 		HudText inventry = new HudText(0,0,"", standard);
@@ -251,6 +255,7 @@ public class ListWorld extends World {
 		options.hb.add(world);
 		options.hb.add(colors);
 		options.hb.add(c1);
+		options.hb.add(stats);
 		options.hb.add(c2);
 		options.hb.add(c3);
 		options.hb.add(c4);

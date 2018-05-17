@@ -41,7 +41,9 @@ public class Player extends Object {
 	ListWorld lw;
 	
 	//energy
-	double maxenergy = 100;
+	double maxenergybase = 100;
+	double maxenergy = maxenergybase;
+	double maxenergybonus = 0;
 	double energy = maxenergy;
 	double energyrate = 0.4;
 	boolean energyregen = true;
@@ -84,7 +86,8 @@ public class Player extends Object {
 	double sprintcost = 0.5;
 	
 	//hp
-	double maxhealth = 100;
+	double maxhealthbase = 100; 
+	double maxhealth = maxhealthbase;
 	double health = 100;
 	int dmgcooldown = 50;
 	boolean invulnerable = false;
@@ -292,15 +295,21 @@ public class Player extends Object {
 	
 	public void checkInventory() {
 		maxhealthbonus = 0;
-		
+		maxenergybonus = 0;
+		maxhealth = maxhealthbase;
+		maxenergy = maxenergybase;
 		for (int i = 0; i < lw.inventory.size(); i++) {
 			String s = lw.inventory.get(i);
 			
 			if (s.equals("donut")) {
 				maxhealthbonus += 20;
 			}
+			if (s.equals("shroom")) {
+				maxenergybonus += 20;
+				System.out.println("shroom");
+			}
 		}
-		
+		maxenergy += maxenergybonus;
 		maxhealth += maxhealthbonus;
 	}
 
