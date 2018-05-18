@@ -119,6 +119,9 @@ public class RectangleObject extends Object {
 		if (type.equals("dangerfloor")) {
 			setSize(200, 100);
 		}
+		if (type.equals("fallblock")) {
+			hasImg = true;
+		}
 		if (type.equals("bigmush")) {
 			setSize(350, 300);
 			hm = new HealthModule(350);
@@ -134,6 +137,7 @@ public class RectangleObject extends Object {
 			setSprite("assets/animated_sprites/bigmush/bigmush_idle.png");
 			stype = "bigmush";
 			animator = new Animator(sprite);
+			animator.speed(10);
 			animator.createList(getPathList());
 		}
 		if (type.equals("spikeboi")) {
@@ -321,6 +325,10 @@ public class RectangleObject extends Object {
 				lw.p.setX(getX());
 				animator.setIndexRange(3, 5);
 			}
+			else if (type.equals("fallblock") && lw.p.getY() < getY()) {
+				setGravity(true);
+				setCollision(true);
+			}
 			else if (type.equals("kantarell") && !hasStarted) {
 				counter = new Counter(1000, 2, "kantarell");
 				counter.start();
@@ -443,7 +451,13 @@ public class RectangleObject extends Object {
 	
 	public void voidCheck() {
 		if (getY() > 3000) {
-			hm.decreaseHealth(hm.getHealth());
+			if (hm != null) {
+				hm.decreaseHealth(hm.getHealth());
+			}
+			else {
+				lw.go.rects.remove(this);
+				lw.cl.collisions.remove(getObjectRect());
+			}
 		}
 	}
 	

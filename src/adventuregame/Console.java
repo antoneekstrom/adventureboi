@@ -43,8 +43,10 @@ public class Console {
 			
 			//get rectangle values of object
 			"getrect",
-			"gr",
 			"rect",
+			
+			//set gravity
+			"grav",
 			
 			//show objectrect
 			"showrect",
@@ -289,6 +291,13 @@ public class Console {
 				selected = parameters.get(0);
 				giveResponse("selected:" + selected);
 				lw.go.rects.get(selected).select();
+			}
+		}
+		if (key.equals("grav")) {
+			if (stringparameters.size() == 1) {
+				lw.go.rects.get(selected).setGravity(Boolean.valueOf(stringparameters.get(0)));
+				lw.go.rects.get(selected).setCollision(Boolean.valueOf(stringparameters.get(0)));
+				giveResponse("gravity: " + lw.go.rects.get(selected).hasGravity());
 			}
 		}
 		if (key.equals("addx")) {

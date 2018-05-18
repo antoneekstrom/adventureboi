@@ -1,3 +1,4 @@
+
 -1550,607,3000,148,-14336,rectangle,boing
 -424,374,250,250,-14336,solidstar, what is up dog
 -959,26,500,500,-14336,info1,boing
@@ -7,8 +8,14 @@
 -5419,330,936,103,-14336,rectangle,boing
 -4291,330,309,103,-14336,rectangle,boing
 2321,607,1803,148,-14336,rectangle,boing
-1737,463,300,300,-1,kantarell,boing
-735,467,150,150,-1,spikeboi,boing
-343,173,200,100,-1,dangerfloor,boing
-4165,659,1700,100,-1,dangerfloor,boing
-4398,369,350,300,-1,bigmush,boing
+1798,624,300,300,-1,kantarell,boing
+503,467,150,150,-1,spikeboi,boing
+4264,471,558,130,-14336,fallblock,boing
+5043,497,238,101,-14336,fallblock,boing
+5546,329,261,82,-14336,fallblock,boing
+6004,201,255,35,-14336,fallblock,boing
+6415,477,386,145,-14336,fallblock,boing
+6923,314,280,133,-14336,fallblock,boing
+7383,189,253,116,-14336,fallblock,boing
+7799,421,62,64,-14336,fallblock,boing
+8069,296,169,60,-14336,fallblock,boing
