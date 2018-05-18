@@ -75,6 +75,11 @@ public class Console {
 			"ymin",
 			"ymax",
 			
+			//apply force to selected
+			"forcex",
+			"forcey",
+			"applyforce",
+			
 			//save world
 			"save",
 			
@@ -298,6 +303,25 @@ public class Console {
 				lw.go.rects.get(selected).setGravity(Boolean.valueOf(stringparameters.get(0)));
 				lw.go.rects.get(selected).setCollision(Boolean.valueOf(stringparameters.get(0)));
 				giveResponse("gravity: " + lw.go.rects.get(selected).hasGravity());
+			}
+		}
+		if (key.equals("forcex")) {
+			if (parameters.size() == 1) {
+				lw.go.rects.get(selected).applyForceX(parameters.get(0));
+				giveResponse(String.valueOf(lw.go.rects.get(selected).getForceX() ) );
+			}
+		}
+		if (key.equals("forcey")) {
+			if (parameters.size() == 1) {
+				lw.go.rects.get(selected).applyForceY(parameters.get(0));
+				giveResponse(String.valueOf(lw.go.rects.get(selected).getForceY() ) );
+			}
+		}
+		if (key.equals("applyforce")) {
+			if (parameters.size() == 2) {
+				lw.go.rects.get(selected).applyForceX(parameters.get(0));
+				lw.go.rects.get(selected).applyForceY(parameters.get(1));
+				giveResponse(String.valueOf(lw.go.rects.get(selected).getForceY()) + "," + (String.valueOf(lw.go.rects.get(selected).getForceX())) );
 			}
 		}
 		if (key.equals("addx")) {

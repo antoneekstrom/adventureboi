@@ -36,6 +36,12 @@ public class RectangleObject extends Object {
 	boolean doesCarry = false;
 	boolean imgRepeat = false;
 	
+	double forcex = 0;
+	double forcey = 0;
+	int xtranslate, ytranslate;
+	int mass = 10;
+	double resistance = 2;
+	
 	int repeatCount = 0;
 	int imgWidth = 0;
 	
@@ -120,7 +126,7 @@ public class RectangleObject extends Object {
 			setSize(200, 100);
 		}
 		if (type.equals("fallblock")) {
-			hasImg = true;
+			hasImg = false;
 		}
 		if (type.equals("bigmush")) {
 			setSize(350, 300);
@@ -247,6 +253,7 @@ public class RectangleObject extends Object {
 		
 		if (hasGravity()) {
 			voidCheck();
+			force();
 		}
 		
 		if (hasHealth) {
@@ -506,6 +513,75 @@ public class RectangleObject extends Object {
 		selected = true;
 	}
 
+	public void force() {
+		//x-axis
+		if (forcex > 0) {
+			if (forcex - resistance < 0) {
+				forcex = 0;
+			}
+			else {
+				forcex -= resistance;
+			}
+		}
+		else {
+			if (forcex + resistance > 0) {
+				forcex = 0;
+			}
+			else {
+				forcex += resistance;
+			}
+		}
+		
+		if (forcex < 0) {
+			xtranslate = (int) ( (Math.sqrt(forcex)) + (Math.sqrt(forcex) * Math.sqrt(mass)) );
+			setX(getX() + xtranslate);
+		}
+		else {
+			xtranslate = (int) ( (Math.sqrt(forcex)) - (Math.sqrt(forcex) * Math.sqrt(mass)) );
+			setX(getX() - xtranslate);
+		}
+		
+		//y-axis
+		if (forcey > 0) {
+			if (forcey - resistance < 0) {
+				forcey = 0;
+			}
+			else {
+				forcey -= resistance;
+			}
+		}
+		else {
+			if (forcey + resistance > 0) {
+				forcey = 0;
+			}
+			else {
+				forcey += resistance;
+			}
+		}
+		
+		ytranslate = (int) ( (Math.sqrt(forcey)) - (Math.sqrt(forcey) * Math.sqrt(mass)) );
+		if (forcey < 0) {
+			ytranslate = -ytranslate;
+		}
+		setY(getY() + ytranslate);
+	}
+	
+	public void applyForceX(double f) {
+		forcex = f;
+	}
+	
+	public double getForceX() {
+		return forcex;
+	}
+	
+	public void applyForceY(double f) {
+		forcey = f;
+	}
+	
+	public double getForceY() {
+		return forcey;
+	}
+
 	public void paint(Graphics g) {
 		//healthbar
 		g.setColor(getCOLOR());
@@ -548,5 +624,6 @@ public class RectangleObject extends Object {
 				g.drawString("selected", getCx(), getCy());
 			}
 		}
+		g.drawString(String.valueOf(xtranslate), getCx(), getCy() - 100);
 	}
 }
