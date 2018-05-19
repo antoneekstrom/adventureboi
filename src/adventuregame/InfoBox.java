@@ -53,7 +53,7 @@ public class InfoBox {
 		HudText t = new HudText(r.x, r.y, id, f);
 		t.setId(id);
 		t.hasImage(true);
-		t.setImage("assets/sprites/" + path + ".png", 100, 100);
+		t.setImage(path, 100, 100);
 		t.setText("");
 		t.centerImage(r);
 		tlist.add(t);
@@ -136,6 +136,9 @@ public class InfoBox {
 	public void update() {
 		for (int i = 0; i < tlist.size(); i++) {
 			tlist.get(i).update();
+			if (tlist.get(i).centerImage) {
+				tlist.get(i).centerImage(r);
+			}
 		}
 		if (autoWidth) {
 			adjustWidth();

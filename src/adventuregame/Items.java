@@ -7,11 +7,13 @@ public class Items {
 	private static HashMap<String, String> descriptions = new HashMap<String, String>() {{
 		put("donut", "Epicly yummy.");
 		put("shroom", "Very nice mushroom.");
+		put("angryshroom", "Very angery boi.");
 	}};
 	
 	private static HashMap<String, String> effects = new HashMap<String, String>() {{
 		put("donut", "+20 max hp");
 		put("shroom", "+20 max energy");
+		put("angryshroom", "+5 base damage (does not work)");
 	}};
 	
 	public static String getDescription(String item) {

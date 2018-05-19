@@ -380,7 +380,7 @@ public class Console {
 		}
 		if (key.equals("jump")) {
 			if (totalparameters == 0 && lw.go.rects.get(selected).ai != null) {
-				lw.go.rects.get(selected).ai.jump(true);
+				lw.go.rects.get(selected).ai.jump();
 			}
 			giveResponse("queued jump to" + lw.go.rects.get(selected).type + selected);
 		}

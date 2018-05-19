@@ -7,13 +7,10 @@ public class AI {
 
 	private Rectangle r;
 	private Rectangle nr;
-	private ArrayList<String> q;
-	private int gravity;
 	private Rectangle ground;
 	private Rectangle obstacle;
 	private String lastobstacle = "";
-	
-	private Counter rcounter = new Counter(1000, 5000, "randomizer");
+	private RectangleObject ro;
 	
 	String[] excluded = new String[] {
 		"fire",
@@ -21,17 +18,20 @@ public class AI {
 		"pickup",
 	};
 	
-	private boolean ready = true;
-	
-	private Counter c = new Counter(1000, 2, "start");
+	private double jumpchance = 0.5;
+	private double jumpforce = 120;
+	private int jumptime = 100;
 	
 	private int speed = 5;
+	
+	private boolean ready = true;
 	private String direction = "right";
 	private boolean move = false;
+	
+	private Counter rcounter = new Counter(jumptime, 10, "randomizer");
+	private Counter c = new Counter(1000, 2, "start");
 
-	public AI(int g) {
-		q = new ArrayList<String>();
-		gravity = g;
+	public AI() {
 		obstacle = new Rectangle();
 		ground = new Rectangle();
 	}
@@ -40,8 +40,20 @@ public class AI {
 		speed = s;
 	}
 	
+	public void jumpForce(double f) {
+		jumpforce = f;
+	}
+	
+	public void jumpTime(int i) {
+		jumptime = i;
+	}
+	
 	public int getSpeed() {
 		return speed;
+	}
+	
+	public Counter rcounter() {
+		return rcounter;
 	}
 
 	public void update(Rectangle r) {
@@ -58,18 +70,15 @@ public class AI {
 			}
 		}
 		
-		if (q.size() > 0) {
-			if (q.get(0).equals("jump")) {
-				q.remove(0);
-				jump(false);
-			}
-		}
-		
 		if (move) {
 			move();
 		}
 		randomizer();
 		pathfind();
+	}
+	
+	public void setMove(boolean b) {
+		move = b;
 	}
 	
 	public boolean getMove() {
@@ -81,6 +90,7 @@ public class AI {
 	}
 	
 	public void passCollision(RectangleObject ro) {
+		this.ro = ro;
 		Rectangle g = ro.getObjectRect();
 		if (nr != null && g.getMinY() > nr.getMinY()) {
 			ground = g;
@@ -97,12 +107,11 @@ public class AI {
 		double r = Math.random();
 		
 		if (rcounter.isDone()) {
-			System.out.println("after");
 			rcounter.reset();
 			rcounter.start();
 			
-			if (r < 0.5) {
-				jump(false);
+			if (r < jumpchance) {
+				jump();
 			}
 		}
 		else if (!rcounter.hasStarted()) {
@@ -122,14 +131,6 @@ public class AI {
 		return s;
 	}
 	
-	public String getQ() {
-		String q = "";
-		for (String s : this.q) {
-			q = q + "," + s;
-		}
-		return q;
-	}
-	
 	public boolean isExcluded(RectangleObject ro) {
 		boolean b = false;
 		for (int i = 0; i < excluded.length; i++) {
@@ -142,6 +143,10 @@ public class AI {
 	
 	public void pathfind() {
 		//switch direction
+		avoidBlockade();
+	}
+	
+	public void avoidBlockade() {
 		if (ground.getMinX() >= nr.getMinX()) {
 			direction("right");
 		}
@@ -178,13 +183,17 @@ public class AI {
 		}
 	}
 	
+	/** Jumps if random number 0-1 is lower than parameter */
+	public void jumpChance(double d) {
+		jumpchance = d;
+	}
+	
 	public String getDirection() {
 		return direction;
 	}
 	
 	public void start() {
 		
-		System.out.println("spikeboi has started");
 		if (Math.random() < 0.5) {
 			direction("left");
 		}
@@ -194,22 +203,19 @@ public class AI {
 		move = true;
 		move();
 	}
-
-	/** ai jump, true: add to queue, false: jump */
-	public void jump(boolean b) {
-		int jduration = 25;
-		double jspeed = 15;
-		
-		
-		if (b) {
-			for (int i = 0; i < jduration; i++) {
-				q.add("jump");
-			}
-		}
-		else {
-			nr.y = (int) (nr.y - (jspeed + gravity));
-		}
+	
+	public void passObject(RectangleObject o) {
+		ro = o;
 	}
 
-
+	/** ai jump, true: add to queue, false: jump */
+	public void jump() {
+		ro.applyForceY(jumpforce);
+	}
 }
+
+
+
+
+
+

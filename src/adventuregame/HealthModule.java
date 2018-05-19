@@ -8,10 +8,13 @@ public class HealthModule {
 	int hp, maxhp;
 	int damage = 0;
 	
-	private boolean showHp = false;
-	boolean invulnerable = false;
 	int dmgcooldown = 20;
 	int cooldowncounter = dmgcooldown;
+	
+	private boolean invulnerable = false;
+	private boolean showHp = false;
+	private boolean invincible = false;
+	private boolean canDie = true;
 	HudBar hb;
 	
 	public HealthModule(int mhp) {
@@ -21,6 +24,20 @@ public class HealthModule {
 	
 	public void setDamage(int i) {
 		damage = i;
+	}
+	
+	public void setCanDie(boolean b) {
+		canDie = b;
+	}
+	
+	public boolean canDie() {
+		return canDie;
+	}
+	
+	public void hpLimit() {
+		if (!canDie && hp < 0) {
+			hp = 0;
+		}
 	}
 	
 	public void showHp() {
@@ -45,6 +62,14 @@ public class HealthModule {
 		}
 	}
 	
+	public boolean isInvincible() {
+		return invincible;
+	}
+	
+	public void invincible(boolean b) {
+		invincible = b;
+	}
+	
 	public boolean hpVisible() {
 		return showHp;
 	}
@@ -63,7 +88,7 @@ public class HealthModule {
 	}
 	
 	public void decreaseHealth(int h) {
-		if (!invulnerable) {
+		if (!invulnerable && !invincible) {
 			System.out.println(h);
 			hp -= h;
 			invulnerable = true;

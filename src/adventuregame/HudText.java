@@ -42,9 +42,9 @@ public class HudText {
 	private boolean hasTooltip = false;
 	int ttoffsetx = 50;
 	
+	boolean centerImage = false;
 	String imagepath;
 	int imagex = x;
-	int imagey = y;
 	int imagewidth = 100;
 	int imageheight = 100;
 	private BufferedImage image;
@@ -62,7 +62,7 @@ public class HudText {
 	}
 	
 	public void toolTip() {
-		ib = new InfoBox(new Rectangle(0, 0, 400, 200), font);
+		ib = new InfoBox(new Rectangle(0, 0, 400, 350), font);
 		ib.addText(text);
 		ib.setBackground(Color.WHITE);
 		ib.setId(id);
@@ -71,7 +71,7 @@ public class HudText {
 		if (id.equals("item")) {
 			ib.addParagraph(Items.getDescription(text));
 			ib.addParagraph(Items.getEffect(text));
-			ib.addImage(text);
+			ib.addImage("assets/sprites/" + text + ".png");
 		}
 	}
 	
@@ -219,8 +219,8 @@ public class HudText {
 	}
 	
 	public void centerImage(Rectangle parent) {
+		centerImage = true;
 		imagex = parent.x + (parent.width / 2) - (imagewidth / 2);
-		imagey = parent.y + (parent.height / 2) - (imageheight / 2);
 	}
 
 	public void paint(Graphics g) {
@@ -241,7 +241,7 @@ public class HudText {
 				ib.paint(g);
 			}
 			if (hasImage) {
-				g.drawImage(image, imagex, imagey, imagewidth, imageheight, null);
+				g.drawImage(image, imagex, y, imagewidth, imageheight, null);
 			}
 		}
 	}

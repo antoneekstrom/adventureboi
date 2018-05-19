@@ -110,7 +110,7 @@ public class RectangleObject extends Object {
 			animator = new Animator(sprite);
 			animator.createList(getPathList());
 			animator.countCycles(true);
-			animator.speed(10);
+			animator.speed(7);
 		}
 		if (type.equals("ultrahealth")) {
 			setSize(150, 150);
@@ -132,6 +132,27 @@ public class RectangleObject extends Object {
 		if (type.equals("energyshroom")) {
 			
 		}
+		if (type.equals("angryshroom")) {
+			setGravity(true);
+			setCollision(true);
+			doesCarry = true;
+			subtype = "enemy";
+			setSize(150, 150);
+			ai = new AI();
+			ai.setSpeed(15);
+			animator = new Animator(sprite);
+			animator.createList(getPathList());
+			animator.speed(5);
+			animator.setIndexRange(0, 3);
+			ai.jumpChance(0.8);
+			ai.jumpTime(7);
+			ai.jumpForce(70);
+			hm = new HealthModule(200);
+			hm.setCanDie(false);
+			hasHealth = true;
+			hm.showHp();
+			hm.hb.offSet(Position.centerX(getObjectRect(), hm.hb.rect).x, hm.hb.rect.y - 100);
+		}
 		if (type.equals("dangerfloor")) {
 			setSize(200, 100);
 		}
@@ -147,7 +168,7 @@ public class RectangleObject extends Object {
 			hasHealth = true;
 			hm.showHp();
 			subtype = "enemy";
-			ai = new AI(getGRAVITY());
+			ai = new AI();
 			doesCarry = true;
 			ai.setSpeed(3);
 			setCollision(true);
@@ -168,7 +189,7 @@ public class RectangleObject extends Object {
 			hm.showHp();
 			subtype = "enemy";
 			hm.hb.offSet(75 - hm.hb.w / 2, -70);
-			ai = new AI(getGRAVITY());
+			ai = new AI();
 			animator = new Animator(sprite);
 			animator.createList(getPathList());
 		}
@@ -177,7 +198,7 @@ public class RectangleObject extends Object {
 			setCollision(true);
 			subtype = "enemy";
 			setSize(150, 150);
-			ai = new AI(getGRAVITY());
+			ai = new AI();
 			hm = new HealthModule(1337);
 			hasHealth = true;
 		}
@@ -271,7 +292,7 @@ public class RectangleObject extends Object {
 		
 		if (hasHealth) {
 			hm.update();
-			if (hm.getHealth() <= 0) {
+			if (hm.getHealth() <= 0 && !hm.isInvincible() && hm.canDie()) {
 				lw.go.rects.remove(this);
 				lw.cl.collisions.remove(getObjectRect());
 			}
@@ -354,6 +375,12 @@ public class RectangleObject extends Object {
 				lw.p.checkInventory();
 				lw.p.addHealth(20, false);
 			}
+			else if (type.equals("deceasedangryshroom")) {
+				lw.go.rects.remove(this);
+				lw.cl.collisions.remove(getObjectRect());
+				lw.addItem("angryshroom");
+				lw.p.checkInventory();
+			}
 			else if (type.equals("shroom")) {
 				lw.go.rects.remove(this);
 				lw.cl.collisions.remove(this.getObjectRect());
@@ -423,6 +450,12 @@ public class RectangleObject extends Object {
 				lw.cl.collisions.remove(getObjectRect());
 			}
 		}
+		if (type.equals("angryshroom") && hm.getHealth() <= 0) {
+			ai.setMove(false);
+			animator.setIndexRange(animator.size() - 1, animator.size() - 1);
+			givetype("deceasedangryshroom");
+		}
+		
 		//collision with all objects
 		for (int i = 0; i < lw.go.rects.size(); i++) {
 			RectangleObject ro = lw.go.rects.get(i);
@@ -484,6 +517,7 @@ public class RectangleObject extends Object {
 		}
 		//ai / pathfinding
 		if (ai != null) {
+			ai.passObject(this);
 			Rectangle r = new Rectangle(getX(), getY(), getWidth(), getHeight());
 			ai.update(r);
 			setX(ai.returnPos().x);
@@ -559,6 +593,16 @@ public class RectangleObject extends Object {
 					path + "bigmush_idle",
 					path + "bigmush_left",
 					path + "bigmush_right"
+			};
+			return l;
+		}
+		else if (stype.equals("angryshroom")) {
+			String path = "assets/animated_sprites/angryshroom/";
+			String[] l = new String[] {
+					path + "as1",
+					path + "as2",
+					path + "as3",
+					path + "dm1",
 			};
 			return l;
 		}
@@ -720,6 +764,9 @@ public class RectangleObject extends Object {
 				g.setColor(Color.ORANGE);
 				g.drawString("selected", getCx(), getCy());
 			}
+		}
+		if (ai != null) {
+			g.drawString(String.valueOf(""), getCx(), getCy() - 150);
 		}
 	}
 }

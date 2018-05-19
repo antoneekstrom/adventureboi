@@ -199,7 +199,7 @@ public class HUD {
 	
 	public void textUpdate(HudText ht) {
 		if (ht.id == "debug") {
-			ht.text = String.valueOf(Math.round(world.p.forcex) + "," + Math.round(world.p.forcey));
+			ht.text = "";
 		}
 		if (ht.id == "debug2") {
 			ht.text = "max" + String.valueOf(p.maxhealth);

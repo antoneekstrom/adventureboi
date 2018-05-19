@@ -9,12 +9,10 @@ public class Counter implements ActionListener {
 	
 	private Timer timer;
 	int goal;
+	int counter = 0;
 	boolean done = false;
 	String id;
 	private boolean started = false;
-	
-	double modifier = 0.1;
-	double result = 1;
 	
 	public Counter(int delay, int m, String s) {
 		timer = new Timer(delay, this);
@@ -36,23 +34,20 @@ public class Counter implements ActionListener {
 	}
 	
 	public void reset() {
+		timer.stop();
 		started = false;
 		done = false;
-		result = 1;
-		modifier = 0.1;
-		timer.stop();
+		counter = 0;
+		
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		if (goal > 0) {
-			goal--;
-			if (result - modifier >= 0) {
-				result -= modifier;
-			}
+		if (counter < goal) {
+			counter++;
 		}
-		else if (goal == 0) {
-			goal = -1;
+		else if (counter == goal) {
+			counter = -1;
 			done = true;
 		}
 	}
