@@ -49,6 +49,16 @@ public class InfoBox {
 		tc = c;
 	}
 	
+	public void addImage(String path) {
+		HudText t = new HudText(r.x, r.y, id, f);
+		t.setId(id);
+		t.hasImage(true);
+		t.setImage("assets/sprites/" + path + ".png", 100, 100);
+		t.setText("");
+		t.centerImage(r);
+		tlist.add(t);
+	}
+	
 	public void addText(String id) {
 		HudText t = new HudText(r.x, r.y, id, f);
 		t.setBackground(fg, 10, 100);

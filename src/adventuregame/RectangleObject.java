@@ -40,7 +40,8 @@ public class RectangleObject extends Object {
 	double forcey = 0;
 	int xtranslate, ytranslate;
 	int mass = 10;
-	double resistance = 2;
+	double resistancex = 1;
+	double resistancey = 2;
 	
 	int repeatCount = 0;
 	int imgWidth = 0;
@@ -102,6 +103,15 @@ public class RectangleObject extends Object {
 		if (type.equals("rectangle")) {
 			
 		}
+		if (type.equals("explosion")) {
+			setSprite("assets/animated_sprites/explosion/ex1.png");
+			stype = "explosion";
+			setSize(200, 200);
+			animator = new Animator(sprite);
+			animator.createList(getPathList());
+			animator.countCycles(true);
+			animator.speed(10);
+		}
 		if (type.equals("ultrahealth")) {
 			setSize(150, 150);
 			subtype = "pickup";
@@ -127,6 +137,9 @@ public class RectangleObject extends Object {
 		}
 		if (type.equals("fallblock")) {
 			hasImg = false;
+			setCollision(true);
+			setGravity(true);
+			doesCarry = true;
 		}
 		if (type.equals("bigmush")) {
 			setSize(350, 300);
@@ -211,8 +224,8 @@ public class RectangleObject extends Object {
 			setSprite("assets/sprites/chargedfire.png");
 			inceptiverect = getObjectRect();
 		}
-		if (type.equals("dangerfloor")) {
-			//imgRepeat();
+		if (type.equals("explosion")) {
+			lw.cl.collisions.remove(getObjectRect());
 		}
 	}
 	
@@ -268,6 +281,11 @@ public class RectangleObject extends Object {
 			}
 		}
 		
+		if (type.equals("explosion") && animator.getCycles() > 0) {
+			lw.go.rects.remove(this);
+			lw.cl.collisions.remove(getObjectRect());
+		}
+		
 		if (counter != null && counter.id.equals("kantarell") && counter.done) {
 			if (shrinkcounter > 0) {
 				shrinkcounter--;
@@ -292,6 +310,21 @@ public class RectangleObject extends Object {
 			lw.cl.add(getObjectRect());
 			appear.done = false;
 			hasStarted = false;
+		}
+		
+		if (type.equals("explosion")) {
+			//explosion hitbox
+			Rectangle r = getObjectRect();
+			
+			//determine force
+			double xdistance = (lw.p.getX() + (lw.p.getWidth() / 2) ) - (getX() + (getWidth() / 2) );
+			double ydistance = (lw.p.getY() + (lw.p.getHeight() / 2) ) - (getY() + (getHeight() / 2) );
+			
+			
+			//apply force to nearby player
+			if (r.intersects(lw.p.getObjectRect())) {
+				lw.p.setForce(xdistance * 0.7, -(ydistance * 1.5) );
+			}
 		}
 		
 		if (getObjectRect().intersects(lw.p.getObjectRect())) {
@@ -329,12 +362,12 @@ public class RectangleObject extends Object {
 			}
 			else if (type.equals("spikeboi")) {
 				lw.p.damage(20);
-				lw.p.setX(getX());
+				if (lw.p.getY() < getY()) {
+					lw.p.setX(getX());
+				}
 				animator.setIndexRange(3, 5);
 			}
 			else if (type.equals("fallblock") && lw.p.getY() < getY()) {
-				setGravity(true);
-				setCollision(true);
 			}
 			else if (type.equals("kantarell") && !hasStarted) {
 				counter = new Counter(1000, 2, "kantarell");
@@ -343,6 +376,11 @@ public class RectangleObject extends Object {
 			}
 			else if (type.equals("dangerfloor")) {
 				lw.p.damage((int) lw.p.health);
+			}
+			if (hasGravity() && hasCollision()) {
+				if (forcex != 0) {
+					lw.p.forcex = forcex;
+				}
 			}
 			if (doesCarry) {
 				if (lw.p.getY() < getY() && ai != null && ai.getMove()) {
@@ -396,6 +434,21 @@ public class RectangleObject extends Object {
 						lw.cl.collisions.remove(getObjectRect());
 						lw.go.rects.remove(this);
 					}
+				}
+			}
+			
+			if (type.equals("explosion") && ro.hasGravity() && ro.hasCollision()) {
+				//explosion hitbox
+				Rectangle r = getObjectRect();
+				
+				//determine force
+				double xdistance = (ro.getX() + (ro.getWidth() / 2) ) - (getX() + (getWidth() / 2) );
+				double ydistance = (ro.getY() + (ro.getHeight() / 2) ) - (getY() + (getHeight() / 2) );
+				
+				
+				//apply force to nearby player
+				if (r.intersects(ro.getObjectRect())) {
+					ro.setForce(xdistance * 0.6, -(ydistance * 0.8) );
 				}
 			}
 			
@@ -456,6 +509,16 @@ public class RectangleObject extends Object {
 		lw.cl.collisions.remove(getObjectRect());
 	}
 	
+	public void applyForce(double x, double y) {
+		forcex += x;
+		forcey += y;
+	}
+	
+	public void setForce(double x, double y) {
+		forcex = x;
+		forcey = y;
+	}
+	
 	public void voidCheck() {
 		if (getY() > 3000) {
 			if (hm != null) {
@@ -499,6 +562,23 @@ public class RectangleObject extends Object {
 			};
 			return l;
 		}
+		else if (stype.equals("explosion")) {
+			String path = "assets/animated_sprites/explosion/";
+			String[] l = new String[] {
+					path + "ex1",
+					path + "ex2",
+					path + "ex3",
+					path + "ex4",
+					path + "ex5",
+					path + "ex6",
+					path + "ex7",
+					path + "ex8",
+					path + "ex9",
+					path + "ex10",
+					path + "ex11",
+			};
+			return l;
+		}
 		else {
 			return null;
 		}
@@ -514,56 +594,73 @@ public class RectangleObject extends Object {
 	}
 
 	public void force() {
+		//resistance
+		int rx = (int) (resistancex + (Math.pow(forcex, 1/4)) );
+		int ry = (int) (resistancey + (Math.pow(forcey, 1/4)) );
+		
 		//x-axis
 		if (forcex > 0) {
-			if (forcex - resistance < 0) {
+			if (forcex - rx < 0) {
 				forcex = 0;
 			}
 			else {
-				forcex -= resistance;
+				forcex -= rx;
 			}
 		}
 		else {
-			if (forcex + resistance > 0) {
+			if (forcex + rx > 0) {
 				forcex = 0;
 			}
 			else {
-				forcex += resistance;
+				forcex += rx;
 			}
 		}
 		
-		if (forcex < 0) {
-			xtranslate = (int) ( (Math.sqrt(forcex)) + (Math.sqrt(forcex) * Math.sqrt(mass)) );
+		if (forcex > 0) {
+			xtranslate = (int) ( (Math.sqrt(forcex)) + (Math.sqrt(forcex) * ( Math.sqrt(mass	) / 2) ) );
 			setX(getX() + xtranslate);
 		}
-		else {
-			xtranslate = (int) ( (Math.sqrt(forcex)) - (Math.sqrt(forcex) * Math.sqrt(mass)) );
+		else if (forcex < 0) {
+			double f = -forcex;
+			xtranslate = (int) ( (Math.sqrt(f)) + (Math.sqrt(f) * Math.sqrt(mass) / 2) );
 			setX(getX() - xtranslate);
 		}
 		
 		//y-axis
 		if (forcey > 0) {
-			if (forcey - resistance < 0) {
+			if (forcey - ry < 0) {
 				forcey = 0;
 			}
 			else {
-				forcey -= resistance;
+				forcey -= ry;
 			}
 		}
 		else {
-			if (forcey + resistance > 0) {
+			if (forcey + ry > 0) {
 				forcey = 0;
 			}
 			else {
-				forcey += resistance;
+				forcey += ry;
 			}
 		}
 		
-		ytranslate = (int) ( (Math.sqrt(forcey)) - (Math.sqrt(forcey) * Math.sqrt(mass)) );
-		if (forcey < 0) {
-			ytranslate = -ytranslate;
+		if (forcey > 0) {
+			ytranslate = (int) ( (Math.sqrt(forcey)) + (Math.sqrt(forcey) * Math.sqrt(mass) / 2) );
+			setY(getY() - ytranslate);
 		}
-		setY(getY() + ytranslate);
+		else if (forcey < 0) {
+			double f = -forcey;
+			ytranslate = (int) ( (Math.sqrt(f)) + (Math.sqrt(f) * Math.sqrt(mass) / 2) );
+			setY(getY() + ytranslate);
+		}
+	}
+	
+	public void setMass(int i) {
+		mass = i;
+	}
+	
+	public int getMass() {
+		return mass;
 	}
 	
 	public void applyForceX(double f) {
@@ -624,6 +721,5 @@ public class RectangleObject extends Object {
 				g.drawString("selected", getCx(), getCy());
 			}
 		}
-		g.drawString(String.valueOf(xtranslate), getCx(), getCy() - 100);
 	}
 }

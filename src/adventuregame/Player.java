@@ -48,6 +48,12 @@ public class Player extends Object {
 	double energyrate = 0.4;
 	boolean energyregen = true;
 	
+	//force
+	double forcex, forcey;
+	int xtranslate, ytranslate;
+	double resistancex = 1;
+	double resistancey = 2;
+	int mass = 10;
 	
 	//fire
 	boolean charging = false;
@@ -213,6 +219,7 @@ public class Player extends Object {
 	public void die() {
 		setX(0);
 		setY(0);
+		setForce(0,0);
 		health = maxhealth;
 	}
 	
@@ -293,6 +300,78 @@ public class Player extends Object {
 		}
 	}
 	
+	public void force() {
+		//resistance
+		int rx = (int) (resistancex + (Math.pow(forcex, 1/4)) );
+		int ry = (int) (resistancey + (Math.pow(forcey, 1/4)) );
+		
+		//x-axis
+		if (forcex > 0) {
+			if (forcex - rx < 0) {
+				forcex = 0;
+			}
+			else {
+				forcex -= rx;
+			}
+		}
+		else {
+			if (forcex + rx > 0) {
+				forcex = 0;
+			}
+			else {
+				forcex += rx;
+			}
+		}
+		
+		if (forcex > 0) {
+			xtranslate = (int) ( (Math.sqrt(forcex)) + (Math.sqrt(forcex) * ( Math.sqrt(mass	) / 2) ) );
+			setX(getX() + xtranslate);
+		}
+		else if (forcex < 0) {
+			double f = -forcex;
+			xtranslate = (int) ( (Math.sqrt(f)) + (Math.sqrt(f) * Math.sqrt(mass) / 2) );
+			setX(getX() - xtranslate);
+		}
+		
+		//y-axis
+		if (forcey > 0) {
+			if (forcey - ry < 0) {
+				forcey = 0;
+			}
+			else {
+				forcey -= ry;
+			}
+		}
+		else {
+			if (forcey + ry > 0) {
+				forcey = 0;
+			}
+			else {
+				forcey += ry;
+			}
+		}
+		
+		if (forcey > 0) {
+			ytranslate = (int) ( (Math.sqrt(forcey)) + (Math.sqrt(forcey) * Math.sqrt(mass) / 2) );
+			setY(getY() - ytranslate);
+		}
+		else if (forcey < 0) {
+			double f = -forcey;
+			ytranslate = (int) ( (Math.sqrt(f)) + (Math.sqrt(f) * Math.sqrt(mass) / 2) );
+			setY(getY() + ytranslate);
+		}
+	}
+	
+	public void applyForce(double x, double y) {
+		forcex += x;
+		forcey += y;
+	}
+	
+	public void setForce(double x, double y) {
+		forcex = x;
+		forcey = y;
+	}
+	
 	public void checkInventory() {
 		maxhealthbonus = 0;
 		maxenergybonus = 0;
@@ -337,6 +416,7 @@ public class Player extends Object {
 		energy();
 		stamina();
 		invincible();
+		force();
 		charge();
 	}
 	
@@ -579,6 +659,6 @@ public class Player extends Object {
 		if (animation) {
 			g.drawImage(chargeimg, getCx(), ay, getWidth(), getHeight(), null);
 		}
-		g.drawString(String.valueOf(""), getCx(), getCy() - 50);
+		g.drawString(String.valueOf(forcex), getCx(), getCy() - 200);
 	}
 }

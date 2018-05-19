@@ -35,6 +35,14 @@ public class Counter implements ActionListener {
 		return done;
 	}
 	
+	public void reset() {
+		started = false;
+		done = false;
+		result = 1;
+		modifier = 0.1;
+		timer.stop();
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		if (goal > 0) {

@@ -54,7 +54,7 @@ public class Mouse implements MouseListener {
 
 	@Override
 	public void mousePressed(MouseEvent arg0) {
-		mouse = MouseInfo.getPointerInfo().getLocation();
+		mouse = GlobalData.getRelativeMouse();
 		if (rc != null) {
 			if (ba.mode == "rectangle") {
 				rc.mode = "rectangle";
@@ -76,7 +76,7 @@ public class Mouse implements MouseListener {
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
 		ba.getClick();
-		mouse = MouseInfo.getPointerInfo().getLocation();
+		mouse = GlobalData.getRelativeMouse();
 		//checks hud clicks
 		if (rc != null && tc != null) {
 			if (hud.visible == false) {

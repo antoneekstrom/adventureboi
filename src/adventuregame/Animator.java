@@ -20,6 +20,9 @@ public class Animator {
 	private int counter = 0;
 	private int countergoal = 5;
 	
+	private int cycles = 0;
+	private boolean countCycles = false;
+	
 	//determines if images should cycle through index range or use external integer to choose image
 	private boolean cycle = true;
 	
@@ -36,6 +39,10 @@ public class Animator {
 	public void addImage(BufferedImage img, int index) {
 		images.add(index, img);
 		lastIndex = images.size();
+	}
+	
+	public int getCycles() {
+		return cycles;
 	}
 	
 	public int size() {
@@ -90,6 +97,10 @@ public class Animator {
 	public int getLastIndex() {
 		return lastIndex;
 	}
+	
+	public void countCycles(boolean b) {
+		countCycles = b;
+	}
 
 	public void update() {
 		counter++;
@@ -104,6 +115,9 @@ public class Animator {
 				}
 				else {
 					currentimg = images.get(firstIndex);
+					if (countCycles) {
+						cycles++;
+					}
 				}
 			}
 			//chooses index from external integer

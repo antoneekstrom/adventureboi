@@ -80,6 +80,9 @@ public class Console {
 			"forcey",
 			"applyforce",
 			
+			//set mass for object
+			"mass",
+			
 			//save world
 			"save",
 			
@@ -172,7 +175,7 @@ public class Console {
 		key = "none";
 		//find keyword in output string
 		for (int i = 0; i < keys.length; i++) {
-			if (output.contains(keys[i])) {
+			if (output.startsWith(keys[i])) {
 				key = keys[i];
 				
 				//remove keyword from output string
@@ -437,6 +440,15 @@ public class Console {
 				lw.p.setGravity(true);
 			}
 			giveResponse("gravity: " + lw.p.hasGravity());
+		}
+		if (key.equals("mass")) {
+			if (totalparameters == 0) {
+				giveResponse("current mass: " + lw.go.rects.get(selected).getMass());
+			}
+			else if (parameters.size() == 1) {
+				lw.go.rects.get(selected).setMass(parameters.get(0));
+				giveResponse("new mass: " + lw.go.rects.get(selected).getMass());
+			}
 		}
 		if (key.equals("getai")) {
 			System.out.println("ai");

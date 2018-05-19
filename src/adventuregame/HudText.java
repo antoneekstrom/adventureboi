@@ -6,6 +6,11 @@ import java.awt.Graphics;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 public class HudText {
 	
@@ -37,6 +42,14 @@ public class HudText {
 	private boolean hasTooltip = false;
 	int ttoffsetx = 50;
 	
+	String imagepath;
+	int imagex = x;
+	int imagey = y;
+	int imagewidth = 100;
+	int imageheight = 100;
+	private BufferedImage image;
+	boolean hasImage = false;
+	
 	public HudText(int x, int y, String t, Font f) {
 		text = t;
 		this.x = x;
@@ -58,11 +71,27 @@ public class HudText {
 		if (id.equals("item")) {
 			ib.addParagraph(Items.getDescription(text));
 			ib.addParagraph(Items.getEffect(text));
+			ib.addImage(text);
 		}
 	}
 	
 	public void setType(String s) {
 		type = s;
+	}
+	
+	public void hasImage(boolean b) {
+		hasImage = b;
+	}
+	
+	public void setImage(String fullpath, int w, int h) {
+		imagepath = fullpath;
+		imagewidth = w;
+		imageheight = h;
+		try {
+			image = ImageIO.read(new File(fullpath));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public String getAlignment() {
@@ -173,6 +202,10 @@ public class HudText {
 		return hasTooltip;
 	}
 	
+	public void setImagePath(String s) {
+		imagepath = s;
+	}
+	
 	public int getTotalHeight() {
 		return fontheight + padding;
 	}
@@ -183,6 +216,11 @@ public class HudText {
 	
 	public void setVisible(boolean b) {
 		visible = b;
+	}
+	
+	public void centerImage(Rectangle parent) {
+		imagex = parent.x + (parent.width / 2) - (imagewidth / 2);
+		imagey = parent.y + (parent.height / 2) - (imageheight / 2);
 	}
 
 	public void paint(Graphics g) {
@@ -201,6 +239,9 @@ public class HudText {
 			g.drawString(text, x, y);
 			if (hasTooltip) {
 				ib.paint(g);
+			}
+			if (hasImage) {
+				g.drawImage(image, imagex, imagey, imagewidth, imageheight, null);
 			}
 		}
 	}

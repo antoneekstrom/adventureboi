@@ -117,6 +117,10 @@ public class Menu extends ListWorld implements ActionListener {
 		
 		createOptions();
 		
+		actualhud.ht.add(new HudText(dim.width - 500, 100, "", standard) {{
+			this.setId("debug");
+		}});
+		
 		HudObj start = new HudObj((dim.width / 2) -300, 550, 600, 100, Color.ORANGE);
 		HudObj exit = new HudObj((dim.width / 2) -300, 700, 600, 100, Color.ORANGE);
 		HudObj play = new HudObj((dim.width / 2) -300, 400, 600, 100, Color.ORANGE);

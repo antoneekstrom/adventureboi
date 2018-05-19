@@ -122,9 +122,16 @@ public class List {
 		else {
 			t.setId(textentry.id);
 		}
+		
+		t.setImagePath("assets/sprites/" + t.text + ".png");
+		if (textentry.hasImage) {
+			t.setImage("assets/sprites/" + t.text + ".png", t.imagewidth, t.imageheight);
+		}
+		
 		t.width = textentry.width;
 		t.padding = textentry.padding;
 		t.update = textentry.update;
+		t.hasImage(textentry.hasImage);
 		t.hover = textentry.hover;
 		t.textcolor = textentry.textcolor;
 		t.setType(textentry.getType());

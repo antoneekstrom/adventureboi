@@ -48,16 +48,16 @@ public class RectangleCreator {
 	
 	public void create() {
 		if (world.optionsactive != true && !world.currentHud.equals("levels")) {
-			Rectangle r = new Rectangle(p1);		
+			Rectangle r = new Rectangle(p1);
 			if (mode == "rectangle") {
 				r.add(p2);
 				world.addRect(new Point(r.x, r.y), new Dimension(r.width, r.height), color);
 			} else {
 				
 				RectangleObject ro = new RectangleObject(world.frame, world);
-				ro.setLocation((int)p1.getX(), (int)p1.getY());
 				ro.getObjectRect().setLocation((int)p1.getX(), (int)p1.getY());
 				ro.setSize(100, 100);
+				ro.setLocation((int)p1.getX() - ro.getWidth(), (int)p1.getY() - ro.getHeight());
 				ro.givetype(mode);
 
 				try {
@@ -71,7 +71,7 @@ public class RectangleCreator {
 				for (int i = 0; i < world.go.rects.size(); i++) {
 					RectangleObject o2 = world.go.rects.get(i);
 
-					if (ro.getObjectRect().intersects(o2.getObjectRect())) {
+					if (ro.getObjectRect().intersects(o2.getObjectRect()) && !ro.type.equals("explosion")) {
 						
 						ro.setLocation((int) ro.getObjectRect().getX(), (int) (o2.getObjectRect().getMinY() - ro.getHeight() / 2));
 						ro.getObjectRect().setLocation((int) ro.getObjectRect().getX(), (int) (o2.getObjectRect().getMinY() - ro.getHeight() / 2));

@@ -9,7 +9,6 @@ public class AI {
 	private Rectangle nr;
 	private ArrayList<String> q;
 	private int gravity;
-	private Rectangle prevground;
 	private Rectangle ground;
 	private Rectangle obstacle;
 	private String lastobstacle = "";
@@ -27,7 +26,6 @@ public class AI {
 	private Counter c = new Counter(1000, 2, "start");
 	
 	private int speed = 5;
-	private int jumptrigger = 100;
 	private String direction = "right";
 	private boolean move = false;
 
@@ -97,12 +95,17 @@ public class AI {
 	
 	public void randomizer() {
 		double r = Math.random();
+		
 		if (rcounter.isDone()) {
+			System.out.println("after");
+			rcounter.reset();
+			rcounter.start();
+			
 			if (r < 0.5) {
 				jump(false);
 			}
 		}
-		else {
+		else if (!rcounter.hasStarted()) {
 			rcounter.start();
 		}
 	}
