@@ -46,6 +46,9 @@ public class RectangleObject extends Object {
 	int repeatCount = 0;
 	int imgWidth = 0;
 	
+	boolean contactDamage = false;
+	int ctdamage = 20;
+	
 	//fireball
 	int shrinkcounter = 100;
 	int velocity = 15;
@@ -144,13 +147,16 @@ public class RectangleObject extends Object {
 			animator.createList(getPathList());
 			animator.speed(5);
 			animator.setIndexRange(0, 3);
-			ai.jumpChance(0.8);
-			ai.jumpTime(7);
+			ai.jumpChance(0.9);
+			ai.randomTime(7);
 			ai.jumpForce(70);
+			ai.turnChance(0.6);
 			hm = new HealthModule(200);
 			hm.setCanDie(false);
 			hasHealth = true;
 			hm.showHp();
+			contactDamage = true;
+			ctdamage = 30;
 			hm.hb.offSet(Position.centerX(getObjectRect(), hm.hb.rect).x, hm.hb.rect.y - 100);
 		}
 		if (type.equals("dangerfloor")) {
@@ -180,6 +186,24 @@ public class RectangleObject extends Object {
 			animator = new Animator(sprite);
 			animator.speed(10);
 			animator.createList(getPathList());
+		}
+		if (type.equals("tallmush")) {
+			setSprite("assets/animated_sprites/tallmush/tallmush.png");
+			animator = new Animator(sprite);
+			animator.createList(getPathList());
+			setSize(200, 400);
+			doesCarry = true;
+			setCollision(true);
+			setGravity(true);
+			animator.speed(20);
+			ai = new AI();
+			ai.setSpeed(5);
+			ai.jumpChance(0.2);
+			ai.randomTime(100);
+			hm = new HealthModule(300);
+			hasHealth = true;
+			hm.showHp();
+			hm.hb.offSet(50, -70);
 		}
 		if (type.equals("spikeboi")) {
 			setSize(150, 150);
@@ -379,6 +403,7 @@ public class RectangleObject extends Object {
 			else if (type.equals("deceasedangryshroom")) {
 				lw.go.rects.remove(this);
 				lw.cl.collisions.remove(getObjectRect());
+				contactDamage = false;
 				Character.Inventory().addItem("angryshroom");
 				lw.p.checkInventory();
 			}
@@ -409,6 +434,9 @@ public class RectangleObject extends Object {
 				if (forcex != 0) {
 					lw.p.forcex = forcex;
 				}
+			}
+			if (contactDamage) {
+				lw.p.damage(ctdamage);
 			}
 			if (doesCarry) {
 				if (lw.p.getY() < getY() && ai != null && ai.getMove()) {
@@ -527,6 +555,15 @@ public class RectangleObject extends Object {
 		}
 		//animation
 		if (animator != null) {
+			if (type.equals("tallmush") && ai.getDirection().equals("left")) {
+				animator.setIndexRange(4, animator.size());
+				animator.setIndex(animator.getLastIndex());
+			}
+			else if (type.equals("tallmush") && ai.getDirection().equals("right")) {
+				animator.setIndexRange(0, 3);
+				animator.setIndex(animator.getLastIndex());
+			}
+			
 			animator.update();
 			sprite = animator.getSprite();
 		}
@@ -605,6 +642,20 @@ public class RectangleObject extends Object {
 					path + "as2",
 					path + "as3",
 					path + "dm1",
+			};
+			return l;
+		}
+		else if (stype.equals("tallmush")) {
+			String path = "assets/animated_sprites/tallmush/";
+			String[] l = new String[] {
+					path + "tallmush",
+					path + "tm2",
+					path + "tm3",
+					path + "tm4",
+					path + "tallmushleft",
+					path + "tm2left",
+					path + "tm3left",
+					path + "tm4left",
 			};
 			return l;
 		}

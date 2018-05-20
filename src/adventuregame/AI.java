@@ -20,15 +20,18 @@ public class AI {
 	
 	private double jumpchance = 0.5;
 	private double jumpforce = 120;
-	private int jumptime = 100;
+	private int randomtime = 100;
 	
+	private double turnchance = 0.4;
 	private int speed = 5;
+	
+	private boolean randomalt = false;
 	
 	private boolean ready = true;
 	private String direction = "right";
 	private boolean move = false;
 	
-	private Counter rcounter = new Counter(jumptime, 10, "randomizer");
+	private Counter rcounter = new Counter(randomtime, 10, "randomizer");
 	private Counter c = new Counter(1000, 2, "start");
 
 	public AI() {
@@ -40,12 +43,16 @@ public class AI {
 		speed = s;
 	}
 	
+	public void turnChance(double d) {
+		turnchance = d;
+	}
+	
 	public void jumpForce(double f) {
 		jumpforce = f;
 	}
 	
-	public void jumpTime(int i) {
-		jumptime = i;
+	public void randomTime(int i) {
+		randomtime = i;
 	}
 	
 	public int getSpeed() {
@@ -104,14 +111,22 @@ public class AI {
 	}
 	
 	public void randomizer() {
-		double r = Math.random();
+		if (randomalt) {
+			randomalt = false;
+		}
+		else {
+			randomalt = true;
+		}
 		
 		if (rcounter.isDone()) {
 			rcounter.reset();
 			rcounter.start();
 			
-			if (r < jumpchance) {
+			if (Math.random() < jumpchance) {
 				jump();
+			}
+			if (Math.random() < turnchance && randomalt) {
+				direction("switch");
 			}
 		}
 		else if (!rcounter.hasStarted()) {
