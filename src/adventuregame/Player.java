@@ -377,8 +377,8 @@ public class Player extends Object {
 		maxenergybonus = 0;
 		maxhealth = maxhealthbase;
 		maxenergy = maxenergybase;
-		for (int i = 0; i < lw.inventory.size(); i++) {
-			String s = lw.inventory.get(i);
+		for (int i = 0; i < Character.Inventory().get().size(); i++) {
+			String s = Character.Inventory().get().get(i);
 			
 			if (s.equals("donut")) {
 				maxhealthbonus += 20;
@@ -394,6 +394,12 @@ public class Player extends Object {
 
 	public void collisionCorrection() {
 		getObjectRect().y = (int) (getY() - 25);
+	}
+	
+	public void fillStats() {
+		health = maxhealth;
+		energy = maxenergy;
+		stamina = maxstamina;
 	}
 	
 	public void setLocation(int nx, int ny) {
@@ -659,6 +665,6 @@ public class Player extends Object {
 		if (animation) {
 			g.drawImage(chargeimg, getCx(), ay, getWidth(), getHeight(), null);
 		}
-		g.drawString(String.valueOf(forcex), getCx(), getCy() - 200);
+		g.drawString(String.valueOf(""), getCx(), getCy() - 200);
 	}
 }

@@ -23,4 +23,7 @@ public class Items {
 	public static String getEffect(String item) {
 		return effects.get(item);
 	}
+	
+	public static void test() {
+	}
 }

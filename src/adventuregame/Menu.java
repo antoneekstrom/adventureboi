@@ -14,6 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import java.util.ArrayList;
+import adventuregame.Character;
 
 
 import javax.swing.Timer;
@@ -79,6 +80,9 @@ public class Menu extends ListWorld implements ActionListener {
 		sw = new SaveWriter("menu");
 		huds = new ArrayList<HUD>();
 		
+		character = new Character();
+		Character.Inventory().requestUpdate();
+		
 		statistics = new HUD(this);
 		statistics.id = "stats";
 		actualhud = new HUD(this);
@@ -113,6 +117,8 @@ public class Menu extends ListWorld implements ActionListener {
 		c = new Camera(dim);
 		go = new GameObjects(frame, this);
 		p = new Player(frame, this);
+		p.checkInventory();
+		p.fillStats();
 		cl = new PlayerCollision(p);
 		
 		createOptions();

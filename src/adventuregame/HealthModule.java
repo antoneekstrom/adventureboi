@@ -50,6 +50,10 @@ public class HealthModule {
 		updateBarHp();
 	}
 	
+	public void hideHp() {
+		showHp = false;
+	}
+	
 	public void hpCheck() {
 		
 		if (invulnerable) {

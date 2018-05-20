@@ -9,8 +9,6 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
-import java.awt.event.InputEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 import javax.swing.KeyStroke;
@@ -20,10 +18,8 @@ import adventuregame.Camera;
 import adventuregame.Controller;
 import adventuregame.GameObjects;
 import adventuregame.HUD;
-import adventuregame.HudList;
 import adventuregame.HudObj;
 import adventuregame.HudText;
-import adventuregame.InfoBox;
 import adventuregame.List;
 import adventuregame.Main;
 import adventuregame.MethodAction;
@@ -39,6 +35,7 @@ import adventuregame.SaveWriter;
 import adventuregame.Text;
 import adventuregame.TextCreator;
 import adventuregame.TypeListener;
+import adventuregame.Character;
 
 public class ListWorld extends World {
 	
@@ -72,6 +69,7 @@ public class ListWorld extends World {
 	public HUD actualhud;
 	public List inv;
 	public ArrayList<String> inventory;
+	public Character character;
 	public HUD console;
 	
 	public Thread t;

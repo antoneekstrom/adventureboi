@@ -371,20 +371,20 @@ public class RectangleObject extends Object {
 			else if (type.equals("donut")) {
 				lw.go.rects.remove(this);
 				lw.cl.collisions.remove(getObjectRect());
-				lw.addItem("donut");
+				Character.Inventory().addItem("donut");
 				lw.p.checkInventory();
 				lw.p.addHealth(20, false);
 			}
 			else if (type.equals("deceasedangryshroom")) {
 				lw.go.rects.remove(this);
 				lw.cl.collisions.remove(getObjectRect());
-				lw.addItem("angryshroom");
+				Character.Inventory().addItem("angryshroom");
 				lw.p.checkInventory();
 			}
 			else if (type.equals("shroom")) {
 				lw.go.rects.remove(this);
 				lw.cl.collisions.remove(this.getObjectRect());
-				lw.addItem("shroom");
+				Character.Inventory().addItem("shroom");
 				lw.p.checkInventory();
 			}
 			else if (type.equals("spikeboi")) {
@@ -453,6 +453,7 @@ public class RectangleObject extends Object {
 		if (type.equals("angryshroom") && hm.getHealth() <= 0) {
 			ai.setMove(false);
 			animator.setIndexRange(animator.size() - 1, animator.size() - 1);
+			hm.hideHp();
 			givetype("deceasedangryshroom");
 		}
 		

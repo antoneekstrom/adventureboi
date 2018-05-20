@@ -1,8 +1,6 @@
 package adventuregame;
 
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Point;
 import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
 import java.io.File;

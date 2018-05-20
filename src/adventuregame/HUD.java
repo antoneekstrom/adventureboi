@@ -1,12 +1,9 @@
 package adventuregame;
 
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.MouseInfo;
 import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
 import worlds.ListWorld;
@@ -192,6 +189,14 @@ public class HUD {
 				if (i < world.typelistener.c.responsehistory.size()) {
 					l.list.get(i).text = world.typelistener.c.responsehistory.get(i);
 				}
+			}
+		}
+		if (l.id == "inventory") {
+			if (Character.Inventory().updateRequest()) {
+				l.addIdList(Character.Inventory().get());
+				l.addEntryList(Character.Inventory().get());
+				l.fill();
+				Character.Inventory().fullFillRequest();
 			}
 		}
 		l.visible = visible;
