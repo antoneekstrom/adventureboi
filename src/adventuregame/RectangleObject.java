@@ -171,6 +171,7 @@ public class RectangleObject extends Object {
 			ai = new AI();
 			doesCarry = true;
 			ai.setSpeed(3);
+			ai.jumpChance(0);
 			setCollision(true);
 			setGravity(true);
 			hm.hb.offSet(Position.centerX(getObjectRect(), hm.hb.rect).x, hm.hb.rect.y - 100);
