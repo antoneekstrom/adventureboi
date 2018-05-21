@@ -43,7 +43,6 @@ public class Player extends Object {
 	//energy
 	double maxenergybase = 100;
 	double maxenergy = maxenergybase;
-	double maxenergybonus = 0;
 	double energy = maxenergy;
 	double energyrate = 0.4;
 	boolean energyregen = true;
@@ -99,8 +98,6 @@ public class Player extends Object {
 	boolean invulnerable = false;
 	int invinciblecounter = 0;
 	public boolean invincible = false;
-	
-	double maxhealthbonus = 0;
 	
 	//movement
 	public String direction = "none";
@@ -373,23 +370,12 @@ public class Player extends Object {
 	}
 	
 	public void checkInventory() {
-		maxhealthbonus = 0;
-		maxenergybonus = 0;
-		maxhealth = maxhealthbase;
-		maxenergy = maxenergybase;
-		for (int i = 0; i < Character.Inventory().get().size(); i++) {
-			String s = Character.Inventory().get().get(i);
-			
-			if (s.equals("donut")) {
-				maxhealthbonus += 20;
-			}
-			if (s.equals("shroom")) {
-				maxenergybonus += 20;
-				System.out.println("shroom");
-			}
-		}
-		maxenergy += maxenergybonus;
-		maxhealth += maxhealthbonus;
+		
+		maxhealth = Character.Stats().getHealth();
+		maxstamina = Character.Stats().getStamina();
+		maxenergy = Character.Stats().getEnergy();
+		firedamage = Character.Stats().getDamage();
+		energyrate = Character.Stats().getEnergyRate();
 	}
 
 	public void collisionCorrection() {

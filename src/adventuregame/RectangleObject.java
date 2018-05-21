@@ -195,10 +195,11 @@ public class RectangleObject extends Object {
 			doesCarry = true;
 			setCollision(true);
 			setGravity(true);
-			animator.speed(20);
+			subtype = "enemy";
+			animator.speed(10);
 			ai = new AI();
 			ai.setSpeed(5);
-			ai.jumpChance(0.2);
+			ai.jumpChance(0);
 			ai.randomTime(100);
 			hm = new HealthModule(300);
 			hasHealth = true;
@@ -397,20 +398,24 @@ public class RectangleObject extends Object {
 				lw.go.rects.remove(this);
 				lw.cl.collisions.remove(getObjectRect());
 				Character.Inventory().addItem("donut");
+				Character.Stats().setHealth(Character.Stats().getHealth() + 20);
+				lw.p.addHealth(20, true);
 				lw.p.checkInventory();
-				lw.p.addHealth(20, false);
 			}
 			else if (type.equals("deceasedangryshroom")) {
 				lw.go.rects.remove(this);
 				lw.cl.collisions.remove(getObjectRect());
 				contactDamage = false;
 				Character.Inventory().addItem("angryshroom");
+				Character.Stats().setDamage(Character.Stats().getDamage() + 5);
 				lw.p.checkInventory();
 			}
 			else if (type.equals("shroom")) {
 				lw.go.rects.remove(this);
 				lw.cl.collisions.remove(this.getObjectRect());
 				Character.Inventory().addItem("shroom");
+				Character.Stats().setEnergy(Character.Stats().getEnergy() + 20);
+				lw.p.addHealth(20, true);
 				lw.p.checkInventory();
 			}
 			else if (type.equals("spikeboi")) {
@@ -555,12 +560,13 @@ public class RectangleObject extends Object {
 		}
 		//animation
 		if (animator != null) {
+			
 			if (type.equals("tallmush") && ai.getDirection().equals("left")) {
-				animator.setIndexRange(4, animator.size());
-				animator.setIndex(animator.getLastIndex());
+				animator.setIndexRange(7, animator.size());
+				animator.setIndex(0);
 			}
 			else if (type.equals("tallmush") && ai.getDirection().equals("right")) {
-				animator.setIndexRange(0, 3);
+				animator.setIndexRange(0, 6);
 				animator.setIndex(animator.getLastIndex());
 			}
 			
@@ -648,14 +654,20 @@ public class RectangleObject extends Object {
 		else if (stype.equals("tallmush")) {
 			String path = "assets/animated_sprites/tallmush/";
 			String[] l = new String[] {
-					path + "tallmush",
-					path + "tm2",
-					path + "tm3",
-					path + "tm4",
-					path + "tallmushleft",
-					path + "tm2left",
-					path + "tm3left",
-					path + "tm4left",
+					path + "right/1",
+					path + "right/2",
+					path + "right/3",
+					path + "right/4",
+					path + "right/5",
+					path + "right/6",
+					path + "right/7",
+					path + "left/1",
+					path + "left/2",
+					path + "left/3",
+					path + "left/4",
+					path + "left/5",
+					path + "left/6",
+					path + "left/7",
 			};
 			return l;
 		}

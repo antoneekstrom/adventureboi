@@ -78,6 +78,7 @@ public class HUD {
 	public void infoupdate(InfoBox ib) {
 		ib.getText("energymax").setText(String.valueOf("max energy: " + world.p.maxenergy));
 		ib.getText("energyrate").setText("energyrate: " + world.p.energyrate + "e/tick");
+		ib.getText("damage").setText("base damage: " + world.p.firedamage + "dmg");
 	}
 	
 	public void specificUpdate(HudObj ho) {

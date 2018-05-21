@@ -82,6 +82,7 @@ public class Menu extends ListWorld implements ActionListener {
 		
 		character = new Character();
 		Character.Inventory().requestUpdate();
+		Character.backup();
 		
 		statistics = new HUD(this);
 		statistics.id = "stats";
@@ -138,15 +139,16 @@ public class Menu extends ListWorld implements ActionListener {
 		menu.hb.add(play);
 		
 		InfoBox stats = new InfoBox(new Rectangle((int) ((dim.width / 2) - (dim.width * 0.8) / 2), (int) ((dim.height / 2) - (dim.height * 0.8) / 2), (int) (dim.width * 0.8), (int) (dim.height * 0.8)), standard);
+		
 		stats.addText("energymax");
 		stats.addText("energyrate");
+		stats.addText("damage");
 		HudText erate = stats.getText("energyrate");
 		erate.setLocation(new Point(erate.x - 600, erate.y + 250));
 		HudText emax = stats.getText("energymax");
 		emax.setLocation(new Point(emax.x - 600, emax.y + 150));
 		stats.setBackground(Color.WHITE);
 		stats.setVisible(true);
-		statistics.ib.add(stats);
 		
 		HudBar hp = new HudBar((int) ((dim.width / 2) - 200), 100, 400, 50);
 		HudBar ep = new HudBar(50, 100, 400, 50);
@@ -232,6 +234,20 @@ public class Menu extends ListWorld implements ActionListener {
 		deletelevel.addText("delete");
 		levels.hb.add(newlevel);
 		levels.hb.add(deletelevel);
+		
+		List statlist = new List(new Rectangle((int) ((dim.width / 2) - dim.width * 0.4), (int) ((dim.height / 2) - dim.height * 0.4), (int) (dim.width * 0.8), (int) (dim.height * 0.8)), "text", this);
+		llistentry.setType("stats");
+		llistentry.setPadding(10);
+		llistentry.autoWidth(true);
+		statlist.setPadding(50);
+		statlist.setSpacing(50);
+		statlist.setPaddingTop(150);
+		statlist.setTextEntry(llistentry);
+		statlist.scrollBar();
+		statlist.setHideOverflow(true, 50);
+		statlist.addEntryList(Character.Stats().get());
+		statlist.fill();
+		statistics.lists.add(statlist);
 		
 		menu.hb.add(exit);
 		menu.hb.add(start);

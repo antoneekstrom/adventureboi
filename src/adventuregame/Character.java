@@ -6,8 +6,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.stream.Stream;
 import java.util.List;
 
@@ -17,6 +19,7 @@ public class Character {
 	public static BufferedWriter writer;
 	
 	private static Inventory inventory;
+	private static Statistics stats;
 	
 	private static boolean initialized = false;
 	
@@ -36,11 +39,16 @@ public class Character {
 			e.printStackTrace();
 		}
 		inventory = new Inventory();
+		stats = new Statistics();
 		initialized = true;
 	}
 	
 	public static Inventory Inventory() {
 		return inventory;
+	}
+	
+	public static Statistics Stats() {
+		return stats;
 	}
 	
 	public static boolean initialized() {
@@ -82,6 +90,31 @@ public class Character {
 			data = a[1];
 		}
 		return data;
+	}
+	
+	public static void backup() {
+		File backup = new File("data/player/backup/backup1.properties");
+		
+		try {
+			Files.copy(file.toPath(), backup.toPath(), StandardCopyOption.REPLACE_EXISTING);
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/** Set data to String, clears previous */
+	public static void setData(String key, String newdata) {
+		int l = findLine(key);
+		
+		if (l != 0) {
+			try {
+				writeToLine(l, key + ":" + newdata);
+			}
+			catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	public static int countLines(String filename) {
