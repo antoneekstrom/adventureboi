@@ -135,7 +135,7 @@ public class Player extends Object {
 			aura2 = ImageIO.read(new File("assets/animated_sprites/aura/aura2.png"));
 			aura3 = ImageIO.read(new File("assets/animated_sprites/aura/aura3.png"));
 			charge1 = ImageIO.read(new File("assets/animated_sprites/boicharge/charge1.png"));
-			greenboi = ImageIO.read(new File("assets/boi/stamina_boi.png"));
+			greenboi = ImageIO.read(new File("assets/animated_sprites/boieffects/stamina_boi.png"));
 		} catch (IOException e) {e.printStackTrace();}
 		
 		//effect animation

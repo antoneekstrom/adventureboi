@@ -53,7 +53,7 @@ public class InfoBox {
 		HudText t = new HudText(r.x, r.y, id, f);
 		t.setId(id);
 		t.hasImage(true);
-		t.setImage(path, 100, 100);
+		t.setImage(path, 120, 120);
 		t.setText("");
 		t.centerImage(r);
 		tlist.add(t);

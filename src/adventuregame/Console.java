@@ -93,6 +93,9 @@ public class Console {
 			"gettype",
 			"givetype",
 			
+			//add item to inventory
+			"additem",
+			
 			//get ai variables and logic
 			"getai",
 			
@@ -367,6 +370,9 @@ public class Console {
 		if (key.equals("givetype")) {
 			giveResponse("object " + selected + " is now of the type " + stringparameters.get(0));
 			lw.go.rects.get(selected).givetype(stringparameters.get(0));
+		}
+		if (key.equals("additem") && stringparameters.size() == 1) {
+			Character.Inventory().addItem(stringparameters.get(0));
 		}
 		if (key.equals("showrect")) {
 			giveResponse("show rects");

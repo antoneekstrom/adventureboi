@@ -62,7 +62,7 @@ public class HudText {
 	}
 	
 	public void toolTip() {
-		ib = new InfoBox(new Rectangle(0, 0, 400, 350), font);
+		ib = new InfoBox(new Rectangle(0, 0, 400, 400), font);
 		ib.addText(text);
 		ib.setBackground(Color.WHITE);
 		ib.setId(id);
@@ -71,7 +71,7 @@ public class HudText {
 		if (id.equals("item")) {
 			ib.addParagraph(Items.getDescription(text));
 			ib.addParagraph(Items.getEffect(text));
-			ib.addImage("assets/sprites/" + text + ".png");
+			ib.addImage("assets/thumbnails/" + text + ".png");
 		}
 	}
 	
