@@ -235,7 +235,7 @@ public class Menu extends ListWorld implements ActionListener {
 		levels.hb.add(newlevel);
 		levels.hb.add(deletelevel);
 		
-		List statlist = new List(new Rectangle((int) ((dim.width / 2) - dim.width * 0.4), (int) ((dim.height / 2) - dim.height * 0.4), (int) (dim.width * 0.8), (int) (dim.height * 0.8)), "text", this);
+		statlist = new List(new Rectangle((int) ((dim.width / 2) - dim.width * 0.4), (int) ((dim.height / 2) - dim.height * 0.4), (int) (dim.width * 0.8), (int) (dim.height * 0.8)), "text", this);
 		llistentry.setType("stats");
 		llistentry.setPadding(10);
 		llistentry.autoWidth(true);

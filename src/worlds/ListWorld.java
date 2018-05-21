@@ -71,6 +71,7 @@ public class ListWorld extends World {
 	public ArrayList<String> inventory;
 	public Character character;
 	public HUD console;
+	public List statlist;
 	
 	public Thread t;
 	

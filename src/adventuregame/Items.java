@@ -9,6 +9,7 @@ public class Items {
 		put("shroom", "Very nice mushroom.");
 		put("angryshroom", "Very angery boi.");
 		put("tallmush", "Tallest boi in the entire 7th dimension.");
+		put("explosion", "How did this get here?.");
 	}};
 	
 	private static HashMap<String, String> effects = new HashMap<String, String>() {{
@@ -16,6 +17,7 @@ public class Items {
 		put("shroom", "+20 max energy");
 		put("angryshroom", "+5 base damage (does not work)");
 		put("tallmush", "+0.2 energy regen");
+		put("explosion", "+1 explosion");
 	}};
 	
 	public static String getDescription(String item) {

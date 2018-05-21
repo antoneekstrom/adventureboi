@@ -415,7 +415,7 @@ public class RectangleObject extends Object {
 				lw.cl.collisions.remove(this.getObjectRect());
 				Character.Inventory().addItem("shroom");
 				Character.Stats().setEnergy(Character.Stats().getEnergy() + 20);
-				lw.p.addHealth(20, true);
+				lw.p.energy = lw.p.maxenergy;
 				lw.p.checkInventory();
 			}
 			else if (type.equals("spikeboi")) {

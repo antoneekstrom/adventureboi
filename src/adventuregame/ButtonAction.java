@@ -138,6 +138,9 @@ public class ButtonAction {
 						}
 						if (hb.get(i).id == "stats") {
 							world.switchHud("stats");
+							world.statlist.addIdList(Character.Stats().get());
+							world.statlist.addEntryList(Character.Stats().get());
+							world.statlist.fill();
 						}
 					}
 				}
