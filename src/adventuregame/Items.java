@@ -9,7 +9,7 @@ public class Items {
 		put("shroom", "Very nice mushroom.");
 		put("angryshroom", "Very angery boi.");
 		put("tallmush", "Tallest boi in the entire 7th dimension.");
-		put("explosion", "How did this get here?.");
+		put("explosion", "How did this get here?");
 	}};
 	
 	private static HashMap<String, String> effects = new HashMap<String, String>() {{
