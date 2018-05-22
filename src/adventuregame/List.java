@@ -130,6 +130,7 @@ public class List {
 		
 		t.width = textentry.width;
 		t.padding = textentry.padding;
+		t.font = textentry.font;
 		t.update = textentry.update;
 		t.hasImage(textentry.hasImage);
 		t.hover = textentry.hover;

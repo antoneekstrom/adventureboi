@@ -35,6 +35,10 @@ public class InfoBox {
 	public String getId() {
 		return id;
 	}
+
+	public void setFont(Font font) {
+		f = font;
+	}
 	
 	public void setBackground(Color c) {
 		hasBackground = true;
@@ -94,7 +98,7 @@ public class InfoBox {
 			else {
 				tlist.get(i).centerHorizontally(r);
 			}
-			tlist.get(i).y = (int) (r.getMinY() + 50 + i * (tlist.get(i).getTotalHeight() + 10) );
+			tlist.get(i).y = (int) (r.getMinY() + 70 + i * (tlist.get(i).getTotalHeight() + 10) );
 		}
 		
 		visible = true;

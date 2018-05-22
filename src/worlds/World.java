@@ -32,6 +32,7 @@ public class World extends JPanel implements ActionListener {
 	int up1 = 87;
 	int up2 = 32;
 	int down = 83;
+	int inventorybutton = KeyEvent.VK_I;
 	int esc = 27;
 	int a_left = 37;
 	int a_right = 39;

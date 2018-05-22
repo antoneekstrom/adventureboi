@@ -142,6 +142,9 @@ public class ButtonAction {
 							world.statlist.addEntryList(Character.Stats().get());
 							world.statlist.fill();
 						}
+						if (hb.get(i).id == "invbutton") {
+							world.switchHud("invscreen");
+						}
 					}
 				}
 				for (int i = 0; i < hl.size(); i++) {
@@ -156,10 +159,6 @@ public class ButtonAction {
 							world.currentHud = "";
 							world.p.isEnabled(true);
 							world.p.setLocation(0,0);
-						}
-						
-						if (hl.get(i).visible && hl.get(i).id.equals("invbutton") && ht.hasMouse) {
-							world.switchHud("invscreen");
 						}
 					}
 				}

@@ -35,7 +35,7 @@ public class MethodAction extends AbstractAction {
 			
 		}
 		//actualhud
-		if (world.optionsactive == false || world.currentHud == "") {
+		if (world.optionsactive == false || world.currentHud == "" && !world.currentHud.equals("invscreen")) {
 			world.switchHud("actualhud");
 		}
 		//console
@@ -48,6 +48,24 @@ public class MethodAction extends AbstractAction {
 			world.typelistener.enable();
 			world.typelistener.c.visible = true;
 			world.stopPlayerController();
+		}
+
+		//inventory
+		if (action.equals("invp")) {
+			if (!world.currentHud.equals("invscreen")) {
+				world.switchHud("invscreen");
+			}
+			else {
+				world.switchHud("actualhud");
+			}
+		}
+		if (action.equals("invr")) {
+			if (!world.currentHud.equals("invscreen")) {
+				world.switchHud("invscreen");
+			}
+			else {
+				world.switchHud("actualhud");
+			}
 		}
 	}
 }

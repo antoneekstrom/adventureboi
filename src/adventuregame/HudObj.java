@@ -27,11 +27,14 @@ public class HudObj {
 	public Font font;
 	public boolean visible = true;
 	boolean hasImage = false;
+	private boolean selected = false;
 	BufferedImage bf;
 	boolean center = true;
 	int tx, ty;
 	private int index = 0;
 	Color textcolor = Color.WHITE;
+	Color textHighlightColor = Color.ORANGE;
+	Color currentTextColor = Color.ORANGE;
 	
 	public HudObj(int x, int y, int w, int h, Color c) {
 		colord = c;
@@ -43,6 +46,14 @@ public class HudObj {
 	
 	public void setHighlightColor(Color c) {
 		color2 = c;
+	}
+
+	public void select(boolean b) {
+		selected = b;
+	}
+
+	public void setHighlightTextColor(Color c) {
+		textHighlightColor = c;
 	}
 	
 	public void setId(String s) {
@@ -74,10 +85,12 @@ public class HudObj {
 		mouse = MouseInfo.getPointerInfo().getLocation();
 		
 		if (highlight == true) {
-			if (hrect.contains(mouse)) {
+			if (hrect.contains(mouse) || selected) {
 				color = color2;
+				currentTextColor = textHighlightColor;
 			} else {
 				color = colord;
+				currentTextColor = textcolor;
 			}
 		}
 	}
@@ -103,7 +116,7 @@ public class HudObj {
 		g.setColor(color);
 		g.fillRect(hrect.x, hrect.y, hrect.width, hrect.height);
 		if (text != null) {
-			g.setColor(textcolor);
+			g.setColor(currentTextColor);
 			if (center) {
 				g.drawString(text, (int) (hrect.getMinX() + (hrect.getWidth() / 2) - (g.getFontMetrics().stringWidth(text) / 2)), (int)(hrect.getMaxY() - (hrect.getHeight() / 2) + (g.getFontMetrics().getHeight() / 4)));
 			}

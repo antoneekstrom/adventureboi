@@ -40,7 +40,8 @@ public class HudText {
 	int paddingLeft = 10;
 	private String alignment = "none";
 	private boolean hasTooltip = false;
-	int ttoffsetx = 50;
+	int ttoffsetx = -50;
+	int ttoffsety = -50;
 	
 	boolean centerImage = false;
 	String imagepath;
@@ -62,7 +63,7 @@ public class HudText {
 	}
 	
 	public void toolTip() {
-		ib = new InfoBox(new Rectangle(0, 0, 400, 400), font);
+		ib = new InfoBox(new Rectangle(0, 0, 400, 450), font);
 		ib.addText(text);
 		ib.setBackground(Color.WHITE);
 		ib.setId(id);
@@ -162,7 +163,7 @@ public class HudText {
 			hasMouse = false;
 		}
 		if (hover && r.contains(mouse) && hasTooltip) {
-			ib.place(new Point(r.x - ttoffsetx, r.y));
+			ib.place(new Point(r.x + ttoffsetx, r.y + ttoffsety));
 		}
 		else if (hasTooltip) {
 			ib.setVisible(false);

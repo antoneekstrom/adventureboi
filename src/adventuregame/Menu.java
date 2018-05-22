@@ -27,7 +27,7 @@ public class Menu extends ListWorld implements ActionListener {
 	private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 	public Main frame;
 	public Mouse m2;
-	public Font standard = new Font("Comic Sans MS", 20 ,50);
+	public Font standard = new Font("Comic Sans MS", 20 ,40);
 	public HUD menu;
 	public HUD levels;
 	public HUD console;
@@ -141,6 +141,7 @@ public class Menu extends ListWorld implements ActionListener {
 		exit.addText("Quit");
 		exit.setId("quit");
 		play.addText("Play");
+		play.setFont(standard);
 		play.setId("play");
 		menu.hb.add(play);
 		
@@ -232,8 +233,8 @@ public class Menu extends ListWorld implements ActionListener {
 		llist.addIdList(sw.getWorldList());
 		llist.fill();
 		levels.lists.add(llist);
-		HudObj newlevel = new HudObj(dim.width - 300, dim.height - 150, 250, 100, Color.ORANGE);
-		HudObj deletelevel = new HudObj(dim.width - 300, dim.height - 300, 250, 100, Color.ORANGE);
+		HudObj newlevel = new HudObj(dim.width - 300, dim.height - 350, 250, 100, Color.ORANGE);
+		HudObj deletelevel = new HudObj(dim.width - 300, dim.height - 500, 250, 100, Color.ORANGE);
 		newlevel.addText("new level");
 		newlevel.setId("newlevel");
 		deletelevel.setId("deletelevel");

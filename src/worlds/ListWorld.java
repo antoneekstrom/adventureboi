@@ -239,14 +239,15 @@ public class ListWorld extends World {
 
 	public void createInventory(HUD hud) {
 		invlist = new ArrayList<String>();
-		inv = new List(new Rectangle(dim.width - 400, (dim.height / 2) - 300, 350, 800), "text", this);
+		inv = new List(new Rectangle(dim.width / 2 + 200, dim.height / 2 - 300, 650, 850), "text", this);
 		HudText inventry = new HudText(0,0,"", standard);
-		inventry.setBackground(Color.ORANGE, 0, 200);
+		inventry.setBackground(Color.ORANGE, 0, 500);
 		inventry.setPadding(25);
 		inventry.setTextColor(Color.WHITE);
 		inventry.update = true;
 		inventry.setId("item");
 		inventry.hover = true;
+		inventry.font = standard.deriveFont(40f);
 		inventry.toolTip();
 		inv.setPadding(50);
 		inv.setSpacing(50);
@@ -257,9 +258,29 @@ public class ListWorld extends World {
 		ArrayList<String> invl = new ArrayList<String>();
 		inv.addEntryList(invl);
 		inv.scrollBar();
-		inv.setHideOverflow(true, 50);
 		inv.fill();
 		hud.lists.add(inv);
+
+		hud.ht.add(new HudText(50, 100, "", standard){{
+			this.setText("Filters");
+			this.setTextColor(Color.WHITE);
+			this.setBackground(Color.ORANGE, 25, 200);
+		}});
+		hud.hb.add(new HudObj(25, 200, 200, 100, Color.ORANGE) {{
+			this.addText("All");
+			this.setHighlightColor(Color.WHITE);
+			this.setHighlightTextColor(Color.ORANGE);
+			this.select(true);
+		}});
+		hud.hb.add(new HudObj(25, 350, 200, 100, Color.ORANGE) {{
+			this.addText("Stats");
+		}});
+
+		hud.ht.add(new HudText(dim.width / 2 + 225, dim.height / 2 - 425, "", standard) {{
+			this.setText("Inventory");
+			this.setBackground(Color.ORANGE, 25, 625);
+			this.setTextColor(Color.WHITE);
+		}});
 	}
 	
 	public void paint(Graphics g) {
@@ -334,8 +355,8 @@ public class ListWorld extends World {
 		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(a_up, 0, false), "a-upp");
 		this.getActionMap().put("a-upp", new PlayerAbility("a-upp", this));
 		this.getActionMap().put("a-upr", new PlayerAbility("a-upr", this));
+
 		//shift
-		
 		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(sprint, 0, true), "shiftr");
 		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(sprint, 0, false), "shiftp");
 		this.getActionMap().put("shiftp", new PlayerAbility("shiftp", this));
@@ -346,6 +367,12 @@ public class ListWorld extends World {
 		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(consolebutton, 0, false), "consolep");
 		this.getActionMap().put("consoler", new MethodAction("consoler", this));
 		this.getActionMap().put("consolep", new MethodAction("consolep", this));
+
+		//inventory
+		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(inventorybutton, 0, true), "invr");
+		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(inventorybutton, 0, false), "invp");
+		this.getActionMap().put("invr", new MethodAction("invr", this));
+		this.getActionMap().put("invp", new MethodAction("invp", this));
 	}
 	
 	public void stopPlayerController() {
