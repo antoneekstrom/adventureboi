@@ -1,7 +1,6 @@
 package adventuregame;
 
 import java.awt.Rectangle;
-import java.util.ArrayList;
 
 public class AI {
 
@@ -9,7 +8,6 @@ public class AI {
 	private Rectangle nr;
 	private Rectangle ground;
 	private Rectangle obstacle;
-	private String lastobstacle = "";
 	private RectangleObject ro;
 	
 	String[] excluded = new String[] {
@@ -42,7 +40,7 @@ public class AI {
 	public void setSpeed(int s) {
 		speed = s;
 	}
-	
+
 	public void turnChance(double d) {
 		turnchance = d;
 	}
@@ -105,7 +103,6 @@ public class AI {
 		else {
 			if (!isExcluded(ro)) {
 				obstacle = g;
-				lastobstacle = ro.type;
 			}
 		}
 	}

@@ -1,13 +1,9 @@
 package adventuregame;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.InputEvent;
 import java.util.ArrayList;
 
 import javax.swing.AbstractAction;
-
-import worlds.ListWorld;
-import worlds.World;
 
 public class PlayerAction extends AbstractAction {
 
