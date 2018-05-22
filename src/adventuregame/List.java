@@ -36,6 +36,8 @@ public class List {
 	int listheight = 0;
 	int entryheight = 95;
 	Point mouse;
+
+	private String sortByTag = "none";
 	
 	int blockHeight = 0;
 	HudObj blockTop;
@@ -78,6 +80,7 @@ public class List {
 		list.clear();
 		listheight = 0;
 		for (int i = 0; i < entries.size(); i++) {
+			
 			addEntry(entries.get(i));
 			if (hasIdList && ids.size() == list.size()) {
 				list.get(i).setId(ids.get(i));
@@ -87,6 +90,18 @@ public class List {
 		if (scrollbar) {
 			calculateTotalEntryHeight();
 			calculateBarHeight();
+		}
+	}
+
+	public void sortByTag(String s) {
+		sortByTag = s;
+	}
+
+	public void sort() {
+		for (int i = 0; i < list.size(); i++) {
+			if (!sortByTag.equals("none") && list.get(i).getSortingTag().equals(sortByTag)) {
+				list.get(i).setVisible(false);
+			}
 		}
 	}
 	

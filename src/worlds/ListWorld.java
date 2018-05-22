@@ -274,6 +274,7 @@ public class ListWorld extends World {
 		}});
 		hud.hb.add(new HudObj(25, 350, 200, 100, Color.ORANGE) {{
 			this.addText("Stats");
+			this.setId("statsort");
 		}});
 
 		hud.ht.add(new HudText(dim.width / 2 + 225, dim.height / 2 - 425, "", standard) {{

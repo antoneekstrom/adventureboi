@@ -89,6 +89,7 @@ public class InfoBox {
 	
 	public void place(Point p) {
 		r.setLocation(p.x - r.width, p.y);
+		limitToScreen();
 		
 		for (int i = 0; i < tlist.size(); i++) {
 			tlist.get(i).update();
@@ -102,6 +103,21 @@ public class InfoBox {
 		}
 		
 		visible = true;
+	}
+
+	public void limitToScreen() {
+		if (r.y + r.height > GeneralTools.getScreenDim().height) {
+			r.y = GeneralTools.getScreenDim().height - r.height;
+		}
+		if (r.x > GeneralTools.getScreenDim().width - r.width) {
+			r.x = GeneralTools.getScreenDim().width - r.width;
+		}
+		if (r.y < 0) {
+			r.y = 0;
+		}
+		if (r.x < 0) {
+			r.x = 0;
+		}
 	}
 	
 	public void setVisible(boolean b) {

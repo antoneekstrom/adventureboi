@@ -42,6 +42,8 @@ public class HudText {
 	private boolean hasTooltip = false;
 	int ttoffsetx = -50;
 	int ttoffsety = -50;
+
+	private String sortingTag = "none";
 	
 	boolean centerImage = false;
 	String imagepath;
@@ -73,7 +75,17 @@ public class HudText {
 			ib.addParagraph(Items.getDescription(text));
 			ib.addParagraph(Items.getEffect(text));
 			ib.addImage("assets/thumbnails/" + text + ".png");
+			
+			giveSortingTag();
 		}
+	}
+
+	public String getSortingTag() {
+		return sortingTag;
+	}
+
+	public void giveSortingTag() {
+		sortingTag = Items.getSortingTag(text);
 	}
 	
 	public void setType(String s) {

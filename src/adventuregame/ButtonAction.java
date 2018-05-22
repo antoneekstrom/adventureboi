@@ -145,6 +145,11 @@ public class ButtonAction {
 						if (hb.get(i).id == "invbutton") {
 							world.switchHud("invscreen");
 						}
+						if (hb.get(i).id.equals("statsort")) {
+							System.out.println("sort");
+							world.inv.sortByTag("statup");
+							world.inv.sort();
+						}
 					}
 				}
 				for (int i = 0; i < hl.size(); i++) {

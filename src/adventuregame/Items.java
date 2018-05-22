@@ -19,9 +19,20 @@ public class Items {
 		put("tallmush", "+0.2 energy regen");
 		put("explosion", "+1 explosion");
 	}};
+
+	private static HashMap<String, String> tags = new HashMap<String, String>() {{
+		put("donut", "statup");
+		put("shroom", "statup");
+		put("angryshroom", "statup");
+		put("tallmush", "statup");
+	}};
 	
 	public static String getDescription(String item) {
 		return descriptions.get(item);
+	}
+
+	public static String getSortingTag(String item) {
+		return tags.get(item);
 	}
 	
 	public static String getEffect(String item) {
