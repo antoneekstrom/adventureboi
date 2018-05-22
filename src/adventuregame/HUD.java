@@ -171,7 +171,7 @@ public class HUD {
 			world.p.enabled = false;
 			world.stopPlayerController();
 		}
-		if (id.equals("actualhud") && !world.currentHud.equals("menu") && !world.currentHud.equals("levels") && !world.currentHud.equals("options") && !world.currentHud.equals("stats")) {
+		if (id.equals("actualhud") && !world.currentHud.equals("menu") && !world.currentHud.equals("levels") && !world.currentHud.equals("options") && !world.currentHud.equals("stats") && !world.currentHud.equals("invscreen")) {
 			setVisible(true);
 		}
 	}

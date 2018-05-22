@@ -42,7 +42,6 @@ public class ListWorld extends World {
 	private int FRAMERATE = 12;
 	public String name = "menu";
 	public ArrayList<RectangleObject> rects;
-	private ArrayList<Text> texts;
 	public Timer timer;
 	private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 	public Player p;
@@ -66,9 +65,9 @@ public class ListWorld extends World {
 	public String lastHud;
 	public TypeListener typelistener;
 	public List llist;
+	public ArrayList<String> invlist;
 	public HUD actualhud;
 	public List inv;
-	public ArrayList<String> inventory;
 	public Character character;
 	public HUD console;
 	public List statlist;
@@ -79,7 +78,6 @@ public class ListWorld extends World {
 		frame = f;
 		setBackground(Color.CYAN);
 		setSize(dim);
-		texts = new ArrayList<Text>();
 		rects = new ArrayList<RectangleObject>();
 	}
 	
@@ -179,13 +177,6 @@ public class ListWorld extends World {
 		timer.start();
 	}
 	
-	public void addItem(String name) {
-		inventory.add(name);
-		inv.addIdList(inventory);
-		inv.addEntryList(inventory);
-		inv.fill();
-	}
-	
 	public void createOptions() {
 		options.font = standard.deriveFont(10, 35);
 		HudObj quit = new HudObj(50, 200, 400, 100, Color.ORANGE);
@@ -199,33 +190,14 @@ public class ListWorld extends World {
 		HudObj world = new HudObj(50, 350, 400, 100, Color.ORANGE);
 		HudObj noclip = new HudObj((int) (dim.getWidth() - 350), 50, 300, 100, Color.ORANGE);
 		HudObj invincible = new HudObj((int) (dim.getWidth() - 700), 50, 300, 100, Color.ORANGE);
-		
-		inventory = new ArrayList<String>();
 		HudObj stats = new HudObj(50, 500, 400, 100, Color.ORANGE);
+		HudObj invbutton = new HudObj(50, 600, 400, 100, Color.ORANGE);
+
+		invbutton.addText("Inventory");
+		invbutton.setId("invbutton");
+		
 		stats.addText("Statistics");
 		stats.setId("stats");
-		
-		inv = new List(new Rectangle(dim.width - 400, (dim.height / 2) - 300, 350, 800), "text", this);
-		HudText inventry = new HudText(0,0,"", standard);
-		options.lists.add(inv);
-		inventry.setBackground(Color.ORANGE, 0, 200);
-		inventry.setPadding(25);
-		inventry.setTextColor(Color.WHITE);
-		inventry.update = true;
-		inventry.setId("item");
-		inventry.hover = true;
-		inventry.toolTip();
-		inv.setPadding(50);
-		inv.setSpacing(50);
-		inv.setId("inventory");
-		inv.setPaddingTop(50);
-		inv.setTextEntry(inventry);
-		inv.setHideOverflow(true, 50);
-		ArrayList<String> invl = new ArrayList<String>();
-		inv.addEntryList(invl);
-		inv.scrollBar();
-		inv.setHideOverflow(true, 50);
-		inv.fill();
 		
 		noclip.addText("gravity");
 		noclip.id = "gravity";
@@ -253,6 +225,7 @@ public class ListWorld extends World {
 		options.hb.add(invincible);
 		options.hb.add(world);
 		options.hb.add(colors);
+		options.hb.add(invbutton);
 		options.hb.add(c1);
 		options.hb.add(stats);
 		options.hb.add(c2);
@@ -262,6 +235,31 @@ public class ListWorld extends World {
 		options.hb.add(save);
 		options.hb.add(mode);
 		options.hb.add(noclip);
+	}
+
+	public void createInventory(HUD hud) {
+		invlist = new ArrayList<String>();
+		inv = new List(new Rectangle(dim.width - 400, (dim.height / 2) - 300, 350, 800), "text", this);
+		HudText inventry = new HudText(0,0,"", standard);
+		inventry.setBackground(Color.ORANGE, 0, 200);
+		inventry.setPadding(25);
+		inventry.setTextColor(Color.WHITE);
+		inventry.update = true;
+		inventry.setId("item");
+		inventry.hover = true;
+		inventry.toolTip();
+		inv.setPadding(50);
+		inv.setSpacing(50);
+		inv.setId("inventory");
+		inv.setPaddingTop(50);
+		inv.setTextEntry(inventry);
+		inv.setHideOverflow(true, 50);
+		ArrayList<String> invl = new ArrayList<String>();
+		inv.addEntryList(invl);
+		inv.scrollBar();
+		inv.setHideOverflow(true, 50);
+		inv.fill();
+		hud.lists.add(inv);
 	}
 	
 	public void paint(Graphics g) {

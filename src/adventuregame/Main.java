@@ -3,13 +3,8 @@ package adventuregame;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
-
 import javax.swing.JFrame;
-
-import worlds.IntroductionWorld;
 import worlds.ListWorld;
-import worlds.Stage1;
-import worlds.TutorialWorld;
 
 public class Main extends JFrame {
 	

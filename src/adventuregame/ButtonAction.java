@@ -158,7 +158,8 @@ public class ButtonAction {
 							world.p.setLocation(0,0);
 						}
 						
-						if (hl.get(i).visible && hl.get(i).id.equals("inventory") && ht.hasMouse) {
+						if (hl.get(i).visible && hl.get(i).id.equals("invbutton") && ht.hasMouse) {
+							world.switchHud("invscreen");
 						}
 					}
 				}

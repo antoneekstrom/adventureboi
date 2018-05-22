@@ -32,6 +32,7 @@ public class Menu extends ListWorld implements ActionListener {
 	public HUD levels;
 	public HUD console;
 	public HUD statistics;
+	public HUD invscreen;
 	public Point mouse;
 	public SaveWriter sw;
 	boolean ready = false;
@@ -84,6 +85,9 @@ public class Menu extends ListWorld implements ActionListener {
 		Character.Inventory().requestUpdate();
 		Character.backup();
 		
+		
+		invscreen = new HUD(this);
+		invscreen.id = "invscreen";
 		statistics = new HUD(this);
 		statistics.id = "stats";
 		actualhud = new HUD(this);
@@ -99,7 +103,8 @@ public class Menu extends ListWorld implements ActionListener {
 		huds.add(menu);
 		huds.add(levels);
 		huds.add(options);
-		
+		huds.add(invscreen);
+
 		console = new HUD(this);
 		console.id = "console";
 		
@@ -123,6 +128,7 @@ public class Menu extends ListWorld implements ActionListener {
 		cl = new PlayerCollision(p);
 		
 		createOptions();
+		createInventory(invscreen);
 		
 		HudObj start = new HudObj((dim.width / 2) -300, 550, 600, 100, Color.ORANGE);
 		HudObj exit = new HudObj((dim.width / 2) -300, 700, 600, 100, Color.ORANGE);
@@ -285,10 +291,35 @@ public class Menu extends ListWorld implements ActionListener {
 			menu.paint(g);
 			levels.paint(g);
 			console.paint(g);
+			invscreen.paint(g);
 			options.paint(g);
 			statistics.paint(g);
 			actualhud.paint(g);
 		}
+	}
+
+	public void inventory() {
+		invlist = new ArrayList<String>();
+		inv = new List(new Rectangle(dim.width - 400, (dim.height / 2) - 300, 350, 800), "text", this);
+		HudText inventry = new HudText(0,0,"", standard);
+		inventry.setBackground(Color.ORANGE, 0, 200);
+		inventry.setPadding(25);
+		inventry.setTextColor(Color.WHITE);
+		inventry.update = true;
+		inventry.setId("item");
+		inventry.hover = true;
+		inventry.toolTip();
+		inv.setPadding(50);
+		inv.setSpacing(50);
+		inv.setId("inventory");
+		inv.setPaddingTop(50);
+		inv.setTextEntry(inventry);
+		inv.setHideOverflow(true, 50);
+		ArrayList<String> invl = new ArrayList<String>();
+		inv.addEntryList(invl);
+		inv.scrollBar();
+		inv.setHideOverflow(true, 50);
+		inv.fill();
 	}
 
 	double time1, time2;
@@ -309,6 +340,7 @@ public class Menu extends ListWorld implements ActionListener {
 			actualhud.passPlayer(p);
 			actualhud.update();
 			console.update();
+			invscreen.update();
 			statistics.update();
 			console.passWorld(this);
 			c.run(p);
