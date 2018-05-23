@@ -55,6 +55,7 @@ public class ListWorld extends World {
 	public Controller controller;
 	public Font standard = new Font("Comic Sans MS", 20 ,50);
 	public HUD options;
+	public HUD invscreen;
 	public RectangleCreator rc;
 	public GameObjects go;
 	public Mouse m;
@@ -268,6 +269,7 @@ public class ListWorld extends World {
 		}});
 		hud.hb.add(new HudObj(25, 200, 200, 100, Color.ORANGE) {{
 			this.addText("All");
+			this.setId("all");
 			this.setHighlightColor(Color.WHITE);
 			this.setHighlightTextColor(Color.ORANGE);
 			this.select(true);
@@ -276,7 +278,10 @@ public class ListWorld extends World {
 			this.addText("Stats");
 			this.setId("statsort");
 		}});
-
+		hud.hb.add(new HudObj(25, 500, 200, 100, Color.ORANGE) {{
+			this.addText("misc");
+			this.setId("misc");
+		}});
 		hud.ht.add(new HudText(dim.width / 2 + 225, dim.height / 2 - 425, "", standard) {{
 			this.setText("Inventory");
 			this.setBackground(Color.ORANGE, 25, 625);

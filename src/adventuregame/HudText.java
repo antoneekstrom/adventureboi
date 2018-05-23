@@ -151,7 +151,7 @@ public class HudText {
 	public void autoWidth(boolean b) {
 		autowidth = b;
 	}
-	
+
 	public void setX(int i) {
 		x = i;
 	}
@@ -162,6 +162,10 @@ public class HudText {
 	
 	public void setY(int i) {
 		y = i;
+	}
+
+	public void hide() {
+		this.setVisible(false);
 	}
 	
 	public void hover() {

@@ -145,10 +145,8 @@ public class ButtonAction {
 						if (hb.get(i).id == "invbutton") {
 							world.switchHud("invscreen");
 						}
-						if (hb.get(i).id.equals("statsort")) {
-							System.out.println("sort");
-							world.inv.sortByTag("statup");
-							world.inv.sort();
+						if (huds.get(k).id == "invscreen") {
+							SortButtons.sort(hb.get(i), world);
 						}
 					}
 				}

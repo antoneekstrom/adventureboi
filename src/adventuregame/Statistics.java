@@ -31,6 +31,7 @@ public class Statistics {
 		l.add("max energy: " + getEnergy() + " ");
 		l.add("max stamina: " + getStamina() + " ");
 		l.add("energy rate: " + getEnergyRate() + "e/tick ");
+		l.add("base damage: " + getDamage() + " ");
 		return l;
 	}
 	

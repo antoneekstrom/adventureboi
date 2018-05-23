@@ -373,6 +373,7 @@ public class Console {
 		}
 		if (key.equals("additem") && stringparameters.size() == 1) {
 			Character.Inventory().addItem(stringparameters.get(0));
+			Character.Inventory().requestUpdate();
 		}
 		if (key.equals("showrect")) {
 			giveResponse("show rects");

@@ -2,6 +2,7 @@ package adventuregame;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.ListIterator;
 
 import worlds.ListWorld;
 
@@ -37,7 +38,7 @@ public class List {
 	int entryheight = 95;
 	Point mouse;
 
-	private String sortByTag = "none";
+	private String sortByTag = "all";
 	
 	int blockHeight = 0;
 	HudObj blockTop;
@@ -80,13 +81,14 @@ public class List {
 		list.clear();
 		listheight = 0;
 		for (int i = 0; i < entries.size(); i++) {
-			
+
 			addEntry(entries.get(i));
+
 			if (hasIdList && ids.size() == list.size()) {
 				list.get(i).setId(ids.get(i));
 			}
 		}
-		
+
 		if (scrollbar) {
 			calculateTotalEntryHeight();
 			calculateBarHeight();
@@ -97,11 +99,24 @@ public class List {
 		sortByTag = s;
 	}
 
+	public String getListSort() {
+		return sortByTag;
+	}
+
 	public void sort() {
-		for (int i = 0; i < list.size(); i++) {
-			if (!sortByTag.equals("none") && list.get(i).getSortingTag().equals(sortByTag)) {
-				list.get(i).setVisible(false);
+		fill();
+
+		ListIterator<HudText> iterator = list.listIterator(0);
+		while (iterator.hasNext()) {
+			HudText t = iterator.next();
+			if (!t.getSortingTag().equals(getListSort()) && !getListSort().equals("all")) {
+				iterator.remove();
 			}
+		}
+		if (scrollbar) {
+			calculateTotalEntryHeight();
+			calculateBarHeight();
+			resetBarY();
 		}
 	}
 	
@@ -109,6 +124,10 @@ public class List {
 		int lastentry;
 		lastentry = (int) (rect.getMinY() + (list.size() - 1) * entryheight + paddingTop + (((list.size() - 1) > 0) ? (spacing * (list.size() - 1)) : (0)) + ((scrollbar) ? (scrolldistance) : (0)) );		
 		listheight = (int) (lastentry - rect.getMinY());
+	}
+
+	public void resetBarY() {
+		bar.hrect.y = (int) rect.getMinY();
 	}
 
 	public void scrollBar() {

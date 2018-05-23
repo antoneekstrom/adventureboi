@@ -32,7 +32,6 @@ public class Menu extends ListWorld implements ActionListener {
 	public HUD levels;
 	public HUD console;
 	public HUD statistics;
-	public HUD invscreen;
 	public Point mouse;
 	public SaveWriter sw;
 	boolean ready = false;
@@ -116,6 +115,7 @@ public class Menu extends ListWorld implements ActionListener {
 		m = new Mouse(this, frame, menu);
 		m.ba.huds.add(options);
 		m.ba.huds.add(levels);
+		m.ba.huds.add(invscreen);
 		m.addRc(rc);
 		m.addTc(tc);
 		addMouseListener(m);
@@ -144,18 +144,6 @@ public class Menu extends ListWorld implements ActionListener {
 		play.setFont(standard);
 		play.setId("play");
 		menu.hb.add(play);
-		
-		InfoBox stats = new InfoBox(new Rectangle((int) ((dim.width / 2) - (dim.width * 0.8) / 2), (int) ((dim.height / 2) - (dim.height * 0.8) / 2), (int) (dim.width * 0.8), (int) (dim.height * 0.8)), standard);
-		
-		stats.addText("energymax");
-		stats.addText("energyrate");
-		stats.addText("damage");
-		HudText erate = stats.getText("energyrate");
-		erate.setLocation(new Point(erate.x - 600, erate.y + 250));
-		HudText emax = stats.getText("energymax");
-		emax.setLocation(new Point(emax.x - 600, emax.y + 150));
-		stats.setBackground(Color.WHITE);
-		stats.setVisible(true);
 		
 		HudBar hp = new HudBar((int) ((dim.width / 2) - 200), 100, 400, 50);
 		HudBar ep = new HudBar(50, 100, 400, 50);

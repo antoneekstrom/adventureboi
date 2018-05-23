@@ -61,6 +61,7 @@ public class MethodAction extends AbstractAction {
 		}
 		if (action.equals("invr")) {
 			if (!world.currentHud.equals("invscreen")) {
+				Character.Inventory().requestUpdate();
 				world.switchHud("invscreen");
 			}
 			else {

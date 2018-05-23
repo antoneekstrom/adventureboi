@@ -10,6 +10,8 @@ public class Items {
 		put("angryshroom", "Very angery boi.");
 		put("tallmush", "Tallest boi in the entire 7th dimension.");
 		put("explosion", "How did this get here?");
+		put("lowercaseb", "Epic lowercase b.");
+		put("uppercaseb", "Incredibly epic uppercase b.");
 	}};
 	
 	private static HashMap<String, String> effects = new HashMap<String, String>() {{
@@ -18,13 +20,18 @@ public class Items {
 		put("angryshroom", "+5 base damage (does not work)");
 		put("tallmush", "+0.2 energy regen");
 		put("explosion", "+1 explosion");
+		put("lowercaseb", "+1 b");
+		put("uppercaseb", "+1 B");
 	}};
-
+	
 	private static HashMap<String, String> tags = new HashMap<String, String>() {{
 		put("donut", "statup");
 		put("shroom", "statup");
 		put("angryshroom", "statup");
 		put("tallmush", "statup");
+		put("explosion", "misc");
+		put("lowercaseb", "statup");
+		put("uppercaseb", "statup");
 	}};
 	
 	public static String getDescription(String item) {

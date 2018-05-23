@@ -197,6 +197,7 @@ public class HUD {
 				l.addIdList(Character.Inventory().get());
 				l.addEntryList(Character.Inventory().get());
 				l.fill();
+				l.sort();
 				Character.Inventory().fullFillRequest();
 			}
 		}
