@@ -45,7 +45,6 @@ public class Main extends JFrame {
 		//set icon for frame
 		try {
 			ImageIcon icon = new ImageIcon("assets/animated_sprites/aboi/manboi.png");
-			System.out.println("icon height" + icon.getIconHeight());
 			frame.setIconImage(icon.getImage());
 		}
 		catch (Exception e) {}
