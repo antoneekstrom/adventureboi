@@ -3,6 +3,11 @@ package adventuregame;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
+import java.io.File;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import worlds.ListWorld;
 
@@ -20,7 +25,7 @@ public class Main extends JFrame {
 	}
 	
 	public void start(Main f) {	
-		this.setTitle("Epic game");
+		this.setTitle("adventureboi");
 		this.setSize((int) dim.getWidth(), (int) dim.getHeight());
 		this.setResizable(!fullscreen);
 		this.setUndecorated(fullscreen);
@@ -39,6 +44,13 @@ public class Main extends JFrame {
 	public static void main(String[] args) {
 		Main frame = new Main();
 		frame.start(frame);
+
+		//set icon for frame
+		try {
+			ImageIcon icon = new ImageIcon("assets/icon/adventureboi.ico");
+			frame.setIconImage(icon.getImage());
+		}
+		catch (Exception e) {}
 	}
 }
 

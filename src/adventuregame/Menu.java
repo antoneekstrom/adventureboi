@@ -12,10 +12,8 @@ import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import java.util.ArrayList;
 import adventuregame.Character;
-
 
 import javax.swing.Timer;
 
@@ -70,7 +68,7 @@ public class Menu extends ListWorld implements ActionListener {
 	}
 	
 	public void run() {
-		
+
 		lastHud = "menu";
 		typelistener = new TypeListener(this);
 		addKeyListener(typelistener);
