@@ -3,10 +3,7 @@ package adventuregame;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.awt.image.BufferedImage;
-import java.io.File;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import worlds.ListWorld;
@@ -47,7 +44,8 @@ public class Main extends JFrame {
 
 		//set icon for frame
 		try {
-			ImageIcon icon = new ImageIcon("assets/icon/adventureboi.ico");
+			ImageIcon icon = new ImageIcon("assets/animated_sprites/aboi/manboi.png");
+			System.out.println("icon height" + icon.getIconHeight());
 			frame.setIconImage(icon.getImage());
 		}
 		catch (Exception e) {}
