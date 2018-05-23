@@ -106,11 +106,11 @@ public class InfoBox {
 	}
 
 	public void limitToScreen() {
-		if (r.y + r.height > GeneralTools.getScreenDim().height) {
-			r.y = GeneralTools.getScreenDim().height - r.height;
+		if (r.y + r.height > GlobalData.getScreenDim().height) {
+			r.y = GlobalData.getScreenDim().height - r.height;
 		}
-		if (r.x > GeneralTools.getScreenDim().width - r.width) {
-			r.x = GeneralTools.getScreenDim().width - r.width;
+		if (r.x > GlobalData.getScreenDim().width - r.width) {
+			r.x = GlobalData.getScreenDim().width - r.width;
 		}
 		if (r.y < 0) {
 			r.y = 0;

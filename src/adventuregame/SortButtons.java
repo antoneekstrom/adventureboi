@@ -5,7 +5,6 @@ import java.awt.Color;
 import worlds.ListWorld;
 
 public class SortButtons {
-
     private static void select(HudObj o, ListWorld w) {
         o.setHighlightColor(Color.WHITE);
         o.setHighlightTextColor(Color.ORANGE);
