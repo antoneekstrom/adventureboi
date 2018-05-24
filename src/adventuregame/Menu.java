@@ -81,7 +81,15 @@ public class Menu extends ListWorld implements ActionListener {
 		character = new Character();
 		Character.Inventory().requestUpdate();
 		Character.backup();
-		
+
+		NewCamera.setCameraPos(new Point(0, 0));
+		NewObjectStorage.add(new NewObject() {{
+		}});
+		NewObjectStorage.add(new NewObject() {{
+			this.rectangle().setLocation(0, 500);
+			this.getForce().setGravity(false);
+			this.setCollision(false);
+		}});
 		
 		invscreen = new HUD(this);
 		invscreen.id = "invscreen";
@@ -275,6 +283,7 @@ public class Menu extends ListWorld implements ActionListener {
 			if (p.enabled == true) {
 				p.paint(g);
 			}
+
 			menu.paint(g);
 			levels.paint(g);
 			console.paint(g);
@@ -282,6 +291,8 @@ public class Menu extends ListWorld implements ActionListener {
 			options.paint(g);
 			statistics.paint(g);
 			actualhud.paint(g);
+
+			NewObjectStorage.paint(g);
 		}
 	}
 
@@ -333,6 +344,8 @@ public class Menu extends ListWorld implements ActionListener {
 			c.run(p);
 			go.update();
 			cl.pRun(p);
+
+			NewObjectStorage.update();
 			
 			if (typelistener.c.saving) {
 				typelistener.c.saving = false;
