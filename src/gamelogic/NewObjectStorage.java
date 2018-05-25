@@ -1,7 +1,9 @@
-package adventuregame;
+package gamelogic;
 
 import java.awt.Graphics;
 import java.util.ArrayList;
+
+import objects.NewObject;
 
 public class NewObjectStorage {
 
@@ -12,7 +14,7 @@ public class NewObjectStorage {
     }
 
     /** Add object to game.
-     * @param object -Initialized object to add to game.
+     * @param object - Initialized object to add to game.
     */
     public static void add(NewObject object) {
         objects.add(object);

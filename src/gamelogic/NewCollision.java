@@ -1,7 +1,9 @@
-package adventuregame;
+package gamelogic;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
+
+import objects.NewObject;
 
 public class NewCollision {
 
@@ -15,7 +17,8 @@ public class NewCollision {
 
         //loop through all other objects
         for (NewObject object2 : objects) {
-            if (object1.rectangle().intersects(object2.rectangle())) {
+            //if object1 is not the same as object2 and they are intersecting
+            if (object1.get().intersects(object2.get()) && !object2.equals(object1)) {
                 collision(object1, object2);
                 object1.setIntersect(true);
             }
@@ -28,8 +31,8 @@ public class NewCollision {
     private static void collision(NewObject o1, NewObject o2) {
 
         //define hitboxes
-        Rectangle r1 = o1.rectangle();
-        Rectangle r2 = o2.rectangle();
+        Rectangle r1 = o1.get();
+        Rectangle r2 = o2.get();
 
         //determine distance of itersection on all side in pixels
         int r,l,t,b;
@@ -48,8 +51,7 @@ public class NewCollision {
 
         if (r1.y < r2.y) {
             i = (int) ( r2.getMinY() - r1.getMaxY() );
-        }
-        else {i = 0;}
+        } else {i = 0;}
 
         return i;
     }

@@ -14,6 +14,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import adventuregame.Character;
+import gamelogic.NewCamera;
+import gamelogic.NewObjectStorage;
+import objects.NewObject;
+import objects.Spikeboi;
 
 import javax.swing.Timer;
 
@@ -82,19 +86,18 @@ public class Menu extends ListWorld implements ActionListener {
 		Character.Inventory().requestUpdate();
 		Character.backup();
 
+		Images.indexAllImages();
+		Images.loadAllImages();
+
 		NewCamera.setCameraPos(new Point(0, 0));
 		NewObjectStorage.add(new NewObject() {{
+			this.get().setLocation(0, 500);
+			this.get().width = 300;
+			this.getForce().setGravity(false);
+			this.setCollision(false);
+		}});
+		NewObjectStorage.add(new Spikeboi() {{
 			this.setColor(Color.black);
-		}});
-		NewObjectStorage.add(new NewObject() {{
-			this.rectangle().setLocation(0, 500);
-			this.getForce().setGravity(false);
-			this.setCollision(false);
-		}});
-		NewObjectStorage.add(new NewObject() {{
-			this.rectangle().setLocation(100, 400);
-			this.getForce().setGravity(false);
-			this.setCollision(false);
 		}});
 		
 		invscreen = new HUD(this);

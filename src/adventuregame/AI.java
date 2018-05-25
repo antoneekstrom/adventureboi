@@ -2,8 +2,6 @@ package adventuregame;
 
 import java.awt.Rectangle;
 
-import org.w3c.dom.css.Rect;
-
 public class AI {
 
 	private Rectangle r;

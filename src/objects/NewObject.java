@@ -1,10 +1,17 @@
-package adventuregame;
+package objects;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
+
+import adventuregame.AI;
+import adventuregame.Animator;
+import adventuregame.Force;
+import gamelogic.NewCamera;
+import gamelogic.NewCollision;
 
 public class NewObject {
 
@@ -13,11 +20,19 @@ public class NewObject {
     private boolean collision = true;
     private boolean intersect = false;
     private boolean camera = true;
-    private boolean debug = true;
+    private boolean debug = false;
+    private boolean hasImage = false;
 
     //attributes
     Color color_fg = Color.white;
     Font font = new Font("Comic Sans MS", 40, 40);
+
+    //image/sprite
+    private BufferedImage image;
+
+    //modules
+    private AI ai;
+    private Animator animator;
 
     //force
     private Force force;
@@ -51,24 +66,68 @@ public class NewObject {
         intersect = b;
     }
 
-    /** Is called when intersecting with another collision-enabled object */
-    private void intersect() {
-        if (intersect) {
-
-        }
+    public boolean doesIntersect() {
+        return intersect;
     }
 
-    /** Get object rectangle (hit/collision box). */
-    public Rectangle rectangle() {
+    /** Is called when intersecting with another object. */
+    protected void intersect() {
+    }
+
+    /** Set sprite/image. */
+    public void setImage(BufferedImage i) {
+        image = i;
+        hasImage = true;
+    }
+
+    /** Get object image. */
+    public BufferedImage getImage() {
+        return image;
+    }
+
+    public Animator getAnimator() {
+        return animator;
+    }
+
+    public AI getAI() {
+        return ai;
+    }
+
+    public void createAI() {
+        ai = new AI();
+    }
+
+    /** Get object rectangle/bouding box. This is also where position translation should occur. */
+    public Rectangle get() {
         return r;
     }
 
-    /** Update object logic */
-    public void update() {
-        intersect();
+    /** Calculate forces and positioning. */
+    private void calculatePosition() {
         updateForce();
-        updateDisplayCoordinates();
         collision();
+    }
+
+    /** Update stuff for object every tick. */
+    protected void logic() {
+    }
+
+    /** Do animation related things every tick. */
+    protected void animate() {
+    }
+
+    /** Update ai: Pass information, get back information */
+    protected void ai() {
+    }
+
+    /** Update object. */
+    public void update() {
+        logic(); /* Do regular update stuff every tick */
+        ai(); /* Do AI things every tick. */
+        if (doesIntersect()) {intersect();}; /* Execute things when intersecting another object */
+        calculatePosition(); /* Calculate forces and positioning */
+        updateDisplayCoordinates(); /* Update position on screen */
+        animate(); /* Do animation. */
     }
 
     //coordinate methods for backwards compatability
@@ -86,6 +145,14 @@ public class NewObject {
 
     public int getY() {
         return r.y;
+    }
+
+    public int getWidth() {
+        return r.width;
+    }
+
+    public int getHeight() {
+        return r.height;
     }
 
     //display coordinate methods
@@ -129,7 +196,7 @@ public class NewObject {
         return force;
     }
 
-    public void newForce(Force f) {
+    public void setForce(Force f) {
         force = f;
     }
 
@@ -148,10 +215,16 @@ public class NewObject {
 
         //paint to screen
         if (visible) {
-            g.fillRect(getDisplayCoordinate().x, getDisplayCoordinate().y, r.width, r.height);
-
+            if (hasImage) {
+                g.drawImage(image, getDisplayCoordinate().x,
+                getDisplayCoordinate().y, r.width, r.height, null);
+            } else {
+                g.fillRect(getDisplayCoordinate().x,
+                getDisplayCoordinate().y, r.width, r.height);
+            }
             if (debug) {
-                g.drawString(String.valueOf(force.getForceY()), r.x, r.y);
+                g.drawString(String.valueOf(r.y), getDisplayCoordinate().x,
+                getDisplayCoordinate().y);
             }
         }
     }

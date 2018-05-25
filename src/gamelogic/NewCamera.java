@@ -1,8 +1,9 @@
-package adventuregame;
+package gamelogic;
 
 import java.awt.Point;
+import java.awt.Polygon;
 
-import jdk.nashorn.internal.objects.Global;
+import objects.NewObject;
 
 /** The purpose of this class is to act as a "camera" to
  *  move around the environment and show things outside the 
@@ -34,13 +35,11 @@ public class NewCamera {
     /** Set display coordinates for an object */
     public static void setDisplayCoordinates(NewObject o) {
         Point p = new Point();
-        
-        int x = checkX(o.rectangle().getLocation());
-        int y = checkY(o.rectangle().getLocation());
+
+        int x = checkX(o.get().getLocation());
+        int y = checkY(o.get().getLocation());
         p.setLocation(p.getX() + x, p.getY() + y);
 
-        setCameraPos(GlobalData.getRelativeMouse());
-        
         o.setDisplayCoordinate(p);
     }
     

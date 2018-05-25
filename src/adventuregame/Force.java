@@ -8,7 +8,7 @@ public class Force {
     private int translatex, translatey;
     private double forcex = 0, forcey = 0;
     private double resistancex = 1, resistancey = 2;
-    private double gravityStrength = 10;
+    private double gravityStrength = 20;
 
     private boolean gravity = true;
 
@@ -25,7 +25,6 @@ public class Force {
     public void gravity(Rectangle r) {
         if (gravity) {
             r.y += gravityStrength;
-            //applyForce(0, -gravityStrength);
         }
     }
 
