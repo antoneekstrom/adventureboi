@@ -1,6 +1,7 @@
 package adventuregame;
 
 import java.awt.Dimension;
+import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Toolkit;
 
@@ -16,6 +17,10 @@ public class GlobalData {
 		return relativeMouse;
 	}
 	
+	public static Point getMouse() {
+		return MouseInfo.getPointerInfo().getLocation();
+	}
+
     public static Dimension getScreenDim() {
         return Toolkit.getDefaultToolkit().getScreenSize();
     }

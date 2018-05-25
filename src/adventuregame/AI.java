@@ -2,6 +2,8 @@ package adventuregame;
 
 import java.awt.Rectangle;
 
+import org.w3c.dom.css.Rect;
+
 public class AI {
 
 	private Rectangle r;
@@ -155,7 +157,9 @@ public class AI {
 	
 	public void pathfind() {
 		//switch direction
-		avoidBlockade();
+		if (nr.intersects(ground) || nr.intersects(obstacle)) {
+			avoidBlockade();
+		}
 	}
 	
 	public void avoidBlockade() {

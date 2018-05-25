@@ -60,7 +60,7 @@ public class NewObject {
 
     /** Get object rectangle (hit/collision box). */
     public Rectangle rectangle() {
-        return r;   
+        return r;
     }
 
     /** Update object logic */

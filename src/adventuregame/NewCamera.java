@@ -2,6 +2,8 @@ package adventuregame;
 
 import java.awt.Point;
 
+import jdk.nashorn.internal.objects.Global;
+
 /** The purpose of this class is to act as a "camera" to
  *  move around the environment and show things outside the 
  *  initial viewport of the monitor/window. It is used by placing
@@ -37,7 +39,7 @@ public class NewCamera {
         int y = checkY(o.rectangle().getLocation());
         p.setLocation(p.getX() + x, p.getY() + y);
 
-        setCameraPos(new Point(getCameraPosition().x -1, getCameraPosition().y));
+        setCameraPos(GlobalData.getRelativeMouse());
         
         o.setDisplayCoordinate(p);
     }
