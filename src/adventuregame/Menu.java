@@ -84,9 +84,15 @@ public class Menu extends ListWorld implements ActionListener {
 
 		NewCamera.setCameraPos(new Point(0, 0));
 		NewObjectStorage.add(new NewObject() {{
+			this.setColor(Color.black);
 		}});
 		NewObjectStorage.add(new NewObject() {{
 			this.rectangle().setLocation(0, 500);
+			this.getForce().setGravity(false);
+			this.setCollision(false);
+		}});
+		NewObjectStorage.add(new NewObject() {{
+			this.rectangle().setLocation(100, 400);
 			this.getForce().setGravity(false);
 			this.setCollision(false);
 		}});

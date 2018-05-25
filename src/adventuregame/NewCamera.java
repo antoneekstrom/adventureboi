@@ -36,6 +36,8 @@ public class NewCamera {
         int x = checkX(o.rectangle().getLocation());
         int y = checkY(o.rectangle().getLocation());
         p.setLocation(p.getX() + x, p.getY() + y);
+
+        setCameraPos(new Point(getCameraPosition().x -1, getCameraPosition().y));
         
         o.setDisplayCoordinate(p);
     }

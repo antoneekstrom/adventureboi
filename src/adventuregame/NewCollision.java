@@ -32,31 +32,56 @@ public class NewCollision {
         Rectangle r2 = o2.rectangle();
 
         //determine distance of itersection on all side in pixels
-        int x, y;
-        x = checkX(r1,r2);
-        y = checkY(r1,r2);
+        int r,l,t,b;
+        r = checkRight(r1, r2);
+        l = checkLeft(r1, r2);
+        t = checkTop(r1, r2);
+        b = checkBottom(r1, r2);
 
         //move object1 out of object2
-        r1.setLocation(r1.x + x, r1.y + y);
+        r1.setLocation(r1.x + r + l, r1.y + b + t);
     }
 
     //check intersection on x axis
-    private static int checkX(Rectangle r1, Rectangle r2) {
+    private static int checkTop(Rectangle r1, Rectangle r2) {
         int i;
 
-        i = r1.x - r2.x;
+        if (r1.y < r2.y) {
+            i = (int) ( r2.getMinY() - r1.getMaxY() );
+        }
+        else {i = 0;}
+
+        return i;
+    }
+
+    private static int checkLeft(Rectangle r1, Rectangle r2) {
+        int i;
+
+        if (r1.x < r2.x) {
+            i = (int) ( r2.getMinX() - r1.getMaxX() );
+        } else {i = 0;}
+
+        return i;
+    }
+
+    private static int checkRight(Rectangle r1, Rectangle r2) {
+        int i;
+
+        if (r1.x > r2.x) {
+            i = (int) ( r2.getMaxX() - r1.getMinX() );
+        } else {i = 0;}
 
         return i;
     }
     
     //check intersection on y axis
-    private static int checkY(Rectangle r1, Rectangle r2) {
+    private static int checkBottom(Rectangle r1, Rectangle r2) {
         int i;
         
-        i = r1.y - r2.y;
+        if (r1.y > r2.y) {
+            i = (int) ( r2.getMaxY() - r1.getMinY() );
+        } else {i = 0;}
         
-        System.out.println(i);
-
         return i;
     }
 }

@@ -39,6 +39,10 @@ public class NewObject {
         force = new Force();
     }
 
+    public void setColor(Color c) {
+        color_fg = c;
+    }
+
     public void setCollision(boolean b) {
         collision = b;
     }
@@ -61,10 +65,10 @@ public class NewObject {
 
     /** Update object logic */
     public void update() {
-        collision();
         intersect();
         updateForce();
         updateDisplayCoordinates();
+        collision();
     }
 
     //coordinate methods for backwards compatability
@@ -147,7 +151,7 @@ public class NewObject {
             g.fillRect(getDisplayCoordinate().x, getDisplayCoordinate().y, r.width, r.height);
 
             if (debug) {
-                g.drawString(String.valueOf(r.y), r.x, r.y);
+                g.drawString(String.valueOf(force.getForceY()), r.x, r.y);
             }
         }
     }

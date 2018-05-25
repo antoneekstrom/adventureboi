@@ -25,7 +25,12 @@ public class Force {
     public void gravity(Rectangle r) {
         if (gravity) {
             r.y += gravityStrength;
+            //applyForce(0, -gravityStrength);
         }
+    }
+
+    public double getForceY() {
+        return forcey;
     }
 
     /** Apply forces to object */
