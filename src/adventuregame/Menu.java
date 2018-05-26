@@ -16,8 +16,8 @@ import java.util.ArrayList;
 import adventuregame.Character;
 import gamelogic.NewCamera;
 import gamelogic.NewObjectStorage;
+import objects.AngryShroom;
 import objects.NewObject;
-import objects.Spikeboi;
 
 import javax.swing.Timer;
 
@@ -96,7 +96,7 @@ public class Menu extends ListWorld implements ActionListener {
 			this.getForce().setGravity(false);
 			this.setCollision(false);
 		}});
-		NewObjectStorage.add(new Spikeboi() {{
+		NewObjectStorage.add(new AngryShroom() {{
 			this.setColor(Color.black);
 		}});
 		

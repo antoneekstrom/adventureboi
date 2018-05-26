@@ -2,19 +2,13 @@ package adventuregame;
 
 import java.awt.Rectangle;
 
+import objects.NewObject;
+
 public class AI {
 
-	private Rectangle r;
-	private Rectangle nr;
 	private Rectangle ground;
 	private Rectangle obstacle;
-	private RectangleObject ro;
-	
-	String[] excluded = new String[] {
-		"fire",
-		"spike",
-		"pickup",
-	};
+	private NewObject object;
 	
 	private double jumpchance = 0.5;
 	private double jumpforce = 120;
@@ -61,9 +55,8 @@ public class AI {
 		return rcounter;
 	}
 
-	public void update(Rectangle r) {
-		this.r = r;
-		nr = r;
+	public void update(NewObject o) {
+		object = o;
 		
 		if (ready) {
 			if (!c.hasStarted()) {
@@ -81,6 +74,10 @@ public class AI {
 		randomizer();
 		pathfind();
 	}
+
+	public NewObject returnObject() {
+		return object;
+	}
 	
 	public void setMove(boolean b) {
 		move = b;
@@ -90,18 +87,13 @@ public class AI {
 		return move;
 	}
 	
-	public Rectangle getNewRect() {
-		return nr;
-	}
-	
-	public void passCollision(RectangleObject ro) {
-		this.ro = ro;
-		Rectangle g = ro.getObjectRect();
-		if (nr != null && g.getMinY() > nr.getMinY()) {
+	public void passCollision(NewObject o) {
+		Rectangle g = o.get();
+		if (g.getMinY() > object.get().getMinY()) {
 			ground = g;
 		}
 		else {
-			if (!isExcluded(ro)) {
+			if (!object.isPassThrough()) {
 				obstacle = g;
 			}
 		}
@@ -130,45 +122,23 @@ public class AI {
 			rcounter.start();
 		}
 	}
-
-	public Rectangle returnPos() {		
-		return r;
-	}
-	
-	public String getLogic() {
-		String s = "";
-		
-		s = s + "Ground equals Obstacle:" + ground.equals(obstacle);
-		
-		return s;
-	}
-	
-	public boolean isExcluded(RectangleObject ro) {
-		boolean b = false;
-		for (int i = 0; i < excluded.length; i++) {
-			if (ro.type.equals(excluded[i]) || ro.subtype.equals(excluded[i])) {
-				b = true;
-			}
-		}
-		return b;
-	}
 	
 	public void pathfind() {
 		//switch direction
-		if (nr.intersects(ground) || nr.intersects(obstacle)) {
+		if (object.get().intersects(ground) || object.get().intersects(obstacle)) {
 			avoidBlockade();
 		}
 	}
 	
 	public void avoidBlockade() {
-		if (ground.getMinX() >= nr.getMinX()) {
+		if (ground.getMinX() >= object.get().getMinX()) {
 			direction("right");
 		}
-		if (ground.getMaxX() <= nr.getMaxX()) {
+		if (ground.getMaxX() <= object.get().getMaxX()) {
 			direction("left");
 		}
-		if (obstacle.intersects(nr) && !ground.equals(obstacle)) {
-			if (obstacle.getMaxX() > nr.getMinX()) {
+		if (obstacle.intersects(object.get()) && !ground.equals(obstacle)) {
+			if (obstacle.getMaxX() > object.get().getMinX()) {
 				direction("switch");
 			}
 		}
@@ -176,10 +146,10 @@ public class AI {
 
 	public void move() {
 		if (direction.equals("right")) {
-			nr.x = (int) (nr.getX() + speed);
+			object.get().x = (int) (object.get().getX() + speed);
 		}
 		if (direction.equals("left")) {
-			nr.x = (int) (nr.getX() - speed);
+			object.get().x = (int) (object.get().getX() - speed);
 		}
 	}
 	
@@ -201,6 +171,14 @@ public class AI {
 	public void jumpChance(double d) {
 		jumpchance = d;
 	}
+
+	public String getLogic() {
+		String s = "";
+		
+		s = s + "Ground equals Obstacle:" + ground.equals(obstacle);
+		
+		return s;
+	}
 	
 	public String getDirection() {
 		return direction;
@@ -218,13 +196,13 @@ public class AI {
 		move();
 	}
 	
-	public void passObject(RectangleObject o) {
-		ro = o;
+	public void passObject(NewObject o) {
+		object = o;
 	}
 
 	/** ai jump, true: add to queue, false: jump */
 	public void jump() {
-		ro.applyForceY(jumpforce);
+		object.applyForce(0.0, jumpforce);
 	}
 }
 

@@ -21,6 +21,7 @@ public class NewCollision {
             if (object1.get().intersects(object2.get()) && !object2.equals(object1)) {
                 collision(object1, object2);
                 object1.setIntersect(true);
+                object1.passCollision(object2);
             }
             else {
                 object1.setIntersect(false);
@@ -28,6 +29,7 @@ public class NewCollision {
         }
     }
 
+    /** Calculate collision for two objects. */
     private static void collision(NewObject o1, NewObject o2) {
 
         //define hitboxes
@@ -45,7 +47,6 @@ public class NewCollision {
         r1.setLocation(r1.x + r + l, r1.y + b + t);
     }
 
-    //check intersection on x axis
     private static int checkTop(Rectangle r1, Rectangle r2) {
         int i;
 
@@ -76,7 +77,6 @@ public class NewCollision {
         return i;
     }
     
-    //check intersection on y axis
     private static int checkBottom(Rectangle r1, Rectangle r2) {
         int i;
         

@@ -20,7 +20,7 @@ public class NewObject {
     private boolean collision = true;
     private boolean intersect = false;
     private boolean camera = true;
-    private boolean debug = false;
+    private boolean debug = true;
     private boolean hasImage = false;
 
     //attributes
@@ -30,12 +30,18 @@ public class NewObject {
     //image/sprite
     private BufferedImage image;
 
+    //labels
+    private boolean passThrough = false;
+
     //modules
     private AI ai;
     private Animator animator;
 
     //force
     private Force force;
+
+    //last collision
+    private NewObject lastCollision;
 
     //positioning
     private Rectangle r;
@@ -60,6 +66,23 @@ public class NewObject {
 
     public void setCollision(boolean b) {
         collision = b;
+    }
+
+    public boolean isPassThrough() {
+        return passThrough;
+    }
+
+    public void setPassThrough(boolean b) {
+        passThrough = b;
+    }
+
+    /** Pass object this one has collided with. */
+    public void passCollision(NewObject o) {
+        lastCollision = o;
+    }
+
+    public NewObject getLastCollision() {
+        return lastCollision;
     }
 
     public void setIntersect(boolean b) {
@@ -89,9 +112,13 @@ public class NewObject {
         return animator;
     }
 
+    public void createAnimator() {
+        animator = new Animator(image);
+    }
+
     public AI getAI() {
         return ai;
-    }
+    }   
 
     public void createAI() {
         ai = new AI();
@@ -114,10 +141,26 @@ public class NewObject {
 
     /** Do animation related things every tick. */
     protected void animate() {
+        if (animator != null) {
+            animator.update();
+            image = animator.getSprite();
+        }
+    }
+
+    /** Set position and size for this object */
+    protected void setRectangle(Rectangle nr) {
+        r = nr;
     }
 
     /** Update ai: Pass information, get back information */
     protected void ai() {
+        if (ai != null) {
+            if (getLastCollision() != null) {
+                ai.passCollision(getLastCollision());
+            }
+            ai.update(this);
+            r = ai.returnObject().get();
+        }
     }
 
     /** Update object. */
@@ -192,6 +235,14 @@ public class NewObject {
         }
     }
 
+    public boolean ping() {
+        return true;
+    }
+
+    public void applyForce(double x, double y) {
+        force.applyForce(x, y);
+    }
+
     public Force getForce() {
         return force;
     }
@@ -223,7 +274,7 @@ public class NewObject {
                 getDisplayCoordinate().y, r.width, r.height);
             }
             if (debug) {
-                g.drawString(String.valueOf(r.y), getDisplayCoordinate().x,
+                g.drawString(String.valueOf(getForce().getForceY()), getDisplayCoordinate().x,
                 getDisplayCoordinate().y);
             }
         }

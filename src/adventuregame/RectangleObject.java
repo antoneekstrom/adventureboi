@@ -521,7 +521,6 @@ public class RectangleObject extends Object {
 			}
 			
 			if (ai != null && lw.go.rects.get(i).getObjectRect().intersects(getObjectRect()) && !(lw.go.rects.get(i).getObjectRect().equals(getObjectRect()))) {
-				ai.passCollision(lw.go.rects.get(i));
 			}
 			
 			if (type.equals("fire") && lw.go.rects.get(i).hasHealth && !(lw.go.rects.get(i).type.equals(type))) {
@@ -529,6 +528,7 @@ public class RectangleObject extends Object {
 					lw.go.rects.get(i).hm.decreaseHealth(hm.damage);
 				}
 			}
+			/*
 			if (type.equals("spikeboi") && lw.go.rects.get(i).type.equals("spikeboi") && lw.go.rects.get(i).ai != null && ai != null && !(getObjectRect().equals(lw.go.rects.get(i).getObjectRect())) && lw.go.rects.get(i).getObjectRect().intersects(getObjectRect())) {
 				if (ai.getNewRect() != null && lw.go.rects.get(i).ai.getNewRect() != null) {
 					
@@ -537,6 +537,7 @@ public class RectangleObject extends Object {
 					}
 				}
 			}
+			*/
 			if (doesCarry) {
 				if (ro.getY() < getY() && ai != null && ai.getMove()) {
 					if (getObjectRect().intersects(ro.getObjectRect())) {
@@ -552,11 +553,10 @@ public class RectangleObject extends Object {
 		}
 		//ai / pathfinding
 		if (ai != null) {
-			ai.passObject(this);
 			Rectangle r = new Rectangle(getX(), getY(), getWidth(), getHeight());
-			ai.update(r);
-			setX(ai.returnPos().x);
-			setY(ai.returnPos().y);
+			//ai.update(r);
+			//setX(ai.returnPos().x);
+			//setY(ai.returnPos().y);
 		}
 		//animation
 		if (animator != null) {

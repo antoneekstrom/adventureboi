@@ -3,6 +3,7 @@ package adventuregame;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FilenameFilter;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.imageio.ImageIO;
@@ -28,13 +29,13 @@ public class Images {
 	/** Index images from all directories into 'paths' hashmap. */
 	public static void indexAllImages() {
 		for (String dir : directories) {
-			indexDirectory(dir);
+			indexDirectory(dir, paths);
 		}
 	}
 
 	/** Index all images in specified directory, and put them into 'paths' hashmap. */
-	private static void indexDirectory(String s) {
-		File dir = new File(s);
+	private static void indexDirectory(String dirpath, HashMap<String, String> map) {
+		File dir = new File(dirpath);
 
 		File[] files = dir.listFiles(new FilenameFilter(){
 			@Override
@@ -44,7 +45,7 @@ public class Images {
 		});
 
 		for (File f : files) {
-			paths.put(f.getName(), dir.getPath());
+			map.put(f.getName(), dir.getPath());
 		}
 	}
 
@@ -52,6 +53,18 @@ public class Images {
 		for (String s : paths.keySet()) {
 			System.out.println(paths.get(s) +  "\\" + s);
 		}
+	}
+
+	public static ArrayList<BufferedImage> getAnimationImages(String dirpath) {
+		HashMap<String, String> map = new HashMap<String, String>();
+		indexDirectory(dirpath, map);
+		ArrayList<BufferedImage> imgs = new ArrayList<BufferedImage>();
+		try {
+			for (String s : map.keySet()) {
+				imgs.add(ImageIO.read(new File(map.get(s) + "\\" + s)));
+			}
+		} catch (Exception e) {}
+		return imgs;
 	}
 	
 	/** Load images from 'paths' into 'images' */
