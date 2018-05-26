@@ -395,7 +395,7 @@ public class Player extends Object {
 	}
 	
 	public void update() {
-		animation();
+		//animation();
 		gravity();
 		jump();
 		setLocation(getX(), getY());

@@ -11,11 +11,13 @@ public class AngryShroom extends NewObject implements ObjectMethods {
         super.initialize();
         super.setImage(Images.getImage("angryshroom"));
         createAnimator();
+        createAI();
         getAnimator().addList(Images.getAnimationImages("assets/animated_sprites/angryshroom"));
         getAnimator().setIndexRange(0, 3);
     }
 
     public void ai() {
+        super.ai();
     }
 
     public void logic() {

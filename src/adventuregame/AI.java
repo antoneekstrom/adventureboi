@@ -9,6 +9,7 @@ public class AI {
 	private Rectangle ground;
 	private Rectangle obstacle;
 	private NewObject object;
+	private Rectangle objectRectangle;
 	
 	private double jumpchance = 0.5;
 	private double jumpforce = 120;
@@ -57,6 +58,7 @@ public class AI {
 
 	public void update(NewObject o) {
 		object = o;
+		objectRectangle = object.get();
 		
 		if (ready) {
 			if (!c.hasStarted()) {
@@ -75,8 +77,8 @@ public class AI {
 		pathfind();
 	}
 
-	public NewObject returnObject() {
-		return object;
+	public Rectangle returnObject() {
+		return objectRectangle;
 	}
 	
 	public void setMove(boolean b) {
@@ -89,7 +91,7 @@ public class AI {
 	
 	public void passCollision(NewObject o) {
 		Rectangle g = o.get();
-		if (g.getMinY() > object.get().getMinY()) {
+		if (g.getMinY() > objectRectangle.getMinY()) {
 			ground = g;
 		}
 		else {
@@ -125,20 +127,20 @@ public class AI {
 	
 	public void pathfind() {
 		//switch direction
-		if (object.get().intersects(ground) || object.get().intersects(obstacle)) {
+		if (objectRectangle.intersects(ground) || objectRectangle.intersects(obstacle)) {
 			avoidBlockade();
 		}
 	}
 	
 	public void avoidBlockade() {
-		if (ground.getMinX() >= object.get().getMinX()) {
+		if (ground.getMinX() >= objectRectangle.getMinX()) {
 			direction("right");
 		}
-		if (ground.getMaxX() <= object.get().getMaxX()) {
+		if (ground.getMaxX() <= objectRectangle.getMaxX()) {
 			direction("left");
 		}
-		if (obstacle.intersects(object.get()) && !ground.equals(obstacle)) {
-			if (obstacle.getMaxX() > object.get().getMinX()) {
+		if (obstacle.intersects(objectRectangle) && !ground.equals(obstacle)) {
+			if (obstacle.getMaxX() > objectRectangle.getMinX()) {
 				direction("switch");
 			}
 		}
@@ -146,10 +148,10 @@ public class AI {
 
 	public void move() {
 		if (direction.equals("right")) {
-			object.get().x = (int) (object.get().getX() + speed);
+			objectRectangle.x = (int) (objectRectangle.getX() + speed);
 		}
 		if (direction.equals("left")) {
-			object.get().x = (int) (object.get().getX() - speed);
+			objectRectangle.x = (int) (objectRectangle.getX() - speed);
 		}
 	}
 	
@@ -194,6 +196,11 @@ public class AI {
 		}
 		move = true;
 		move();
+	}
+
+	public void test(NewObject o) {
+		System.out.println(o.ping());
+		o.applyForce(0, 50);
 	}
 	
 	public void passObject(NewObject o) {

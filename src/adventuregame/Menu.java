@@ -18,6 +18,7 @@ import gamelogic.NewCamera;
 import gamelogic.NewObjectStorage;
 import objects.AngryShroom;
 import objects.NewObject;
+import objects.NewPlayer;
 
 import javax.swing.Timer;
 
@@ -92,12 +93,20 @@ public class Menu extends ListWorld implements ActionListener {
 		NewCamera.setCameraPos(new Point(0, 0));
 		NewObjectStorage.add(new NewObject() {{
 			this.get().setLocation(0, 500);
-			this.get().width = 300;
+			this.get().width = 800;
 			this.getForce().setGravity(false);
 			this.setCollision(false);
 		}});
+		NewObjectStorage.add(new NewPlayer() {{
+			this.get().setLocation(200, 0);
+		}});
 		NewObjectStorage.add(new AngryShroom() {{
 			this.setColor(Color.black);
+			this.get().setLocation(500, 0);
+		}});
+		NewObjectStorage.add(new NewObject() {{
+			this.get().setLocation(700, 0);
+			get().height = 250;
 		}});
 		
 		invscreen = new HUD(this);

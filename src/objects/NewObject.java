@@ -20,7 +20,7 @@ public class NewObject {
     private boolean collision = true;
     private boolean intersect = false;
     private boolean camera = true;
-    private boolean debug = true;
+    private boolean debug = false;
     private boolean hasImage = false;
 
     //attributes
@@ -159,7 +159,6 @@ public class NewObject {
                 ai.passCollision(getLastCollision());
             }
             ai.update(this);
-            r = ai.returnObject().get();
         }
     }
 

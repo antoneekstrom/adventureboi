@@ -55,6 +55,21 @@ public class Images {
 		}
 	}
 
+	public static HashMap<String, BufferedImage> getImageHashMap(String dir) {
+		HashMap<String, String> indexmap = new HashMap<String, String>();
+		HashMap<String, BufferedImage> imagemap = new HashMap<String, BufferedImage>();
+		indexDirectory(dir, indexmap);
+		try {
+			for (String name : indexmap.keySet()) {
+				String path = indexmap.get(name);
+				imagemap.put(name.replace(".png", ""), ImageIO.read(new File(path + "//" + name)));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return imagemap;
+	}
+
 	public static ArrayList<BufferedImage> getAnimationImages(String dirpath) {
 		HashMap<String, String> map = new HashMap<String, String>();
 		indexDirectory(dirpath, map);

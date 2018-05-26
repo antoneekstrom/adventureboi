@@ -38,13 +38,21 @@ public class NewCollision {
 
         //determine distance of itersection on all side in pixels
         int r,l,t,b;
-        r = checkRight(r1, r2);
-        l = checkLeft(r1, r2);
+
         t = checkTop(r1, r2);
-        b = checkBottom(r1, r2);
+
+        if (r1.y < r2.y) { /* This might be bad : if o1 is above r2 */
+            b = checkBottom(r1, r2);
+        } else {b = 0;}
+        
+        if (t == 0 && b == 0) {
+            r = checkRight(r1, r2);
+            l = checkLeft(r1, r2);
+        } else {r = 0; l = 0;}
 
         //move object1 out of object2
-        r1.setLocation(r1.x + r + l, r1.y + b + t);
+        r1.x = r1.x + r + l;
+        r1.y = r1.y + b + t;
     }
 
     private static int checkTop(Rectangle r1, Rectangle r2) {
