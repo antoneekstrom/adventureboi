@@ -12,6 +12,7 @@ import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import adventuregame.Character;
 import gamelogic.NewCamera;
@@ -20,6 +21,7 @@ import objects.AngryShroom;
 import objects.NewObject;
 import objects.NewPlayer;
 
+import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import worlds.ListWorld;
@@ -90,16 +92,16 @@ public class Menu extends ListWorld implements ActionListener {
 		Images.indexAllImages();
 		Images.loadAllImages();
 
+		add(Input.start());
+
 		NewCamera.setCameraPos(new Point(0, 0));
 		NewObjectStorage.add(new NewObject() {{
 			this.get().setLocation(0, 500);
 			this.get().width = 800;
 			this.getForce().setGravity(false);
-			this.setCollision(false);
+			this.setCollision(true);
 		}});
-		NewObjectStorage.add(new NewPlayer() {{
-			this.get().setLocation(200, 0);
-		}});
+		NewObjectStorage.newPlayer();
 		NewObjectStorage.add(new AngryShroom() {{
 			this.setColor(Color.black);
 			this.get().setLocation(500, 0);

@@ -222,6 +222,10 @@ public class NewObject {
 
     }
 
+    public boolean getCollision() {
+        return collision;
+    }
+
     /** Enable/disable "camera" */
     public void setCamera(boolean b) {
         camera = b;
