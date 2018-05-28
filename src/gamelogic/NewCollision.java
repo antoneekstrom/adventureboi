@@ -39,11 +39,11 @@ public class NewCollision {
         //determine distance of itersection on all side in pixels
         int r,l,t,b;
 
-        if (r1.y < r2.y) {
+        if (r1.getMinY() < r2.getMinY()) {
             t = checkTop(r1, r2);
         } else {t = 0;}
 
-        if (r1.y > r2.y) { /* This might be bad : if o1 is above r2 */
+        if (r1.getMaxY() > r2.getMaxY()) {
             b = checkBottom(r1, r2);
         } else {b = 0;}
         
