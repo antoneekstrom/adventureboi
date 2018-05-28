@@ -96,20 +96,18 @@ public class Menu extends ListWorld implements ActionListener {
 
 		NewCamera.setCameraPos(new Point(0, 0));
 		NewObjectStorage.add(new NewObject() {{
-			this.get().setLocation(0, 500);
+			this.get().setLocation(300, 500);
 			this.get().width = 800;
 			this.getForce().setGravity(false);
-			this.setCollision(true);
-		}});
-		NewObjectStorage.newPlayer();
-		NewObjectStorage.add(new AngryShroom() {{
-			this.setColor(Color.black);
-			this.get().setLocation(500, 0);
+			this.setCollision(false);
 		}});
 		NewObjectStorage.add(new NewObject() {{
-			this.get().setLocation(700, 0);
-			get().height = 250;
+			this.get().setLocation(700, 200);
+			this.get().height = 400;
+			this.getForce().setGravity(false);
+			this.setCollision(false);
 		}});
+		NewObjectStorage.newPlayer();
 		
 		invscreen = new HUD(this);
 		invscreen.id = "invscreen";

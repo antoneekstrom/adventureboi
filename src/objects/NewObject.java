@@ -22,6 +22,7 @@ public class NewObject {
     private boolean camera = true;
     private boolean debug = false;
     private boolean hasImage = false;
+    private boolean canMove = false;
 
     //attributes
     Color color_fg = Color.white;
@@ -70,6 +71,14 @@ public class NewObject {
 
     public boolean isPassThrough() {
         return passThrough;
+    }
+
+    public boolean canMove() {
+        return canMove();
+    }
+
+    public void setCanMove(boolean b) {
+        canMove = b;
     }
 
     public void setPassThrough(boolean b) {

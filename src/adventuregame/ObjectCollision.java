@@ -56,8 +56,8 @@ public class ObjectCollision {
 						if (ro.getMaxY() > r.getMinY() && !(ro.getMaxY() > r.getMaxY())) {
 							dy = ro.getMaxY() - r.getMinY();
 
-							//if player is under object
 						}
+						//if player is under object
 						if (ro.getMinY() < r.getMaxY() && !(ro.getMinY() < r.getMinY())) {
 
 							//side = "under";

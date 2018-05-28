@@ -19,9 +19,11 @@ public class NewCollision {
         for (NewObject object2 : objects) {
             //if object1 is not the same as object2 and they are intersecting
             if (object1.get().intersects(object2.get()) && !object2.equals(object1)) {
-                collision(object1, object2);
-                object1.setIntersect(true);
-                object1.passCollision(object2);
+                if (object1.getCollision()) {
+                    collision(object1, object2);
+                    object1.setIntersect(true);
+                    object1.passCollision(object2);
+                }
             }
             else {
                 object1.setIntersect(false);
@@ -37,24 +39,24 @@ public class NewCollision {
         Rectangle r2 = o2.get();
 
         //determine distance of itersection on all side in pixels
-        int r,l,t,b;
+        int r = 0, l = 0, t = 0, b = 0;
 
-        if (r1.getMinY() < r2.getMinY()) {
-            t = checkTop(r1, r2);
-        } else {t = 0;}
+        t = checkTop(r1, r2);
+        b = checkBottom(r1, r2);
 
-        if (r1.getMaxY() > r2.getMaxY()) {
-            b = checkBottom(r1, r2);
-        } else {b = 0;}
+        l = checkLeft(r1, r2);
+        r = checkRight(r1, r2);
         
-        if (t == 0 && b == 0) {
-            r = checkRight(r1, r2);
-            l = checkLeft(r1, r2);
-        } else {r = 0; l = 0;}
-
         //move object1 out of object2
-        r1.x = r1.x + r + l;
-        r1.y = r1.y + b + t;
+        if (l < t + b) {
+            r1.x = r1.x + l;
+        }
+        if (r < t + b) {
+            r1.x = r1.x + r;
+        }
+        if (t + b < l + r) {
+            r1.y = r1.y + b + t;
+        }
     }
 
     private static int checkTop(Rectangle r1, Rectangle r2) {
