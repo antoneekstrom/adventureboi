@@ -48,15 +48,20 @@ public class NewCollision {
         r = checkRight(r1, r2);
         
         //move object1 out of object2
-        if (l < t + b) {
-            r1.x = r1.x + l;
+
+        if (r + l + r1.width < b + t) {
+            if (r1.getMaxX() > r2.getMinX() && (r1.getMinX() < r2.getMinX())) {
+                r1.x = r1.x + l;
+            }
+            if (r1.getMinX() < r2.getMaxX() && (r1.getMaxX() > r2.getMaxX())) {
+                r1.x = r1.x + r;
+            }
         }
-        if (r < t + b) {
-            r1.x = r1.x + r;
-        }
-        if (t + b < l + r) {
+
+        if (b + t < r + l + r1.width) {
             r1.y = r1.y + b + t;
         }
+
     }
 
     private static int checkTop(Rectangle r1, Rectangle r2) {
