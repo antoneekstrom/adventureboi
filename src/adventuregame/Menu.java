@@ -115,8 +115,14 @@ public class Menu extends ListWorld implements ActionListener {
 			this.setCollision(false);
 		}});
 		NewObjectStorage.newPlayer();
-		NewObjectStorage.getPlayer(1).getForce().setGravity(true);
-		NewObjectStorage.getPlayer(1).showDebug(true);
+		NewPlayer player1 = NewObjectStorage.getPlayer(1);
+		player1.getForce().setGravity(true);
+		player1.showDebug(true);
+		player1.get().setLocation(400, 0);
+		NewObjectStorage.add(new NewObject() {{
+			this.get().setLocation(400, -200);
+			this.get().setSize(300, 100);
+		}});
 		
 		invscreen = new HUD(this);
 		invscreen.id = "invscreen";

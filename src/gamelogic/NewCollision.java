@@ -15,21 +15,29 @@ public class NewCollision {
         /* Object1 : Current object, object that will be acted upon and moved
            Object2 : other objects from list */
 
+        //for intersection fix
+        boolean i = false;
+
         //loop through all other objects
         for (NewObject object2 : objects) {
             //if object1 is not the same as object2 and they are intersecting
             if (object1.get().intersects(object2.get()) && !object2.equals(object1)) {
                 if (object1.getCollision()) {
                     collision(object1, object2);
+                    i = true;
                     object1.setIntersect(true);
                     object1.passCollision(object2);
                 }
             }
             else {
-                object1.setIntersect(false);
+                if (i == false) {
+                    object1.setIntersect(false);
+                }
             }
         }
     }
+
+    // Collision is hell and I am sorry for this code.
 
     /** Calculate collision for two objects. */
     private static void collision(NewObject o1, NewObject o2) {
@@ -41,18 +49,37 @@ public class NewCollision {
         //determine distance of itersection on all side in pixels
         int r = 0, l = 0, t = 0, b = 0, dx = 0, dy = 0;
 
+        //Which side o1 is of o2
+        String side = "";
+        String verticalSide = "";
+
+        //if translation of o1 should take place on each axis
         boolean x = false;
         boolean y = false;
 
+        //determine all distance values
         t = checkTop(r1, r2);
         b = checkBottom(r1, r2);
         dy = t+b;
-
         l = checkLeft(r1, r2);
         r = checkRight(r1, r2);
         dx = r+l;
 
-        //move object1 out of object2
+        //determine side variables
+        if (l == 0) {
+            side = "right";
+        }
+        else {
+            side = "left";
+        }
+        if (t == 0) {
+            verticalSide = "bottom";
+        }
+        else {
+            verticalSide = "top";
+        }
+
+        //determine if translation on each axis should take place
         if (dx < dy) {
             x = true;
         }
@@ -66,18 +93,31 @@ public class NewCollision {
             y = true;
         }
 
-        if (x) {
+        //move o1 out of o2
+        //this might as well be magic to me, I have no idea what I am actually doing regarding this, sorry
+        if (x && !y) {
             r1.x = r1.x + dx;
         }
-        if (y) {
+        else if (y && !x) {
             r1.y = r1.y + dy;
         }
-
-        if (o1.equals(NewObjectStorage.getPlayer(1))) {
-            NewObjectStorage.getPlayer(1).setDebugString(String.valueOf(x + " : " + y));
+        else if (x && y) {
+            if (side.equals("left")) {
+                dx = -dx;
+            }
+            if (dx + r1.width < dy) {
+                if (side.equals("left")) {
+                    dx = -dx;
+                }
+                r1.x = r1.x + dx;
+            }
+            else {
+                r1.y = r1.y + dy;
+            }
         }
     }
-    
+
+    //check distance of intersection on all sides
     private static int checkLeft(Rectangle r1, Rectangle r2) {
         int i;
         

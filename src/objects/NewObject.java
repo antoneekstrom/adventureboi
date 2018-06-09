@@ -177,9 +177,9 @@ public class NewObject {
 
     /** Update object. */
     public void update() {
-        logic(); /* Do regular update stuff every tick */
         ai(); /* Do AI things every tick. */
         if (doesIntersect()) {intersect();}; /* Execute things when intersecting another object */
+        logic(); /* Do regular update stuff every tick */
         calculatePosition(); /* Calculate forces and positioning */
         updateDisplayCoordinates(); /* Update position on screen */
         animate(); /* Do animation. */

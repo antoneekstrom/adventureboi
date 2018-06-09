@@ -79,7 +79,7 @@ public class NewPlayer extends NewObject implements ObjectMethods {
             setX(getX() - movementSpeed);
         }
         if (jumping) {
-            setY(getY() -  (int) getForce().getGravityStrength() - 20);
+            setY(getY() -  (int) getForce().getGravityStrength() - 25);
         }
         if (sitting) {
             setImage(playerimages.get("falling"));
@@ -105,7 +105,7 @@ public class NewPlayer extends NewObject implements ObjectMethods {
 
     public void paint(Graphics g) {
         super.paint(g);
-        g.drawString(debugString, getDisplayCoordinate().x, getDisplayCoordinate().y - 150);
+        g.drawString(String.valueOf(doesIntersect()), getDisplayCoordinate().x, getDisplayCoordinate().y - 150);
     }
 
 }
