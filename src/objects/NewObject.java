@@ -77,6 +77,10 @@ public class NewObject {
         return canMove();
     }
 
+    public void showDebug(boolean b) {
+        debug = b;
+    }
+
     public void setCanMove(boolean b) {
         canMove = b;
     }
@@ -286,8 +290,8 @@ public class NewObject {
                 getDisplayCoordinate().y, r.width, r.height);
             }
             if (debug) {
-                g.drawString(String.valueOf(getForce().getForceY()), getDisplayCoordinate().x,
-                getDisplayCoordinate().y);
+                g.setColor(Color.black);
+                g.drawString(String.valueOf("X:" + getX() + " Y:" + getY()), getDisplayCoordinate().x, getDisplayCoordinate().y -100);
             }
         }
     }

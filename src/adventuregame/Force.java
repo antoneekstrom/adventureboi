@@ -21,11 +21,21 @@ public class Force {
         gravity = b;
     }
 
+    /** Returns true if object has gravity. */
+    public boolean hasGravity() {
+        return gravity;
+    }
+
     /** Makes object fall */
     public void gravity(Rectangle r) {
         if (gravity) {
             r.y += gravityStrength;
         }
+    }
+
+    /** Returns current strength of gravity. */
+    public double getGravityStrength() {
+        return gravityStrength;
     }
 
     public double getForceY() {

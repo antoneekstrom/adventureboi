@@ -15,8 +15,9 @@ public class NewPlayer extends NewObject implements ObjectMethods {
 
     private HashMap <String, BufferedImage> playerimages;
     private int playerId;
+    private String debugString = "";
 
-    private int movementSpeed = 10;
+    private int movementSpeed = 15;
 
     public NewPlayer(int id) {
         playerId = id;
@@ -30,6 +31,10 @@ public class NewPlayer extends NewObject implements ObjectMethods {
         return playerId;
     }
 
+    public void setDebugString(String s) {
+        debugString = s;
+    }
+
     public void sit(boolean b) {
         sitting = b;
     }
@@ -40,6 +45,12 @@ public class NewPlayer extends NewObject implements ObjectMethods {
 
     public void MoveRight(boolean b) {
         movingRight = b;
+    }
+
+    public void moveDown() {
+        if (!getForce().hasGravity()) {
+            setY(getY() + 20);
+        }
     }
 
     public void jump(boolean b) {
@@ -68,10 +79,11 @@ public class NewPlayer extends NewObject implements ObjectMethods {
             setX(getX() - movementSpeed);
         }
         if (jumping) {
-            setY(getY() - 40);
+            setY(getY() -  (int) getForce().getGravityStrength() - 20);
         }
         if (sitting) {
             setImage(playerimages.get("falling"));
+            moveDown();
         }
         
         if (doesIntersect()) {
@@ -93,7 +105,7 @@ public class NewPlayer extends NewObject implements ObjectMethods {
 
     public void paint(Graphics g) {
         super.paint(g);
-        g.drawString(String.valueOf(doesIntersect()), getDisplayCoordinate().x, getDisplayCoordinate().y - 100);
+        g.drawString(debugString, getDisplayCoordinate().x, getDisplayCoordinate().y - 150);
     }
 
 }

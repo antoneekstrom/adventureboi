@@ -100,6 +100,7 @@ public class Menu extends ListWorld implements ActionListener {
 			this.get().width = 800;
 			this.getForce().setGravity(false);
 			this.setCollision(false);
+			this.showDebug(true);
 		}});
 		NewObjectStorage.add(new NewObject() {{
 			this.get().setLocation(700, 200);
@@ -107,7 +108,15 @@ public class Menu extends ListWorld implements ActionListener {
 			this.getForce().setGravity(false);
 			this.setCollision(false);
 		}});
+		NewObjectStorage.add(new NewObject() {{
+			this.get().setLocation(1400, 300);
+			this.getForce().setGravity(false);
+			this.get().setSize(100, 400);
+			this.setCollision(false);
+		}});
 		NewObjectStorage.newPlayer();
+		NewObjectStorage.getPlayer(1).getForce().setGravity(true);
+		NewObjectStorage.getPlayer(1).showDebug(true);
 		
 		invscreen = new HUD(this);
 		invscreen.id = "invscreen";

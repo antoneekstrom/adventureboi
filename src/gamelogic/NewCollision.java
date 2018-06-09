@@ -39,29 +39,63 @@ public class NewCollision {
         Rectangle r2 = o2.get();
 
         //determine distance of itersection on all side in pixels
-        int r = 0, l = 0, t = 0, b = 0;
+        int r = 0, l = 0, t = 0, b = 0, dx = 0, dy = 0;
+
+        boolean x = false;
+        boolean y = false;
 
         t = checkTop(r1, r2);
         b = checkBottom(r1, r2);
+        dy = t+b;
 
         l = checkLeft(r1, r2);
         r = checkRight(r1, r2);
-        
+        dx = r+l;
+
         //move object1 out of object2
-
-        if (r + l + r1.width < b + t) {
-            if (r1.getMaxX() > r2.getMinX() && (r1.getMinX() < r2.getMinX())) {
-                r1.x = r1.x + l;
-            }
-            if (r1.getMinX() < r2.getMaxX() && (r1.getMaxX() > r2.getMaxX())) {
-                r1.x = r1.x + r;
-            }
+        if (dx < dy) {
+            x = true;
+        }
+        else {
+            y = true;
+        }
+        if (dx < r1.width) {
+            x = true;
+        }
+        if (dy < r1.height) {
+            y = true;
         }
 
-        if (b + t < r + l + r1.width) {
-            r1.y = r1.y + b + t;
+        if (x) {
+            r1.x = r1.x + dx;
+        }
+        if (y) {
+            r1.y = r1.y + dy;
         }
 
+        if (o1.equals(NewObjectStorage.getPlayer(1))) {
+            NewObjectStorage.getPlayer(1).setDebugString(String.valueOf(x + " : " + y));
+        }
+    }
+    
+    private static int checkLeft(Rectangle r1, Rectangle r2) {
+        int i;
+        
+        if (r1.x < r2.x) {
+            i = (int) ( r2.getMinX() - r1.getMaxX() );
+        } else {i = 0;}
+
+        return i;
+    }
+    
+    private static int checkRight(Rectangle r1, Rectangle r2) {
+        int i;
+        
+        if (r1.x > r2.x) {
+            i = (int) ( r2.getMaxX() - r1.getMinX() );
+        } else {i = 0;}
+        
+        return i;
     }
 
     private static int checkTop(Rectangle r1, Rectangle r2) {
@@ -69,26 +103,6 @@ public class NewCollision {
 
         if (r1.y < r2.y) {
             i = (int) ( r2.getMinY() - r1.getMaxY() );
-        } else {i = 0;}
-
-        return i;
-    }
-
-    private static int checkLeft(Rectangle r1, Rectangle r2) {
-        int i;
-
-        if (r1.x < r2.x) {
-            i = (int) ( r2.getMinX() - r1.getMaxX() );
-        } else {i = 0;}
-
-        return i;
-    }
-
-    private static int checkRight(Rectangle r1, Rectangle r2) {
-        int i;
-
-        if (r1.x > r2.x) {
-            i = (int) ( r2.getMaxX() - r1.getMinX() );
         } else {i = 0;}
 
         return i;
