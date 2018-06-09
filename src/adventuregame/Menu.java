@@ -96,8 +96,8 @@ public class Menu extends ListWorld implements ActionListener {
 
 		NewCamera.setCameraPos(new Point(0, 0));
 		NewObjectStorage.add(new NewObject() {{
-			this.get().setLocation(300, 500);
-			this.get().width = 800;
+			this.get().setLocation(0, 500);
+			this.get().width = 1200;
 			this.getForce().setGravity(false);
 			this.setCollision(false);
 			this.showDebug(true);
@@ -114,6 +114,7 @@ public class Menu extends ListWorld implements ActionListener {
 			this.get().setSize(100, 400);
 			this.setCollision(false);
 		}});
+		NewObjectStorage.newPlayer();
 		NewObjectStorage.newPlayer();
 		NewPlayer player1 = NewObjectStorage.getPlayer(1);
 		player1.getForce().setGravity(true);

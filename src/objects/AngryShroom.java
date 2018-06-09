@@ -34,4 +34,8 @@ public class AngryShroom extends NewObject implements ObjectMethods {
     public void update() {
         super.update();
     }
+
+    public void destruct() {
+        super.destruct();
+    }
 }

@@ -11,5 +11,4 @@ public interface ObjectMethods {
     public void animate();
 
     public void ai();
-
 }

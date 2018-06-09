@@ -60,17 +60,37 @@ public class Input {
 
     /** Bind all actionnames to actions. */
     private static void populateActionMap() {
-        actions.put("moveleft", new PlayerMovement("moveleft", false, 1));
-        releasedActions.put("moveleft", new PlayerMovement("moveleft", true, 1));
+        //player1
+        actions.put("moveleft1", new PlayerMovement("moveleft", false, 1));
+        releasedActions.put("moveleft1", new PlayerMovement("moveleft", true, 1));
 
-        actions.put("moveright", new PlayerMovement("moveright", false, 1));
-        releasedActions.put("moveright", new PlayerMovement("moveright", true, 1));
+        actions.put("moveright1", new PlayerMovement("moveright", false, 1));
+        releasedActions.put("moveright1", new PlayerMovement("moveright", true, 1));
         
-        actions.put("jump", new PlayerMovement("jump", false, 1));
-        releasedActions.put("jump", new PlayerMovement("jump", true, 1));
+        actions.put("jump1", new PlayerMovement("jump", false, 1));
+        releasedActions.put("jump1", new PlayerMovement("jump", true, 1));
         
-        actions.put("sit", new PlayerMovement("sit", false, 1));
-        releasedActions.put("sit", new PlayerMovement("sit", true, 1));
+        actions.put("sit1", new PlayerMovement("sit", false, 1));
+        releasedActions.put("sit1", new PlayerMovement("sit", true, 1));
+
+        actions.put("sprint1", new PlayerMovement("sprint", false, 1));
+        releasedActions.put("sprint1", new PlayerMovement("sprint", true, 1));
+        
+        actions.put("abilityleft1", new PlayerMovement("abilityleft", false, 1));
+        releasedActions.put("abilityleft1", new PlayerMovement("abilityleft", true, 1));
+
+        actions.put("abilityright1", new PlayerMovement("abilityright", false, 1));
+        releasedActions.put("abilityright1", new PlayerMovement("abilityright", true, 1));
+
+        //player2
+        actions.put("moveleft2", new PlayerMovement("moveleft", false, 2));
+        releasedActions.put("moveleft2", new PlayerMovement("moveleft", true, 2));
+
+        actions.put("moveright2", new PlayerMovement("moveright", false, 2));
+        releasedActions.put("moveright2", new PlayerMovement("moveright", true, 2));
+
+        actions.put("jump2", new PlayerMovement("jump", false, 2));
+        releasedActions.put("jump2", new PlayerMovement("jump", true, 2));
     }
 
     /** Change a key in the keybinding hashmap. Will need to recreate keybinding after this to work. */
@@ -94,11 +114,19 @@ public class Input {
 
     /** Give all actions default keys. */
     private static void setupKeys() {
-        keybindings.put("moveleft", KeyEvent.VK_A);
-        keybindings.put("moveright", KeyEvent.VK_D);
-        keybindings.put("jump", KeyEvent.VK_W);
-        keybindings.put("sit", KeyEvent.VK_S);
-        keybindings.put("sprint", KeyEvent.VK_UP);
+        //player1
+        keybindings.put("moveleft1", KeyEvent.VK_A);
+        keybindings.put("moveright1", KeyEvent.VK_D);
+        keybindings.put("jump1", KeyEvent.VK_W);
+        keybindings.put("sit1", KeyEvent.VK_S);
+        keybindings.put("sprint1", KeyEvent.VK_UP);
+        keybindings.put("abilityleft1", KeyEvent.VK_LEFT);
+        keybindings.put("abilityright1", KeyEvent.VK_RIGHT);
+
+        //player2
+        keybindings.put("moveright2", KeyEvent.VK_NUMPAD6);
+        keybindings.put("moveleft2", KeyEvent.VK_NUMPAD4);
+        keybindings.put("jump2", KeyEvent.VK_NUMPAD8);
     }
 
     /** Bind all the keys from keybindings hashmap. Use this after changeKey method. */

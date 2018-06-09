@@ -9,6 +9,7 @@ import objects.NewPlayer;
 public class NewObjectStorage {
 
     private static ArrayList<NewObject> objects = new ArrayList<NewObject>();
+    private static ArrayList<NewObject> removeQueue = new ArrayList<NewObject>();
 
     //players
     private static NewPlayer player1;
@@ -26,11 +27,20 @@ public class NewObjectStorage {
         objects.add(object);
     }
 
+    public static void remove(NewObject object) {
+        removeQueue.remove(object);
+    }
+
+    public static void addToIndex(NewObject object, int i) {
+        objects.add(i, object);
+    }
+
     /** update all objects */
     public static void update() {
         for (NewObject o : objects) {
             o.update();
         }
+        NewCamera.update();
     }
 
     /** Get playerobject. */
@@ -51,11 +61,11 @@ public class NewObjectStorage {
         playerCount++;
         if (playerCount == 1) {
             player1 = new NewPlayer(1);
-            add(player1);
+            addToIndex(player1, 1);
         }
         else if (playerCount == 2) {
             player2 = new NewPlayer(2);
-            add(player2);
+            addToIndex(player2, 2);
         }
     }
 

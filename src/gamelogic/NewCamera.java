@@ -1,8 +1,8 @@
 package gamelogic;
 
 import java.awt.Point;
-import java.awt.Polygon;
 
+import adventuregame.GlobalData;
 import objects.NewObject;
 
 /** The purpose of this class is to act as a "camera" to
@@ -13,11 +13,24 @@ import objects.NewObject;
  */
 public class NewCamera {
 
-    private static Point cameraPosition = new Point(0,0);    
+    /** Position of camera */
+    private static Point cameraPosition = new Point(0,0);
+    /** Position camera wants to be at, used for slow/smooth camera. */
+    private static Point cameraDestination = new Point(0,0);
+    private static boolean smoothCamera = true;
 
     /** Run the camera, position display coordinates
      *  relative to camera position for all objects */
     public static void update() {
+        //smooth camera follow
+        if (smoothCamera) {
+            moveCameraTo(cameraDestination);
+        }
+        else {
+            cameraPosition = cameraDestination;
+        }
+
+        //update object camera position for all objects
         for (NewObject o : NewObjectStorage.getObjectList()) {
             setDisplayCoordinates(o);
         }
@@ -26,6 +39,23 @@ public class NewCamera {
     /** Set the camera position to a point */
     public static void setCameraPos(Point p) {
         cameraPosition = p;
+    }
+
+    /** Center camera on object. */
+    public static void centerCameraOn(Point p) {
+        cameraDestination.setLocation(p.x - GlobalData.getScreenDim().width / 2,
+        p.y - GlobalData.getScreenDim().height / 2);
+    }
+
+    /** Advance camera position towards destination. */
+    public static void moveCameraTo(Point p) {
+        //for x-axis
+        int x = p.x - cameraPosition.x;
+        cameraPosition.x += x / 10;
+        
+        //for y-axis
+        int y = p.y - cameraPosition.y;
+        cameraPosition.y += y / 10;
     }
 
     public static Point getCameraPosition() {

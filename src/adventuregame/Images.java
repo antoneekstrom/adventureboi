@@ -14,6 +14,7 @@ public class Images {
 	private static final String[] directories = new String[] {
 		"assets/sprites",
 		"assets/animated_sprites",
+		"assets/animated_sprites/aboi/effects",
 	};
 
 	public String[] getDirectories() {
@@ -96,7 +97,6 @@ public class Images {
 		if (!key.endsWith(".png")) {
 			key = key + ".png";
 		}
-		System.out.println(key);
 		return images.get(key);
 	}
 }

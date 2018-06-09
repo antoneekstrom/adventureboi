@@ -14,7 +14,6 @@ public class PlayerMovement extends AbstractAction {
 
     private String action = "";
     private int id = 0;
-    private NewPlayer player;
     private boolean released;
     
     public PlayerMovement(String a, boolean r, int playerid) {
@@ -25,7 +24,6 @@ public class PlayerMovement extends AbstractAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-        System.out.println(released);
         if (Input.getMovementEnabled()) {
             if (action.equals("moveleft")) {
                 NewObjectStorage.getPlayer(id).moveLeft(released);
@@ -37,7 +35,26 @@ public class PlayerMovement extends AbstractAction {
                 NewObjectStorage.getPlayer(id).sit(released);
             }
             if (action.equals("jump")) {
-                NewObjectStorage.getPlayer(id).jump(released);
+                NewObjectStorage.getPlayer(id).doJump(released);
+            }
+            if (action.equals("sprint")) {
+                NewObjectStorage.getPlayer(id).sprint(released);
+            }
+            if (action.equals("abilityright")) {
+                if (!released) {
+                    NewObjectStorage.getPlayer(id).releaseAbility();
+                }
+                else {
+                    NewObjectStorage.getPlayer(id).useAbility("right", released);
+                }
+            }
+            if (action.equals("abilityleft")) {
+                if (!released) {
+                    NewObjectStorage.getPlayer(id).releaseAbility();
+                }
+                else {
+                    NewObjectStorage.getPlayer(id).useAbility("left", released);
+                }
             }
         }
 	}

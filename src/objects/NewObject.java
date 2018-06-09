@@ -12,6 +12,7 @@ import adventuregame.Animator;
 import adventuregame.Force;
 import gamelogic.NewCamera;
 import gamelogic.NewCollision;
+import gamelogic.NewObjectStorage;
 
 public class NewObject {
 
@@ -47,6 +48,7 @@ public class NewObject {
     //positioning
     private Rectangle r;
     private Point displayCoordinate;
+    private int yLimit = 3000   ;
 
     public NewObject() {
         r = new Rectangle(100, 100);
@@ -180,9 +182,22 @@ public class NewObject {
         ai(); /* Do AI things every tick. */
         if (doesIntersect()) {intersect();}; /* Execute things when intersecting another object */
         logic(); /* Do regular update stuff every tick */
+        basicLogic(); /* Basic logic for all objects */
         calculatePosition(); /* Calculate forces and positioning */
         updateDisplayCoordinates(); /* Update position on screen */
         animate(); /* Do animation. */
+    }
+
+    /** Update basic logic stuff for all objects */
+    private void basicLogic() {
+        if (get().y > yLimit) {
+            destruct();
+        }
+    }
+
+    /** Called when object dies/is destroyed. Should invoke super. */
+    public void destruct() {
+        NewObjectStorage.remove(this);
     }
 
     //coordinate methods for backwards compatability
