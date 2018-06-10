@@ -3,6 +3,7 @@ package adventuregame;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
+import UI.HudBar;
 import worlds.ListWorld;
 
 public class GameObjects {

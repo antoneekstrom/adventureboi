@@ -6,8 +6,6 @@ public interface ObjectMethods {
 
     public void logic();
 
-    public void intersect();
-
     public void animate();
 
     public void ai();

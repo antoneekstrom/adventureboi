@@ -41,20 +41,14 @@ public class PlayerMovement extends AbstractAction {
                 NewObjectStorage.getPlayer(id).sprint(released);
             }
             if (action.equals("abilityright")) {
-                if (!released) {
-                    NewObjectStorage.getPlayer(id).releaseAbility();
-                }
-                else {
-                    NewObjectStorage.getPlayer(id).useAbility("right", released);
-                }
+                NewObjectStorage.getPlayer(id).useAbility("right", released);
             }
             if (action.equals("abilityleft")) {
-                if (!released) {
-                    NewObjectStorage.getPlayer(id).releaseAbility();
-                }
-                else {
-                    NewObjectStorage.getPlayer(id).useAbility("left", released);
-                }
+                NewObjectStorage.getPlayer(id).useAbility("left", released);
+            }
+            if (action.equals("ability1")) {
+                NewObjectStorage.getPlayer(id).selectAbility("fireball");
+                NewObjectStorage.getPlayer(id).releaseAbility();
             }
         }
 	}

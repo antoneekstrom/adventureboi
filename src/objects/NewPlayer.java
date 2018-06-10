@@ -3,12 +3,15 @@ package objects;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.HashMap;
 
+import adventuregame.Animator;
 import adventuregame.GlobalData;
 import adventuregame.Images;
 import gamelogic.AbilityValues;
 import gamelogic.NewCamera;
+import gamelogic.NewObjectStorage;
 
 public class NewPlayer extends NewObject implements ObjectMethods {
 
@@ -34,7 +37,7 @@ public class NewPlayer extends NewObject implements ObjectMethods {
     private boolean lockCameraY = false;
 
     //abilities
-    private HashMap<String, Runnable> abilities = new HashMap<String, Runnable>() {
+    final private HashMap<String, Runnable> abilities = new HashMap<String, Runnable>() {
         private static final long serialVersionUID = 1L;
 	{
         put("fireball", () -> fireball());
@@ -42,11 +45,17 @@ public class NewPlayer extends NewObject implements ObjectMethods {
     private String currentAbility = "fireball";
     private String abilityDirection = "none";
     private boolean abilityCharging = false;
+    private int abilityCooldown = AbilityValues.cooldown.get(currentAbility);
+    private int chargePercentage = 0;
+
+    //charge animation
+    private BufferedImage[] chargeAnimation;
 
     //Ability
-    private double ABILITY_FACTOR_MAX = 3;
-    private double ABILITY_FACTOR_INCREASE = 0.2;
-    private double AbilityFactor = 1;
+    private double ABILITY_FACTOR_MAX = AbilityValues.factorMax.get(currentAbility);;
+    private double ABILITY_FACTOR_INCREASE = AbilityValues.factorIncrease.get(currentAbility);
+    private int ABILITY_COOLDOWN = AbilityValues.cooldown.get(currentAbility);
+    private double abilityFactor = 1;
 
     //jumping
     /** Amount of times player can jump before touching the ground again. */
@@ -139,10 +148,15 @@ public class NewPlayer extends NewObject implements ObjectMethods {
     public void initialize() {
         super.initialize();
         get().setSize(150, 125);
+        setName("player" + PLAYER_ID);
 
         //animation/images
         playerimages = Images.getImageHashMap("assets/animated_sprites/aboi");
         setImage(playerimages.get("still"));
+        chargeAnimation = new BufferedImage[Images.getFolderImages("assets/animated_sprites/boicharge").size()];
+        for (int i = 0; i <= 10; i++) {
+            chargeAnimation[i] = Images.getImage("charge" + i);
+        }
     }
 
     public void ai() {
@@ -172,12 +186,8 @@ public class NewPlayer extends NewObject implements ObjectMethods {
 
     public void logic() {
         movement();
-        abilities();
+        chargeAbility();
         if (PLAYER_ID == 1) {centerCamera();}
-    }
-
-    public void abilities() {
-        if (abilityCharging) {chargeAbility();}
     }
 
     public void selectAbility(String s) {
@@ -192,15 +202,24 @@ public class NewPlayer extends NewObject implements ObjectMethods {
     }
 
     public void chargeAbility() {
-        if (AbilityFactor + ABILITY_FACTOR_INCREASE <= ABILITY_FACTOR_MAX) {
-            AbilityFactor += ABILITY_FACTOR_INCREASE;
+        if (abilityCooldown == 0) {
+            if (abilityFactor + ABILITY_FACTOR_INCREASE <= ABILITY_FACTOR_MAX && abilityCharging) {
+                abilityFactor += ABILITY_FACTOR_INCREASE;
+            }
+            else if (abilityCharging && abilityFactor + ABILITY_FACTOR_INCREASE > ABILITY_FACTOR_MAX) {abilityFactor = ABILITY_FACTOR_MAX;}
+            else if (!abilityCharging && abilityFactor != 1) {
+                releaseAbility();
+            }
         }
-        else {AbilityFactor = ABILITY_FACTOR_MAX;}
+        else {
+            abilityCooldown--;
+        }
     }
 
     public void releaseAbility() {
-        abilities.get(currentAbility);
-        AbilityFactor = 1;
+        abilities.get(currentAbility).run();
+        abilityFactor = 1;
+        abilityCooldown = ABILITY_COOLDOWN;
     }
 
     /** Center camera on player */
@@ -240,11 +259,18 @@ public class NewPlayer extends NewObject implements ObjectMethods {
             setImage(playerimages.get("still"));
             animationCounter = 9;
         }
-
         animateStatus();
+        if (abilityCharging) {
+            animateCharge();
+        }
     }
 
-    public void animateStatus() {
+    private void animateCharge() {
+        chargePercentage = (int) Math.round(((abilityFactor - 1) / (ABILITY_FACTOR_MAX - 1)) * 10);
+        statusImage = chargeAnimation[chargePercentage];
+    }
+
+    private void animateStatus() {
         if (sprinting) {
             statusImage = Images.getImage("stamina_boi.png");
         }
@@ -253,7 +279,7 @@ public class NewPlayer extends NewObject implements ObjectMethods {
         }
     }
 
-    public void intersect() {
+    public void intersect(NewObject collision) {
         jumpCount = MAX_JUMP_COUNT;
     }
 
@@ -268,17 +294,23 @@ public class NewPlayer extends NewObject implements ObjectMethods {
     public void paint(Graphics g) {
         super.paint(g);
         g.drawImage(statusImage, getDisplayCoordinate().x, getDisplayCoordinate().y, getWidth(), getHeight(), null);
-        g.drawString(String.valueOf("charge:" + AbilityFactor), getDisplayCoordinate().x, getDisplayCoordinate().y - 150);
+        g.drawString(String.valueOf("cooldown:" + abilityCooldown + " percentage:" + chargePercentage + " charge:" + abilityFactor),
+        getDisplayCoordinate().x - 300, getDisplayCoordinate().y - 150);
     }
 
     public void fireball() {
         Fireball f = new Fireball(abilityDirection);
+        f.damage *= abilityFactor;
+        if (chargePercentage == 10) {
+            f.charged();
+        }
+        f.get().setSize( (int) (f.get().getWidth() * abilityFactor), (int) (f.get().getHeight() * abilityFactor));
         if (abilityDirection.equals("left")) {
-            f.get().setLocation((int) get().getCenterX() - f.getWidth(), (int) get().getCenterY());
+            f.get().setLocation((int) get().getCenterX() - (int) getWidth() / 2 - f.getWidth(), (int) get().getCenterY() - (int) f.get().getHeight());
         }
         else if (abilityDirection.equals("right")) {
-            f.get().setLocation((int) get().getCenterX() + f.getWidth(), (int) get().getCenterY());
+            f.get().setLocation((int) get().getCenterX() + (int) getWidth() / 2, (int) get().getCenterY() - (int) (f.get().getHeight()));
         }
+        NewObjectStorage.add(f);
     }
-
 }

@@ -26,6 +26,10 @@ public class Force {
         return gravity;
     }
 
+    public void setGravityStrength(double d) {
+        gravityStrength = d;
+    }
+
     /** Makes object fall */
     public void gravity(Rectangle r) {
         if (gravity) {

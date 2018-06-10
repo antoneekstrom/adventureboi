@@ -14,13 +14,13 @@ import java.util.ArrayList;
 import javax.swing.KeyStroke;
 import javax.swing.Timer;
 
+import UI.HUD;
+import UI.HudObj;
+import UI.HudText;
+import UI.List;
 import adventuregame.Camera;
 import adventuregame.Controller;
 import adventuregame.GameObjects;
-import adventuregame.HUD;
-import adventuregame.HudObj;
-import adventuregame.HudText;
-import adventuregame.List;
 import adventuregame.Main;
 import adventuregame.MethodAction;
 import adventuregame.Mouse;
@@ -164,7 +164,6 @@ public class ListWorld extends World {
 		p = new Player(frame, this);
 		c = new Camera(dim);
 		cl = new PlayerCollision(p);
-		sw.loadWorld(this);
 		startPlayerController(p);
 		p.setGravity(true);
 		p.setLocation(0, 100);

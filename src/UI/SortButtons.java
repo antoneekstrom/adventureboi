@@ -1,4 +1,4 @@
-package adventuregame;
+package UI;
 
 import java.awt.Color;
 

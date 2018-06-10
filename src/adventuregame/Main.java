@@ -13,7 +13,6 @@ public class Main extends JFrame {
 	Dimension fdim;
 	Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 	public static boolean fullscreen = true;
-	public ListWorld lw;
 	public Menu m;
 	public Thread t;
 	
@@ -31,11 +30,9 @@ public class Main extends JFrame {
 		this.setVisible(true);
 		
 		//create and add world
-		ListWorld lw = new ListWorld(f);
-		Menu m = new Menu(f);
+		GameEnvironment m = new GameEnvironment();
 		add(m);
-		add(lw);
-		m.run();
+		m.start();
 	}
 	
 	public static void main(String[] args) {

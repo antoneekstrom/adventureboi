@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import javax.imageio.ImageIO;
@@ -15,6 +16,7 @@ public class Images {
 		"assets/sprites",
 		"assets/animated_sprites",
 		"assets/animated_sprites/aboi/effects",
+		"assets/animated_sprites/boicharge",
 	};
 
 	public String[] getDirectories() {
@@ -44,6 +46,7 @@ public class Images {
 				return name.endsWith(".png");
 			}
 		});
+		Arrays.sort(files);
 
 		for (File f : files) {
 			map.put(f.getName(), dir.getPath());
@@ -71,7 +74,8 @@ public class Images {
 		return imagemap;
 	}
 
-	public static ArrayList<BufferedImage> getAnimationImages(String dirpath) {
+	/** Get all images in a folder. Uses full relative path (from game folder) */
+	public static ArrayList<BufferedImage> getFolderImages(String dirpath) {
 		HashMap<String, String> map = new HashMap<String, String>();
 		indexDirectory(dirpath, map);
 		ArrayList<BufferedImage> imgs = new ArrayList<BufferedImage>();
@@ -91,6 +95,10 @@ public class Images {
 				images.put(name, ImageIO.read(new File(path + "\\" + name)));
 			}
 		} catch (Exception e) {e.printStackTrace();}
+	}
+
+	public static boolean isIndexed(String s) {
+		return images.containsKey(s);
 	}
 
 	public static BufferedImage getImage(String key) {

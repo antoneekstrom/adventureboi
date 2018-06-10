@@ -5,6 +5,11 @@ import java.awt.MouseInfo;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
+import UI.HUD;
+import UI.HudObj;
+import UI.HudText;
+import UI.List;
+import UI.SortButtons;
 import worlds.ListWorld;
 
 public class ButtonAction {
@@ -156,7 +161,7 @@ public class ButtonAction {
 						
 						if (hl.get(i).visible && hl.get(i).id.equals("levels") && ht.hasMouse) {
 							world = world.getWorld();
-							sw.setWorld(hl.get(i).ids.get(r), world);
+							//sw.setWorld(hl.get(i).ids.get(r), world);
 							world.startPlayerController(world.p);
 							world.switchHud("");
 							world.currentHud = "";

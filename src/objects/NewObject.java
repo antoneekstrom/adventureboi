@@ -10,6 +10,8 @@ import java.awt.image.BufferedImage;
 import adventuregame.AI;
 import adventuregame.Animator;
 import adventuregame.Force;
+import adventuregame.HealthModule;
+import adventuregame.Images;
 import gamelogic.NewCamera;
 import gamelogic.NewCollision;
 import gamelogic.NewObjectStorage;
@@ -23,11 +25,12 @@ public class NewObject {
     private boolean camera = true;
     private boolean debug = false;
     private boolean hasImage = false;
-    private boolean canMove = false;
 
     //attributes
     Color color_fg = Color.white;
     Font font = new Font("Comic Sans MS", 40, 40);
+    protected String name = "Object";
+    private String text;
 
     //image/sprite
     private BufferedImage image;
@@ -38,6 +41,7 @@ public class NewObject {
     //modules
     private AI ai;
     private Animator animator;
+    private HealthModule healthModule;
 
     //force
     private Force force;
@@ -54,13 +58,34 @@ public class NewObject {
         r = new Rectangle(100, 100);
         r.setLocation(0, 0);
         displayCoordinate = new Point(r.x, r.y);
-
         initialize();
     }
 
-    /**setup object to specified type */
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String t) {
+        text = t;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void inititializeType() {
+        if (Images.isIndexed(name)) {
+            setImage(Images.getImage(name));
+        }
+    }
+
+    public void setName(String n) {
+        name = n;
+    }
+
+    /** setup object to specified type. Overwrite this method if this is not a generic object. */
     public void initialize() {
-        force = new Force();
+        setForce(new Force());
     }
 
     public void setColor(Color c) {
@@ -81,10 +106,6 @@ public class NewObject {
 
     public void showDebug(boolean b) {
         debug = b;
-    }
-
-    public void setCanMove(boolean b) {
-        canMove = b;
     }
 
     public void setPassThrough(boolean b) {
@@ -108,8 +129,12 @@ public class NewObject {
         return intersect;
     }
 
-    /** Is called when intersecting with another object. */
-    protected void intersect() {
+    /** Is called when intersecting with another object. Call super. */
+    protected void intersect(NewObject collision) {
+    }
+
+    protected HealthModule getHealthModule() {
+        return healthModule;
     }
 
     /** Set sprite/image. */
@@ -127,7 +152,7 @@ public class NewObject {
         return animator;
     }
 
-    public void createAnimator() {
+    public void enableAnimator() {
         animator = new Animator(image);
     }
 
@@ -180,7 +205,7 @@ public class NewObject {
     /** Update object. */
     public void update() {
         ai(); /* Do AI things every tick. */
-        if (doesIntersect()) {intersect();}; /* Execute things when intersecting another object */
+        if (doesIntersect()) {intersect(lastCollision);}; /* Execute things when intersecting another object */
         logic(); /* Do regular update stuff every tick */
         basicLogic(); /* Basic logic for all objects */
         calculatePosition(); /* Calculate forces and positioning */
@@ -197,7 +222,6 @@ public class NewObject {
 
     /** Called when object dies/is destroyed. Should invoke super. */
     public void destruct() {
-        NewObjectStorage.remove(this);
     }
 
     //coordinate methods for backwards compatability
@@ -248,6 +272,10 @@ public class NewObject {
             NewCollision.check(this);
         }
 
+    }
+
+    public void enableHealthModule(int health) {
+        healthModule = new HealthModule(health);
     }
 
     public boolean getCollision() {

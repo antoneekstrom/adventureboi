@@ -3,6 +3,8 @@ package adventuregame;
 import java.awt.Color;
 import java.awt.Graphics;
 
+import UI.HudBar;
+
 public class HealthModule {
 	
 	int hp, maxhp;

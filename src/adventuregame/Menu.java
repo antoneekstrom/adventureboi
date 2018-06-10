@@ -12,18 +12,19 @@ import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import adventuregame.Character;
 import gamelogic.NewCamera;
 import gamelogic.NewObjectStorage;
-import objects.AngryShroom;
-import objects.NewObject;
 import objects.NewPlayer;
 
-import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import UI.HUD;
+import UI.HudBar;
+import UI.HudObj;
+import UI.HudText;
+import UI.List;
 import worlds.ListWorld;
 
 public class Menu extends ListWorld implements ActionListener {
@@ -83,67 +84,19 @@ public class Menu extends ListWorld implements ActionListener {
 		setSize(dim);
 		setBackground(Color.CYAN);
 		sw = new SaveWriter("menu");
-		huds = new ArrayList<HUD>();
 		
-		character = new Character();
-		Character.Inventory().requestUpdate();
-		Character.backup();
-
 		Images.indexAllImages();
 		Images.loadAllImages();
 
 		add(Input.start());
 
 		NewCamera.setCameraPos(new Point(0, 0));
-		NewObjectStorage.add(new NewObject() {{
-			this.get().setLocation(0, 500);
-			this.get().width = 1200;
-			this.getForce().setGravity(false);
-			this.setCollision(false);
-			this.showDebug(true);
-		}});
-		NewObjectStorage.add(new NewObject() {{
-			this.get().setLocation(700, 200);
-			this.get().height = 400;
-			this.getForce().setGravity(false);
-			this.setCollision(false);
-		}});
-		NewObjectStorage.add(new NewObject() {{
-			this.get().setLocation(1400, 300);
-			this.getForce().setGravity(false);
-			this.get().setSize(100, 400);
-			this.setCollision(false);
-		}});
-		NewObjectStorage.newPlayer();
 		NewObjectStorage.newPlayer();
 		NewPlayer player1 = NewObjectStorage.getPlayer(1);
 		player1.getForce().setGravity(true);
 		player1.showDebug(true);
 		player1.get().setLocation(400, 0);
-		NewObjectStorage.add(new NewObject() {{
-			this.get().setLocation(400, -200);
-			this.get().setSize(300, 100);
-		}});
-		
-		invscreen = new HUD(this);
-		invscreen.id = "invscreen";
-		statistics = new HUD(this);
-		statistics.id = "stats";
-		actualhud = new HUD(this);
-		actualhud.id = "actualhud";
-		menu = new HUD(this);
-		menu.id = "menu";
-		levels = new HUD(this);
-		levels.id = "levels";
-		options = new HUD(this);
-		options.id = "options";
-		huds.add(statistics);
-		huds.add(actualhud);
-		huds.add(menu);
-		huds.add(levels);
-		huds.add(options);
-		huds.add(invscreen);
-
+	
 		console = new HUD(this);
 		console.id = "console";
 		
@@ -162,10 +115,6 @@ public class Menu extends ListWorld implements ActionListener {
 		
 		c = new Camera(dim);
 		go = new GameObjects(frame, this);
-		p = new Player(frame, this);
-		p.checkInventory();
-		p.fillStats();
-		cl = new PlayerCollision(p);
 		
 		createOptions();
 		createInventory(invscreen);
@@ -303,9 +252,6 @@ public class Menu extends ListWorld implements ActionListener {
 		p.setLocation(0, 100);
 		p.setSize(150, 125);
 		p.setGRAVITY(30);
-		startPlayerController(p);
-		sw.setWorld("menu", this);
-		sw.loadWorld(this);
 		p.JFUEL = 7;
 		timer.start();
 	}
@@ -318,6 +264,7 @@ public class Menu extends ListWorld implements ActionListener {
 				p.paint(g);
 			}
 
+			NewObjectStorage.paint(g);
 			menu.paint(g);
 			levels.paint(g);
 			console.paint(g);
@@ -326,7 +273,6 @@ public class Menu extends ListWorld implements ActionListener {
 			statistics.paint(g);
 			actualhud.paint(g);
 
-			NewObjectStorage.paint(g);
 		}
 	}
 
@@ -357,9 +303,9 @@ public class Menu extends ListWorld implements ActionListener {
 	double time1, time2;
 	int FRAMERATE = 12;
 	public void actionPerformed(ActionEvent arg0) {
-		time1 = System.nanoTime() / 1000000;
+		time1 = System.nanoTime() / 10000;
 		if (time1 - time2 > FRAMERATE) {
-			time2 = System.nanoTime() / 1000000;
+			time2 = System.nanoTime() / 10000;
 			
 			name = sw.getWorld();
 			m.ba.passSaveWriter(sw);
@@ -369,7 +315,6 @@ public class Menu extends ListWorld implements ActionListener {
 			menu.update();
 			levels.update();
 			options.update();
-			actualhud.passPlayer(p);
 			actualhud.update();
 			console.update();
 			invscreen.update();

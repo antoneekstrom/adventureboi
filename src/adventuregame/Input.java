@@ -91,6 +91,9 @@ public class Input {
 
         actions.put("jump2", new PlayerMovement("jump", false, 2));
         releasedActions.put("jump2", new PlayerMovement("jump", true, 2));
+
+        actions.put("ability1", new PlayerMovement("ability1", false, 2));
+        releasedActions.put("ability1", new PlayerMovement("ability1", true, 2));
     }
 
     /** Change a key in the keybinding hashmap. Will need to recreate keybinding after this to work. */
@@ -122,6 +125,7 @@ public class Input {
         keybindings.put("sprint1", KeyEvent.VK_UP);
         keybindings.put("abilityleft1", KeyEvent.VK_LEFT);
         keybindings.put("abilityright1", KeyEvent.VK_RIGHT);
+        keybindings.put("ability1", KeyEvent.VK_1);
 
         //player2
         keybindings.put("moveright2", KeyEvent.VK_NUMPAD6);

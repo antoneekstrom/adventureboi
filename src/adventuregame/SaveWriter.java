@@ -14,7 +14,9 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.stream.Stream;
 
-import worlds.ListWorld;
+import gamelogic.NewObjectStorage;
+import objects.NewObject;
+import objects.ObjectTypes;
 
 public class SaveWriter {
 	private BufferedWriter writer;
@@ -43,7 +45,7 @@ public class SaveWriter {
 
 	}
 	
-	public void setWorld(String s, ListWorld w) {
+	public void setWorld(String s, GameEnvironment ge) {
 		file = new File("data/levels/" + s + ".world");
 		System.out.println(file.getPath());
 		try {
@@ -62,8 +64,8 @@ public class SaveWriter {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		w.setName(s);
-		loadWorld(w);
+		ge.setName(s);
+		loadWorld(ge);
 	}
 	
 	public void createWorld(String s) {
@@ -192,11 +194,10 @@ public class SaveWriter {
 	String t = "";
 	String txt = "";
 	Color c;
-	public void loadWorld(ListWorld world) {
+	public void loadWorld(GameEnvironment ge) {
 		try {
 			//clears current world
-			world.go.rects.clear();
-			world.cl.collisions.clear();
+			NewObjectStorage.clearEnvironment();
 			lcount = countLines(file.getPath());
 		} catch (IOException e) {e.printStackTrace();}
 		//parse rectangleobject from .world file
@@ -215,30 +216,27 @@ public class SaveWriter {
 				
 				//additional properties
 				if (a.length > 5) {
+					//type
 					t = String.valueOf(a[5]);
 				}
 				if (a.length > 6) {
+					//text
 					txt = String.valueOf(a[6]);
 				}
 			}
 			
 			//create object and put it into game world
-			RectangleObject ro = new RectangleObject(world.frame, world);
-			ro.setLocation(x, y);
-			ro.setSize(w, h);
-			ro.setCOLOR(c);
-			if (!(t.equals(""))) {
-				if (!t.equals("rectangle")) {
-					ro.hasImg = true;
-				}
-				ro.givetype(t);
+			NewObject o = new NewObject();
+			o = ObjectTypes.getObject(t);
+			if (!ObjectTypes.isKnownType(t) || ObjectTypes.isExcluded(t)) {
+				o.setColor(c);
+				o.setName(t);
+				o.get().setSize(w, h);
 			}
-			if (!txt.equals("")) {
-				ro.text(txt);
-			}
-			world.addRo(ro);
-			
-			//world.addRect(new Point(x, y), new Dimension(w, h), c);
+			o.setText(txt);
+			o.get().setLocation(x, y);
+
+			NewObjectStorage.add(o);
 		}
 	}
 	

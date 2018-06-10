@@ -5,6 +5,7 @@ import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import UI.HUD;
 import worlds.ListWorld;
 
 public class Mouse implements MouseListener {

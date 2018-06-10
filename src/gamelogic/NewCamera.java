@@ -31,8 +31,8 @@ public class NewCamera {
         }
 
         //update object camera position for all objects
-        for (NewObject o : NewObjectStorage.getObjectList()) {
-            setDisplayCoordinates(o);
+        for (int i = 0; i < NewObjectStorage.getObjectList().size(); i++) {
+            setDisplayCoordinates(NewObjectStorage.getObjectList().get(i));
         }
     }
 
