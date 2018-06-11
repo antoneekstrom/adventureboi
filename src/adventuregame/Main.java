@@ -30,7 +30,7 @@ public class Main extends JFrame {
 		this.setVisible(true);
 		
 		//create and add world
-		GameEnvironment m = new GameEnvironment();
+		GameEnvironment m = new GameEnvironment(this);
 		add(m);
 		m.start();
 	}

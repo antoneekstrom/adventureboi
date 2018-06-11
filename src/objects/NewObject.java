@@ -35,8 +35,8 @@ public class NewObject {
     //image/sprite
     private BufferedImage image;
 
-    //labels
-    private boolean passThrough = false;
+    //values
+    private String debugString = "";
 
     //modules
     private AI ai;
@@ -63,6 +63,14 @@ public class NewObject {
 
     public String getText() {
         return text;
+    }
+
+    public void setDebugString(String s) {
+        debugString = s;
+    }
+
+    public String getDebugString() {
+        return debugString;
     }
 
     public void setText(String t) {
@@ -96,20 +104,12 @@ public class NewObject {
         collision = b;
     }
 
-    public boolean isPassThrough() {
-        return passThrough;
-    }
-
     public boolean canMove() {
         return canMove();
     }
 
     public void showDebug(boolean b) {
         debug = b;
-    }
-
-    public void setPassThrough(boolean b) {
-        passThrough = b;
     }
 
     /** Pass object this one has collided with. */
@@ -334,7 +334,8 @@ public class NewObject {
             }
             if (debug) {
                 g.setColor(Color.black);
-                g.drawString(String.valueOf("X:" + getX() + " Y:" + getY()), getDisplayCoordinate().x, getDisplayCoordinate().y -100);
+                g.drawRect(getDisplayCoordinate().x, getDisplayCoordinate().y, get().width, get().height);
+                g.drawString(debugString, getDisplayCoordinate().x - 250, getDisplayCoordinate().y -100);
             }
         }
     }

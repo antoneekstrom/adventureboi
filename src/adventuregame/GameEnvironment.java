@@ -6,10 +6,11 @@ import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import UI.UIManager;
-
+import gamelogic.MouseFunctions;
 import gamelogic.NewCamera;
 import gamelogic.NewObjectStorage;
 import objects.NewObject;
@@ -24,37 +25,56 @@ public class GameEnvironment extends JPanel implements ActionListener {
     Timer timer;
     SaveWriter sw;
     JPanel input;
+    private static JFrame frame;
+    private int numberOfPlayers = 2;
 
-    public GameEnvironment() {
+    public static JFrame getFrame() {
+        return frame;
+    }
+
+    public GameEnvironment(JFrame f) {
+        frame = f;
     }
 
     public void start() {
+        //set up panel
         setSize(GlobalData.getScreenDim());
         setBackground(Color.CYAN);
+
+        //set up save mechanism and load menu world
         sw = new SaveWriter("menu");
         sw.loadWorld(this);
+
+        //add mouselistener
+        addMouseListener(MouseFunctions.getClickListener());
         
+        //load all images
         Images.indexAllImages();
-		Images.loadAllImages();
-        
+        Images.loadAllImages();
+
+        //start UI
+        UIManager.start();
+
+        //start and attach input panel
         input = Input.start();
         add(input);
         this.setFocusable(true);
 		this.requestFocus();
         
+        //add players
+		for (int i = 1; i <= numberOfPlayers; i++) {
+            NewObjectStorage.newPlayer();
+        }
+        //start camera and initialize world
 		NewCamera.setCameraPos(new Point(0, 0));
-		NewObjectStorage.newPlayer();
-		NewObjectStorage.newPlayer();
 		NewObjectStorage.add(new NewObject() {{
 			get().setLocation(500, 0);
 			get().setSize(100, 500);
 			getForce().setGravity(false);
 			this.setCollision(false);
 		}});
-		NewPlayer player1 = NewObjectStorage.getPlayer(1);
-		player1.getForce().setGravity(false);
-        System.out.println("player: " + NewObjectStorage.getObjectList().indexOf(player1));
         
+        //start gameloop timer
         timer = new Timer(TIMER_DELAY, this);
         timer.start();
     }
@@ -70,7 +90,7 @@ public class GameEnvironment extends JPanel implements ActionListener {
 		time1 = System.nanoTime() / 10000;
 		if (time1 - time2 > FRAMERATE) {
             time2 = System.nanoTime() / 10000;
-            
+
             NewObjectStorage.update();
             UIManager.update();
 			repaint();

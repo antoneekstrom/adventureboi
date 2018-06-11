@@ -3,25 +3,39 @@ package UI;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import adventuregame.GlobalData;
-
 public class MenuUI extends GUI {
 
-    public MenuUI() {
-        start();
+    public MenuUI(String name) {
+        super(name);
     }
 
     public void start() {
-        HudText t = new HudText(GlobalData.getScreenDim().width / 2,
-        GlobalData.getScreenDim().height / 2, "", GlobalData.getStandardFont());
-        t.setText("This is text.");
-        addText(t);
+        showOutline(true);
+        //title
+        addObject(new UIText(getName(), "Adventureboi", true) {{
+            this.textColor(Color.orange);
+            this.get().y = 200;
+            this.setFontSize(80);
+        }});
 
-        UIButton b = new UIButton() {{
-            color(Color.ORANGE);
-            addText(new HudText(get().x, get().y, "text", GlobalData.getStandardFont()));
-        }};
-        addButton(b);
+        //custom levels button
+        addObject(new UIButton(getName(), "Custom Levels", true) {{
+            this.get().y = 450;
+            setFontSize(40);
+            autoAdjustBackgroundWidth(false);
+            get().width = 500;
+            setBackgroundPadding(40);
+        }});
+        
+        //quit button
+        addObject(new UIButton(getName(), "Quit Game", true) {{
+            this.get().y = 600;
+            setFontSize(40);
+            autoAdjustBackgroundWidth(false);
+            get().width = 500;
+            setBackgroundPadding(40);
+
+        }});
     }
 
     public void update() {

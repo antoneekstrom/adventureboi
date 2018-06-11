@@ -38,6 +38,7 @@ public class ObjectTypes {
             NewObject o = new NewObject();
             o.setName(name);
             o.getForce().setGravity(false);
+            o.setCollision(false);
             o.inititializeType();
             return o;
         }

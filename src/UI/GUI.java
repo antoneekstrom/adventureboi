@@ -1,5 +1,7 @@
 package UI;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -8,40 +10,84 @@ import adventuregame.GlobalData;
 
 public class GUI {
 
+	protected int screenCenterX = GlobalData.getScreenDim().width / 2;
+	protected int screenCenterY = GlobalData.getScreenDim().height / 2;
+	protected Color BACKGROUND_COLOR = Color.orange;
+	private Color TEXT_COLOR = Color.white;
+	protected int FONT_SIZE = 40;
+	protected String FONT_NAME = "Comic Sans MS";
+
+	private Rectangle box = new Rectangle(0, 0, GlobalData.getScreenDim().width, GlobalData.getScreenDim().height);
+
+	private ArrayList<UIObject> UIObjects = new ArrayList<UIObject>();
+
+	private boolean showOutline = true;
 	private boolean visible = true;
-	private ArrayList<HudText> UIText = new ArrayList<HudText>() {
-		private static final long serialVersionUID = 1L;
-	{
-	}};
+	private String name;
 
-	private ArrayList<UIButton> UIButton = new ArrayList<UIButton>() {
-		private static final long serialVersionUID = 1L;
-	{
-	}};
-	
-	public GUI() {
-		
+	public GUI(String name) {
+		this.name = name;
 	}
 
-	public Rectangle getRectangle() {
-		return new Rectangle(0, 0, GlobalData.getScreenDim().width,
-		GlobalData.getScreenDim().height);
+	public Font getUIFont() {
+		return new Font(FONT_NAME, 20 , FONT_SIZE);
 	}
 
-	public ArrayList<HudText> getUITextList() {
-		return UIText;
+	public void start() {
+
 	}
 
-	public ArrayList<UIButton> getUIButtonList() {
-		return UIButton;
+	public UIObject getObjectByText(String objectText) {
+		UIObject returnObject = null;
+		for (UIObject o : UIObjects) {
+			if (o.getText().equals(objectText)) {returnObject = o;}
+		}
+		return returnObject;
 	}
 
-	void addText(HudText text) {
-		UIText.add(text);
+	public Color getUITextColor() {
+		return TEXT_COLOR;
 	}
 
-	void addButton(UIButton button) {
-		UIButton.add(button);
+	public void setUIBackgroundColor(Color c) {
+		BACKGROUND_COLOR = c;
+	}
+
+	public Color getUIBackgroundColor() {
+		return BACKGROUND_COLOR;
+	}
+
+	public void setUITextColor(Color c) {
+		TEXT_COLOR = c;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String n) {
+		name = n;
+	}
+
+	public void showOutline(boolean b) {
+		showOutline = b;
+	}
+
+	public void addObject(UIObject o) {
+		o.setParentName(name);
+		UIObjects.add(o);
+	}
+
+	public void setBox(Rectangle newBox) {
+		box = newBox;
+	}
+
+	public Rectangle get() {
+		return box;
+	}
+
+	public ArrayList<UIObject> getUIObjectList() {
+		return UIObjects;
 	}
 
 	public void setVisible(boolean b) {
@@ -53,20 +99,18 @@ public class GUI {
 	}
 	
 	public void update() {
-		for (HudText t : UIText) {
-			t.update();
-		}
-		for (UIButton b : UIButton) {
+		for (UIObject b : UIObjects) {
 			b.update();
 		}
 	}
 	
 	public void paint(Graphics g) {
-		for (HudText t : UIText) {
-			t.paint(g);
-		}
-		for (UIButton b : UIButton) {
+		for (UIObject b : UIObjects) {
 			b.paint(g);
+		}
+
+		if (showOutline) {
+			g.drawRect(get().x, get().y, get().width, get().height);
 		}
 	}
 

@@ -27,11 +27,10 @@ public class NewPlayer extends NewObject implements ObjectMethods {
     private int animationCounter = 0;
     private int ANIMATION_COUNTER_GOAL = 10;
     private BufferedImage statusImage;
+    private int fallOffset = -20;
 
     //data
     private int PLAYER_ID;
-    private String debugString = "";
-    
     //camera
     private int CAMERA_Y = (GlobalData.getScreenDim().height / 2) - 300;
     private boolean lockCameraY = false;
@@ -91,10 +90,6 @@ public class NewPlayer extends NewObject implements ObjectMethods {
 
     public int getId() {
         return PLAYER_ID;
-    }
-
-    public void setDebugString(String s) {
-        debugString = s;
     }
 
     public void sit(boolean b) {
@@ -252,7 +247,9 @@ public class NewPlayer extends NewObject implements ObjectMethods {
         //jumping
         if (!doesIntersect()) {
             setImage(playerimages.get("falling"));
+            fallOffset = 10;
         }
+        else {fallOffset = 0;}
 
         //standing still
         if (!movingRight && !movingLeft && doesIntersect()) {
@@ -293,9 +290,7 @@ public class NewPlayer extends NewObject implements ObjectMethods {
 
     public void paint(Graphics g) {
         super.paint(g);
-        g.drawImage(statusImage, getDisplayCoordinate().x, getDisplayCoordinate().y, getWidth(), getHeight(), null);
-        g.drawString(String.valueOf("cooldown:" + abilityCooldown + " percentage:" + chargePercentage + " charge:" + abilityFactor),
-        getDisplayCoordinate().x - 300, getDisplayCoordinate().y - 150);
+        g.drawImage(statusImage, getDisplayCoordinate().x, getDisplayCoordinate().y + fallOffset, getWidth(), getHeight(), null);
     }
 
     public void fireball() {
