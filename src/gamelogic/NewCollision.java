@@ -105,14 +105,14 @@ public class NewCollision {
             if (side.equals("left")) {
                 dx = -dx;
             }
-            if (dx + r1.width < dy) {
+            if (dx + r1.width < dy + r1.height) {
                 if (side.equals("left")) {
                     dx = -dx;
                 }
                 r1.x = r1.x + dx;
             }
             else {
-                r1.y = r1.y + dy;
+            	//r1.y = r1.y + dy;
             }
         }
     }

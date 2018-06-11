@@ -12,6 +12,7 @@ import UI.UIManager;
 
 import gamelogic.NewCamera;
 import gamelogic.NewObjectStorage;
+import objects.NewObject;
 import objects.NewPlayer;
 
 
@@ -43,7 +44,15 @@ public class GameEnvironment extends JPanel implements ActionListener {
         
 		NewCamera.setCameraPos(new Point(0, 0));
 		NewObjectStorage.newPlayer();
+		NewObjectStorage.newPlayer();
+		NewObjectStorage.add(new NewObject() {{
+			get().setLocation(500, 0);
+			get().setSize(100, 500);
+			getForce().setGravity(false);
+			this.setCollision(false);
+		}});
 		NewPlayer player1 = NewObjectStorage.getPlayer(1);
+		player1.getForce().setGravity(false);
         System.out.println("player: " + NewObjectStorage.getObjectList().indexOf(player1));
         
         timer = new Timer(TIMER_DELAY, this);

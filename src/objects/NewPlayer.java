@@ -111,7 +111,7 @@ public class NewPlayer extends NewObject implements ObjectMethods {
 
     public void moveDown() {
         if (!getForce().hasGravity()) {
-            setY(getY() + 20);
+            setY(getY() + PLAYER_SPEED);
         }
     }
 
