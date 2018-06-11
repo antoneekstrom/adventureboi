@@ -2,7 +2,6 @@ package gamelogic;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import objects.NewObject;
 
@@ -24,7 +23,9 @@ public class NewCollision {
             //if object1 is not the same as object2 and they are intersecting
             if (object1.get().intersects(object2.get()) && !object2.equals(object1)) {
                 if (object1.getCollision()) {
-                    collision(object1, object2);
+                    if (!object2.isPushable()) {
+                        collision(object1, object2);
+                    }
                     i = true;
                     object1.setIntersect(true);
                     object1.passCollision(object2);

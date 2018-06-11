@@ -14,13 +14,15 @@ import adventuregame.HealthModule;
 import adventuregame.Images;
 import gamelogic.NewCamera;
 import gamelogic.NewCollision;
-import gamelogic.NewObjectStorage;
 
 public class NewObject {
 
     //switches
     private boolean visible = true;
+    /** Set to true if object should receive collision logic. Will still affect other collision enabled objects. */
     private boolean collision = true;
+    /** Set to true if object should be pushable. */
+    private boolean pushable = false;
     private boolean intersect = false;
     private boolean camera = true;
     private boolean debug = false;
@@ -296,6 +298,14 @@ public class NewObject {
 
     public boolean ping() {
         return true;
+    }
+
+    public boolean isPushable() {
+        return pushable;
+    }
+
+    public void pushable(boolean b) {
+        pushable = b;
     }
 
     public void applyForce(double x, double y) {

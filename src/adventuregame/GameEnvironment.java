@@ -72,7 +72,8 @@ public class GameEnvironment extends JPanel implements ActionListener {
 			get().setSize(100, 500);
 			getForce().setGravity(false);
 			this.setCollision(false);
-		}});
+        }});
+        NewPlayer player = NewObjectStorage.getPlayer(1);
         
         //start gameloop timer
         timer = new Timer(TIMER_DELAY, this);
