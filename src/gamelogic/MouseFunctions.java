@@ -14,7 +14,10 @@ public class MouseFunctions {
         private static final long serialVersionUID = 1L;
 	{
         put("Quit Game", () -> quitGame());
-        put("Custom Levels", () -> UIManager.getGUI("menu").setVisible(false));
+        put("Custom Levels", () -> UIManager.hideAll());
+        put("Settings", () -> UIManager.enableGUI("Settings"));
+        put("Keybindings", () -> UIManager.enableGUI("Keybindings"));
+        put("Back", () -> UIManager.enableGUI(UIManager.getLastGUI()));
     }};
 
     public static ClickListener getClickListener() {

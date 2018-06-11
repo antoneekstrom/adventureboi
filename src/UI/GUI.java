@@ -22,7 +22,7 @@ public class GUI {
 	private ArrayList<UIObject> UIObjects = new ArrayList<UIObject>();
 
 	private boolean showOutline = true;
-	private boolean visible = true;
+	private boolean visible = false;
 	private String name;
 
 	public GUI(String name) {
@@ -92,6 +92,9 @@ public class GUI {
 
 	public void setVisible(boolean b) {
 		visible = b;
+		if (isVisible() && !b) {
+			UIManager.setLastGUI(getName());
+		}
 	}
 
 	public boolean isVisible() {
@@ -112,6 +115,15 @@ public class GUI {
 		if (showOutline) {
 			g.drawRect(get().x, get().y, get().width, get().height);
 		}
+	}
+
+	public void addBackButton() {
+		UIButton b = new UIButton(getName(), "Back", false);
+		b.get().setLocation(100, 100);
+		b.setBackgroundPadding(40);
+		b.centerTextX(true);
+		b.centerTextY(true);
+		addObject(b);
 	}
 
 }

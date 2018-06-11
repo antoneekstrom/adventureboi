@@ -1,15 +1,15 @@
 package UI;
 
 import java.awt.Color;
-import java.awt.Graphics;
 
 public class MenuUI extends GUI {
 
-    public MenuUI(String name) {
-        super(name);
+    public MenuUI() {
+        super("Menu");
     }
 
     public void start() {
+        setVisible(true);
         showOutline(true);
         //title
         addObject(new UIText(getName(), "Adventureboi", true) {{
@@ -29,21 +29,20 @@ public class MenuUI extends GUI {
         
         //quit button
         addObject(new UIButton(getName(), "Quit Game", true) {{
+            this.get().y = 750;
+            setFontSize(40);
+            autoAdjustBackgroundWidth(false);
+            get().width = 500;
+            setBackgroundPadding(40);
+        }});
+
+        //settings button
+        addObject(new UIButton(getName(), "Settings", true) {{
             this.get().y = 600;
             setFontSize(40);
             autoAdjustBackgroundWidth(false);
             get().width = 500;
             setBackgroundPadding(40);
-
         }});
     }
-
-    public void update() {
-        super.update();
-    }
-
-    public void paint(Graphics g) {
-        super.paint(g);
-    }
-
 }
