@@ -59,6 +59,10 @@ public class NewObjectStorage {
         }
     }
 
+    public static int playerCount() {
+        return playerCount;
+    }
+
     /** Create a new player and add it to the playerlist. */
     public static void newPlayer() {
         playerCount++;

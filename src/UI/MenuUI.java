@@ -10,13 +10,8 @@ public class MenuUI extends GUI {
 
     public void start() {
         setVisible(true);
-        showOutline(true);
         //title
-        addObject(new UIText(getName(), "Adventureboi", true) {{
-            this.textColor(Color.orange);
-            this.get().y = 200;
-            this.setFontSize(80);
-        }});
+        addTitle("Adventureboi");
 
         //custom levels button
         addObject(new UIButton(getName(), "Custom Levels", true) {{

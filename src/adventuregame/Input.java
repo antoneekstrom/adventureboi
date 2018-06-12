@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
 import actions.PlayerMovement;
+import actions.UINavigation;
 
 public class Input {
 
@@ -58,8 +59,7 @@ public class Input {
         jcomp = w;
     }
 
-    /** Bind all actionnames to actions. */
-    private static void populateActionMap() {
+    private static void player1() {
         //player1
         actions.put("moveleft1", new PlayerMovement("moveleft", false, 1));
         releasedActions.put("moveleft1", new PlayerMovement("moveleft", true, 1));
@@ -81,7 +81,8 @@ public class Input {
 
         actions.put("abilityright1", new PlayerMovement("abilityright", false, 1));
         releasedActions.put("abilityright1", new PlayerMovement("abilityright", true, 1));
-
+    }
+    private static void player2() {
         //player2
         actions.put("moveleft2", new PlayerMovement("moveleft", false, 2));
         releasedActions.put("moveleft2", new PlayerMovement("moveleft", true, 2));
@@ -94,6 +95,24 @@ public class Input {
 
         actions.put("ability1", new PlayerMovement("ability1", false, 2));
         releasedActions.put("ability1", new PlayerMovement("ability1", true, 2));
+    }
+
+    private static void addNavigationAction(String actionkey) {
+        actions.put(actionkey, new UINavigation(actionkey, false));
+        releasedActions.put(actionkey, new UINavigation(actionkey, true));
+    }
+    private static void navigation() {
+        addNavigationAction("UI_options");
+        addNavigationAction("UI_inventory");
+        addNavigationAction("UI_up");
+        addNavigationAction("UI_down");
+    }
+
+    /** Bind all actionnames to actions. */
+    private static void populateActionMap() {
+        player1();
+        player2();
+        navigation();
     }
 
     /** Change a key in the keybinding hashmap. Will need to recreate keybinding after this to work. */
@@ -126,11 +145,14 @@ public class Input {
         keybindings.put("abilityleft1", KeyEvent.VK_LEFT);
         keybindings.put("abilityright1", KeyEvent.VK_RIGHT);
         keybindings.put("ability1", KeyEvent.VK_1);
-
         //player2
         keybindings.put("moveright2", KeyEvent.VK_NUMPAD6);
         keybindings.put("moveleft2", KeyEvent.VK_NUMPAD4);
         keybindings.put("jump2", KeyEvent.VK_NUMPAD8);
+        //navigation
+        keybindings.put("UI_options", KeyEvent.VK_ESCAPE);
+        keybindings.put("UI_inventory", KeyEvent.VK_I);
+
     }
 
     /** Bind all the keys from keybindings hashmap. Use this after changeKey method. */

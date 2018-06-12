@@ -26,7 +26,7 @@ public class GameEnvironment extends JPanel implements ActionListener {
     SaveWriter sw;
     JPanel input;
     private static JFrame frame;
-    private int numberOfPlayers = 2;
+    private int numberOfPlayers = 1;
 
     public static JFrame getFrame() {
         return frame;
@@ -74,7 +74,7 @@ public class GameEnvironment extends JPanel implements ActionListener {
 			this.setCollision(false);
         }});
         NewPlayer player = NewObjectStorage.getPlayer(1);
-        
+
         //start gameloop timer
         timer = new Timer(TIMER_DELAY, this);
         timer.start();

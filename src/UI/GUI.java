@@ -92,9 +92,6 @@ public class GUI {
 
 	public void setVisible(boolean b) {
 		visible = b;
-		if (isVisible() && !b) {
-			UIManager.setLastGUI(getName());
-		}
 	}
 
 	public boolean isVisible() {
@@ -124,6 +121,24 @@ public class GUI {
 		b.centerTextX(true);
 		b.centerTextY(true);
 		addObject(b);
+	}
+
+	public void addMenuButton(String text, int y) {
+		addObject(new UIButton(getName(), text, true) {{
+            this.get().y = y;
+            setFontSize(40);
+            autoAdjustBackgroundWidth(false);
+            get().width = 500;
+            setBackgroundPadding(40);
+        }});
+	}
+
+	public void addTitle(String text) {
+		addObject(new UIText(getName(), text, true) {{
+            this.textColor(Color.orange);
+            this.get().y = 200;
+            this.setFontSize(80);
+        }});
 	}
 
 }

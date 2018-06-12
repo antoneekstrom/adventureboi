@@ -13,11 +13,7 @@ public class KeybindingsUI extends GUI {
         addBackButton();
 
         //title
-        addObject(new UIText(getName(), "Keybindings", true) {{
-            setFontSize(80);
-            get().y = 200;
-            textColor(Color.orange);
-        }});
+        addTitle("Keybindings");
     }
 
 }

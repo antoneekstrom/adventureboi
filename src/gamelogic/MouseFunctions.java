@@ -10,14 +10,17 @@ public class MouseFunctions {
 
     private static ClickListener clickListener = new ClickListener();
 
+
     private static final HashMap<String, Runnable> actionsByText = new HashMap<String, Runnable>() {
         private static final long serialVersionUID = 1L;
 	{
         put("Quit Game", () -> quitGame());
-        put("Custom Levels", () -> UIManager.hideAll());
+        put("Custom Levels", () -> UIManager.enableGUI("HUD"));
+        put("Resume", () -> UIManager.enableGUI("HUD"));
         put("Settings", () -> UIManager.enableGUI("Settings"));
         put("Keybindings", () -> UIManager.enableGUI("Keybindings"));
-        put("Back", () -> UIManager.enableGUI(UIManager.getLastGUI()));
+        put("Menu", () -> UIManager.enableGUI("Menu"));
+        put("Back", () -> UIManager.enableLatestGUI());
     }};
 
     public static ClickListener getClickListener() {

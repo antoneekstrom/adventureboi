@@ -13,15 +13,11 @@ public class SettingsUI extends GUI {
         addBackButton();
 
         //title
-        addObject(new UIText(getName(), "Settings", true) {{
-            setFontSize(80);
-            get().y = 200;
-            textColor(Color.orange);
-        }});
+        addTitle("Settings");
 
         //keybindings button
         addObject(new UIButton(getName(), "Keybindings", true) {{
-            this.get().y = 600;
+            this.get().y = 450;
             setFontSize(40);
             autoAdjustBackgroundWidth(false);
             get().width = 500;

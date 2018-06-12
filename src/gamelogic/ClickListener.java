@@ -11,19 +11,15 @@ public class ClickListener implements MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-    }
+	}
     
 	@Override
 	public void mousePressed(MouseEvent e) {
-    }
+	}
     
 	@Override
 	public void mouseReleased(MouseEvent e) {
-        for (GUI gui : UIManager.getGUIList()) {
-            for (UIObject o : gui.getUIObjectList()) {
-                if (o.checkMouse()) {MouseFunctions.executeClickActionByText(o.getText());}
-            }
-        }
+		click();
 	}
 
 	@Override
@@ -34,6 +30,15 @@ public class ClickListener implements MouseListener {
 	@Override
 	public void mouseExited(MouseEvent e) {
 		
+	}
+
+	public void click() {
+        for (GUI gui : UIManager.getGUIList()) {
+            for (UIObject o : gui.getUIObjectList()) {
+                if (o.checkMouse()) {
+					MouseFunctions.executeClickActionByText(o.getText());}
+            }
+        }
 	}
 
 }

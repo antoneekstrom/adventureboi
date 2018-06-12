@@ -12,22 +12,23 @@ public class UIObject {
     
     private Rectangle box = new Rectangle(0, 0, 100, 100);
     private Color BACKGROUND_COLOR = Color.orange;
-    private Color SECONDARY_BACKGROUND_COLOR = Color.WHITE;
+    private Color HIGHLIGHT_COLOR = Color.WHITE;
     private Color TEXT_COLOR = Color.white;
     private Color activeBackgroundColor = BACKGROUND_COLOR;
     
     private boolean hasBackground = false;
-    private boolean hasText = false;
+    protected boolean hasText = false;
     private boolean showOutline = false;
     private boolean autoAdjustBackgroundWidth = false;
     private boolean autoAdjustBackgroundHeight = false;
     private boolean backgroundHoverColorChange = false;
     private boolean centerInParentX = false;
+    private Rectangle parentRectangle;
     
     private int backgroundPadding = 0;
     private Font font;
     private float FONT_SIZE;
-    private String text = "";
+    protected String text = "";
     private int textWidth = 0;
     private int textHeight = 0;
     private boolean centerTextX = false;
@@ -49,6 +50,15 @@ public class UIObject {
         FONT_SIZE = i;
         font = font.deriveFont(FONT_SIZE);
     }
+
+    public void copyProperties(UIObject o) {
+        BACKGROUND_COLOR = o.getBackgroundColor();
+        TEXT_COLOR = o.getTextColor();
+    }
+
+    public boolean hasBackground() {
+        return hasBackground;
+    }
     
     public String getParentName() {
         return parentName;
@@ -60,13 +70,19 @@ public class UIObject {
 
     public void hoverColorChange(Color secondarycolor) {
         backgroundHoverColorChange = true;
-        SECONDARY_BACKGROUND_COLOR = secondarycolor;
+        HIGHLIGHT_COLOR = secondarycolor;
+    }
+
+    public void setParentRectangle(Rectangle r) {
+        parentRectangle = r;
     }
     
     /** Center UIObject on x-axis (horizontally) in the GUI box. */
     private void centerInParentX() {
-        Rectangle parent = getParent().get();
-        box.setLocation( (parent.width / 2) - (get().width / 2), get().y);
+        if (parentRectangle == null) {
+            parentRectangle = getParent().get();
+        }
+        box.setLocation( (parentRectangle.width / 2) - (get().width / 2), get().y);
     }
 
     public void centerInParentX(boolean b) {
@@ -114,7 +130,7 @@ public class UIObject {
 
     private void hoverColorChange(boolean hasMouse) {
         if (backgroundHoverColorChange && hasMouse) {
-            activeBackgroundColor = SECONDARY_BACKGROUND_COLOR;
+            activeBackgroundColor = HIGHLIGHT_COLOR;
         }
         else {
             activeBackgroundColor = BACKGROUND_COLOR;

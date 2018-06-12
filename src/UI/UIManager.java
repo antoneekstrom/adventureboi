@@ -3,17 +3,32 @@ package UI;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
+import adventuregame.GameEnvironment;
+import gamelogic.NewObjectStorage;
+
 /** This is were all the UI's are stored. */
 public class UIManager {
 
-    /** Name of the last GUI that was visible. */
-    private static String lastGUI = "Menu";
+    /** Max number of entries in history. */
+    private static int MAX_HISTORY_SIZE = 5;
+    /** History for recent GUI's in order. */
+    private static ArrayList<String> GUIHistory = new ArrayList<String>();
 
-    public static String getLastGUI() {
-        return lastGUI;
+    public static void addToHistory(String name) {
+        GUIHistory.add(name);
+        /** Remove oldest entry if size is larger than max. */
+        if (GUIHistory.size() > MAX_HISTORY_SIZE) {
+            GUIHistory.remove(0);
+        }
     }
-    public static void setLastGUI(String name) {
-        lastGUI = name;
+    /** Returns name of latest GUI and removes it from history. */
+    public static String getLatestGUI() {
+        String name = null;
+        if (GUIHistory.size() > 0) {
+            name = GUIHistory.get(GUIHistory.size() - 1);
+            GUIHistory.remove(GUIHistory.size() - 1);
+        }
+        return name;
     }
 
     /** A list containing all the UI's. */
@@ -23,6 +38,8 @@ public class UIManager {
         add(new MenuUI());
         add(new SettingsUI());
         add(new KeybindingsUI());
+        add(new NewHUD());
+        add(new OptionsUI());
     }};
 
     /** Starts all UI's */
@@ -33,11 +50,29 @@ public class UIManager {
         }
     }
 
+    public static void enableHUD(boolean b) {
+        getGUI("HUD").setVisible(b);
+    }
+
+    public static void enableLatestGUI() {
+        hideAll(false);
+        enableGUI(getLatestGUI());
+    }
+
+    /** Returns true if no GUI's are visible. */
+    public static boolean allHidden() {
+        boolean b = true;
+        for (GUI gui : interfaces) {
+            if (gui.isVisible()) {b = false;}
+        }
+        return b;
+    }
+
     /** Enable a GUI and disable all others.
      *  @param name : Name of GUI to enable.
      */
     public static void enableGUI(String name) {
-        hideAll();
+        hideAll(true);
         getGUI(name).setVisible(true);
     }
 
@@ -45,8 +80,9 @@ public class UIManager {
         return interfaces;
     }
 
-    public static void hideAll() {
+    public static void hideAll(boolean addToHistory) {
         for (GUI gui : interfaces) {
+            if (gui.isVisible() && addToHistory) {UIManager.addToHistory(gui.getName());}
             gui.setVisible(false);
         }
     }
