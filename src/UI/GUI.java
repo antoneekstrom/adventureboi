@@ -16,12 +16,17 @@ public class GUI {
 	private Color TEXT_COLOR = Color.white;
 	protected int FONT_SIZE = 40;
 	protected String FONT_NAME = "Comic Sans MS";
+	private int BORDER_THICKNESS = 10;
+
+	private int guidelineY1;
+	private int guidelineSpacing;
+	private int guidelineUses = -1;
 
 	private Rectangle box = new Rectangle(0, 0, GlobalData.getScreenDim().width, GlobalData.getScreenDim().height);
 
 	private ArrayList<UIObject> UIObjects = new ArrayList<UIObject>();
 
-	private boolean showOutline = true;
+	private boolean showOutline = false;
 	private boolean visible = false;
 	private String name;
 
@@ -35,6 +40,21 @@ public class GUI {
 
 	public void start() {
 
+	}
+
+	public void setGuidelineSpacing(int i) {
+		guidelineSpacing = i;
+	}
+
+	public void setGuidelineY1(int y) {
+		guidelineY1 = y;
+	}
+
+	public int getGuidelineY1() {
+		int y = guidelineY1;
+		guidelineUses++;
+		for (int i = 0; i < guidelineUses; i++) {y += guidelineSpacing;}
+		return y;
 	}
 
 	public UIObject getObjectByText(String objectText) {
@@ -82,6 +102,10 @@ public class GUI {
 		box = newBox;
 	}
 
+	public int getBorderThickness() {
+		return BORDER_THICKNESS;
+	}
+
 	public Rectangle get() {
 		return box;
 	}
@@ -120,6 +144,8 @@ public class GUI {
 		b.setBackgroundPadding(40);
 		b.centerTextX(true);
 		b.centerTextY(true);
+		b.hasBorder(true);
+		b.setBorderThickness(BORDER_THICKNESS);
 		addObject(b);
 	}
 
@@ -128,7 +154,9 @@ public class GUI {
             this.get().y = y;
             setFontSize(40);
             autoAdjustBackgroundWidth(false);
-            get().width = 500;
+			get().width = 500;
+			hasBorder(true);
+			setBorderThickness(BORDER_THICKNESS);
             setBackgroundPadding(40);
         }});
 	}

@@ -1,8 +1,10 @@
 package UI;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 
@@ -14,6 +16,7 @@ public class UIObject {
     private Color BACKGROUND_COLOR = Color.orange;
     private Color HIGHLIGHT_COLOR = Color.WHITE;
     private Color TEXT_COLOR = Color.white;
+    private Color BORDER_COLOR = Color.white;
     private Color activeBackgroundColor = BACKGROUND_COLOR;
     
     private boolean hasBackground = false;
@@ -23,8 +26,10 @@ public class UIObject {
     private boolean autoAdjustBackgroundHeight = false;
     private boolean backgroundHoverColorChange = false;
     private boolean centerInParentX = false;
-    private Rectangle parentRectangle;
+    private boolean hasBorder = false;
     
+    private Rectangle parentRectangle;
+    private int BORDER_THICKNESS = 5;
     private int backgroundPadding = 0;
     private Font font;
     private float FONT_SIZE;
@@ -66,6 +71,18 @@ public class UIObject {
     
     public void showOutline(boolean b) {
         showOutline = b;
+    }
+
+    public void hasBorder(boolean b) {
+        hasBorder = b;
+    }
+
+    public void setBorderColor(Color c) {
+        BORDER_COLOR = c;
+    }
+
+    public void setBorderThickness(int i) {
+        BORDER_THICKNESS = i;
     }
 
     public void hoverColorChange(Color secondarycolor) {
@@ -135,6 +152,10 @@ public class UIObject {
         else {
             activeBackgroundColor = BACKGROUND_COLOR;
         }
+    }
+
+    public int getBackgroundPadding() {
+        return backgroundPadding;
     }
 
     public void onMouseOver(boolean hasMouse) {
@@ -236,6 +257,12 @@ public class UIObject {
         }
         if (showOutline) {
             g.drawRect(get().x, get().y, get().width, get().height);
+        }
+        if (hasBorder) {
+            Graphics2D g2d = (Graphics2D) g;
+            g2d.setStroke(new BasicStroke(BORDER_THICKNESS));
+            g2d.setColor(BORDER_COLOR);
+            g2d.drawRect(get().x - BORDER_THICKNESS * 2, get().y - BORDER_THICKNESS * 2, get().width + BORDER_THICKNESS * 4, get().height + BORDER_THICKNESS * 4);
         }
     }
     

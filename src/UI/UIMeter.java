@@ -39,9 +39,11 @@ public class UIMeter extends UIObject {
         hasText = true;
         textObject = new UIText(getParentName(), text, false);
         textObject.textColor(getTextColor());
-        textObject.centerTextX(true);
+        textObject.autoAdjustBackground(true);
         textObject.setParentRectangle(get());
-        textObject.get().setLocation(get().getLocation());
+        textObject.centerInParentX(true);
+        textObject.textColor(getTextColor());
+        textObject.get().setLocation(get().x, get().y - 25);
     }
 
     public Rectangle getFill() {
@@ -59,6 +61,7 @@ public class UIMeter extends UIObject {
     private void start() {
         fill = new Rectangle();
         get().setSize(350, 50);
+        setBackgroundPadding(10);
         setBackgroundColor(Color.white);
     }
 
@@ -90,7 +93,9 @@ public class UIMeter extends UIObject {
     }
 
     public void paint(Graphics g) {
-        super.paint(g);
+        g.setColor(getBackgroundColor());
+        g.fillRect(get().x - getBackgroundPadding() / 2, get().y - getBackgroundPadding() / 2, get().width + getBackgroundPadding(), get().height + getBackgroundPadding());
+
         g.setColor(FOREGROUND_COLOR);
         g.fillRect(getFill().x, getFill().y, getFill().width, getFill().height);
         if (textObject != null) {textObject.paint(g);}

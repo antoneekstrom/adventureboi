@@ -7,7 +7,7 @@ import UI.HudBar;
 
 public class HealthModule {
 	
-	int hp, maxhp;
+	int health, maxHealth;
 	int damage = 0;
 	
 	int dmgcooldown = 20;
@@ -19,9 +19,9 @@ public class HealthModule {
 	private boolean canDie = true;
 	HudBar hb;
 	
-	public HealthModule(int mhp) {
-		this.hp = mhp;
-		maxhp = mhp;
+	public HealthModule(int maxhp) {
+		this.health = maxhp;
+		maxHealth = maxhp;
 	}
 	
 	public void setDamage(int i) {
@@ -37,8 +37,8 @@ public class HealthModule {
 	}
 	
 	public void hpLimit() {
-		if (!canDie && hp < 0) {
-			hp = 0;
+		if (!canDie && health < 0) {
+			health = 0;
 		}
 	}
 	
@@ -87,7 +87,7 @@ public class HealthModule {
 	public void updateBarHp() {
 		if (hb != null) {
 			if (hb.stats && showHp) {
-				hb.updateValues(hp, maxhp);
+				hb.updateValues(health, maxHealth);
 				hb.update();
 			}
 		}
@@ -96,14 +96,14 @@ public class HealthModule {
 	public void decreaseHealth(int h) {
 		if (!invulnerable && !invincible) {
 			System.out.println(h);
-			hp -= h;
+			health -= h;
 			invulnerable = true;
 		}
 		updateBarHp();
 	}
 	
 	public int getHealth() {
-		return hp;
+		return health;
 	}
 	
 	public void paint(Graphics g) {

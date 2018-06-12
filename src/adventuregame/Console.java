@@ -393,14 +393,14 @@ public class Console {
 		}
 		if (key.equals("sethp")) {
 			if (lw.go.rects.get(selected).hasHealth && parameters.size() == 1) {
-				lw.go.rects.get(selected).hm.hp = parameters.get(0);
+				lw.go.rects.get(selected).hm.health = parameters.get(0);
 				giveResponse("set hp to " + parameters.get(0) + " for " + lw.go.rects.get(selected).type + selected);
 			}
 			
 		}
 		if (key.equals("setmaxhp")) {
 			if (lw.go.rects.get(selected).hasHealth && parameters.size() == 1) {
-				lw.go.rects.get(selected).hm.maxhp = parameters.get(0);
+				lw.go.rects.get(selected).hm.maxHealth = parameters.get(0);
 				giveResponse("set maxhp to " + parameters.get(0) + " for " + lw.go.rects.get(selected).type + selected);
 			}
 			

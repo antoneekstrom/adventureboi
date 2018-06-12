@@ -19,19 +19,19 @@ public class NewHUD extends GUI {
         //healthbar
         UIMeter health = new UIMeter(getName());
         health.get().setLocation(100, 100);
-        health.setText("Health");
+        health.createText("Health");
         health.setForegroundColor(Color.red);
         addObject(health);
         //stamina
         UIMeter stamina = new UIMeter(getName());
-        stamina.get().setLocation(100, 200);
-        stamina.setText("Stamina"); 
+        stamina.get().setLocation(100, 250);
+        stamina.createText("Stamina"); 
         stamina.setForegroundColor(Color.green);
         addObject(stamina);
         //energy
         UIMeter energy = new UIMeter(getName());
-        energy.get().setLocation(100, 300);
-        energy.setText("Energy");
+        energy.get().setLocation(100, 400);
+        energy.createText("Energy");
         energy.setForegroundColor(Color.blue);
         addObject(energy);
         //experience
