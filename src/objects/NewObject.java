@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import adventuregame.AI;
 import adventuregame.Animator;
@@ -27,6 +28,7 @@ public class NewObject {
     private boolean camera = true;
     private boolean debug = false;
     private boolean hasImage = false;
+    private boolean passThrough = false;
 
     //attributes
     Color color_fg = Color.white;
@@ -48,19 +50,35 @@ public class NewObject {
     //force
     private Force force;
 
+    //velocity
+    private double velocityX = 0;
+    private double velocityY = 0;
+    private ArrayList<Double> posLogX = new ArrayList<Double>();
+    private ArrayList<Double> posLogY = new ArrayList<Double>();
+    private int POSLOG_MAX = 5;
+
+
     //last collision
     private NewObject lastCollision;
 
     //positioning
     private Rectangle r;
     private Point displayCoordinate;
-    private int yLimit = 3000   ;
+    private int yLimit = 3000;
 
     public NewObject() {
         r = new Rectangle(100, 100);
         r.setLocation(0, 0);
         displayCoordinate = new Point(r.x, r.y);
         initialize();
+    }
+
+    public boolean isPassThrough() {
+        return passThrough;
+    }
+
+    public void setPassThrough(boolean b) {
+        passThrough = b;
     }
 
     public String getText() {
@@ -145,6 +163,13 @@ public class NewObject {
         hasImage = true;
     }
 
+    public double velocityX() {return velocityX;}
+    public double velocityY() {return velocityY;}
+
+    private void calculateVelocity() {
+
+    }
+
     /** Get object image. */
     public BufferedImage getImage() {
         return image;
@@ -210,9 +235,11 @@ public class NewObject {
         if (doesIntersect()) {intersect(lastCollision);}; /* Execute things when intersecting another object */
         logic(); /* Do regular update stuff every tick */
         basicLogic(); /* Basic logic for all objects */
+        calculateVelocity();
         calculatePosition(); /* Calculate forces and positioning */
         updateDisplayCoordinates(); /* Update position on screen */
         animate(); /* Do animation. */
+        if (healthModule != null) {healthModule().update();}
     }
 
     /** Update basic logic stuff for all objects */
@@ -274,6 +301,10 @@ public class NewObject {
             NewCollision.check(this);
         }
 
+    }
+
+    public HealthModule healthModule() {
+        return healthModule;
     }
 
     public void enableHealthModule(int health) {

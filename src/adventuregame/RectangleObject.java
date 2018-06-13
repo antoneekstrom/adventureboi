@@ -318,7 +318,7 @@ public class RectangleObject extends Object {
 		
 		if (hasHealth) {
 			hm.update();
-			if (hm.getHealth() <= 0 && !hm.isInvincible() && hm.canDie()) {
+			if (hm.health() <= 0 && !hm.isInvincible() && hm.canDie()) {
 				lw.go.rects.remove(this);
 				lw.cl.collisions.remove(getObjectRect());
 			}
@@ -484,7 +484,7 @@ public class RectangleObject extends Object {
 				lw.cl.collisions.remove(getObjectRect());
 			}
 		}
-		if (type.equals("angryshroom") && hm.getHealth() <= 0) {
+		if (type.equals("angryshroom") && hm.health() <= 0) {
 			ai.setMove(false);
 			animator.setIndexRange(animator.size() - 1, animator.size() - 1);
 			hm.hideHp();
@@ -601,7 +601,7 @@ public class RectangleObject extends Object {
 	public void voidCheck() {
 		if (getY() > 3000) {
 			if (hm != null) {
-				hm.decreaseHealth(hm.getHealth());
+				hm.decreaseHealth(hm.health());
 			}
 			else {
 				lw.go.rects.remove(this);

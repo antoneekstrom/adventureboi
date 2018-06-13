@@ -27,12 +27,14 @@ public class UIObject {
     private boolean backgroundHoverColorChange = false;
     private boolean centerInParentX = false;
     private boolean hasBorder = false;
+    private boolean visible = true;
     
     private Rectangle parentRectangle;
     private int BORDER_THICKNESS = 5;
     private int backgroundPadding = 0;
     private Font font;
     private float FONT_SIZE;
+    private String tag = "";
     protected String text = "";
     private int textWidth = 0;
     private int textHeight = 0;
@@ -47,8 +49,24 @@ public class UIObject {
         parentName = s;
     }
 
+    public void setVisible(boolean b) {
+        visible = b;
+    }
+
+    public boolean visible() {
+        return visible;
+    }
+
     public UIObject() {
         font = GlobalData.getStandardFont();
+    }
+
+    public void setTag(String s) {
+        tag = s;
+    }
+
+    public String tag() {
+        return tag;
     }
     
     public void setFontSize(float i) {

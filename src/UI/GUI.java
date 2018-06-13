@@ -57,6 +57,30 @@ public class GUI {
 		return y;
 	}
 
+	public static UIObject findObject(UIObject[] arr, String text) {
+		UIObject object = null;
+		for (UIObject o :  arr) {
+			if (o.getText().equals(text)) {object = o;}
+		}
+		return object;
+	}
+
+	public void resetGuidelines() {
+		guidelineUses = -1;
+		guidelineY1 = 0;
+		guidelineSpacing = 0;
+	}
+
+	public UIObject[] getObjectsByTag(String s) {
+		ArrayList<UIObject> l = new ArrayList<UIObject>();
+		for (UIObject o : UIObjects) {
+			if (o.tag().equals(s)) {l.add(o);}
+		}
+		UIObject[] arr = new UIObject[l.size()];
+		l.toArray(arr);
+		return arr;
+	}
+
 	public UIObject getObjectByText(String objectText) {
 		UIObject returnObject = null;
 		for (UIObject o : UIObjects) {
@@ -130,7 +154,7 @@ public class GUI {
 	
 	public void paint(Graphics g) {
 		for (UIObject b : UIObjects) {
-			b.paint(g);
+			if (b.visible()) {b.paint(g);}
 		}
 
 		if (showOutline) {

@@ -41,9 +41,7 @@ public class UIMeter extends UIObject {
         textObject.textColor(getTextColor());
         textObject.autoAdjustBackground(true);
         textObject.setParentRectangle(get());
-        textObject.centerInParentX(true);
         textObject.textColor(getTextColor());
-        textObject.get().setLocation(get().x, get().y - 25);
     }
 
     public Rectangle getFill() {
@@ -56,6 +54,10 @@ public class UIMeter extends UIObject {
 
     public void setValue(double d) {
         value = d;
+    }
+
+    public double value() {
+        return value;
     }
 
     private void start() {
@@ -90,6 +92,7 @@ public class UIMeter extends UIObject {
         setFill();
         calculateFillWidth();
         if (textObject != null) {textObject.update();}
+        textObject.get().setLocation(get().x + get().width / 2 - textObject.getTextWidth() / 2, get().y - 25); /* Center text in meter. */
     }
 
     public void paint(Graphics g) {

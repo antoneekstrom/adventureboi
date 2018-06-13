@@ -12,7 +12,7 @@ public class Fireball extends NewObject implements ObjectMethods {
     int velocity = 15;
     int distanceTraveled = 0;
     int maxDistance = 1000;
-    int damage = 5;
+    int damage = 15;
     /** True if ability is fully charged. */
     private boolean charged = false;
 

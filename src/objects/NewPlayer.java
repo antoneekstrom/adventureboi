@@ -50,6 +50,8 @@ public class NewPlayer extends NewObject implements ObjectMethods {
     //charge animation
     private BufferedImage[] chargeAnimation;
 
+    //stats
+
     //Ability
     private double ABILITY_FACTOR_MAX = AbilityValues.factorMax.get(currentAbility);;
     private double ABILITY_FACTOR_INCREASE = AbilityValues.factorIncrease.get(currentAbility);
@@ -144,6 +146,9 @@ public class NewPlayer extends NewObject implements ObjectMethods {
         super.initialize();
         get().setSize(150, 125);
         setName("player" + PLAYER_ID);
+        enableHealthModule(100);
+        healthModule().setMaxHealth(100);
+        healthModule().setHealth(100);
 
         //animation/images
         playerimages = Images.getImageHashMap("assets/animated_sprites/aboi");
@@ -183,6 +188,20 @@ public class NewPlayer extends NewObject implements ObjectMethods {
         movement();
         chargeAbility();
         if (PLAYER_ID == 1) {centerCamera();}
+        healthLogic();
+    }
+
+    public void healthLogic() {
+        if (healthModule().isDead()) {die();}
+    }
+
+    public void die() {
+        respawn();
+        healthModule().setHealth(healthModule().maxHealth());
+    }
+
+    public void respawn() {
+        get().setLocation(spawnPoint);
     }
 
     public void selectAbility(String s) {
@@ -282,6 +301,7 @@ public class NewPlayer extends NewObject implements ObjectMethods {
 
     public void update() {
         super.update();
+        setDebugString(velocityX() + ":" + velocityY());
     }
 
     public void destruct() {

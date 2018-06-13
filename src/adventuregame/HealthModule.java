@@ -1,9 +1,6 @@
 package adventuregame;
 
-import java.awt.Color;
 import java.awt.Graphics;
-
-import UI.HudBar;
 
 public class HealthModule {
 	
@@ -17,15 +14,22 @@ public class HealthModule {
 	private boolean showHp = false;
 	private boolean invincible = false;
 	private boolean canDie = true;
-	HudBar hb;
 	
 	public HealthModule(int maxhp) {
-		this.health = maxhp;
-		maxHealth = maxhp;
+		setHealth(maxhp);
+		setMaxHealth(maxhp);
+	}
+
+	public int maxHealth() {
+		return maxHealth;
 	}
 	
 	public void setDamage(int i) {
 		damage = i;
+	}
+
+	public void setMaxHealth(int h) {
+		maxHealth = h;
 	}
 	
 	public void setCanDie(boolean b) {
@@ -40,16 +44,6 @@ public class HealthModule {
 		if (!canDie && health < 0) {
 			health = 0;
 		}
-	}
-	
-	public void showHp() {
-		showHp = true;
-		hb = new HudBar(0, 0, 100, 50);
-		hb.bg = Color.WHITE;
-		hb.fg = Color.RED;
-		hb.w = 100;
-		hb.stats = true;
-		updateBarHp();
 	}
 	
 	public void hideHp() {
@@ -84,31 +78,27 @@ public class HealthModule {
 		hpCheck();
 	}
 	
-	public void updateBarHp() {
-		if (hb != null) {
-			if (hb.stats && showHp) {
-				hb.updateValues(health, maxHealth);
-				hb.update();
-			}
-		}
-	}
-	
 	public void decreaseHealth(int h) {
 		if (!invulnerable && !invincible) {
-			System.out.println(h);
 			health -= h;
 			invulnerable = true;
 		}
-		updateBarHp();
+	}
+
+	public boolean isDead() {
+		if (health < 0 && canDie() && !invincible) {return true;} else {return false;}
+	}
+
+	public void setHealth(int h) {
+		health = h;
 	}
 	
-	public int getHealth() {
+	public int health() {
 		return health;
 	}
 	
 	public void paint(Graphics g) {
 		if (showHp) {
-			hb.paint(g);
 		}
 	}
 	

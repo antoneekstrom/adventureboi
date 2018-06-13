@@ -13,6 +13,7 @@ import UI.UIManager;
 import gamelogic.MouseFunctions;
 import gamelogic.NewCamera;
 import gamelogic.NewObjectStorage;
+import objects.AngryShroom;
 import objects.NewObject;
 import objects.NewPlayer;
 
@@ -26,7 +27,7 @@ public class GameEnvironment extends JPanel implements ActionListener {
     SaveWriter sw;
     JPanel input;
     private static JFrame frame;
-    private int numberOfPlayers = 1;
+    private int numberOfPlayers = 2;
 
     public static JFrame getFrame() {
         return frame;
@@ -73,7 +74,9 @@ public class GameEnvironment extends JPanel implements ActionListener {
 			getForce().setGravity(false);
 			this.setCollision(false);
         }});
+        NewObjectStorage.add(new AngryShroom());
         NewPlayer player = NewObjectStorage.getPlayer(1);
+        player.showDebug(true);
 
         //start gameloop timer
         timer = new Timer(TIMER_DELAY, this);
