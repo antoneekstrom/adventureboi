@@ -7,6 +7,11 @@ import adventuregame.Images;
 
 public class Starman extends NewObject implements ObjectMethods {
 
+    public Starman() {
+        super();
+        setName("starman");
+    }
+
     public void initialize() {
         super.initialize();
         enableAnimator();

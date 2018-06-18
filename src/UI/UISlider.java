@@ -18,6 +18,8 @@ public class UISlider extends UIObject {
     }
 
     public void start() {
+        setBackgroundPadding(40);
+        //handle
         handle = new UIObject();
         handle.setParentName(getParentName());
         handle.setBox(new Rectangle(get().x, get().y, 30, 30));
@@ -42,5 +44,10 @@ public class UISlider extends UIObject {
         super.paint(g);
         handle.paint(g);
     }
+
+    public void setValue(double d) {value = d;}
+    public void setMaxValue(double d) {maxValue = d;}
+    public double value() {return value;}
+    public double maxValue() {return maxValue;}
 
 }

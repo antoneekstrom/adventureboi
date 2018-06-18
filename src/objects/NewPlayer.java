@@ -6,16 +6,15 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import adventuregame.Animator;
 import adventuregame.GlobalData;
 import adventuregame.Images;
+import data.PlayerData;
 import gamelogic.AbilityValues;
 import gamelogic.NewCamera;
 import gamelogic.NewObjectStorage;
 
 public class NewPlayer extends NewObject implements ObjectMethods {
-
-    //states
+	//states
     private boolean sitting = false;
     private boolean movingRight = false;
     private boolean movingLeft = false;
@@ -50,7 +49,8 @@ public class NewPlayer extends NewObject implements ObjectMethods {
     //charge animation
     private BufferedImage[] chargeAnimation;
 
-    //stats
+    //playerdata
+    private PlayerData playerData;
 
     //Ability
     private double ABILITY_FACTOR_MAX = AbilityValues.factorMax.get(currentAbility);;
@@ -69,7 +69,7 @@ public class NewPlayer extends NewObject implements ObjectMethods {
     private int jumpTime = 0;
 
     /** Velocity of jump. This will be added to the strength of gravity when calculated. */
-    private int JUMP_SPEED = 20;
+    private int JUMP_SPEED = 35;
 
     //positioning
     Point spawnPoint = new Point(0,0);
@@ -107,7 +107,7 @@ public class NewPlayer extends NewObject implements ObjectMethods {
     }
 
     public void moveDown() {
-        if (!getForce().hasGravity()) {
+        if (!physics().hasGravity()) {
             setY(getY() + PLAYER_SPEED);
         }
     }
@@ -138,7 +138,7 @@ public class NewPlayer extends NewObject implements ObjectMethods {
         }
         if (jumping && jumpTime - 1 >= 0) {
             jumpTime--;
-            get().y = get().y - JUMP_SPEED - (int) getForce().getGravityStrength();
+            get().y = get().y - JUMP_SPEED;
         }
     }
     
@@ -154,9 +154,13 @@ public class NewPlayer extends NewObject implements ObjectMethods {
         playerimages = Images.getImageHashMap("assets/animated_sprites/aboi");
         setImage(playerimages.get("still"));
         chargeAnimation = new BufferedImage[Images.getFolderImages("assets/animated_sprites/boicharge").size()];
+        ArrayList<BufferedImage> l = new ArrayList<BufferedImage>();
         for (int i = 0; i <= 10; i++) {
-            chargeAnimation[i] = Images.getImage("charge" + i);
+            l.add(i, Images.getImage("charge" + i));
         }
+        BufferedImage[] arr = new BufferedImage[l.size()];
+        arr = l.toArray(arr);
+        chargeAnimation = arr;
     }
 
     public void ai() {
@@ -189,6 +193,10 @@ public class NewPlayer extends NewObject implements ObjectMethods {
         chargeAbility();
         if (PLAYER_ID == 1) {centerCamera();}
         healthLogic();
+        debug();
+    }
+
+    public void debug() {
     }
 
     public void healthLogic() {
@@ -296,12 +304,9 @@ public class NewPlayer extends NewObject implements ObjectMethods {
     }
 
     public void intersect(NewObject collision) {
-        jumpCount = MAX_JUMP_COUNT;
-    }
-
-    public void update() {
-        super.update();
-        setDebugString(velocityX() + ":" + velocityY());
+        if (collisionSide().equals("top")) {
+            jumpCount = MAX_JUMP_COUNT;
+        }
     }
 
     public void destruct() {
@@ -321,10 +326,10 @@ public class NewPlayer extends NewObject implements ObjectMethods {
         }
         f.get().setSize( (int) (f.get().getWidth() * abilityFactor), (int) (f.get().getHeight() * abilityFactor));
         if (abilityDirection.equals("left")) {
-            f.get().setLocation((int) get().getCenterX() - (int) getWidth() / 2 - f.getWidth(), (int) get().getCenterY() - (int) f.get().getHeight());
+            f.get().setLocation((int) get().getCenterX() - (int) getWidth() / 2 - f.getWidth(), (int) get().getCenterY() - (int) f.get().getHeight() + 30);
         }
         else if (abilityDirection.equals("right")) {
-            f.get().setLocation((int) get().getCenterX() + (int) getWidth() / 2, (int) get().getCenterY() - (int) (f.get().getHeight()));
+            f.get().setLocation((int) get().getCenterX() + (int) getWidth() / 2, (int) get().getCenterY() - (int) (f.get().getHeight()) + 30);
         }
         NewObjectStorage.add(f);
     }

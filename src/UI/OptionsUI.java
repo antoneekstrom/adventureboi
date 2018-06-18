@@ -15,6 +15,7 @@ public class OptionsUI extends GUI {
         addMenuButton("Settings", getGuidelineY1());
         addMenuButton("Menu", getGuidelineY1());
         addMenuButton("Quit Game", getGuidelineY1());
+        addMenuButton("Save", getGuidelineY1());
     }
 
 }

@@ -2,7 +2,6 @@ package objects;
 
 import java.awt.Graphics;
 
-import adventuregame.Force;
 import adventuregame.Images;
 import gamelogic.NewObjectStorage;
 
@@ -17,6 +16,7 @@ public class Fireball extends NewObject implements ObjectMethods {
     private boolean charged = false;
 
     public Fireball(String d) {
+        setName("fireball");
         direction = d;
     }
 
@@ -26,10 +26,10 @@ public class Fireball extends NewObject implements ObjectMethods {
     }
     
     public void initialize() {
+        super.initialize();
         get().setSize(50, 50);
+        physics().setGravity(false);
         setImage(Images.getImage("fire"));
-        setForce(new Force());
-        getForce().setGravity(false);
     }
 
     public void logic() {

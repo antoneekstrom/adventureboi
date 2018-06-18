@@ -33,7 +33,6 @@ public class RectangleObject extends Object {
 	boolean hasStarted = false;
 	boolean started = false;
 	boolean charged = false;
-	boolean doesCarry = false;
 	boolean imgRepeat = false;
 	
 	double forcex = 0;
@@ -138,7 +137,6 @@ public class RectangleObject extends Object {
 		if (type.equals("angryshroom")) {
 			setGravity(true);
 			setCollision(true);
-			doesCarry = true;
 			subtype = "enemy";
 			setSize(150, 150);
 			ai = new AI();
@@ -166,7 +164,6 @@ public class RectangleObject extends Object {
 			hasImg = false;
 			setCollision(true);
 			setGravity(true);
-			doesCarry = true;
 		}
 		if (type.equals("bigmush")) {
 			setSize(350, 300);
@@ -175,7 +172,6 @@ public class RectangleObject extends Object {
 			hm.showHp();
 			subtype = "enemy";
 			ai = new AI();
-			doesCarry = true;
 			ai.setSpeed(3);
 			ai.jumpChance(0);
 			setCollision(true);

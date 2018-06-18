@@ -13,12 +13,14 @@ public class Main extends JFrame {
 	Dimension fdim;
 	Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 	public static boolean fullscreen = true;
-	public Menu m;
 	public Thread t;
+	public GameEnvironment ge;
 	
 	public Main() {
 		
 	}
+
+	public GameEnvironment get() {return ge;}
 	
 	public void start(Main f) {	
 		this.setTitle("adventureboi");
@@ -30,9 +32,9 @@ public class Main extends JFrame {
 		this.setVisible(true);
 		
 		//create and add world
-		GameEnvironment m = new GameEnvironment(this);
-		add(m);
-		m.start();
+		ge = new GameEnvironment(this);
+		add(ge);
+		ge.start();
 	}
 	
 	public static void main(String[] args) {

@@ -1,6 +1,7 @@
 package adventuregame;
 
 import java.awt.Color;
+import java.awt.Point;
 import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -14,20 +15,21 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.stream.Stream;
 
+import gamelogic.NewCamera;
 import gamelogic.NewObjectStorage;
 import objects.NewObject;
 import objects.ObjectTypes;
 
 public class SaveWriter {
-	private BufferedWriter writer;
-	private File file;
-	private File directory;
-	private File[] levels;
-	public String line;
-	private int lnum;
-	private int lcount;
+	private static BufferedWriter writer;
+	static private File file;
+	static private File directory;
+	static private File[] levels;
+	public static String line;
+	private static int lnum;
+	private static int lcount;
 	
-	public void ping() {
+	public static void ping() {
 		System.out.println("ping");
 	}
 	
@@ -44,8 +46,14 @@ public class SaveWriter {
 		}
 
 	}
-	
-	public void setWorld(String s, GameEnvironment ge) {
+
+	public static void loadLevel(String s) {
+		setWorld(s);
+		NewCamera.setCameraPos(new Point(0,0));
+		GameEnvironment.getFrame().get().loadPlayers();
+	}
+
+	public static void setWorld(String s) {
 		file = new File("data/levels/" + s + ".world");
 		System.out.println(file.getPath());
 		try {
@@ -64,11 +72,11 @@ public class SaveWriter {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		ge.setName(s);
-		loadWorld(ge);
+		GameEnvironment.getFrame().get().setName(s);
+		loadWorld(GameEnvironment.getFrame().get());
 	}
 	
-	public void createWorld(String s) {
+	public static void createWorld(String s) {
 		File f = new File(directory.getPath() + "/" + s + ".world");
 		if (!f.exists() && !s.equals("") && !s.equals(" ")) {
 			try {
@@ -83,7 +91,7 @@ public class SaveWriter {
 		}
 	}
 	
-	public void deleteWorld(String s) {
+	public static void deleteWorld(String s) {
 		File f = new File(directory.getPath() + "/" + s + ".world");
 		if (f.exists()) {
 			try {
@@ -99,11 +107,11 @@ public class SaveWriter {
 		directory = f;
 	}
 	
-	public File[] getDirWorlds() {
+	static public File[] getDirWorlds() {
 		return levels;
 	}
 	
-	public ArrayList<String> getWorldList() {
+	static public ArrayList<String> getWorldList() {
 		findWorlds();
 		ArrayList<String> l = new ArrayList<String>();
 		for (int i = 0; i < getDirWorlds().length; i++) {
@@ -116,7 +124,7 @@ public class SaveWriter {
 		return l;
 	}
 	
-	public void findWorlds() {
+	static public void findWorlds() {
 		directory = new File("data/levels");
 		levels = directory.listFiles(new FilenameFilter() {
 
@@ -130,7 +138,7 @@ public class SaveWriter {
 		return file.getName();
 	}
 	
-	public void writeList(GameObjects go) {
+	public static void writeList(GameObjects go) {
 		System.out.println("stage saved to " + file.getPath());
 		BufferedWriter writer;
 		try {
@@ -160,7 +168,7 @@ public class SaveWriter {
 		}	
 	}
 	
-	public void readLine(int n) {
+	public static void readLine(int n) {
 		lnum = n;
 		try (Stream<String> lines = Files.lines(Paths.get(file.getPath()))) {
 		    line = lines.skip(lnum).findFirst().get();
@@ -190,11 +198,11 @@ public class SaveWriter {
 	    }
 	}
 	
-	int x,y,w,h;
-	String t = "";
-	String txt = "";
-	Color c;
-	public void loadWorld(GameEnvironment ge) {
+	static int x,y,w,h;
+	static String t = "";
+	static String txt = "";
+	static Color c;
+	public static void loadWorld(GameEnvironment ge) {
 		try {
 			//clears current world
 			NewObjectStorage.clearEnvironment();
@@ -240,7 +248,7 @@ public class SaveWriter {
 		}
 	}
 	
-	public void write(String s) {
+	public static void write(String s) {
 		try {
 			writer.write(s);
 			writer.flush();
@@ -249,7 +257,7 @@ public class SaveWriter {
 		}
 	}
 	
-	public void newLine() {
+	public static void newLine() {
 		try {
 			writer.newLine();
 		} catch (Exception e) {e.printStackTrace();}

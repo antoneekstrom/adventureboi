@@ -1,10 +1,12 @@
 package adventuregame;
 
 import java.awt.Rectangle;
+import java.io.Serializable;
 
-public class Force {
+public class Force implements Serializable {
 
-    private int mass = 10;
+    private static final long serialVersionUID = 1L;
+	private int mass = 10;
     private int translatex, translatey;
     private double forcex = 0, forcey = 0;
     private double resistancex = 1, resistancey = 2;

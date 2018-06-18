@@ -62,6 +62,14 @@ public class NewCamera {
         return cameraPosition;
     }
 
+    /** Get position of mouse relative to camera. The point represents the point
+     *  in the game that is present on the screen.
+     */
+    public static Point getMouse() {
+        Point m = GlobalData.getMouse();
+        return new Point(m.x + getCameraPosition().x, m.y + getCameraPosition().y);
+    }
+
     /** Set display coordinates for an object */
     public static void setDisplayCoordinates(NewObject o) {
         Point p = new Point();
@@ -80,7 +88,7 @@ public class NewCamera {
         return object.x - getCameraPosition().x;
     }
 
-    /** See checkX() documentation */
+    /** See checkX(). */
     private static int checkY(Point object) {
         return object.y - getCameraPosition().y;
     }

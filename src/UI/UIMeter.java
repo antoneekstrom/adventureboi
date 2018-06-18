@@ -36,7 +36,7 @@ public class UIMeter extends UIObject {
 
     public void createText(String s) {
         text = s;
-        hasText = true;
+        hasText(true);
         textObject = new UIText(getParentName(), text, false);
         textObject.textColor(getTextColor());
         textObject.autoAdjustBackground(true);

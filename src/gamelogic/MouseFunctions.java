@@ -3,7 +3,9 @@ package gamelogic;
 import java.awt.event.WindowEvent;
 import java.util.HashMap;
 
+import UI.LevelsUI;
 import UI.UIManager;
+import UI.UIObject;
 import adventuregame.GameEnvironment;
 
 public class MouseFunctions {
@@ -15,12 +17,24 @@ public class MouseFunctions {
         private static final long serialVersionUID = 1L;
 	{
         put("Quit Game", () -> quitGame());
-        put("Custom Levels", () -> UIManager.enableGUI("HUD"));
+        put("Start", () -> UIManager.enableGUI("HUD"));
         put("Resume", () -> UIManager.enableGUI("HUD"));
         put("Settings", () -> UIManager.enableGUI("Settings"));
         put("Keybindings", () -> UIManager.enableGUI("Keybindings"));
         put("Menu", () -> UIManager.enableGUI("Menu"));
         put("Back", () -> UIManager.enableLatestGUI());
+        put("Custom Levels", () -> UIManager.enableGUI("Levels"));
+        put("Save", () -> GameEnvironment.saveGame());
+    }};
+
+    private static final HashMap<String, Runnable> actionsByTag = new HashMap<String, Runnable>() {
+        private static final long serialVersionUID = 1L;
+	{
+        put("nextObject", () -> ObjectCreator.nextObject());
+        put("prevObject", () -> ObjectCreator.previousObject());
+        put("toggleObjectCreation", () -> ObjectCreator.toggleEnabled());
+        put("toggleObjectInspection", () -> ObjectInspector.toggle());
+        put("refreshLevels", () -> LevelsUI.refreshList());
     }};
 
     public static ClickListener getClickListener() {
@@ -31,8 +45,22 @@ public class MouseFunctions {
         GameEnvironment.getFrame().dispatchEvent(new WindowEvent(GameEnvironment.getFrame(), WindowEvent.WINDOW_CLOSING));
     }
 
-    public static void executeClickActionByText(String name) {
-        actionsByText.get(name).run();
+    public static void executeClickActionByTag(String tag) {
+        if (actionsByTag.containsKey(tag)) {
+            actionsByTag.get(tag).run();
+        }
     }
 
+    public static void executeClickActionByText(String name) {
+        if (actionsByText.containsKey(name)) {
+            actionsByText.get(name).run();
+        }
+    }
+
+    public static void executeListAction(UIObject lo) {
+        if (lo.tag().equals("levelList")) {
+            GameEnvironment.loadLevel(lo.getText());
+        }
+        lo.leftMouseReleased();
+    }
 }

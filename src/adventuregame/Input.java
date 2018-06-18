@@ -1,6 +1,7 @@
 package adventuregame;
 
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.HashMap;
 
 import javax.swing.Action;
@@ -10,6 +11,7 @@ import javax.swing.KeyStroke;
 
 import actions.PlayerMovement;
 import actions.UINavigation;
+import UI.UIObject;
 
 public class Input {
 
@@ -19,6 +21,11 @@ public class Input {
     
     private static boolean takeInput = true;
     private static boolean movementEnabled = true;
+
+    //keylistener
+    private static boolean keyInput = false;
+    private static String inputString = "";
+    private static UIObject focusedObject;
 
     private static HashMap<String, Integer> keybindings;
     private static HashMap<String, Action> actions;
@@ -106,6 +113,7 @@ public class Input {
         addNavigationAction("UI_inventory");
         addNavigationAction("UI_up");
         addNavigationAction("UI_down");
+        addNavigationAction("UI_creative");
     }
 
     /** Bind all actionnames to actions. */
@@ -152,6 +160,7 @@ public class Input {
         //navigation
         keybindings.put("UI_options", KeyEvent.VK_ESCAPE);
         keybindings.put("UI_inventory", KeyEvent.VK_I);
+        keybindings.put("UI_creative", KeyEvent.VK_C);
 
     }
 
@@ -179,6 +188,50 @@ public class Input {
             jcomp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(key, 0, true), name);
             jcomp.getActionMap().put(name, a);
         }
+    }
+
+    public static void keyInput(boolean b) {keyInput = b;}
+    public static boolean keyInput() {return keyInput;}
+    public static void type(char c) {inputString += c;}
+    public static void clearInputString() {inputString = "";}
+    public static void setInputString(String s) {inputString = s;}
+    public static String getInputString() {return inputString;}
+    private static void backspace() {inputString = inputString.substring(0, inputString.length() - 1);}
+    public static void focusObject(UIObject o) {focusedObject = o;}
+    public static void submitString() {
+        focusedObject.submitInput(inputString);
+        focusedObject.toggleTyping();
+        clearInputString();
+    }
+
+    public static KeyListener getKeyListener() {
+        KeyListener kl = new KeyListener(){
+        
+            @Override
+            public void keyTyped(KeyEvent e) {
+            }
+        
+            @Override
+            public void keyReleased(KeyEvent e) {
+                
+            }
+        
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (keyInput) {
+                    if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+                        backspace(); /* delete character */
+                    }
+                    else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                        submitString(); /* Submit input */
+                    }
+                    else {
+                        type(e.getKeyChar()); /* Type character. */
+                    }
+                }
+            }
+        };
+        return kl; 
     }
 
 }

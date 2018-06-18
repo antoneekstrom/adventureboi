@@ -7,6 +7,8 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import adventuregame.GlobalData;
+import gamelogic.ObjectInspector;
+import objects.NewObject;
 
 public class GUI {
 
@@ -57,6 +59,7 @@ public class GUI {
 		return y;
 	}
 
+	/**  */
 	public static UIObject findObject(UIObject[] arr, String text) {
 		UIObject object = null;
 		for (UIObject o :  arr) {
@@ -183,6 +186,54 @@ public class GUI {
 			setBorderThickness(BORDER_THICKNESS);
             setBackgroundPadding(40);
         }});
+	}
+	/** Invoked when mouse is clicked while this GUI is active. */
+	public void leftClick() {
+	}
+
+	public void inspectionContextMenu(NewObject o) {
+		UIContextMenu c = new UIContextMenu(getName());
+		c.setText(o.getName());
+		c.get().setLocation(GlobalData.getMouse());
+		c.get().setSize(250, 350);
+		c.setTag("objectInspect");
+		c.getList().setFontSize(30);
+
+		c.textColor(Color.white);
+		c.setBackgroundColor(Color.white);
+		c.getList().textColor(Color.white);
+		c.getList().entry().takeInput(true);
+		c.getList().setTag(c.tag());
+		ObjectInspector.inspectObject(o);
+
+		c.getList().handle().setBackgroundColor(Color.white);
+		c.getList().handle().hoverColorChange(Color.orange.brighter());
+
+		c.getList().get().setSize(c.get().getSize());
+		c.getList().get().setLocation(c.get().getLocation());
+		c.hasText(false);
+		c.getList().refreshList(new String[] {
+			o.getName(),
+			"width:" + o.get().width,
+			"height:" + o.get().height,
+			"x:" + o.get().x,
+			"y:" + o.get().y,
+		});
+		c.getList().getList().get(0).takeInput(false);
+		c.getList().getList().get(1).setInputPrefix("width");
+		c.getList().getList().get(2).setInputPrefix("height");
+		c.getList().getList().get(3).setInputPrefix("x");
+		c.getList().getList().get(4).setInputPrefix("y");
+		addObject(c);
+	}
+	
+	public void applyGeneralStyle(UIObject o) {
+		o.hasBorder(true);
+		o.setBorderThickness(BORDER_THICKNESS);
+		o.setBackgroundPadding(40);
+		o.centerTextY(true);
+		o.centerTextX(true);
+		o.setFontSize(40);
 	}
 
 	public void addTitle(String text) {

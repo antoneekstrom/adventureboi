@@ -40,6 +40,8 @@ public class UIManager {
         add(new KeybindingsUI());
         add(new NewHUD());
         add(new OptionsUI());
+        add(new CreativeUI());
+        add(new LevelsUI());
     }};
 
     /** Starts all UI's */
@@ -48,6 +50,14 @@ public class UIManager {
         for (GUI gui : interfaces) {
             gui.start();
         }
+    }
+
+    public static GUI getCurrentGUI() {
+        GUI r = null;
+        for (GUI gui : interfaces) {
+            if (gui.isVisible()) {r = gui;}
+        }
+        return r;
     }
 
     public static void enableHUD(boolean b) {

@@ -3,13 +3,17 @@ package UI;
 import java.awt.Color;
 
 import adventuregame.GlobalData;
+import gamelogic.MouseFunctions;
 import gamelogic.NewObjectStorage;
+import objects.NewObject;
 import objects.NewPlayer;
 
 public class NewHUD extends GUI {
 
-    private boolean showPlayer1 = true;
-    private boolean showPlayer2 = true;
+    private UIText t1;
+    private NewObject currentObject;
+    public NewObject getCurrentObject() {return currentObject;}
+    public void setCurrentObject(NewObject o) {currentObject = o;}
 
     public NewHUD() {
         super("HUD");
@@ -46,6 +50,20 @@ public class NewHUD extends GUI {
         super.update();
         determineUI();
         updateStats();
+        debug();
+    }
+
+    @Override
+    public void leftClick() {
+        for (UIObject o : getObjectsByTag("objectInspect")) {
+            if (!o.checkMouse()) {
+                getUIObjectList().remove(o);
+            }
+        }
+    }
+
+    public void debug() {
+        t1.setText(String.valueOf(MouseFunctions.getClickListener().isLeftPressed()));
     }
 
     public void updateStats() {
@@ -56,10 +74,12 @@ public class NewHUD extends GUI {
         health1.setMaxValue( (double) p1.healthModule().maxHealth());
         
         //player2
-        NewPlayer p2 = NewObjectStorage.getPlayer(2);
-        UIMeter health2 = (UIMeter) GUI.findObject(getObjectsByTag("player2"), "Health");
-        health2.setValue( (double) p2.healthModule().health());
-        health2.setMaxValue( (double) p2.healthModule().maxHealth());
+        if (NewObjectStorage.playerCount() > 1) {
+            NewPlayer p2 = NewObjectStorage.getPlayer(2);
+            UIMeter health2 = (UIMeter) GUI.findObject(getObjectsByTag("player2"), "Health");
+            health2.setValue( (double) p2.healthModule().health());
+            health2.setMaxValue( (double) p2.healthModule().maxHealth());
+        }
     }
     
     public void determineUI() {
@@ -96,7 +116,7 @@ public class NewHUD extends GUI {
     }
     
     public void start() {
-        UIText t1 = new UIText(getName(), "HUD", true);
+        t1 = new UIText(getName(), "HUD", true);
         addObject(t1);
      
         player1();

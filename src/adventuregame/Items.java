@@ -33,7 +33,7 @@ public class Items {
 		put("lowercaseb", "statup");
 		put("uppercaseb", "statup");
 	}};
-	
+
 	public static String getDescription(String item) {
 		return descriptions.get(item);
 	}

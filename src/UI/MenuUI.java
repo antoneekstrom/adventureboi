@@ -12,14 +12,18 @@ public class MenuUI extends GUI {
         setVisible(true);
         //title
         addTitle("Adventureboi");
+        getObjectByText("Adventureboi").get().y -= 100;
 
         //custom levels button
-        addMenuButton("Custom Levels", 450);
+        addMenuButton("Custom Levels", 350);
+
+        //start button
+        addMenuButton("Start", 500);
         
         //settings button
-        addMenuButton("Settings", 600);
+        addMenuButton("Settings", 650);
         
         //quit button
-        addMenuButton("Quit Game", 750);
+        addMenuButton("Quit Game", 800);
     }
 }

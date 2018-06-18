@@ -1,24 +1,26 @@
 package objects;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
-import adventuregame.AI;
 import adventuregame.Animator;
-import adventuregame.Force;
 import adventuregame.HealthModule;
-import adventuregame.Images;
+import data.ObjectData;
+import gamelogic.NewAI;
 import gamelogic.NewCamera;
 import gamelogic.NewCollision;
+import gamelogic.NewObjectStorage;
+import gamelogic.Physics;
 
 public class NewObject {
 
-    //switches
+	//switches
     private boolean visible = true;
     /** Set to true if object should receive collision logic. Will still affect other collision enabled objects. */
     private boolean collision = true;
@@ -29,6 +31,7 @@ public class NewObject {
     private boolean debug = false;
     private boolean hasImage = false;
     private boolean passThrough = false;
+    private boolean selected = false;
 
     //attributes
     Color color_fg = Color.white;
@@ -43,23 +46,22 @@ public class NewObject {
     private String debugString = "";
 
     //modules
-    private AI ai;
+    private NewAI ai;
     private Animator animator;
     private HealthModule healthModule;
 
-    //force
-    private Force force;
+    //physics
+    private Physics physics = new Physics();
 
     //velocity
     private double velocityX = 0;
     private double velocityY = 0;
-    private ArrayList<Double> posLogX = new ArrayList<Double>();
-    private ArrayList<Double> posLogY = new ArrayList<Double>();
-    private int POSLOG_MAX = 5;
+    private Point lastPos;
 
 
-    //last collision
+    //collision
     private NewObject lastCollision;
+    private String collisionSide = "none";
 
     //positioning
     private Rectangle r;
@@ -69,6 +71,7 @@ public class NewObject {
     public NewObject() {
         r = new Rectangle(100, 100);
         r.setLocation(0, 0);
+        setText("");
         displayCoordinate = new Point(r.x, r.y);
         initialize();
     }
@@ -77,12 +80,26 @@ public class NewObject {
         return passThrough;
     }
 
+    public void setCollisonSide(String s) {collisionSide = s;}
+    public String collisionSide() {return collisionSide;}
+
     public void setPassThrough(boolean b) {
         passThrough = b;
     }
 
     public String getText() {
         return text;
+    }
+    public ObjectData extractData() {
+        return new ObjectData(this);
+    }
+
+    public Color getColor() {return color_fg;}
+
+    public NewObject(ObjectData data) {
+        setRectangle(data.rectangle());
+        setColor(data.color());
+        setText(data.text());
     }
 
     public void setDebugString(String s) {
@@ -101,19 +118,14 @@ public class NewObject {
         return name;
     }
 
-    public void inititializeType() {
-        if (Images.isIndexed(name)) {
-            setImage(Images.getImage(name));
-        }
-    }
-
     public void setName(String n) {
         name = n;
     }
 
     /** setup object to specified type. Overwrite this method if this is not a generic object. */
     public void initialize() {
-        setForce(new Force());
+        physics = new Physics();
+        lastPos = get().getLocation();
     }
 
     public void setColor(Color c) {
@@ -141,6 +153,15 @@ public class NewObject {
         return lastCollision;
     }
 
+    public boolean isSelected() {return selected;}
+    public void deselect() {selected = false;}
+    public void select() {
+        for (NewObject o : NewObjectStorage.getObjectList()) {
+            if (o.isSelected()) {o.deselect();}
+        }
+        selected = true;
+    }
+
     public void setIntersect(boolean b) {
         intersect = b;
     }
@@ -149,8 +170,13 @@ public class NewObject {
         return intersect;
     }
 
-    /** Is called when intersecting with another object. Call super. */
-    protected void intersect(NewObject collision) {
+    /** Is called when intersecting with another object. Use this one for removing/creating objects. Call super. */
+    public void intersect(NewObject collision) {
+    }
+    
+    /** Is called immediately upon intersection. Call super. */
+    public void collide(NewObject collision) {
+        physics().collide();
     }
 
     protected HealthModule getHealthModule() {
@@ -167,7 +193,9 @@ public class NewObject {
     public double velocityY() {return velocityY;}
 
     private void calculateVelocity() {
-
+        velocityX = get().x - lastPos.x;
+        velocityY = get().y - lastPos.y;
+        lastPos = get().getLocation();
     }
 
     /** Get object image. */
@@ -183,12 +211,12 @@ public class NewObject {
         animator = new Animator(image);
     }
 
-    public AI getAI() {
+    public NewAI getAI() {
         return ai;
     }   
 
     public void createAI() {
-        ai = new AI();
+        ai = new NewAI();
     }
 
     /** Get object rectangle/bouding box. This is also where position translation should occur. */
@@ -198,7 +226,7 @@ public class NewObject {
 
     /** Calculate forces and positioning. */
     private void calculatePosition() {
-        updateForce();
+        updatePhysics();
         collision();
     }
 
@@ -215,16 +243,13 @@ public class NewObject {
     }
 
     /** Set position and size for this object */
-    protected void setRectangle(Rectangle nr) {
+    public void setRectangle(Rectangle nr) {
         r = nr;
     }
 
     /** Update ai: Pass information, get back information */
     protected void ai() {
         if (ai != null) {
-            if (getLastCollision() != null) {
-                ai.passCollision(getLastCollision());
-            }
             ai.update(this);
         }
     }
@@ -232,14 +257,19 @@ public class NewObject {
     /** Update object. */
     public void update() {
         ai(); /* Do AI things every tick. */
-        if (doesIntersect()) {intersect(lastCollision);}; /* Execute things when intersecting another object */
         logic(); /* Do regular update stuff every tick */
         basicLogic(); /* Basic logic for all objects */
         calculateVelocity();
+        if (intersect) {intersect(lastCollision);}
         calculatePosition(); /* Calculate forces and positioning */
         updateDisplayCoordinates(); /* Update position on screen */
         animate(); /* Do animation. */
         if (healthModule != null) {healthModule().update();}
+        debug();
+    }
+    
+    /** Update method for debugging. */
+    private void debug() {
     }
 
     /** Update basic logic stuff for all objects */
@@ -291,6 +321,10 @@ public class NewObject {
         return displayCoordinate;
     }
 
+    public Rectangle getDisplayBox() {
+        return new Rectangle(getDisplayCoordinate().x, getDisplayCoordinate().y, get().width, get().height);
+    }
+
     public void setDisplayCoordinate(Point p) {
         displayCoordinate = p;
     }
@@ -339,22 +373,17 @@ public class NewObject {
         pushable = b;
     }
 
-    public void applyForce(double x, double y) {
-        force.applyForce(x, y);
+    public void addForce(double x, double y) {
+        physics.addForce(x, y);
     }
 
-    public Force getForce() {
-        return force;
-    }
-
-    public void setForce(Force f) {
-        force = f;
+    public Physics physics() {
+        return physics;
     }
 
     /** Applies forces to object */
-    private void updateForce() {
-        force.gravity(r);
-        force.update(r);
+    private void updatePhysics() {
+        physics().update(this);
     }
 
     //display object
@@ -377,6 +406,14 @@ public class NewObject {
                 g.setColor(Color.black);
                 g.drawRect(getDisplayCoordinate().x, getDisplayCoordinate().y, get().width, get().height);
                 g.drawString(debugString, getDisplayCoordinate().x - 250, getDisplayCoordinate().y -100);
+            }
+            if (isSelected()) {
+                Graphics2D g2d = (Graphics2D) g;
+                g2d.setStroke(new BasicStroke(20));
+                g2d.setColor(Color.red);
+                g2d.drawString("SELECTED", getDisplayCoordinate().x, getDisplayCoordinate().y - 50);
+                g2d.setColor(Color.green);
+                g2d.drawRect(getDisplayCoordinate().x, getDisplayCoordinate().y, get().width, get().height);
             }
         }
     }

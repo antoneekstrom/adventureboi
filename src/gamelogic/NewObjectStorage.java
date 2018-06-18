@@ -19,6 +19,8 @@ public class NewObjectStorage {
         return objects;
     }
 
+    public static void setList(ArrayList<NewObject> l) {objects = l;}
+
     /** Add object to game.
      * @param object - Initialized object to add to game.
     */
@@ -32,6 +34,7 @@ public class NewObjectStorage {
 
     public static void clearEnvironment() {
         objects.clear();
+        playerCount = 0;
     }
 
     public static void addToIndex(NewObject object, int i) {
@@ -98,5 +101,4 @@ public class NewObjectStorage {
             o.paint(g);
         }
     }
-
 }

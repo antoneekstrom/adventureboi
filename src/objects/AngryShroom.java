@@ -5,6 +5,8 @@ import adventuregame.Images;
 public class AngryShroom extends NewObject implements ObjectMethods {
 
     public AngryShroom() {
+        setName("angryshroom");
+        setText("angryshroom");
     }
 
     public void initialize() {
@@ -12,9 +14,7 @@ public class AngryShroom extends NewObject implements ObjectMethods {
         super.setImage(Images.getImage("angryshroom"));
         enableAnimator();
         createAI();
-        getAI().setSpeed(8);
-        getAI().jumpChance(0.8);
-        getAI().turnChance(0.4);
+        enableHealthModule(100);
         get().setSize(125, 125);
         getAnimator().addList(Images.getFolderImages("assets/animated_sprites/angryshroom"));
         getAnimator().setIndexRange(0, 3);
@@ -26,7 +26,14 @@ public class AngryShroom extends NewObject implements ObjectMethods {
     }
 
     public void logic() {
-        
+        if (healthModule().isDead()) {
+            die();
+        }
+    }
+
+    public void die() {
+        getAI().setEnabled(false);
+        getAnimator().setIndexRange(3, 3);
     }
 
     public void animate() {
@@ -34,7 +41,10 @@ public class AngryShroom extends NewObject implements ObjectMethods {
     }
     
 	public void intersect(NewObject collision) {
-        getAI().passCollision(collision);
+    }
+    
+    public void collide(NewObject collision) {
+        getAI().collision(collision);
     }
 
     public void update() {

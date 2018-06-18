@@ -23,12 +23,11 @@ public class NewCollision {
             //if object1 is not the same as object2 and they are intersecting
             if (object1.get().intersects(object2.get()) && !object2.equals(object1)) {
                 if (object1.getCollision()) {
-                    if (!object2.isPushable()) {
-                        collision(object1, object2);
-                    }
+                    collision(object1, object2);
                     i = true;
                     object1.setIntersect(true);
                     object1.passCollision(object2);
+                    object1.collide(object2);
                 }
             }
             else {
@@ -63,9 +62,15 @@ public class NewCollision {
         //---------------------//
         if (x < y) {
             moveX = true;
+
+            //set side
+            if (invertX) {o1.setCollisonSide("left");}
+            else {o1.setCollisonSide("right");}
         }
         else {
             moveY = true;
+            if (invertY) {o1.setCollisonSide("top");}
+            else {o1.setCollisonSide("bottom");}
         }
         //---------------------//
         if (invertX) {x = -x;}
@@ -74,11 +79,12 @@ public class NewCollision {
         if (moveX) {
             r1.x = r1.x + x;
         }
-        else {
+        else if (moveY) {
             r1.y = r1.y + y;
         }
-
-        o1.setDebugString("x:" + (r+l) + " y:" + (t+b));
+        if (o1.equals(NewObjectStorage.getPlayer(1))) {
+            o1.setDebugString("x:" + x + " y:" + y);
+        }
     }
 
     //check distance of intersection on all sides
@@ -105,7 +111,7 @@ public class NewCollision {
     private static int checkTop(Rectangle r1, Rectangle r2) {
         int i;
 
-        if (r1.getCenterY() < r2.getCenterY()) {
+        if (r1.getCenterY() <= r2.getCenterY()) {
             i = (int) ( r2.getMinY() - r1.getMaxY() );
         } else {i = 0;}
 
@@ -115,7 +121,7 @@ public class NewCollision {
     private static int checkBottom(Rectangle r1, Rectangle r2) {
         int i;
         
-        if (r1.getCenterY() > r2.getCenterY()) {
+        if (r1.getCenterY() >= r2.getCenterY()) {
             i = (int) ( r2.getMaxY() - r1.getMinY() );
         } else {i = 0;}
         

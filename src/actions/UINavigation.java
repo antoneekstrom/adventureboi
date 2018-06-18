@@ -24,7 +24,7 @@ public class UINavigation extends AbstractAction {
 			}
 			if (action.equals("UI_options")) {
 				if (UIManager.getGUI("Options").isVisible()) {
-					UIManager.enableGUI("HUD");
+					UIManager.enableLatestGUI();
 				}
 				else if (UIManager.getGUI("HUD").isVisible()) {
 					UIManager.enableGUI("Options");
@@ -34,6 +34,14 @@ public class UINavigation extends AbstractAction {
 				}
 				else {
 					UIManager.enableLatestGUI();
+				}
+			}
+			if (action.equals("UI_creative")) {
+				if (UIManager.getGUI("Creative").isVisible()) {
+					UIManager.enableLatestGUI();
+				}
+				else {
+					UIManager.enableGUI("Creative");
 				}
 			}
 		}

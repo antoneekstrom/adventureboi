@@ -3,12 +3,14 @@ package adventuregame;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
-public class Animator {
+public class Animator implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
 	private ArrayList<BufferedImage> images;
 	BufferedImage currentimg;
 	private BufferedImage backup;
