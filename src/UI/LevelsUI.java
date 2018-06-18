@@ -25,6 +25,7 @@ public class LevelsUI extends GUI {
 
     public void start() {
         addTitle("Custom Levels");
+        addBackButton();
         getObjectByText("Custom Levels").get().y -= 180;
         //list
         levels = new UIList(getName()) {{
@@ -51,6 +52,8 @@ public class LevelsUI extends GUI {
         }};
         applyGeneralStyle(refresh);
         addObject(refresh);
+
+        refreshList();
     }
 
     public void update() {

@@ -18,7 +18,6 @@ import java.util.stream.Stream;
 import gamelogic.NewCamera;
 import gamelogic.NewObjectStorage;
 import objects.NewObject;
-import objects.ObjectTypes;
 
 public class SaveWriter {
 	private static BufferedWriter writer;
@@ -235,12 +234,6 @@ public class SaveWriter {
 			
 			//create object and put it into game world
 			NewObject o = new NewObject();
-			o = ObjectTypes.getObject(t);
-			if (!ObjectTypes.isKnownType(t) || ObjectTypes.isExcluded(t)) {
-				o.setColor(c);
-				o.setName(t);
-				o.get().setSize(w, h);
-			}
 			o.setText(txt);
 			o.get().setLocation(x, y);
 

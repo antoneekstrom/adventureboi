@@ -44,6 +44,9 @@ public class GUI {
 
 	}
 
+	public int xCenter(int width) {return (GlobalData.getScreenDim().width / 2) - width / 2;}
+	public int yCenter(int height) {return (GlobalData.getScreenDim().height / 2) - height / 2;}
+
 	public void setGuidelineSpacing(int i) {
 		guidelineSpacing = i;
 	}

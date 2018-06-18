@@ -7,6 +7,7 @@ import java.awt.Rectangle;
 import java.lang.Object;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -15,6 +16,7 @@ import UI.UIManager;
 import data.DataHandler;
 import data.LevelData;
 import data.ObjectData;
+import data.Players;
 import gamelogic.MouseFunctions;
 import gamelogic.NewCamera;
 import gamelogic.NewObjectStorage;
@@ -37,10 +39,17 @@ public class GameEnvironment extends JPanel implements ActionListener {
     private static Main frame;
 
     //players
-    private static int numberOfPlayers = 1;
+    private static int numberOfPlayers = 2;
+    private static String player1_name = "raviolo";
+    private static String player2_name = "boi";
+    public static void setPlayer1Name(String name) {player2_name = name;}
+    public static void setPlayer2Name(String name) {player1_name = name;}
+    public static String player1Name() {return player1_name;}
+    public static String player2Name() {return player2_name;}
 
     //environment data
     private static LevelData levelData = new LevelData("menu", true, null);
+    private static String saveDirectory = "data/levels/";
 
     public static Main getFrame() {
         return frame;
@@ -58,7 +67,8 @@ public class GameEnvironment extends JPanel implements ActionListener {
 
     public static void saveGame() {
         levelData.objectDataList(ObjectData.createDataList());
-        DataHandler.serialize(levelData, levelData.name());
+        Players.savePlayerData();
+        DataHandler.serialize(levelData, new File(saveDirectory + levelData.name() + ".ser"));
     }
 
     private static void createBoilerplateLevel(LevelData data) {
@@ -72,13 +82,12 @@ public class GameEnvironment extends JPanel implements ActionListener {
     }
 
     public static void loadLevel(String name) {
-        levelData = (LevelData) DataHandler.deserialize(name);
+        levelData = (LevelData) DataHandler.deserialize(new File(saveDirectory + name + ".ser"));
 
         if (levelData.objectDataList().isEmpty()) {createBoilerplateLevel(levelData);}
 
         NewObjectStorage.clearEnvironment();
         NewObjectStorage.setList(ObjectData.createObjectList(levelData.objectDataList()));
-        loadPlayers();
     }
 
     public void test() {
@@ -95,16 +104,24 @@ public class GameEnvironment extends JPanel implements ActionListener {
 
         //testing
         test();
-        
+
         //load all images
         Images.indexAllImages();
         Images.loadAllImages();
+
+        //load playerdata
+        Players.loadPlayerData();
 
         //set up save mechanism and load menu world
         loadLevel("menu");
 
         //start UI
         UIManager.start();
+
+        //if there are no player profiles open player selection UI
+        if (Players.playerData().size() < 1) {
+            UIManager.enableGUI("PlayerSelect");
+        }
 
         //start object creator
         ObjectCreator.start();
@@ -116,9 +133,7 @@ public class GameEnvironment extends JPanel implements ActionListener {
 		this.requestFocus();
         
         //start camera and initialize world
-		NewCamera.setCameraPos(new Point(0, 0));
-        NewPlayer player = NewObjectStorage.getPlayer(1);
-        player.showDebug(true);
+        NewCamera.centerCameraOn(new Point(-50, 500));
 
         //start gameloop timer
         timer = new Timer(TIMER_DELAY, this);

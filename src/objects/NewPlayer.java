@@ -30,6 +30,9 @@ public class NewPlayer extends NewObject implements ObjectMethods {
 
     //data
     private int PLAYER_ID;
+    private String displayName = "";
+    public void displayName(String s) {displayName = s;}
+    public String displayName() {return displayName;}
     //camera
     private int CAMERA_Y = (GlobalData.getScreenDim().height / 2) - 300;
     private boolean lockCameraY = false;
@@ -45,12 +48,28 @@ public class NewPlayer extends NewObject implements ObjectMethods {
     private boolean abilityCharging = false;
     private int abilityCooldown = AbilityValues.cooldown.get(currentAbility);
     private int chargePercentage = 0;
+    private double damage = 15;
 
     //charge animation
     private BufferedImage[] chargeAnimation;
 
     //playerdata
     private PlayerData playerData;
+    private PlayerData playerData() {return playerData;}
+
+    public void initiatePlayerData(PlayerData data) {
+        damage = data.damage();
+        healthModule().setMaxHealth((int)data.maxHealth());
+    }
+
+    public PlayerData extractPlayerData() {
+        PlayerData data = new PlayerData();
+        data.damage(damage);
+        data.maxHealth(healthModule().maxHealth());
+        data.name(displayName());
+        return data;
+    }
+    /*--------------*/
 
     //Ability
     private double ABILITY_FACTOR_MAX = AbilityValues.factorMax.get(currentAbility);;
@@ -320,7 +339,7 @@ public class NewPlayer extends NewObject implements ObjectMethods {
 
     public void fireball() {
         Fireball f = new Fireball(abilityDirection);
-        f.damage *= abilityFactor;
+        damage *= abilityFactor;
         if (chargePercentage == 10) {
             f.charged();
         }

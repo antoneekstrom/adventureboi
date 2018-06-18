@@ -3,6 +3,8 @@ package gamelogic;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
+import adventuregame.GameEnvironment;
+import data.Players;
 import objects.NewObject;
 import objects.NewPlayer;
 
@@ -66,15 +68,25 @@ public class NewObjectStorage {
         return playerCount;
     }
 
+    private static NewPlayer createPlayer(int n) {
+        NewPlayer p = new NewPlayer(n);
+        return p;
+    }
+
+    public static void initializePlayers() {
+        player1.initiatePlayerData(Players.getPlayerData(GameEnvironment.player1Name()));
+        player2.initiatePlayerData(Players.getPlayerData(GameEnvironment.player2Name()));
+    }
+
     /** Create a new player and add it to the playerlist. */
     public static void newPlayer() {
         playerCount++;
         if (playerCount == 1) {
-            player1 = new NewPlayer(1);
+            player1 = createPlayer(1);
             addToIndex(player1, 0);
         }
         else if (playerCount == 2) {
-            player2 = new NewPlayer(2);
+            player2 = createPlayer(2);
             addToIndex(player2, 1);
         }
     }

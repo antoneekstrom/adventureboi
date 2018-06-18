@@ -3,9 +3,6 @@ package UI;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
-import adventuregame.GameEnvironment;
-import gamelogic.NewObjectStorage;
-
 /** This is were all the UI's are stored. */
 public class UIManager {
 
@@ -13,6 +10,10 @@ public class UIManager {
     private static int MAX_HISTORY_SIZE = 5;
     /** History for recent GUI's in order. */
     private static ArrayList<String> GUIHistory = new ArrayList<String>();
+
+    private static boolean lockCurrentGUI = false;
+    public static void lockCurrentGUI(boolean b) {lockCurrentGUI = b;}
+    public static boolean lockCurrentGUI() {return lockCurrentGUI;}
 
     public static void addToHistory(String name) {
         GUIHistory.add(name);
@@ -23,7 +24,7 @@ public class UIManager {
     }
     /** Returns name of latest GUI and removes it from history. */
     public static String getLatestGUI() {
-        String name = null;
+        String name = "none";
         if (GUIHistory.size() > 0) {
             name = GUIHistory.get(GUIHistory.size() - 1);
             GUIHistory.remove(GUIHistory.size() - 1);
@@ -42,6 +43,8 @@ public class UIManager {
         add(new OptionsUI());
         add(new CreativeUI());
         add(new LevelsUI());
+        add(new PlayerSelectUI());
+        add(new InspectPlayerUI());
     }};
 
     /** Starts all UI's */
@@ -65,8 +68,11 @@ public class UIManager {
     }
 
     public static void enableLatestGUI() {
-        hideAll(false);
-        enableGUI(getLatestGUI());
+        String gui = getLatestGUI();
+        if (!gui.equals("none") && !lockCurrentGUI) {
+            hideAll(false);
+            enableGUI(gui);
+        }
     }
 
     /** Returns true if no GUI's are visible. */
@@ -82,8 +88,10 @@ public class UIManager {
      *  @param name : Name of GUI to enable.
      */
     public static void enableGUI(String name) {
-        hideAll(true);
-        getGUI(name).setVisible(true);
+        if (!lockCurrentGUI) {
+            hideAll(true);
+            getGUI(name).setVisible(true);
+        }
     }
 
     public static ArrayList<GUI> getGUIList() {

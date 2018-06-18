@@ -25,6 +25,7 @@ public class MouseFunctions {
         put("Back", () -> UIManager.enableLatestGUI());
         put("Custom Levels", () -> UIManager.enableGUI("Levels"));
         put("Save", () -> GameEnvironment.saveGame());
+        put("Select Player", () -> UIManager.enableGUI("PlayerSelect"));
     }};
 
     private static final HashMap<String, Runnable> actionsByTag = new HashMap<String, Runnable>() {
