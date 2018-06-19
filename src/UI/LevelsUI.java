@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Rectangle;
 
 import adventuregame.GlobalData;
-import adventuregame.SaveWriter;
+import data.LevelData;
 
 public class LevelsUI extends GUI {
 
@@ -14,9 +14,7 @@ public class LevelsUI extends GUI {
     int listHeight = 900;
 
     public static void refreshList() {
-        String[] arr = new String[SaveWriter.getWorldList().size()];
-        SaveWriter.getWorldList().toArray(arr);
-        levels.refreshList(arr);
+        levels.refreshList(LevelData.findLevels());
     }
 
     public LevelsUI() {
@@ -46,10 +44,15 @@ public class LevelsUI extends GUI {
         addObject(levels);
 
         //refresh button
-        UIButton refresh = new UIButton(getName(), "Refresh", false) {{
-            get().setLocation((int)levels.get().getMaxX() + 50, levels.get().height);
-            setTag("refreshLevels");
-        }};
+        UIButton refresh = new UIButton(getName(), "Refresh", false) {
+            @Override
+            public void leftMouseReleased() {
+                refreshList();
+            }
+            {
+                get().setLocation((int)levels.get().getMaxX() + 50, levels.get().height);
+            }
+        };
         applyGeneralStyle(refresh);
         addObject(refresh);
 

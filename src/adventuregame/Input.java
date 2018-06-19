@@ -21,6 +21,7 @@ public class Input {
     
     private static boolean takeInput = true;
     private static boolean movementEnabled = true;
+    private static boolean UIKeysEnabled = true;
 
     //keylistener
     private static boolean keyInput = false;
@@ -37,17 +38,11 @@ public class Input {
     }
 
     /** Returns if input is enabled/disabled */
-    public static boolean getState() {
-        return takeInput;
-    }
-
-    public static boolean getMovementEnabled() {
-        return movementEnabled;
-    }
-
-    public static void enableMovement(boolean b) {
-        movementEnabled = b;
-    }
+    public static boolean getState() {return takeInput;}
+    public static boolean getMovementEnabled() {return movementEnabled;}
+    public static void enableMovement(boolean b) {movementEnabled = b;}
+    public static void enableUIKeys(boolean b) {UIKeysEnabled = b;}
+    public static boolean UIKeysEnabled() {return UIKeysEnabled;}
 
     /** Start/initialize controller/playerinput. */
     public static JPanel start() {

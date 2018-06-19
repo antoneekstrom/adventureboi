@@ -6,9 +6,11 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import adventuregame.GameEnvironment;
 import adventuregame.GlobalData;
 import adventuregame.Images;
 import data.PlayerData;
+import data.Players;
 import gamelogic.AbilityValues;
 import gamelogic.NewCamera;
 import gamelogic.NewObjectStorage;
@@ -160,6 +162,17 @@ public class NewPlayer extends NewObject implements ObjectMethods {
             get().y = get().y - JUMP_SPEED;
         }
     }
+
+    public void initializeData() {
+        PlayerData data = null;
+        if (PLAYER_ID == 1) {
+            data = Players.getPlayerData(GameEnvironment.player1Name());
+        }
+        else if (PLAYER_ID == 2) {
+            data = Players.getPlayerData(GameEnvironment.player2Name());
+        }
+        initiatePlayerData(data);
+    }
     
     public void initialize() {
         super.initialize();
@@ -168,6 +181,7 @@ public class NewPlayer extends NewObject implements ObjectMethods {
         enableHealthModule(100);
         healthModule().setMaxHealth(100);
         healthModule().setHealth(100);
+        initializeData();
 
         //animation/images
         playerimages = Images.getImageHashMap("assets/animated_sprites/aboi");

@@ -114,9 +114,11 @@ public class UIObject {
                 typeable(false);
                 Input.keyInput(false);
                 Input.enableMovement(true);
+                Input.enableUIKeys(true);
             }
             else {
                 typeable(true);
+                Input.enableUIKeys(false);
                 Input.focusObject(this);
                 Input.enableMovement(false);
                 Input.keyInput(true);

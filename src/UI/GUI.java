@@ -95,6 +95,12 @@ public class GUI {
 		return returnObject;
 	}
 
+	public void removeAlerts() {
+		for (UIObject object : getObjectsByTag("alert")) {
+			getUIObjectList().remove(object);
+		}
+	}
+
 	public Color getUITextColor() {
 		return TEXT_COLOR;
 	}

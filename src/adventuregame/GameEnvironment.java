@@ -21,9 +21,7 @@ import gamelogic.MouseFunctions;
 import gamelogic.NewCamera;
 import gamelogic.NewObjectStorage;
 import gamelogic.ObjectCreator;
-import objects.AngryShroom;
 import objects.NewObject;
-import objects.NewPlayer;
 
 
 public class GameEnvironment extends JPanel implements ActionListener {
@@ -42,8 +40,8 @@ public class GameEnvironment extends JPanel implements ActionListener {
     private static int numberOfPlayers = 2;
     private static String player1_name = "raviolo";
     private static String player2_name = "boi";
-    public static void setPlayer1Name(String name) {player2_name = name;}
-    public static void setPlayer2Name(String name) {player1_name = name;}
+    public static void setPlayer1Name(String name) {player1_name = name;}
+    public static void setPlayer2Name(String name) {player2_name = name;}
     public static String player1Name() {return player1_name;}
     public static String player2Name() {return player2_name;}
 
@@ -67,7 +65,8 @@ public class GameEnvironment extends JPanel implements ActionListener {
 
     public static void saveGame() {
         levelData.objectDataList(ObjectData.createDataList());
-        Players.savePlayerData();
+        Players.extractAllPlayerData();
+        Players.serializePlayerData();
         DataHandler.serialize(levelData, new File(saveDirectory + levelData.name() + ".ser"));
     }
 
@@ -84,10 +83,15 @@ public class GameEnvironment extends JPanel implements ActionListener {
     public static void loadLevel(String name) {
         levelData = (LevelData) DataHandler.deserialize(new File(saveDirectory + name + ".ser"));
 
-        if (levelData.objectDataList().isEmpty()) {createBoilerplateLevel(levelData);}
-
+        //load level
         NewObjectStorage.clearEnvironment();
         NewObjectStorage.setList(ObjectData.createObjectList(levelData.objectDataList()));
+
+        //load player and gui
+        if (!name.equals("menu")) {
+            NewObjectStorage.newPlayer();
+            UIManager.enableGUI("HUD");
+        }
     }
 
     public void test() {

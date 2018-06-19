@@ -5,8 +5,11 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 
 import UI.UIManager;
+import adventuregame.Input;
 
 public class UINavigation extends AbstractAction {
+
+	private static final long serialVersionUID = 1L;
 
 	String action;
 	boolean released;
@@ -18,7 +21,7 @@ public class UINavigation extends AbstractAction {
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		if (released) {
+		if (released && Input.UIKeysEnabled()) {
 			if (action.equals("UI_inventory")) {
 				UIManager.enableGUI("inventory");
 			}

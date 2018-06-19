@@ -3,7 +3,9 @@ package gamelogic;
 import java.awt.event.WindowEvent;
 import java.util.HashMap;
 
+import UI.GUI;
 import UI.LevelsUI;
+import UI.UIAlert;
 import UI.UIManager;
 import UI.UIObject;
 import adventuregame.GameEnvironment;
@@ -26,6 +28,7 @@ public class MouseFunctions {
         put("Custom Levels", () -> UIManager.enableGUI("Levels"));
         put("Save", () -> GameEnvironment.saveGame());
         put("Select Player", () -> UIManager.enableGUI("PlayerSelect"));
+        put("New Player", () -> UIManager.enableGUI("InputField_PlayerName"));
     }};
 
     private static final HashMap<String, Runnable> actionsByTag = new HashMap<String, Runnable>() {
@@ -35,7 +38,6 @@ public class MouseFunctions {
         put("prevObject", () -> ObjectCreator.previousObject());
         put("toggleObjectCreation", () -> ObjectCreator.toggleEnabled());
         put("toggleObjectInspection", () -> ObjectInspector.toggle());
-        put("refreshLevels", () -> LevelsUI.refreshList());
     }};
 
     public static ClickListener getClickListener() {
@@ -59,9 +61,16 @@ public class MouseFunctions {
     }
 
     public static void executeListAction(UIObject lo) {
-        if (lo.tag().equals("levelList")) {
-            GameEnvironment.loadLevel(lo.getText());
+        switch (lo.tag()) {
+            case "levelList":
+                GameEnvironment.loadLevel(lo.getText());
+                break;
+
+            case "playerList":  
+                GameEnvironment.setPlayer1Name(lo.getText());
+                GUI gui = UIManager.getCurrentGUI();
+                gui.addObject(new UIAlert("Player selected.", gui.getName()));
+                break;
         }
-        lo.leftMouseReleased();
     }
 }

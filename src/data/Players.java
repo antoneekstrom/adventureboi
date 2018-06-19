@@ -14,24 +14,39 @@ public class Players implements Serializable {
     public static ArrayList<PlayerData> playerData() {return playerdata;}
     public static void playerData(ArrayList<PlayerData> datalist) {playerdata = datalist;}
 
+    /** Clears playerdatalist and reloads all files. */
     public static void loadPlayerData() {
+        playerdata.clear();
         for (File f : searchDirectory("data/player")) {
             playerdata.add((PlayerData) DataHandler.deserialize(f));
         }
     }
 
-    private static void extractAllPlayerData() {
+    public static void extractAllPlayerData() {
         playerdata.clear();
         for (int i = 1; i <= NewObjectStorage.playerCount(); i++) {
             playerdata.add(NewObjectStorage.getPlayer(i).extractPlayerData());
         }
     }
 
-    public static void savePlayerData() {
-        extractAllPlayerData();
+    public static void serializePlayerData() {
         for (PlayerData d : playerdata) {
             DataHandler.serialize(d, new File("data/players/" + d.name() + ".ser"));
         }
+    }
+
+    public static void savePlayerData(PlayerData data) {
+        playerdata.add(data);
+    }
+
+    public static String[] getPlayerNames() {
+        ArrayList<String> l = new ArrayList<String>();
+
+        for (PlayerData data : playerdata) {
+            l.add(data.name());
+        }
+        String[] arr = new String[l.size()];
+        return l.toArray(arr);
     }
 
     public static PlayerData getPlayerData(String playername) {

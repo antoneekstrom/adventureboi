@@ -6,7 +6,6 @@ import java.awt.Toolkit;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import worlds.ListWorld;
 
 public class Main extends JFrame {
 	

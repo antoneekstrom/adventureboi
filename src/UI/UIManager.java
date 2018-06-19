@@ -45,6 +45,7 @@ public class UIManager {
         add(new LevelsUI());
         add(new PlayerSelectUI());
         add(new InspectPlayerUI());
+        add(new InputFieldUI("InputField_PlayerName", "Enter Name"));
     }};
 
     /** Starts all UI's */
