@@ -23,7 +23,12 @@ public class UINavigation extends AbstractAction {
 	public void actionPerformed(ActionEvent arg0) {
 		if (released && Input.UIKeysEnabled()) {
 			if (action.equals("UI_inventory")) {
-				UIManager.enableGUI("inventory");
+				if (UIManager.getGUI("Inventory").isVisible()) {
+					UIManager.enableLatestGUI();
+				}
+				else {
+					UIManager.enableGUI("Inventory");
+				}
 			}
 			if (action.equals("UI_options")) {
 				if (UIManager.getGUI("Options").isVisible()) {

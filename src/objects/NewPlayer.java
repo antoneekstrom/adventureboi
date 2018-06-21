@@ -13,6 +13,7 @@ import adventuregame.Images;
 import data.PlayerData;
 import data.Players;
 import gamelogic.AbilityValues;
+import gamelogic.Item;
 import gamelogic.NewCamera;
 import gamelogic.NewObjectStorage;
 
@@ -62,13 +63,19 @@ public class NewPlayer extends NewObject implements ObjectMethods {
 
     //playerdata
     private PlayerData playerData;
-    private PlayerData playerData() {return playerData;}
+    public PlayerData playerData() {return playerData;}
 
     public void initiatePlayerData(PlayerData data) {
+        playerData = data;
         damage = data.damage();
         setName(data.name());
         healthModule().setMaxHealth((int)data.maxHealth());
         healthModule().setHealth(healthModule().maxHealth());
+
+        if (playerData.inventory() == null) {
+            ArrayList<Item> l = new ArrayList<Item>();
+            playerData.inventory(l);
+        }
     }
 
     public PlayerData extractPlayerData() {
@@ -104,7 +111,7 @@ public class NewPlayer extends NewObject implements ObjectMethods {
 
     //logic / physics
     /** Standard walking speed */
-    private int WALK_SPEED = 15;
+    private int WALK_SPEED = 10;
     /** Total player movement speed */
     private int PLAYER_SPEED = WALK_SPEED;
     /** Speed that will be combined with PLAYER_SPEED when sprinting */
@@ -242,7 +249,7 @@ public class NewPlayer extends NewObject implements ObjectMethods {
     }
 
     public void debug() {
-        setDebugString(healthModule().health() + "/" + healthModule().maxHealth() + "    " + getName());
+        setDebugString("y:" + physics().yAcceleration());
     }
 
     public void healthLogic() {

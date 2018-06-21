@@ -44,6 +44,7 @@ public class UIManager {
         add(new CreativeUI());
         add(new LevelsUI());
         add(new PlayerSelectUI());
+        add(new InventoryUI());
         add(new InspectPlayerUI());
         add(new InputFieldUI("InputField_PlayerName", "Enter Name"));
         add(new InputFieldUI("InputField_RemovePlayer", "Enter Name"));
