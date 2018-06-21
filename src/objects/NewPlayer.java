@@ -1,5 +1,6 @@
 package objects;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
@@ -35,6 +36,10 @@ public class NewPlayer extends NewObject implements ObjectMethods {
     private String displayName = "";
     public void displayName(String s) {displayName = s;}
     public String displayName() {return displayName;}
+
+    public boolean showName = true;
+    public Color nameColor = Color.white;
+
     //camera
     private int CAMERA_Y = (GlobalData.getScreenDim().height / 2) - 300;
     private boolean lockCameraY = false;
@@ -61,14 +66,16 @@ public class NewPlayer extends NewObject implements ObjectMethods {
 
     public void initiatePlayerData(PlayerData data) {
         damage = data.damage();
+        setName(data.name());
         healthModule().setMaxHealth((int)data.maxHealth());
+        healthModule().setHealth(healthModule().maxHealth());
     }
 
     public PlayerData extractPlayerData() {
         PlayerData data = new PlayerData();
         data.damage(damage);
         data.maxHealth(healthModule().maxHealth());
-        data.name(displayName());
+        data.name(getName());
         return data;
     }
     /*--------------*/
@@ -103,8 +110,12 @@ public class NewPlayer extends NewObject implements ObjectMethods {
     /** Speed that will be combined with PLAYER_SPEED when sprinting */
     private int SPRINT_SPEED = 10;
 
-    public NewPlayer(int id) {
-        PLAYER_ID = id;
+    public NewPlayer() {
+    }
+
+    public NewPlayer(PlayerData data) {
+        playerData = data;
+        initiatePlayerData(data);
     }
 
     public int getMovementSpeed() {
@@ -165,10 +176,10 @@ public class NewPlayer extends NewObject implements ObjectMethods {
 
     public void initializeData() {
         PlayerData data = null;
-        if (PLAYER_ID == 1) {
+        if (PLAYER_ID == 0) {
             data = Players.getPlayerData(GameEnvironment.player1Name());
         }
-        else if (PLAYER_ID == 2) {
+        else if (PLAYER_ID == 1) {
             data = Players.getPlayerData(GameEnvironment.player2Name());
         }
         initiatePlayerData(data);
@@ -182,6 +193,7 @@ public class NewPlayer extends NewObject implements ObjectMethods {
         healthModule().setMaxHealth(100);
         healthModule().setHealth(100);
         initializeData();
+        showDebug(false);
 
         //animation/images
         playerimages = Images.getImageHashMap("assets/animated_sprites/aboi");
@@ -230,6 +242,7 @@ public class NewPlayer extends NewObject implements ObjectMethods {
     }
 
     public void debug() {
+        setDebugString(healthModule().health() + "/" + healthModule().maxHealth() + "    " + getName());
     }
 
     public void healthLogic() {
@@ -349,6 +362,10 @@ public class NewPlayer extends NewObject implements ObjectMethods {
     public void paint(Graphics g) {
         super.paint(g);
         g.drawImage(statusImage, getDisplayCoordinate().x, getDisplayCoordinate().y + fallOffset, getWidth(), getHeight(), null);
+        if (showName) {
+            setColor(nameColor);
+            g.drawString(getName(), getDisplayCoordinate().x, getDisplayCoordinate().y - 50);
+        }
     }
 
     public void fireball() {

@@ -33,6 +33,15 @@ public class NewObject {
     private boolean passThrough = false;
     private boolean selected = false;
 
+    public boolean cameraFocus = false;
+    public void cameraFocus(boolean b) {
+        for (NewObject o : NewObjectStorage.getObjectList()) {
+            if (o.cameraFocus()) {o.cameraFocus = false;}
+        }
+        cameraFocus = b;
+    }
+    public boolean cameraFocus() {return cameraFocus;}
+
     //attributes
     Color color_fg = Color.white;
     Font font = new Font("Comic Sans MS", 40, 40);
@@ -71,6 +80,13 @@ public class NewObject {
     public NewObject() {
         r = new Rectangle(100, 100);
         r.setLocation(0, 0);
+        setText("");
+        displayCoordinate = new Point(r.x, r.y);
+        initialize();
+    }
+
+    public NewObject(Rectangle r) {
+        this.r = r;
         setText("");
         displayCoordinate = new Point(r.x, r.y);
         initialize();

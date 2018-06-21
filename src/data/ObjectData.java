@@ -93,15 +93,17 @@ public class ObjectData implements Serializable {
 
         for (ObjectData d : datalist) {
             try {
-                NewObject o = (NewObject) createObject(d.className());
-                
-                o.setRectangle(d.rectangle());
-                o.setColor(d.color());
-                o.setText(d.text());
-                o.setIntersect(d.intersect());
-                o.physics().setGravity(d.gravity());
-
-                l.add(o);  
+                if (!d.className().equals(NewPlayer.class.getName())) {
+                    NewObject o = (NewObject) createObject(d.className());
+                    
+                    o.setRectangle(d.rectangle());
+                    o.setColor(d.color());
+                    o.setText(d.text());
+                    o.setIntersect(d.intersect());
+                    o.physics().setGravity(d.gravity());
+                    
+                    l.add(o);  
+                }
             }
             catch (Exception e) {e.printStackTrace();}
         }

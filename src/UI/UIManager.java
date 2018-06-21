@@ -46,6 +46,7 @@ public class UIManager {
         add(new PlayerSelectUI());
         add(new InspectPlayerUI());
         add(new InputFieldUI("InputField_PlayerName", "Enter Name"));
+        add(new InputFieldUI("InputField_RemovePlayer", "Enter Name"));
     }};
 
     /** Starts all UI's */
@@ -101,7 +102,9 @@ public class UIManager {
 
     public static void hideAll(boolean addToHistory) {
         for (GUI gui : interfaces) {
-            if (gui.isVisible() && addToHistory) {UIManager.addToHistory(gui.getName());}
+            if (gui.isVisible() && addToHistory && !gui.incognito()) {
+                UIManager.addToHistory(gui.getName());
+            }
             gui.setVisible(false);
         }
     }

@@ -19,6 +19,12 @@ public class UIMeter extends UIObject {
     /** Text object */
     UIText textObject;
 
+    /** Show value of meter. */
+    UIText values;
+
+    /** If meter values should be on the left or right. */
+    String valueSide = "right";
+
     /** Fill color */
     private Color FOREGROUND_COLOR = Color.orange;
 
@@ -60,11 +66,25 @@ public class UIMeter extends UIObject {
         return value;
     }
 
+    public void showValues() {
+        values = new UIText(getParentName(), value + "/" + maxValue, false);
+        values.textColor(getTextColor());
+        values.autoAdjustBackground(true);
+        values.setParentRectangle(get());
+        values.centerInParentX(false);
+        values.textColor(getTextColor());
+        values.centerTextY(true);
+        values.showOutline(false);
+        values.centerTextX(true);
+    }
+
     private void start() {
         fill = new Rectangle();
         get().setSize(350, 50);
+        get().setLocation(0,0);
         setBackgroundPadding(10);
         setBackgroundColor(Color.white);
+        showValues();
     }
 
     private void calculatePercentage() {
@@ -86,13 +106,25 @@ public class UIMeter extends UIObject {
         fill.width = (int) (get().width * percent);
     }
 
+    private void setValueLocation() {
+        if (valueSide.equals("right")) {
+            values.get().setLocation( (int) get().getMaxX() + 20, (int) get().getCenterY() - (values.get().height / 2) );     
+        }
+        else if (valueSide.equals("left")) {
+            values.get().setLocation( (int) get().getMinX() - 20 - values.get().width, (int) get().getCenterY() - (values.get().height / 2) );     
+        }
+    }
+
     public void update() {
         super.update();
         calculatePercentage();
         setFill();
         calculateFillWidth();
         if (textObject != null) {textObject.update();}
+        if (values != null) {values.update();}
         textObject.get().setLocation(get().x + get().width / 2 - textObject.getTextWidth() / 2, get().y - 25); /* Center text in meter. */
+        setValueLocation();
+        values.setText(value + "/" + maxValue);
     }
 
     public void paint(Graphics g) {
@@ -102,6 +134,7 @@ public class UIMeter extends UIObject {
         g.setColor(FOREGROUND_COLOR);
         g.fillRect(getFill().x, getFill().y, getFill().width, getFill().height);
         if (textObject != null) {textObject.paint(g);}
+        if (values != null) {values.paint(g);}
     }
 
 }

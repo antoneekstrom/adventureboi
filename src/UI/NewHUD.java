@@ -68,10 +68,12 @@ public class NewHUD extends GUI {
 
     public void updateStats() {
         //player1
-        NewPlayer p1 = NewObjectStorage.getPlayer(1);
-        UIMeter health1 = (UIMeter) GUI.findObject(getObjectsByTag("player1"), "Health");
-        health1.setValue( (double) p1.healthModule().health());
-        health1.setMaxValue( (double) p1.healthModule().maxHealth());
+        if (NewObjectStorage.getPlayer(1) != null) {
+            NewPlayer p1 = NewObjectStorage.getPlayer(1);
+            UIMeter health1 = (UIMeter) GUI.findObject(getObjectsByTag("player1"), "Health");
+            health1.setValue( (double) p1.healthModule().health());
+            health1.setMaxValue( (double) p1.healthModule().maxHealth());
+        }
         
         //player2
         if (NewObjectStorage.playerCount() > 1) {
@@ -98,6 +100,7 @@ public class NewHUD extends GUI {
         health.createText("Health");
         health.setForegroundColor(Color.red);
         health.setTag("player2");
+        health.valueSide = "left";
         addObject(health);
         //stamina
         UIMeter stamina = new UIMeter(getName());
@@ -105,6 +108,7 @@ public class NewHUD extends GUI {
         stamina.createText("Stamina"); 
         stamina.setForegroundColor(Color.green);
         stamina.setTag("player2");
+        stamina.valueSide = "left";
         addObject(stamina);
         //energy
         UIMeter energy = new UIMeter(getName());
@@ -112,6 +116,7 @@ public class NewHUD extends GUI {
         energy.createText("Energy");
         energy.setForegroundColor(Color.blue);
         energy.setTag("player2");
+        energy.valueSide = "left";
         addObject(energy);
     }
     

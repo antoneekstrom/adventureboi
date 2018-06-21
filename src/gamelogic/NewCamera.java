@@ -18,21 +18,35 @@ public class NewCamera {
     /** Position camera wants to be at, used for slow/smooth camera. */
     private static Point cameraDestination = new Point(0,0);
     private static boolean smoothCamera = true;
+    private static NewObject focusedObject;
 
     /** Run the camera, position display coordinates
      *  relative to camera position for all objects */
     public static void update() {
         //smooth camera follow
+        followObject();
         if (smoothCamera) {
             moveCameraTo(cameraDestination);
         }
-        else {
-            cameraPosition = cameraDestination;
-        }
+        else { cameraPosition = cameraDestination; }
 
         //update object camera position for all objects
         for (int i = 0; i < NewObjectStorage.getObjectList().size(); i++) {
             setDisplayCoordinates(NewObjectStorage.getObjectList().get(i));
+        }
+    }
+
+    private static void setFocusObject() {
+        for (NewObject object : NewObjectStorage.getObjectList()) {
+            if (object.cameraFocus()) {focusedObject = object;}
+        }
+    }
+
+    /** Set camera destination to object. */
+    private static void followObject() {
+        setFocusObject();
+        if (focusedObject != null) {
+            centerCameraOn( new Point((int) focusedObject.get().getCenterX(), (int) focusedObject.get().getCenterY()) );
         }
     }
 

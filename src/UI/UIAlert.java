@@ -1,8 +1,13 @@
 package UI;
 
+import java.awt.Graphics;
+
 public class UIAlert extends UIObject {
 
     private String text;
+    private UIButton b;
+    private String buttonText = "OK";
+    public void setButtonText(String text) {buttonText = text;}
 
     public UIAlert(String message, String parentname) {
         super();
@@ -22,19 +27,33 @@ public class UIAlert extends UIObject {
         get().y = getParent().yCenter(get().height) - 100;
         autoAdjustBackground(true);
 
-        UIButton b = new UIButton(getParentName(), "OK", true) {
+        b = new UIButton(getParentName(), buttonText, true) {
             @Override
             public void leftMouseReleased() {
                 super.leftMouseReleased();
+                onClose();
                 getParent().removeAlerts();
             }
             {
-                this.get().y = (int) get().getMaxY() + 100;
+                this.get().y = 550;
+                this.setTag("alert");
             }
         };
-        setTag("alert");
         getParent().applyGeneralStyle(b);
         getParent().addObject(b);
+    }
+
+    public void onClose() {
+
+    }
+
+    public void update() {
+        super.update();
+        b.setText(buttonText);
+    }
+
+    public void paint(Graphics g) {
+        super.paint(g);
     }
 
 }

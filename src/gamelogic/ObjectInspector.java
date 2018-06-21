@@ -10,6 +10,9 @@ public class ObjectInspector {
     private static boolean enabled = false;
     private static NewObject inspectedObject;
     public static void inspectObject(NewObject o) {inspectedObject = o;}
+    private static NewObject selectedObject;
+    public static void selectObject(NewObject o) {selectedObject = o;}
+    public static NewObject selectedObject() {return selectedObject;}
 
     public static void enable(boolean b) {
         enabled = b;
@@ -23,8 +26,13 @@ public class ObjectInspector {
     public static void selectWithMouse() {
         if (isEnabled()) {
             for (NewObject o : NewObjectStorage.getObjectList()) {
-                if (o.getDisplayBox().contains(GlobalData.getMouse())) {
+                if (o.getDisplayBox().contains(GlobalData.getMouse()) && !o.isSelected()) {
                     o.select();
+                    selectObject(o);
+                }
+                else if (o.getDisplayBox().contains(GlobalData.getMouse()) && o.isSelected()) {
+                    o.deselect();
+                    selectObject(null);
                 }
             }
         }
@@ -42,6 +50,15 @@ public class ObjectInspector {
         }
         if (property.equals("y")) {
             inspectedObject.get().y = Integer.valueOf(newValue);
+        }
+        if (property.equals("gravity")) {
+            inspectedObject.physics().setGravity(Boolean.valueOf(newValue));
+        }
+        if (property.equals("name")) {
+            inspectedObject.setName(newValue);
+        }
+        if (property.equals("focus")) {
+            inspectedObject.cameraFocus(Boolean.parseBoolean(newValue));
         }
     }
 

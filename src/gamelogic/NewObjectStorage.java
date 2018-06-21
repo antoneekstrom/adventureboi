@@ -4,6 +4,8 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 
 import adventuregame.GameEnvironment;
+import data.Configuration;
+import data.PlayerData;
 import data.Players;
 import objects.NewObject;
 import objects.NewPlayer;
@@ -13,9 +15,70 @@ public class NewObjectStorage {
     private static ArrayList<NewObject> objects = new ArrayList<NewObject>();
 
     //players
-    private static NewPlayer player1;
-    private static NewPlayer player2;
-    private static int playerCount = 0;
+    private static int maxPlayers = 2;
+    public static int maxPlayers() {return maxPlayers;}
+    
+    private static int playersToSpawn = 2;
+    public static int playersToSpawn() {return playersToSpawn;}
+    public static void playersToSpawn(int i) {
+        playersToSpawn = i;
+        Configuration.setProperty("PLAYER_COUNT", String.valueOf(i));
+    }
+
+    private static ArrayList<NewPlayer> players = new ArrayList<NewPlayer>();
+    public static ArrayList<NewPlayer> players() {return players;}
+
+    public static void addPlayer(NewPlayer player) {
+        if (players.size() + 1 <= maxPlayers) {
+            players.add(player);
+        }
+    }
+
+    /** for the amount of players to are meant to spawn: If name from list in gamenvironment
+     *  does not equal null and a {@link data.PlayerData} file with the same name is available,
+     *  initialize a {@link NewPlayer} with that data and put it in
+     *  the playerlist in {@link NewObjectStorage}. This will not put the {@link NewPlayer} in the
+     *  game. Also clears all present {@link NewPlayer} in the playerlist.
+     */
+    public static void addPlayers() {
+        players.clear();
+        for (int i = 0; i < playersToSpawn; i++) {
+            PlayerData data = Players.getPlayerData(GameEnvironment.playernames.get(i));
+
+            if (GameEnvironment.playernames.get(i) != null) {
+                if (data != null) {
+                    players.add(new NewPlayer(data));
+                }
+            }
+        }
+    }
+
+    /** Spawn and add all players from the player list into the game. */
+    public static void spawnPlayers() {
+        for (int i = 0; i < playersToSpawn; i++) {
+            objects.add(i, players.get(i));
+        }
+    }
+
+    public static int playerCount() {return players.size();}
+
+    public static NewPlayer getPlayer(String name) {
+        NewPlayer p = null;
+        for (NewPlayer player : players) {
+            if (player.getName().equals(name)) {
+                return player;
+            }
+        }
+        return p;    
+    }
+    public static NewPlayer getPlayer(int index) {
+        NewPlayer p = null;
+        index--;
+        if (players.size() - 1 >= index) {
+            p = players.get(index);
+        }
+        return p;
+    }
 
     public static ArrayList<NewObject> getObjectList() {
         return objects;
@@ -36,7 +99,6 @@ public class NewObjectStorage {
 
     public static void clearEnvironment() {
         objects.clear();
-        playerCount = 0;
     }
 
     public static void addToIndex(NewObject object, int i) {
@@ -49,46 +111,6 @@ public class NewObjectStorage {
             objects.get(i).update();
         }
         NewCamera.update();
-    }
-
-    /** Get playerobject. */
-    public static NewPlayer getPlayer(int id) {
-        if (id == 1) {
-            return player1;
-        }
-        else if (id == 2) {
-            return player2;
-        }
-        else {
-            return null;
-        }
-    }
-
-    public static int playerCount() {
-        return playerCount;
-    }
-
-    private static NewPlayer createPlayer(int n) {
-        NewPlayer p = new NewPlayer(n);
-        return p;
-    }
-
-    public static void initializePlayers() {
-        player1.initiatePlayerData(Players.getPlayerData(GameEnvironment.player1Name()));
-        player2.initiatePlayerData(Players.getPlayerData(GameEnvironment.player2Name()));
-    }
-
-    /** Create a new player and add it to the playerlist. */
-    public static void newPlayer() {
-        playerCount++;
-        if (playerCount == 1) {
-            player1 = createPlayer(1);
-            addToIndex(player1, 0);
-        }
-        else if (playerCount == 2) {
-            player2 = createPlayer(2);
-            addToIndex(player2, 1);
-        }
     }
 
     /** Find all objects of a certain type and return a list of them. */

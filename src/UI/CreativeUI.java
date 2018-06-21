@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 import adventuregame.GlobalData;
 import adventuregame.Images;
+import gamelogic.NewObjectStorage;
 import gamelogic.ObjectCreator;
 import gamelogic.ObjectInspector;
 
@@ -14,6 +15,7 @@ public class CreativeUI extends GUI {
     UIText current;
     UIImage img;
     UIButton create;
+    UIButton togglesize;
     UIButton inspect;
 
     int centerX = GlobalData.getScreenDim().width / 2;
@@ -84,6 +86,61 @@ public class CreativeUI extends GUI {
         prev.get().setLocation(centerX - navbuttonoffset - prev.get().width / 2, y0);
         addObject(prev);
 
+        //width
+        UIButton width = new UIButton(getName(), "width", false) {
+            @Override
+            public void useInput() {
+                ObjectCreator.width(Integer.parseInt(this.getInput()));
+            }
+            {
+                this.takeInput(true);
+                this.setInputPrefix("width");
+                get().setLocation(100, 400);
+            }
+        };
+        //height
+        UIButton height = new UIButton(getName(), "height", false) {
+            @Override
+            public void useInput() {
+                ObjectCreator.height(Integer.parseInt(this.getInput()));
+            }
+            {
+                this.takeInput(true);
+                this.setInputPrefix("height");
+                get().setLocation(100, 550);
+            }
+        };
+        //use custom size
+        togglesize = new UIButton(getName(), "use size", false) {
+            @Override
+            public void leftMouseReleased() {
+                ObjectCreator.toggleCustomSize();
+            }
+            {
+                get().setLocation(100, 700);
+            }
+        };
+        applyGeneralStyle(width);
+        applyGeneralStyle(height);
+        applyGeneralStyle(togglesize);
+        addObject(width);
+        addObject(height);
+        addObject(togglesize);
+
+        //remove object
+        UIButton remove = new UIButton(getName(), "remove selected", false) {
+            @Override
+            public void leftMouseReleased() {
+                if (ObjectInspector.selectedObject() != null) {
+                    NewObjectStorage.remove(ObjectInspector.selectedObject());
+                }
+            }
+            {
+                this.get().setLocation(100, 900);
+            }
+        };
+        applyGeneralStyle(remove);
+        addObject(remove);
     }
 
     public void update() {
@@ -92,6 +149,7 @@ public class CreativeUI extends GUI {
         current.setText(ObjectCreator.getCurrentObject());
         create.setText("create on click: " + ObjectCreator.isEnabled());
         inspect.setText("inspect on click: " + ObjectInspector.isEnabled());
+        togglesize.setText("use size: " + ObjectCreator.customSize());
     }
 
 }

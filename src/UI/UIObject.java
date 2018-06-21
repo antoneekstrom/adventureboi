@@ -81,7 +81,7 @@ public class UIObject {
         return FONT_SIZE;
     }
 
-    public void setInputPrefix(String s) {inputPrefix = s;}
+    public void setInputPrefix(String s) {inputPrefix = s; takeInput(true);}
     public boolean hasTag() {return hasTag;}
     public void takeInput(boolean b) {takeInput = b;}
     public boolean takeInput() {return takeInput;}
@@ -196,6 +196,8 @@ public class UIObject {
     public void setBackgroundPadding(int i) {
         backgroundPadding = i;
     }
+
+    public Rectangle parentRectangle() {return parentRectangle;}
     
     public int getTextWidth() {
         return textWidth;

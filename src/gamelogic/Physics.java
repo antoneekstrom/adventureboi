@@ -34,7 +34,6 @@ public class Physics {
         acceleration();
         velocity();
         force();
-        object.setDebugString(String.valueOf("yf:" + (int) object.physics().yForce() + " yacc:" + (int) object.physics().yAcceleration() + " yvel:" + (int) object.physics().yVelocity()));
     }
 
     /** Force that draws object downwards. */

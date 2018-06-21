@@ -1,6 +1,5 @@
 package UI;
 
-import data.PlayerData;
 import data.Players;
 
 public class InputFieldUI extends GUI {
@@ -10,6 +9,7 @@ public class InputFieldUI extends GUI {
     public InputFieldUI(String name, String title) {
         super(name);
         this.title = title;
+        incognito(true);
     }
 
     public void start() {
@@ -23,19 +23,7 @@ public class InputFieldUI extends GUI {
         UIButton textfield = new UIButton(getName(), "Name", true) {
             @Override
             public void useInput() {
-                PlayerData data = new PlayerData();
-                data.name(this.getInput());
-                data.healthregen(0);
-                data.damage(15);
-                data.maxHealth(100);
-                data.maxenergy(100);
-                data.maxstamina(100);
-                data.experiencelevel(1);
-                data.energyregen(0.2);
-                Players.savePlayerData(data);
-                Players.serializePlayerData();
-                UIManager.lockCurrentGUI(false);
-                UIManager.enableGUI("PlayerSelect");
+                selectInput(getInput());
             }
             {
                 takeInput(true);
@@ -47,6 +35,39 @@ public class InputFieldUI extends GUI {
         };
         applyGeneralStyle(textfield);
         addObject(textfield);
+    }
+
+    public void selectInput(String input) {
+        switch (getName()) {
+            case "InputField_PlayerName":
+                newPlayer(input);
+                break;
+            
+            case "InputField_RemovePlayer":
+                removePlayer(input);
+                break;
+        }
+    }
+
+    public void newPlayer(String name) {
+        PlayerSelectUI.newPlayer(name);
+        UIManager.lockCurrentGUI(false);
+        UIManager.enableGUI("PlayerSelect");
+    }
+
+    public void removePlayer(String name) {
+        UIAlert alert = new UIAlert("Are you sure you want to delete " + name + "?", getName()) {
+            @Override
+            public void onClose() {
+                Players.removePlayer(name);
+                UIManager.lockCurrentGUI(false);
+                UIManager.enableGUI("PlayerSelect");
+            }
+            {
+                setButtonText("haha nice");
+            }
+        };
+        addObject(alert);
     }
 
 }

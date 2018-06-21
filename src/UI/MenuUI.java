@@ -1,7 +1,9 @@
 package UI;
 
 import adventuregame.GameEnvironment;
+import adventuregame.GlobalData;
 import gamelogic.NewObjectStorage;
+import objects.NewPlayer;
 
 public class MenuUI extends GUI {
 
@@ -11,7 +13,16 @@ public class MenuUI extends GUI {
 
     public void setVisible(boolean b) {
         super.setVisible(b);
+    }
+
+    public void update() {
+        super.update();
+
         getObjectsByTag("player1_Name")[0].setText("player 1: " + GameEnvironment.player1Name());
+
+        UIText p2 = (UIText) getObjectsByTag("player2_Name")[0];
+        p2.setText("player 2: " + GameEnvironment.player2Name());
+        p2.get().setLocation(GlobalData.getScreenDim().width - 75 - p2.get().width, 100);
     }
 
     public void start() {
@@ -40,13 +51,24 @@ public class MenuUI extends GUI {
         //player1 name
         UIText player1 = new UIText(getName(), "player1", false);
         player1.get().setLocation(75, 100);
-        player1.setFontSize(50);
+        player1.setFontSize(40);
         player1.setTag("player1_Name");
         player1.autoAdjustBackground(true);
         if (NewObjectStorage.playerCount() > 0) {
             player1.setText(NewObjectStorage.getPlayer(1).getName());
         }
         addObject(player1);
+
+        //player2 name
+        UIText player2 = new UIText(getName(), "player2", false);
+        player2.get().setLocation(GlobalData.getScreenDim().width - 700, 100);
+        player2.setFontSize(40);
+        player2.setTag("player2_Name");
+        player2.autoAdjustBackground(true);
+        if (NewObjectStorage.playerCount() > 1) {
+            player2.setText(NewObjectStorage.getPlayer(2).getName());
+        }
+        addObject(player2);
 
         setVisible(true);
     }

@@ -8,7 +8,8 @@ public class UIButton extends UIObject {
         setBackgroundColor(getParent().getUIBackgroundColor());
         setText(text);
         autoAdjustBackground(true);
-        hoverColorChange(getBackgroundColor().brighter());
+        hoverColorChange(getParent().BACKGROUND_HOVER_COLOR);
+        setHoverTextColor(getParent().TEXT_HOVER_COLOR);
         if (centered) {
             centerInParentX(true);
             centerTextY(true);

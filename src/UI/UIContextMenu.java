@@ -3,6 +3,8 @@ package UI;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
+import adventuregame.GlobalData;
+
 public class UIContextMenu extends UIObject {
 
 	private UIList options;
@@ -25,6 +27,15 @@ public class UIContextMenu extends UIObject {
 			get().setLocation(get().getLocation());
 			handle().hoverColorChange(getParent().getUIBackgroundColor().brighter());
 		}};
+	}
+
+	public void setLocation() {
+		Rectangle r = new Rectangle();
+		r.setLocation(GlobalData.getMouse());
+		r.setSize(get().getSize());
+
+		if (r.getMaxY() > GlobalData.getScreenDim().height) {r.y = GlobalData.getScreenDim().height - r.height;}
+		setBox(r);
 	}
 
 	public void leftMouseReleased() {

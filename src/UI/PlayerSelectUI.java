@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import data.PlayerData;
 import data.Players;
+import gamelogic.NewObjectStorage;
 
 public class PlayerSelectUI extends GUI {
 
@@ -48,6 +49,8 @@ public class PlayerSelectUI extends GUI {
         else if (!b) {
             getUIObjectList().remove(getObjectByText("Back"));
         }
+
+        refreshList();
     }
 
     public void start() {
@@ -88,6 +91,7 @@ public class PlayerSelectUI extends GUI {
         };
         applyGeneralStyle(playerSlot);
         addObject(playerSlot);
+        nextPlayerSlot();
 
         //new player button
         UIButton newPlayer = new UIButton(getName(), "New Player", false) {
@@ -99,7 +103,6 @@ public class PlayerSelectUI extends GUI {
                 get().setLocation((int) list.get().getMaxX() + 50, 400);
             }
         };
-        nextPlayerSlot();
         applyGeneralStyle(newPlayer);
         addObject(newPlayer);
 
@@ -116,6 +119,58 @@ public class PlayerSelectUI extends GUI {
         };
         applyGeneralStyle(refresh);
         addObject(refresh);
+
+        //player amount button
+        UIButton playercount = new UIButton(getName(), "", false) {
+            @Override
+            public void useInput() {
+                int input = Integer.valueOf(getInput());
+                if (input > NewObjectStorage.maxPlayers()) {input = NewObjectStorage.maxPlayers();}
+                NewObjectStorage.playersToSpawn(input);
+                setText("Active players:" + input);
+            }
+            {
+                takeInput(true);
+                setInputPrefix("Active players");
+                setText("Active players:" + NewObjectStorage.playersToSpawn());
+                get().setLocation( (int) list.get().getMaxX() + 50, 670);
+                setTag("playerCount");
+            }
+        };
+        applyGeneralStyle(playercount);
+        addObject(playercount);
+
+        //remove player
+        UIButton remove = new UIButton(getName(), "Remove Player", false) {
+            @Override
+            public void leftMouseReleased() {
+                UIManager.enableGUI("InputField_RemovePlayer");
+            }
+            {
+                get().setLocation( (int) list.get().getMaxX() + 50, 805);
+            }
+        };
+        applyGeneralStyle(remove);
+        addObject(remove);
+    }
+
+    //player input methods
+    public static void newPlayer(String name) {
+        PlayerData data = new PlayerData();
+        data.name(name);
+        data.healthregen(0);
+        data.damage(15);
+        data.maxHealth(100);
+        data.maxenergy(100);
+        data.maxstamina(100);
+        data.experiencelevel(1);
+        data.energyregen(0.2);
+        Players.savePlayerData(data);
+        Players.serializePlayerData();
+    }
+
+    public static void removePlayer(String name) {
+        Players.removePlayer(name);
     }
 
 }

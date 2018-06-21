@@ -15,6 +15,8 @@ public class GUI {
 	protected int screenCenterX = GlobalData.getScreenDim().width / 2;
 	protected int screenCenterY = GlobalData.getScreenDim().height / 2;
 	protected Color BACKGROUND_COLOR = Color.orange;
+	protected Color BACKGROUND_HOVER_COLOR = Color.white;
+	protected Color TEXT_HOVER_COLOR = Color.orange;
 	private Color TEXT_COLOR = Color.white;
 	protected int FONT_SIZE = 40;
 	protected String FONT_NAME = "Comic Sans MS";
@@ -26,8 +28,10 @@ public class GUI {
 
 	private Rectangle box = new Rectangle(0, 0, GlobalData.getScreenDim().width, GlobalData.getScreenDim().height);
 
+	private ArrayList<UIObject> removeQueue = new ArrayList<UIObject>();
 	private ArrayList<UIObject> UIObjects = new ArrayList<UIObject>();
 
+	private boolean incognito = false;
 	private boolean showOutline = false;
 	private boolean visible = false;
 	private String name;
@@ -43,6 +47,10 @@ public class GUI {
 	public void start() {
 
 	}
+
+	public void incognito(boolean b) {incognito = b;}
+	/** If GUI is incognito (method returns true) it should not be added to GUI history. */
+	public boolean incognito() {return incognito;}
 
 	public int xCenter(int width) {return (GlobalData.getScreenDim().width / 2) - width / 2;}
 	public int yCenter(int height) {return (GlobalData.getScreenDim().height / 2) - height / 2;}
@@ -95,9 +103,22 @@ public class GUI {
 		return returnObject;
 	}
 
+
+	/** Adds UIObject to remove queue. */
+	public void remove(UIObject o) {
+		removeQueue.add(o);
+	}
+	/** Removes all UIObjects in the removeQueue from this GUI. */
+	private void remove() {
+		for (UIObject object : removeQueue) {
+			UIObjects.remove(object);
+		}
+		removeQueue.clear();
+	}
+
 	public void removeAlerts() {
 		for (UIObject object : getObjectsByTag("alert")) {
-			getUIObjectList().remove(object);
+			remove(object);
 		}
 	}
 
@@ -162,6 +183,7 @@ public class GUI {
 		for (UIObject b : UIObjects) {
 			b.update();
 		}
+		remove();
 	}
 	
 	public void paint(Graphics g) {
@@ -203,8 +225,8 @@ public class GUI {
 	public void inspectionContextMenu(NewObject o) {
 		UIContextMenu c = new UIContextMenu(getName());
 		c.setText(o.getName());
-		c.get().setLocation(GlobalData.getMouse());
-		c.get().setSize(250, 350);
+		c.get().setSize(320, 350);
+		c.setLocation();
 		c.setTag("objectInspect");
 		c.getList().setFontSize(30);
 
@@ -212,6 +234,7 @@ public class GUI {
 		c.setBackgroundColor(Color.white);
 		c.getList().textColor(Color.white);
 		c.getList().entry().takeInput(true);
+		c.getList().takeInput(true);
 		c.getList().setTag(c.tag());
 		ObjectInspector.inspectObject(o);
 
@@ -227,12 +250,17 @@ public class GUI {
 			"height:" + o.get().height,
 			"x:" + o.get().x,
 			"y:" + o.get().y,
+			"gravity:" + o.physics().hasGravity(),
+			"focus:" + o.cameraFocus(),
 		});
-		c.getList().getList().get(0).takeInput(false);
+		c.getList().getList().get(0).setInputPrefix("name");
 		c.getList().getList().get(1).setInputPrefix("width");
 		c.getList().getList().get(2).setInputPrefix("height");
 		c.getList().getList().get(3).setInputPrefix("x");
 		c.getList().getList().get(4).setInputPrefix("y");
+		c.getList().getList().get(5).setInputPrefix("gravity");
+		c.getList().getList().get(6).setInputPrefix("focus");
+		
 		addObject(c);
 	}
 	

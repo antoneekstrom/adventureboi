@@ -11,6 +11,14 @@ public class ObjectCreator {
     private static String currentObject = "object";
     private static boolean enabled = false;
 
+    private static boolean customSize = false;
+    private static int width = 100;
+    private static int height = 100;
+    public static void width(int i) {width = i;}
+    public static void height(int i) {height = i;}
+    public static void toggleCustomSize() {if (customSize) {customSize = false;} else {customSize = true;}}
+    public static boolean customSize() {return customSize;}
+
     public static void start() {
         objects = ObjectData.displayNames();
     }
@@ -38,6 +46,9 @@ public class ObjectCreator {
 
             if (o != null) {
                 o.get().setLocation(NewCamera.getMouse());
+                if (customSize) {
+                    o.get().setSize(width, height);
+                }
                 NewObjectStorage.add(o);
             }
         }

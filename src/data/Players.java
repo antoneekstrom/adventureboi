@@ -13,11 +13,12 @@ public class Players implements Serializable {
 	private static ArrayList<PlayerData> playerdata = new ArrayList<PlayerData>();
     public static ArrayList<PlayerData> playerData() {return playerdata;}
     public static void playerData(ArrayList<PlayerData> datalist) {playerdata = datalist;}
+    private static File directory = new File("data/players");
 
     /** Clears playerdatalist and reloads all files. */
     public static void loadPlayerData() {
         playerdata.clear();
-        for (File f : searchDirectory("data/player")) {
+        for (File f : searchDirectory()) {
             playerdata.add((PlayerData) DataHandler.deserialize(f));
         }
     }
@@ -57,8 +58,31 @@ public class Players implements Serializable {
         return data;
     }
 
-    private static File[] searchDirectory(String path) {
-        File directory = new File("data/players");
+    public static void removePlayer(String name) {
+        File f = getPlayerFile(name);
+        f.delete();
+    }
+
+    public static File getPlayerFile(String playername) {
+        File f = null;
+        File[] arr = searchDirectory();
+        for (File file : arr) {
+            if (removeExtension(file.getName()).equals(playername)) {
+                f = file;
+            }
+        }
+        return f;
+    }
+
+    private static String removeExtension(String getname) {
+        int pos = getname.lastIndexOf(".");
+        if (pos > 0) {
+            getname = getname.substring(0, pos);
+        }
+        return getname;
+    }
+
+    private static File[] searchDirectory() {
         File[] files;
 		files = directory.listFiles(new FilenameFilter() {
 

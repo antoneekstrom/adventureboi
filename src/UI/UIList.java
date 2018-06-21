@@ -129,12 +129,11 @@ public class UIList extends UIObject {
         if (pressed) {
             handle.get().y = GlobalData.getMouse().y + handleHoldOffset;
         }
-        calculateScrollLength();
     }
 
     public void leftMouseReleased() {
         for (UIObject o : list) {
-            if (o.checkMouse()) {
+            if (o.checkMouse() && getParent().getObjectsByTag("alert").length == 0) {
                 MouseFunctions.executeListAction(o);
             }
         }
@@ -172,6 +171,7 @@ public class UIList extends UIObject {
         handle.update();
         moveHandle();
         limitHandle();
+        calculateScrollLength();
         determineContentHeight();
         determineEntryLocation();
         for (UIObject o : list) {o.update(); hideOverflow(o);}

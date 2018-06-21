@@ -12,10 +12,9 @@ public class OptionsUI extends GUI {
         addTitle("Options");
         getObjectByText("Options").get().y = getGuidelineY1() - 50;
         addMenuButton("Resume", getGuidelineY1());
+        addMenuButton("Save", getGuidelineY1());
         addMenuButton("Settings", getGuidelineY1());
         addMenuButton("Menu", getGuidelineY1());
-        addMenuButton("Quit Game", getGuidelineY1());
-        addMenuButton("Save", getGuidelineY1());
     }
 
 }

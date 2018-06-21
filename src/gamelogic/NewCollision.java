@@ -82,9 +82,6 @@ public class NewCollision {
         else if (moveY) {
             r1.y = r1.y + y;
         }
-        if (o1.equals(NewObjectStorage.getPlayer(1))) {
-            o1.setDebugString("x:" + x + " y:" + y);
-        }
     }
 
     //check distance of intersection on all sides

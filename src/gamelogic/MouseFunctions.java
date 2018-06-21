@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import UI.GUI;
 import UI.LevelsUI;
+import UI.PlayerSelectUI;
 import UI.UIAlert;
 import UI.UIManager;
 import UI.UIObject;
@@ -23,12 +24,16 @@ public class MouseFunctions {
         put("Resume", () -> UIManager.enableGUI("HUD"));
         put("Settings", () -> UIManager.enableGUI("Settings"));
         put("Keybindings", () -> UIManager.enableGUI("Keybindings"));
-        put("Menu", () -> UIManager.enableGUI("Menu"));
         put("Back", () -> UIManager.enableLatestGUI());
         put("Custom Levels", () -> UIManager.enableGUI("Levels"));
         put("Save", () -> GameEnvironment.saveGame());
         put("Select Player", () -> UIManager.enableGUI("PlayerSelect"));
         put("New Player", () -> UIManager.enableGUI("InputField_PlayerName"));
+        put("Remove Player", () -> UIManager.enableGUI("InputField_RemovePlayer"));
+        put("Menu", () -> {
+            GameEnvironment.loadLevel("menu");
+            UIManager.enableGUI("Menu");
+        });
     }};
 
     private static final HashMap<String, Runnable> actionsByTag = new HashMap<String, Runnable>() {
@@ -66,10 +71,20 @@ public class MouseFunctions {
                 GameEnvironment.loadLevel(lo.getText());
                 break;
 
-            case "playerList":  
-                GameEnvironment.setPlayer1Name(lo.getText());
-                GUI gui = UIManager.getCurrentGUI();
-                gui.addObject(new UIAlert("Player selected.", gui.getName()));
+            case "playerList":
+                PlayerSelectUI gui = (PlayerSelectUI) UIManager.getCurrentGUI();
+                if (gui.getCurrentPlayer() == 1) {
+                    GameEnvironment.setPlayer1Name(lo.getText());
+                    gui.addObject(new UIAlert("Player selected.", gui.getName()));
+                }
+                else if (gui.getCurrentPlayer() == 2) {
+                    GameEnvironment.setPlayer2Name(lo.getText());
+                    gui.addObject(new UIAlert("Player selected.", gui.getName()));
+                }
+                break;
+
+            case "objectInspect":
+                lo.leftMouseReleased();
                 break;
         }
     }

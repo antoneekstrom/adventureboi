@@ -4,15 +4,15 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.lang.Object;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.ArrayList;
 
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import UI.UIManager;
+import data.Configuration;
 import data.DataHandler;
 import data.LevelData;
 import data.ObjectData;
@@ -21,8 +21,7 @@ import gamelogic.MouseFunctions;
 import gamelogic.NewCamera;
 import gamelogic.NewObjectStorage;
 import gamelogic.ObjectCreator;
-import objects.NewObject;
-
+import objects.NewPlayer;
 
 public class GameEnvironment extends JPanel implements ActionListener {
 
@@ -37,13 +36,17 @@ public class GameEnvironment extends JPanel implements ActionListener {
     private static Main frame;
 
     //players
-    private static int numberOfPlayers = 2;
-    private static String player1_name = "raviolo";
-    private static String player2_name = "boi";
-    public static void setPlayer1Name(String name) {player1_name = name;}
-    public static void setPlayer2Name(String name) {player2_name = name;}
-    public static String player1Name() {return player1_name;}
-    public static String player2Name() {return player2_name;}
+    public static ArrayList<String> playernames = new ArrayList<String>();
+    public static void setPlayer1Name(String name) {
+        playernames.add(0, name);
+        Configuration.setProperty("player1_name", name);
+    }
+    public static void setPlayer2Name(String name) {
+        playernames.add(1, name);
+        Configuration.setProperty("player2_name", name);
+    }
+    public static String player1Name() {return playernames.get(0);}
+    public static String player2Name() {return playernames.get(1);}
 
     //environment data
     private static LevelData levelData = new LevelData("menu", true, null);
@@ -57,27 +60,11 @@ public class GameEnvironment extends JPanel implements ActionListener {
         frame = f;
     }
 
-    public static void loadPlayers() {
-        for (int i = 1; i <= numberOfPlayers; i++) {
-            NewObjectStorage.newPlayer();
-        }
-    }
-
     public static void saveGame() {
         levelData.objectDataList(ObjectData.createDataList());
         Players.extractAllPlayerData();
         Players.serializePlayerData();
         DataHandler.serialize(levelData, new File(saveDirectory + levelData.name() + ".ser"));
-    }
-
-    private static void createBoilerplateLevel(LevelData data) {
-        NewObject ground = new NewObject();
-        ground.setRectangle(new Rectangle(-1000, 500, 3000, 100));
-        ground.setColor(Color.orange);
-        ground.physics().setGravity(false);
-        ground.setIntersect(false);
-
-        levelData.objectDataList().add(new ObjectData(ground));
     }
 
     public static void loadLevel(String name) {
@@ -89,12 +76,24 @@ public class GameEnvironment extends JPanel implements ActionListener {
 
         //load player and gui
         if (!name.equals("menu")) {
-            NewObjectStorage.newPlayer();
+            //enable hud
             UIManager.enableGUI("HUD");
-        }
-    }
+            
+            //load players
+            Players.loadPlayerData();
+            NewObjectStorage.addPlayers();
+            NewObjectStorage.spawnPlayers();
+            
+            //set camera to follow player 1
+            NewObjectStorage.getPlayer(1).cameraFocus(true);
 
-    public void test() {
+            //add to config
+            Configuration.setProperty("last_level_loaded", name);
+        }
+        else {
+            NewCamera.centerCameraOn(new Point(-50, 300));
+        }
+
     }
 
     public void start() {
@@ -102,12 +101,16 @@ public class GameEnvironment extends JPanel implements ActionListener {
         setSize(GlobalData.getScreenDim());
         setBackground(Color.CYAN);
 
+        //load config
+        Configuration.loadProperties();
+
+        //get player names
+        playernames.add(0, Configuration.getProperty("player1_name"));
+        playernames.add(1, Configuration.getProperty("player2_name"));
+
         //add listeners
         addMouseListener(MouseFunctions.getClickListener());
         addKeyListener(Input.getKeyListener());
-
-        //testing
-        test();
 
         //load all images
         Images.indexAllImages();
@@ -115,6 +118,9 @@ public class GameEnvironment extends JPanel implements ActionListener {
 
         //load playerdata
         Players.loadPlayerData();
+
+        //add players to playerlist
+        NewObjectStorage.addPlayers();
 
         //set up save mechanism and load menu world
         loadLevel("menu");
@@ -137,7 +143,7 @@ public class GameEnvironment extends JPanel implements ActionListener {
 		this.requestFocus();
         
         //start camera and initialize world
-        NewCamera.centerCameraOn(new Point(-50, 500));
+        NewCamera.centerCameraOn(new Point(-50, 300));
 
         //start gameloop timer
         timer = new Timer(TIMER_DELAY, this);
