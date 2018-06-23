@@ -19,7 +19,8 @@ public class NewCollision {
         boolean i = false;
 
         //loop through all other objects
-        for (NewObject object2 : objects) {
+        for (int k = 0; k < objects.size(); k++) {
+            NewObject object2 = objects.get(k);
             //if object1 is not the same as object2 and they are intersecting
             if (object1.get().intersects(object2.get()) && !object2.equals(object1)) {
                 if (object1.getCollision()) {

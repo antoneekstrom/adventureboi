@@ -8,7 +8,7 @@ import gamelogic.NewObjectStorage;
 public class Fireball extends NewObject implements ObjectMethods {
 
     String direction = "";
-    int velocity = 15;
+    int velocity = 25;
     int distanceTraveled = 0;
     int maxDistance = 1000;
     int damage = 15;

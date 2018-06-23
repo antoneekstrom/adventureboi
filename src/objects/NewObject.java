@@ -280,7 +280,7 @@ public class NewObject {
         calculatePosition(); /* Calculate forces and positioning */
         updateDisplayCoordinates(); /* Update position on screen */
         animate(); /* Do animation. */
-        if (healthModule != null) {healthModule().update();}
+        if (healthModule != null) {healthModule().update(this);}
         debug();
     }
     

@@ -130,6 +130,7 @@ public class PlayerSelectUI extends GUI {
                 setText("Active players:" + input);
             }
             {
+                setTag("playerAmount");
                 takeInput(true);
                 setInputPrefix("Active players");
                 setText("Active players:" + NewObjectStorage.playersToSpawn());

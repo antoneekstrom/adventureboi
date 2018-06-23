@@ -106,11 +106,14 @@ public class Physics {
     /** Called when object is colliding with another one. */
     public void collide() {
         normal();
+        carry();
     }
 
     /** Force that "carries" objects on top of others. */
     private void carry() {
-
+        if (object.collisionSide().equals("top")) {
+            object.get().x += object.getLastCollision().velocityX() / 2;
+        }
     }
 
     /** manipulate both axis of force. */

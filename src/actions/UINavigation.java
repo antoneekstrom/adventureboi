@@ -24,7 +24,7 @@ public class UINavigation extends AbstractAction {
 		if (released && Input.UIKeysEnabled()) {
 			if (action.equals("UI_inventory")) {
 				if (UIManager.getGUI("Inventory").isVisible()) {
-					UIManager.enableLatestGUI();
+					UIManager.enableGUI("HUD");
 				}
 				else {
 					UIManager.enableGUI("Inventory");
@@ -46,7 +46,7 @@ public class UINavigation extends AbstractAction {
 			}
 			if (action.equals("UI_creative")) {
 				if (UIManager.getGUI("Creative").isVisible()) {
-					UIManager.enableLatestGUI();
+					UIManager.enableGUI("HUD");
 				}
 				else {
 					UIManager.enableGUI("Creative");

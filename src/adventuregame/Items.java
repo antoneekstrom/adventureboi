@@ -4,14 +4,16 @@ import java.util.HashMap;
 
 public class Items {
 	
-	private static HashMap<String, String> descriptions = new HashMap<String, String>() {{
-		put("donut", "Epicly yummy.");
-		put("shroom", "Very nice mushroom.");
-		put("angryshroom", "Very angery boi.");
-		put("tallmush", "Tallest boi in the entire 7th dimension.");
-		put("explosion", "How did this get here?");
-		put("lowercaseb", "Epic lowercase b.");
-		put("uppercaseb", "Incredibly epic uppercase b.");
+	private static HashMap<String, String[]> descriptions = new HashMap<String, String[]>() {
+		private static final long serialVersionUID = 1L;
+	{
+		put("donut", new String[] {"Epicly yummy."});
+		put("shroom", new String[] {"Very nice mushroom."});
+		put("angryshroom", new String[] {"Very angery boi.","What is this? Another", "line?!"});
+		put("tallmush", new String[] {"Tallest boi in the entire 7th dimension."});
+		put("explosion", new String[] {"How did this get here?"});
+		put("lowercaseb", new String[] {"Epic lowercase b."});
+		put("uppercaseb", new String[] {"Incredibly epic uppercase b."});
 	}};
 	
 	private static HashMap<String, String> effects = new HashMap<String, String>() {{
@@ -34,7 +36,7 @@ public class Items {
 		put("uppercaseb", "statup");
 	}};
 
-	public static String getDescription(String item) {
+	public static String[] getDescription(String item) {
 		return descriptions.get(item);
 	}
 

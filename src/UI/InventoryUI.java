@@ -1,17 +1,23 @@
 package UI;
 
+import java.util.ArrayList;
+
 import adventuregame.GameEnvironment;
-import data.PlayerData;
+import adventuregame.GlobalData;
 import gamelogic.Item;
 import gamelogic.NewObjectStorage;
 import objects.NewPlayer;
 
 public class InventoryUI extends GUI {
 
-    UIList inv;
+    UIInventory inv;
     String playerName = GameEnvironment.player1Name();
+    String filter = "all";
+
     int invwidth = 700;
     int invheight = 1000;
+    int buttonwidth = 175;
+    int indentation = 100;
 
     public InventoryUI() {
         super("Inventory");
@@ -26,17 +32,39 @@ public class InventoryUI extends GUI {
 
     public void refreshInv() {
         NewPlayer p = NewObjectStorage.getPlayer(playerName);
-        if (NewObjectStorage.getPlayer(playerName).playerData().inventory() != null) {
+        if (p.playerData().inventory() != null) {
 
-            String[] arr = new String[p.playerData().inventory().size()];
-
-            for (int i = 0; i < arr.length; i++) {
-                arr[i] = p.playerData().inventory().get(i).displayName();
+            ArrayList<Item> l = new ArrayList<Item>();
+            
+            for (int i = 0; i < p.playerData().inventory().size(); i++) {
+                if (p.playerData().inventory().get(i).sortingTag().equals(filter) || filter.equals("all")) {
+                    try {
+                        l.add(p.playerData().inventory().get(i));
+                    } catch (NullPointerException e) {e.printStackTrace();}
+                }
             }
+
+            Item[] arr = new Item[l.size()];
+            l.toArray(arr);
 
             if (arr != null) {
                 inv.refreshList(arr);
             }
+        }
+    }
+
+    public void selectFilter(String tag) {
+        for (UIObject object : getObjectsByTag("filter")) {
+            if (object.tag().replace("filter-", "").equals(tag)) {
+                filter = tag;
+                object.toggleForceHoverState();
+            }
+            else {
+                if (object.getForceHoverState()) {object.toggleForceHoverState();}
+            }
+        }
+        if (NewObjectStorage.getPlayer(1) != null) {
+            refreshInv();
         }
     }
 
@@ -46,34 +74,65 @@ public class InventoryUI extends GUI {
         setGuidelineY1(100);
 
         //inventory list
-        inv = new UIList(getName()) {
+        inv = new UIInventory(getName()) {
             {
                 get().setSize(invwidth, invheight);
-                get().setLocation(xCenter(get().width), yCenter(get().height));
+                get().setLocation(GlobalData.getScreenDim().width -50 -get().width, yCenter(get().height));
                 setBackgroundColor(getUITextColor());
                 handle().get().setSize(50, 100);
                 setSpacing(0);
+                setText("invList");
+                setTag("inventory");
+                hasText(false);
                 entry().setBackgroundPadding(0);
                 setFontSize(40);
                 handle().hoverColorChange(handle().getBackgroundColor().brighter());
             }
         };
         addObject(inv);
+        
+        //filters
+        UIText t1 = new UIText(getName(), "Filters", false);
+        t1.get().setLocation(indentation, getGuidelineY1());
+        t1.autoAdjustBackgroundWidth(false);
+        t1.get().width = buttonwidth;
+        t1.setTag("filter");
+        applyGeneralStyle(t1);
+        addObject(t1);
+        
+        //sort by all
+        filterButton("All", "all");
 
-        //add item
-        UIButton add = new UIButton(getName(), "add item", false) {
+        //stats
+        filterButton("Stats", "statup");
+
+        //sort by abilities
+        filterButton("Abilities", "ability");
+
+        //equipment
+        filterButton("Equipment", "equipment");
+
+        //misc
+        filterButton("Misc", "misc");
+
+        selectFilter("all");
+    }
+
+    public void filterButton(String text, String tag) {
+        UIButton filterbutton = new UIButton(getName(), text, false) {
             @Override
             public void leftMouseReleased() {
-                PlayerData player = NewObjectStorage.getPlayer(playerName).playerData();
-                player.inventory().add(new Item("diarrhea"));
-                refreshInv();
+                selectFilter(tag);
             }
             {
-                get().setLocation( (int) inv.get().getMaxX() + 50, getGuidelineY1());
+                setTag("filter-" + tag);
+                get().width = buttonwidth;
+                autoAdjustBackgroundWidth(false);
+                get().setLocation(indentation, getGuidelineY1());
             }
         };
-        applyGeneralStyle(add);
-        addObject(add);
+        applyGeneralStyle(filterbutton);
+        addObject(filterbutton);
     }
 
 }

@@ -10,6 +10,7 @@ public class UIManager {
     private static int MAX_HISTORY_SIZE = 5;
     /** History for recent GUI's in order. */
     private static ArrayList<String> GUIHistory = new ArrayList<String>();
+    private static String lastInHistory = "none";
 
     private static boolean lockCurrentGUI = false;
     public static void lockCurrentGUI(boolean b) {lockCurrentGUI = b;}
@@ -17,6 +18,7 @@ public class UIManager {
 
     public static void addToHistory(String name) {
         GUIHistory.add(name);
+        lastInHistory = name;
         /** Remove oldest entry if size is larger than max. */
         if (GUIHistory.size() > MAX_HISTORY_SIZE) {
             GUIHistory.remove(0);
@@ -103,7 +105,7 @@ public class UIManager {
 
     public static void hideAll(boolean addToHistory) {
         for (GUI gui : interfaces) {
-            if (gui.isVisible() && addToHistory && !gui.incognito()) {
+            if (gui.isVisible() && addToHistory && !gui.incognito() && !gui.getName().equals(lastInHistory)) {
                 UIManager.addToHistory(gui.getName());
             }
             gui.setVisible(false);

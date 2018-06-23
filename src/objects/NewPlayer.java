@@ -56,7 +56,6 @@ public class NewPlayer extends NewObject implements ObjectMethods {
     private boolean abilityCharging = false;
     private int abilityCooldown = AbilityValues.cooldown.get(currentAbility);
     private int chargePercentage = 0;
-    private double damage = 15;
 
     //charge animation
     private BufferedImage[] chargeAnimation;
@@ -67,7 +66,6 @@ public class NewPlayer extends NewObject implements ObjectMethods {
 
     public void initiatePlayerData(PlayerData data) {
         playerData = data;
-        damage = data.damage();
         setName(data.name());
         healthModule().setMaxHealth((int)data.maxHealth());
         healthModule().setHealth(healthModule().maxHealth());
@@ -79,11 +77,9 @@ public class NewPlayer extends NewObject implements ObjectMethods {
     }
 
     public PlayerData extractPlayerData() {
-        PlayerData data = new PlayerData();
-        data.damage(damage);
-        data.maxHealth(healthModule().maxHealth());
-        data.name(getName());
-        return data;
+        playerData.maxHealth(healthModule().maxHealth());
+        playerData.name(getName());
+        return playerData;
     }
     /*--------------*/
 
@@ -104,7 +100,7 @@ public class NewPlayer extends NewObject implements ObjectMethods {
     private int jumpTime = 0;
 
     /** Velocity of jump. This will be added to the strength of gravity when calculated. */
-    private int JUMP_SPEED = 35;
+    private int JUMP_SPEED = 30;
 
     //positioning
     Point spawnPoint = new Point(0,0);
@@ -377,7 +373,9 @@ public class NewPlayer extends NewObject implements ObjectMethods {
 
     public void fireball() {
         Fireball f = new Fireball(abilityDirection);
-        damage *= abilityFactor;
+        double d = playerData().damage();
+        d *= abilityFactor;
+        f.damage = (int) d;
         if (chargePercentage == 10) {
             f.charged();
         }

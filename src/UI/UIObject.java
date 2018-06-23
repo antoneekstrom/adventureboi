@@ -22,6 +22,9 @@ public class UIObject {
     private Color BORDER_COLOR = Color.white;
     private Color activeTextColor = TEXT_COLOR;
     private Color activeBackgroundColor = BACKGROUND_COLOR;
+
+    private UIObject tooltip;
+    private boolean hasTooltip = false;
     
     private boolean textColorChange = false;
     private boolean hasBackground = false;
@@ -52,7 +55,7 @@ public class UIObject {
     private boolean centerTextX = false;
     private boolean centerTextY = false;
     private int textCenterWidth = 0;
-    private int textCenterHeight = 0;
+    protected int textCenterHeight = 0;
     
     private String parentName;
     
@@ -79,6 +82,11 @@ public class UIObject {
 
     public float getFontSize() {
         return FONT_SIZE;
+    }
+
+    public void EnabletoolTip(UIObject tooltip) {
+        hasTooltip = true;
+        this.tooltip = tooltip;
     }
 
     public void setInputPrefix(String s) {inputPrefix = s; takeInput(true);}
@@ -165,6 +173,7 @@ public class UIObject {
     }
 
     public void setBorderColor(Color c) {
+        hasBorder = true;
         BORDER_COLOR = c;
     }
 
@@ -186,7 +195,7 @@ public class UIObject {
         if (parentRectangle == null) {
             parentRectangle = getParent().get();
         }
-        box.setLocation( (parentRectangle.width / 2) - (get().width / 2), get().y);
+        box.setLocation( (parentRectangle.x + parentRectangle.width / 2) - (get().width / 2), get().y);
     }
 
     public void centerInParentX(boolean b) {
@@ -233,13 +242,16 @@ public class UIObject {
         onMouseOver(checkMouse());
         write();
         forceHoverState();
+        if (hasTooltip) {tooltip.update();}
         if (centerInParentX) {centerInParentX();}
     }
 
     /** Force UIObject to look like when it is being hovered upon. */
-    private void toggleForceHoverState() {
+    public void toggleForceHoverState() {
         if (forceHoverState) {forceHoverState = false;} else {forceHoverState = true;}
     }
+
+    public boolean getForceHoverState() {return forceHoverState;}
 
     private void forceHoverState() {
         if (forceHoverState) {
@@ -267,6 +279,11 @@ public class UIObject {
 
     public void onMouseOver(boolean hasMouse) {
         hoverColorChange(hasMouse);
+        if (hasTooltip) {
+            if (hasMouse) {
+                tooltip.setVisible(true);
+            } else {tooltip.setVisible(false);}
+        }
     }
     
     public void setTextCenterWidth() {
@@ -381,6 +398,9 @@ public class UIObject {
                 g2d.setStroke(new BasicStroke(BORDER_THICKNESS));
                 g2d.setColor(BORDER_COLOR);
                 g2d.drawRect(get().x - BORDER_THICKNESS * 2, get().y - BORDER_THICKNESS * 2, get().width + BORDER_THICKNESS * 4, get().height + BORDER_THICKNESS * 4);
+            }
+            if (hasTooltip) {
+                tooltip.paint(g);
             }
         }
     }

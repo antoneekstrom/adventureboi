@@ -19,20 +19,20 @@ public class UIList extends UIObject {
     private int contentSpacing = 50;
 
     private int contentScrollHeight = 0;
-    private int entryHeight = 50;
-    private int entryWidth = 100;
-    private boolean entryFullWidth = true;
+    protected int entryHeight = 50;
+    protected int entryWidth = 100;
+    protected boolean entryFullWidth = true;
 
     /** The distance the handle is offset from the mouse when holding/pressing on scrollbar. */
     private int handleHoldOffset = 0;
-    private int scrollbarWidth = 50;
+    protected int scrollbarWidth = 50;
     private Rectangle scrollbar;
 
     private UIObject entry = new UIObject();
     public UIObject entry() {return entry;}
     public void setEntry(UIObject o) {entry = o;}
 
-    private ArrayList<UIObject> list = new ArrayList<UIObject>();
+    protected ArrayList<UIObject> list = new ArrayList<UIObject>();
     public ArrayList<UIObject> getList() {return list;}
 
     public UIList(String parentname) {
@@ -54,7 +54,7 @@ public class UIList extends UIObject {
         scrollbar = new Rectangle( (int) get().getMaxX() - scrollbarWidth, (int) get().getMinY(), scrollbarWidth, get().height);
     }
 
-    private UIObject getEntry(String text) {
+    public UIObject getEntry(String text) {
         UIObject o = new UIObject();
         o.setParentName(getParentName());
         o.setTag(tag());
@@ -62,8 +62,8 @@ public class UIList extends UIObject {
         o.setParentRectangle(get());
         o.centerTextY(true);
         o.setFontSize(getFontSize());
+        
         o.takeInput(entry().takeInput());
-
         o.setBackgroundColor(entry().getBackgroundColor());
         o.textColor(entry().getTextColor());
         o.setHoverTextColor(entry().getHoverTextColor());
@@ -95,7 +95,7 @@ public class UIList extends UIObject {
     public int getScrollHeight() {return contentScrollHeight;}
 
 
-    private void determineContentHeight() {
+    protected void determineContentHeight() {
         //content height
         int s = list.size();
         int height = 0;
@@ -108,7 +108,7 @@ public class UIList extends UIObject {
         if (listContentPercent > 1) {listContentPercent = 1;}
     }
 
-    private void determineHandleHeight() {
+    protected void determineHandleHeight() {
         double h = get().height * listContentPercent;
         if (h > get().height) {h = get().height;}
         handle.get().height = (int) h;

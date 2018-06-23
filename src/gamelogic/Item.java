@@ -16,13 +16,13 @@ public class Item implements Serializable {
     private String sortingTag;
     
     //Description
-    private String description;
+    private String[] description;
     private String effect;
 
     public Item(String name) {
         this.name = name;
-        description = Items.getDescription(name);
         displayName = name;
+        description = Items.getDescription(name);
         effect = Items.getEffect(name);
         sortingTag = Items.getSortingTag(name);
         image = Images.getImageHashMap("assets/items").get(displayName());
@@ -34,7 +34,7 @@ public class Item implements Serializable {
 
     public String displayName() {return displayName;}
     public String name() {return name;}
-    public String description() {return description;}
+    public String[] description() {return description;}
     public String effect() {return effect;}
     public String sortingTag() {return sortingTag;}
 

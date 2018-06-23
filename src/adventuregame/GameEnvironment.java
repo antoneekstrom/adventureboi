@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import javax.swing.JPanel;
 import javax.swing.Timer;
+
 import UI.UIManager;
 import data.Configuration;
 import data.DataHandler;
@@ -21,7 +22,6 @@ import gamelogic.MouseFunctions;
 import gamelogic.NewCamera;
 import gamelogic.NewObjectStorage;
 import gamelogic.ObjectCreator;
-import objects.NewPlayer;
 
 public class GameEnvironment extends JPanel implements ActionListener {
 
@@ -125,6 +125,9 @@ public class GameEnvironment extends JPanel implements ActionListener {
         //set up save mechanism and load menu world
         loadLevel("menu");
 
+        //set config things
+        NewObjectStorage.playersToSpawn(Integer.parseInt(Configuration.getProperty("PLAYER_COUNT")));
+        
         //start UI
         UIManager.start();
 

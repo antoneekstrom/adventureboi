@@ -88,7 +88,7 @@ public class GUI {
 	public UIObject[] getObjectsByTag(String s) {
 		ArrayList<UIObject> l = new ArrayList<UIObject>();
 		for (UIObject o : UIObjects) {
-			if (o.tag().equals(s)) {l.add(o);}
+			if (o.tag().startsWith(s)) {l.add(o);}
 		}
 		UIObject[] arr = new UIObject[l.size()];
 		l.toArray(arr);
