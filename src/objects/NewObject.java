@@ -418,6 +418,9 @@ public class NewObject {
                 g.fillRect(getDisplayCoordinate().x,
                 getDisplayCoordinate().y, r.width, r.height);
             }
+            if (healthModule != null) {
+                healthModule.paint(g);
+            }
             if (debug) {
                 g.setColor(Color.black);
                 g.drawRect(getDisplayCoordinate().x, getDisplayCoordinate().y, get().width, get().height);

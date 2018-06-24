@@ -1,6 +1,5 @@
 package objects;
 
-import adventuregame.GameEnvironment;
 import adventuregame.Images;
 import gamelogic.Item;
 import gamelogic.NewObjectStorage;
@@ -19,6 +18,7 @@ public class AngryShroom extends NewObject implements ObjectMethods {
         createAI();
         enableHealthModule(100);
         healthModule().showHp();
+        healthModule().healthbar().yOffset = -75;
         get().setSize(125, 125);
         getAnimator().addList(Images.getFolderImages("assets/animated_sprites/angryshroom"));
         getAnimator().setIndexRange(0, 3);
@@ -62,6 +62,7 @@ public class AngryShroom extends NewObject implements ObjectMethods {
 
     public void update() {
         super.update();
+
     }
 
     public void destruct() {

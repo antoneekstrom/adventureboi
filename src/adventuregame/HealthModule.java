@@ -1,8 +1,10 @@
 package adventuregame;
 
 import java.awt.Graphics;
+import java.awt.Point;
 import java.io.Serializable;
 
+import UI.Healthbar;
 import objects.NewObject;
 
 public class HealthModule implements Serializable {
@@ -18,6 +20,16 @@ public class HealthModule implements Serializable {
 	private boolean showHp = false;
 	private boolean invincible = false;
 	private boolean canDie = true;
+	private boolean damageNumber = false;
+
+	private String damageNumberText = "";
+	private int numberXOffset = 15, numberYOffset = 15;
+	private Point damageNumberPosition;
+	private int DMG_NUM_DISPLAY_TIME = 35;
+	private int dmgNumTimer = 0;
+
+	private NewObject object;
+	private Healthbar hpbar;
 	
 	public HealthModule(int maxhp) {
 		setHealth(maxhp);
@@ -31,6 +43,8 @@ public class HealthModule implements Serializable {
 	}
 	
 	public void showHp() {
+		hpbar = new Healthbar(150, 50);
+		showHp = true;
 	}
 
 	public void hpCheck() {
@@ -55,10 +69,14 @@ public class HealthModule implements Serializable {
 	public boolean isInvincible() {return invincible;}
 	public void invincible(boolean b) {invincible = b;}
 	public boolean hpVisible() {return showHp;}
+	public Healthbar healthbar() {return hpbar;}
 	public boolean isDead() {if (health < 0 && canDie() && !invincible) {return true;} else {return false;}}
 	
 	public void update(NewObject object) {
 		hpCheck();
+		this.object = object;
+		if (showHp) {hpbar.update((double) health, (double) maxHealth, object);}
+		dmgNumTimer();
 	}
 	
 	public void decreaseHealth(int h) {
@@ -66,11 +84,29 @@ public class HealthModule implements Serializable {
 			health -= h;
 			invulnerable = true;
 		}
+		damageNumber(h);
 	}
 
+	private void dmgNumTimer() {
+		if (dmgNumTimer > 0) {dmgNumTimer--;}
+		if (dmgNumTimer <= 0) {damageNumber = false;}
+	}
+
+	/** Generate a number showing how much damage was dealt above object. */
+	private void damageNumber(int d) {
+		Point pos = object.getDisplayCoordinate();
+		damageNumberPosition = new Point(pos.x + numberXOffset, pos.y + numberYOffset);
+		damageNumberText = String.valueOf(d);
+		damageNumber = true;
+		dmgNumTimer = DMG_NUM_DISPLAY_TIME;
+	}
 
 	public void paint(Graphics g) {
 		if (showHp) {
+			hpbar.paint(g);
+		}
+		if (damageNumber) {
+			g.drawString(damageNumberText, damageNumberPosition.x, damageNumberPosition.y);
 		}
 	}
 	
