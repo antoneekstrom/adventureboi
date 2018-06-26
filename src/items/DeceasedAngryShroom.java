@@ -9,7 +9,7 @@ public class DeceasedAngryShroom extends Item {
     public DeceasedAngryShroom() {
         super("angryshroom");
         description = new String[] {"A very angery boi", "who has now been deceased."};
-        effect = "+20 max hp";
+        effect = "+5 attack damage";
         sortingTag = Item.statup;
     }
 

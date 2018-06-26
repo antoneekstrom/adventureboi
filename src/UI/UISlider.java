@@ -45,6 +45,7 @@ public class UISlider extends UIObject {
         handle.paint(g);
     }
 
+    public UIObject handle() {return handle;}
     public void setValue(double d) {value = d;}
     public void setMaxValue(double d) {maxValue = d;}
     public double value() {return value;}

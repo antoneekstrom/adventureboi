@@ -29,6 +29,7 @@ public class NewCollision {
                     object1.setIntersect(true);
                     object1.passCollision(object2);
                     object1.collide(object2);
+                    object2.collide(object1);
                 }
             }
             else {

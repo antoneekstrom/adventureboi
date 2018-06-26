@@ -61,7 +61,7 @@ public class InputFieldUI extends GUI {
             public void onClose() {
                 Players.removePlayer(name);
                 UIManager.lockCurrentGUI(false);
-                UIManager.enableGUI("PlayerSelect");
+                UIManager.enableLatestGUI();
             }
             {
                 setButtonText("haha nice");

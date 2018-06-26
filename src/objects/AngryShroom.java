@@ -6,6 +6,8 @@ import items.DeceasedAngryShroom;
 
 public class AngryShroom extends NewObject implements ObjectMethods {
 
+    private DeceasedAngryShroom drop;
+
     public AngryShroom() {
         setName("angryshroom");
         setText("angryshroom");
@@ -35,6 +37,9 @@ public class AngryShroom extends NewObject implements ObjectMethods {
         getAnimator().addList(Images.getFolderImages("assets/animated_sprites/angryshroom"));
         getAnimator().setIndexRange(0, 3);
         getAnimator().speed(5);
+        
+        //drop
+        drop = new DeceasedAngryShroom();
 
         showDebug(true);
     }
@@ -73,7 +78,8 @@ public class AngryShroom extends NewObject implements ObjectMethods {
     public void testPickup(NewObject collision) {
         if (healthModule().isDead() && collision.getClass().equals(NewPlayer.class)) {
             NewObjectStorage.remove(this);
-            NewObjectStorage.getPlayer(1).playerData().inventory().add(new DeceasedAngryShroom());
+            NewPlayer player = (NewPlayer) collision;
+            player.playerData().inventory().add(drop);
         }
     }
 

@@ -5,9 +5,13 @@ import java.awt.Graphics;
 public class UIAlert extends UIObject {
 
     private String text;
-    private UIButton b;
-    private String buttonText = "OK";
-    public void setButtonText(String text) {buttonText = text;}
+    private UIButton yesButton, noButton;
+
+    private String yesButtonText = "OK";
+    private String noButtonText = "extremely no tbh";
+    private int buttonOffset = 45;
+
+    public void setButtonText(String text) {yesButtonText = text;}
 
     public UIAlert(String message, String parentname) {
         super();
@@ -27,7 +31,8 @@ public class UIAlert extends UIObject {
         get().y = getParent().yCenter(get().height) - 100;
         autoAdjustBackground(true);
 
-        b = new UIButton(getParentName(), buttonText, true) {
+        //yes
+        yesButton = new UIButton(getParentName(), yesButtonText, false) {
             @Override
             public void leftMouseReleased() {
                 super.leftMouseReleased();
@@ -35,12 +40,28 @@ public class UIAlert extends UIObject {
                 getParent().removeAlerts();
             }
             {
-                this.get().y = 550;
+                this.get().setLocation(getParent().xCenter(this.get().width) + buttonOffset, 550);
                 this.setTag("alert");
             }
         };
-        getParent().applyGeneralStyle(b);
-        getParent().addObject(b);
+
+        //no
+        noButton = new UIButton(getParentName(), noButtonText, false) {
+            @Override
+            public void leftMouseReleased() {
+                super.leftMouseReleased();
+                getParent().removeAlerts();
+            }
+            {
+                this.get().setLocation(getParent().xCenter(this.get().width) - buttonOffset - this.get().width, 550);
+                this.setTag("alert");
+            }
+        };
+
+        getParent().applyGeneralStyle(yesButton);
+        getParent().addObject(yesButton);
+        getParent().applyGeneralStyle(noButton);
+        getParent().addObject(noButton);
     }
 
     public void onClose() {
@@ -49,7 +70,12 @@ public class UIAlert extends UIObject {
 
     public void update() {
         super.update();
-        b.setText(buttonText);
+        //yes
+        yesButton.setText(yesButtonText);
+        yesButton.get().setLocation(getParent().xCenter(yesButton.get().width) + buttonOffset + yesButton.get().width / 2, 550);
+        //no
+        noButton.get().setLocation(getParent().xCenter(noButton.get().width) - buttonOffset - noButton.get().width / 2, 550);
+        noButton.setText(noButtonText);
     }
 
     public void paint(Graphics g) {

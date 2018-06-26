@@ -22,8 +22,9 @@ public class SettingsUI extends GUI {
         //volume slider
         UISlider volumeSlider = new UISlider(getName(), 100) {{
             centerInParentX(true);
-            setInnerPadding(30);
             get().setSize(getObjectByText("Keybindings").get().getSize());
+            get().height = 100;
+            handle().get().setSize(50, 25);
             setBackgroundColor(getUIBackgroundColor());
             hasBorder(true);
             setBorderThickness(getBorderThickness());

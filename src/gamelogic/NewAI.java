@@ -45,7 +45,6 @@ public class NewAI implements Serializable {
     
     public void collision(NewObject c) {
         if (isEnabled()) {
-        }
             collision = c;
             //determine type of collision
             determineCollision();
@@ -53,6 +52,7 @@ public class NewAI implements Serializable {
             detectCollision();
             //potentially execute an action
             action();
+        }
     }
 
     private void action() {
