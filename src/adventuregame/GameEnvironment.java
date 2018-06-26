@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import UI.UIAlert;
 import UI.UIManager;
 import data.Configuration;
 import data.DataHandler;
@@ -60,11 +61,17 @@ public class GameEnvironment extends JPanel implements ActionListener {
         frame = f;
     }
 
+    /** Save world state. */
     public static void saveGame() {
         levelData.objectDataList(ObjectData.createDataList());
+        DataHandler.serialize(levelData, new File(saveDirectory + levelData.name() + ".ser"));
+        UIManager.getCurrentGUI().addObject(new UIAlert("Game has been saved to " + levelData.name() + ".", UIManager.getCurrentGUI().getName(), false));
+    }
+
+    /** Save playerdata for all present players. */
+    public static void savePlayers() {
         Players.extractAllPlayerData();
         Players.serializePlayerData();
-        DataHandler.serialize(levelData, new File(saveDirectory + levelData.name() + ".ser"));
     }
 
     public static void loadLevel(String name) {

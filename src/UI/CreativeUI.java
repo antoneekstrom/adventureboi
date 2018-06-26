@@ -23,6 +23,9 @@ public class CreativeUI extends GUI {
     int navbuttonoffset = 300;
     int buttonWidth = 150;
 
+    int consoleWidth = 500, consoleHeight = 100;
+    String consolePrefix = "input";
+
     HashMap<String, BufferedImage> images;
 
     public CreativeUI() {
@@ -141,6 +144,24 @@ public class CreativeUI extends GUI {
         };
         applyGeneralStyle(remove);
         addObject(remove);
+
+        //console
+        UIButton console = new UIButton(getName(), "enter command..", true) {
+            @Override
+            public void useInput() {
+                Console.enter(getInput());
+                setText("enter command..");
+            }
+            {
+                takeInput(true);
+                setInputPrefix(consolePrefix);
+                autoAdjustBackground(false);
+                this.get().setSize(consoleWidth, consoleHeight);
+                this.get().y = GlobalData.getScreenDim().height - 150;
+            }
+        };
+        applyGeneralStyle(console);
+        addObject(console);
     }
 
     public void update() {
