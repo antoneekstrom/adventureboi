@@ -59,7 +59,6 @@ public class Fireball extends NewObject implements ObjectMethods {
 
     public void paint(Graphics g) {
         super.paint(g);
-        g.drawString(String.valueOf(charged), getDisplayCoordinate().x, getDisplayCoordinate().y - 50);
     }
 
     public void ai() {

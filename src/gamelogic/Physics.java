@@ -9,16 +9,15 @@ public class Physics {
     private boolean gravity = true;
 
     private int MASS = 10;
-    private double GRAVITY = 10;
-    private double RESISTANCE_CONSTANT = 0.1;
+    private double GRAVITY = 2;
+    private double RESISTANCE_CONSTANT = 0.05;
     
     private double xResistance, yResistance;
     /** Force */
     private double xForce = 0, yForce = 0;
+
     /** Velocity added by force. */
     private double xVel = 0, yVel = 0;
-    /** Acceleration. */
-    private double xAcc = 0, yAcc = 0;
 
     /** Object */
     NewObject object;
@@ -26,30 +25,14 @@ public class Physics {
     /** Update physics */
     public void update(NewObject o) {
         object = o;
-        
         if (gravity) {gravity();}
-        normal();
-        carry();
         applyResistance();
-        acceleration();
-        velocity();
-        force();
+        applyForce();
     }
 
     /** Force that draws object downwards. */
     private void gravity() {
-        yForce(GRAVITY);
-    }
-
-    /** Update and calculate acceleration. */
-    private void acceleration() {
-        xAcc = xForce / MASS;
-        yAcc = yForce / MASS;
-    }
-
-    private void velocity() {
-        xVel += xAcc;
-        yVel += yAcc;
+        yVel += GRAVITY;
     }
 
     /** Applies force that acts as air resistance. */
@@ -58,26 +41,26 @@ public class Physics {
         calculateResistance();
         // x axis
         if (xVel > 0) {
-            if (xForce - xResistance < 0) {xForce = 0;}
+            if (xVel - (xResistance / MASS) < 0) {xVel = 0;}
             else {
                 xForce(-xResistance);
             }
         }
         else if (xVel < 0) {
-            if (xForce + xResistance > 0) {xForce = 0;}
+            if (xVel + (xResistance / MASS) > 0) {xVel = 0;}
             else {
                 xForce(xResistance);
             }
         }
         // y axis
         if (yVel > 0) {
-            if (yForce - yResistance < 0) {yForce = 0;}
+            if (yVel - (yResistance / MASS) < 0) {yVel = 0;}
             else {
                 yForce(-yResistance);
             }
         }
         else if (yVel < 0) {
-            if (yForce + yResistance > 0) {yForce = 0;}
+            if (yVel + (yResistance / MASS) > 0) {yVel = 0;}
             else {
                 yForce(yResistance);
             }
@@ -86,13 +69,21 @@ public class Physics {
 
     /** Calculates strength of resistance force. */
     private void calculateResistance() {
-        yResistance = (yVel*yVel) * RESISTANCE_CONSTANT;
-        xResistance = (xVel*xVel) * RESISTANCE_CONSTANT;
+        xResistance = RESISTANCE_CONSTANT * (xVel*xVel);
+        yResistance = RESISTANCE_CONSTANT * (yVel*yVel);
+    }
+
+    private void calculateForce() {
+        xVel += calcVel(xForce);
+        yVel += calcVel(yForce);
+        xForce = 0;
+        yForce = 0;
     }
 
     /** Update and do force calculation. */
-    private void force() {
+    private void applyForce() {
         Rectangle o = object.get();
+
         o.x += xVel;
         o.y += yVel;
     }
@@ -100,13 +91,14 @@ public class Physics {
     /** Force that counteract current force on an object when it collides. */
     private void normal() {
         if (object.collisionSide().equals("top")) {
+            double f = MASS * yVel;
+            yForce(-f);
         }
     }
 
     /** Called when object is colliding with another one. */
     public void collide() {
         normal();
-        carry();
     }
 
     /** Force that "carries" objects on top of others. */
@@ -116,34 +108,31 @@ public class Physics {
         }
     }
 
-    /** manipulate both axis of force. */
-    public void force(double f) {
-        xForce += f;
-        yForce += f;
-    }
-
-    public void xForce(double f) {xForce += f;}
-    public void yForce(double f) {yForce += f;}
+    public void xForce(double f) {addForce(f, 0);}
+    public void yForce(double f) {addForce(0, f);}
     public boolean hasGravity() {return gravity;}
     public void setGravity(boolean b) {gravity = b;}
     public double xForce() {return xForce;}
     public double yForce() {return yForce;}
-    public double yAcceleration() {return yAcc;}
-    public double xAcceleration() {return xAcc;}
     public double yVelocity() {return yVel;}
     public double xVelocity() {return xVel;}
+    public void mass(int m) {MASS = m;}
+    public int mass() {return MASS;}
     public void reset() {
         yVel = 0;
         xVel = 0;
-        yAcc = 0;
-        xAcc = 0;
         yForce = 0;
         xForce = 0;
+    }
+
+    private double calcVel(double f) {
+        return f / MASS;
     }
 
     public void addForce(double x, double y) {
         xForce += x;
         yForce += y;
+        calculateForce();
     }
 
 }

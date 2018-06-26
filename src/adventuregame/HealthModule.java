@@ -1,5 +1,6 @@
 package adventuregame;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.io.Serializable;
@@ -22,6 +23,8 @@ public class HealthModule implements Serializable {
 	private boolean canDie = true;
 	private boolean damageNumber = false;
 
+	private Color DAMAGEVALUE_COLOR = Color.red;
+
 	private String damageNumberText = "";
 	private int numberXOffset = 15, numberYOffset = 15;
 	private Point damageNumberPosition;
@@ -42,9 +45,11 @@ public class HealthModule implements Serializable {
 		}
 	}
 	
-	public void showHp() {
-		hpbar = new Healthbar(150, 50);
-		showHp = true;
+	public void showHp(boolean b) {
+		showHp = b;
+		if (b) {
+			hpbar = new Healthbar(150, 50);
+		}
 	}
 
 	public void hpCheck() {
@@ -106,6 +111,7 @@ public class HealthModule implements Serializable {
 			hpbar.paint(g);
 		}
 		if (damageNumber) {
+			g.setColor(DAMAGEVALUE_COLOR);
 			g.drawString(damageNumberText, damageNumberPosition.x, damageNumberPosition.y);
 		}
 	}

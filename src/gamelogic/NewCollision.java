@@ -59,10 +59,20 @@ public class NewCollision {
         boolean invertX = false, invertY = false;
 
         //prevent falling through when object1 is in the center of object2 on x-axis
-        if (r == 0 && l == 0) {
+        if (x == 0) {
             r = 100; l = 100;
             x = r+l;
         }
+        /* ------ */
+
+        //pushing fix
+        if (y == 0 && x > 0) {
+            y = x+1;
+        }
+        else if ( y == 0 && x < 0) {
+            y = x-1;
+        }
+        /* ------ */
 
         if (x < 0) {x = -x; invertX = true;}
         if (y < 0) {y = -y; invertY = true;}

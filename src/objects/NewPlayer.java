@@ -196,7 +196,7 @@ public class NewPlayer extends NewObject implements ObjectMethods {
         healthModule().setMaxHealth(100);
         healthModule().setHealth(100);
         initializeData();
-        showDebug(false);
+        showDebug(true);
 
         //animation/images
         playerimages = Images.getImageHashMap("assets/animated_sprites/aboi");
@@ -245,7 +245,7 @@ public class NewPlayer extends NewObject implements ObjectMethods {
     }
 
     public void debug() {
-        setDebugString("y:" + physics().yAcceleration());
+        setDebugString("y:" + (float)physics().yVelocity());
     }
 
     public void healthLogic() {

@@ -100,7 +100,7 @@ public class NewObjectStorage {
     public static void clearEnvironment() {
         objects.clear();
     }
-
+    
     public static void addToIndex(NewObject object, int i) {
         objects.add(i, object);
     }

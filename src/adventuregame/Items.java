@@ -19,7 +19,7 @@ public class Items {
 	private static HashMap<String, String> effects = new HashMap<String, String>() {{
 		put("donut", "+20 max hp");
 		put("shroom", "+20 max energy");
-		put("angryshroom", "+5 base damage (does not work)");
+		put("angryshroom", "+5 damage");
 		put("tallmush", "+0.2 energy regen");
 		put("explosion", "+1 explosion");
 		put("lowercaseb", "+1 b");

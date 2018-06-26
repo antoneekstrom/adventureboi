@@ -56,6 +56,7 @@ public class UITooltip extends UIObject {
     }
 
     public void populateLines() {
+        //description
         for (String text : item.description()) {
             UIText t = new UIText(getParentName(), text, true) {
                 {
@@ -68,6 +69,7 @@ public class UITooltip extends UIObject {
             };
             lines.add(t);
         }
+        //title
         lines.add(new UIText(getParentName(), getText(), false) {
             {
                 this.setTag("title");
@@ -75,6 +77,16 @@ public class UITooltip extends UIObject {
                 centerInParentX(true);
                 this.textColor(getParent().getUIBackgroundColor());
                 this.get().y = get().y + titleOffset;
+            }
+        });
+        //effect
+        lines.add(new UIText(getParentName(), item.effect(), false) {
+            {
+                get().setLocation(get().x, get().y + descOffset);
+                setParentRectangle(get());
+                centerInParentX(true);
+                textColor(getParent().getUIBackgroundColor());
+                this.setFontSize(descriptionFontSize + 5);
             }
         });
     }

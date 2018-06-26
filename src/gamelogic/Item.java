@@ -10,14 +10,14 @@ public class Item implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-	private String displayName;
-    private String name;
-    private transient BufferedImage image;
-    private String sortingTag;
+	protected String displayName;
+    protected String name;
+    protected transient BufferedImage image;
+    protected String sortingTag;
     
     //Description
-    private String[] description;
-    private String effect;
+    protected String[] description;
+    protected String effect;
 
     public Item(String name) {
         this.name = name;
@@ -37,5 +37,10 @@ public class Item implements Serializable {
     public String[] description() {return description;}
     public String effect() {return effect;}
     public String sortingTag() {return sortingTag;}
+
+    //values for easy access
+
+    /** Signifies that this item is some sort of statistical upgrade. */
+    public static String statup = "statup";
 
 }

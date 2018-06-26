@@ -1,6 +1,5 @@
 package gamelogic;
 
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.io.Serializable;
 
@@ -22,7 +21,7 @@ public class NewAI implements Serializable {
     //values
     private int speed = 10;
     private double jumpFrequency = 0.05;
-    private double jumpforce = 120;
+    private double jumpforce = 600;
 
     //direction switching
     private int setDirectionCooldown = 0;
@@ -45,13 +44,15 @@ public class NewAI implements Serializable {
     }
     
     public void collision(NewObject c) {
-        collision = c;
-        //determine type of collision
-        determineCollision();
-        //change direction when colliding
-        detectCollision();
-        //potentially execute an action
-        action();
+        if (isEnabled()) {
+        }
+            collision = c;
+            //determine type of collision
+            determineCollision();
+            //change direction when colliding
+            detectCollision();
+            //potentially execute an action
+            action();
     }
 
     private void action() {
@@ -117,7 +118,7 @@ public class NewAI implements Serializable {
     }
 
     public void jump() {
-        object.physics().addForce(0, jumpforce);
+        object.physics().addForce(0, -jumpforce);
     }
     
     /** Determine if object should change direction. */
@@ -170,4 +171,7 @@ public class NewAI implements Serializable {
 
     public boolean isEnabled() {return enabled;}
     public void setEnabled(boolean b) {enabled = b;}
+    public void jumpFrequency(float f) {jumpFrequency = f;}
+    public void jumpforce(double d) {jumpforce = d;}
+    public void speed(int s) {speed = s;}
 }
