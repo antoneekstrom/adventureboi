@@ -3,6 +3,7 @@ package adventuregame;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashMap;
+import java.lang.Character;
 
 import javax.swing.Action;
 import javax.swing.JComponent;
@@ -187,7 +188,6 @@ public class Input {
 
     public static void keyInput(boolean b) {keyInput = b;}
     public static boolean keyInput() {return keyInput;}
-    public static void type(char c) {inputString += c;}
     public static void clearInputString() {inputString = "";}
     public static void setInputString(String s) {inputString = s;}
     public static String getInputString() {return inputString;}
@@ -197,6 +197,11 @@ public class Input {
         focusedObject.submitInput(inputString);
         focusedObject.toggleTyping();
         clearInputString();
+    }
+    public static void type(char c) {
+        if (Character.isDefined(c)) {
+            inputString += c;
+        }
     }
 
     public static KeyListener getKeyListener() {

@@ -124,6 +124,16 @@ public class NewObjectStorage {
         return arr;
     }
 
+    public static ArrayList<?> findObjects(String name) {
+        ArrayList<NewObject> arr = new ArrayList<NewObject>();
+        for (NewObject o : objects) {
+            if (o.getName().equals(name)) {
+                arr.add(o);
+            }
+        }
+        return arr;
+    }
+
     /** Check if object is of a certain subclass. */
     public static boolean checkForType(Object candidate, Class<?> type){
         return type.isInstance(candidate);

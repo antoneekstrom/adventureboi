@@ -90,10 +90,13 @@ public class Physics {
 
     /** Force that counteract current force on an object when it collides. */
     private void normal() {
-        if (object.collisionSide().equals("top")) {
-            double f = MASS * yVel;
-            yForce(-f);
+        try {
+            if (object.collisionSide().equals("top")) {
+                double f = MASS * yVel;
+                yForce(-f);
+            }
         }
+        catch (NullPointerException e) {e.printStackTrace();}
     }
 
     /** Called when object is colliding with another one. */

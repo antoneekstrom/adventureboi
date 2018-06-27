@@ -96,6 +96,7 @@ public class NewObject {
         return passThrough;
     }
 
+    public void name(String name) {this.name = name;}
     public void setCollisonSide(String s) {collisionSide = s;}
     public String collisionSide() {return collisionSide;}
 

@@ -261,7 +261,7 @@ public class UIObject {
         else {
         }
     }
-
+    
     private void hoverColorChange(boolean hasMouse) {
         if (backgroundHoverColorChange && hasMouse) {
             activeBackgroundColor = HIGHLIGHT_COLOR;

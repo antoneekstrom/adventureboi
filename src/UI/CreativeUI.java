@@ -17,14 +17,19 @@ public class CreativeUI extends GUI {
     UIButton create;
     UIButton togglesize;
     UIButton inspect;
+    UIButton console;
+    static UIList clog;
 
     int centerX = GlobalData.getScreenDim().width / 2;
     int y0 = 500;
     int navbuttonoffset = 300;
     int buttonWidth = 150;
 
-    int consoleWidth = 500, consoleHeight = 100;
+    int logWidth = 800, logHeight = 270;
+    int consoleWidth = 800, consoleHeight = 100;
     String consolePrefix = "input";
+
+    Color LOG_BACKGROUND = new Color(255, 255, 255, 200);
 
     HashMap<String, BufferedImage> images;
 
@@ -146,7 +151,7 @@ public class CreativeUI extends GUI {
         addObject(remove);
 
         //console
-        UIButton console = new UIButton(getName(), "enter command..", true) {
+        console = new UIButton(getName(), "enter command..", true) {
             @Override
             public void useInput() {
                 Console.enter(getInput());
@@ -162,6 +167,58 @@ public class CreativeUI extends GUI {
         };
         applyGeneralStyle(console);
         addObject(console);
+
+        //console log
+        clog = new UIList(getName()) {
+
+            @Override
+            public UIObject getEntry(String text) {
+                UIObject o = super.getEntry(text);
+                o.textColor(parseColor(o));
+                return o;
+            }
+            {
+                logWidth = console.getFullWidth();
+                this.get().setSize(logWidth + 10, logHeight);
+                this.setSpacing(0);
+                this.setText("ConsoleLog");
+                this.hasText(false);
+                this.get().setLocation(xCenter(this.get().width), console.get().y - 25 - logHeight);
+                this.setBackgroundColor(LOG_BACKGROUND);
+                this.textColor(Color.black);
+                this.entry().setBackgroundColor(new Color(0, 0, 0, 0));
+                this.entry().setFontSize(30f);
+                this.handle().get().setSize(50, 100);
+                this.handle().hoverColorChange(this.handle().getBackgroundColor().brighter());
+            }
+        };
+        addObject(clog);
+    }
+
+    public static void refreshLog() {
+        clog.refreshList(Console.getLog());
+        clog.handle().get().y = (int)clog.get().getMaxY() - clog.handle().get().height;
+    }
+
+    private Color parseColor(UIObject o) {
+        Color c = Color.black;
+        String text = o.getText();
+        String s = "";
+        //extract color id
+        if (text.startsWith(Console.colorRegex)) {
+            s = text.substring(0, Console.colorLength);
+            o.setText(text.replace(s, ""));
+        }
+        //Determine color
+        if (s.equals(Console.LOG_RED)) {
+            c = Color.red;
+        }
+        else if (s.equals(Console.LOG_GREEN)) {
+            c = Color.green;
+        }
+        o.setHoverTextColor(c);
+
+        return c;
     }
 
     public void update() {
