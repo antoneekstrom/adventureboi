@@ -31,6 +31,12 @@ public class Console {
     private static String selected = "selected";
     private static String gameObjectRegex = "obj:";
 
+    //'find string' values
+    private static String quote = String.valueOf('"');
+    private static int amountOfSpaces;
+    private static String extractedString;
+    private static int indexOfString;
+
 
     private static HashMap<String, Class<?>> classes = new HashMap<String, Class<?>>() {
         private static final long serialVersionUID = 1L;
@@ -64,13 +70,16 @@ public class Console {
         //split command into parameters
         rawParameters = input.split(regex);
 
-        //set variables
+        //short for setting variables to default
         Runnable r = () -> {
             object = null;
             methodName = rawParameters[0];
             className = defaultClassName;
             parameterStart = 1;
         };
+
+        //extract potential string with spaces
+        extractString(input);
 
         //extract potential object on which to invoke method
         if (rawParameters[0].contains(objectParseRegex)) {
@@ -100,6 +109,46 @@ public class Console {
         }
 
         return successful;
+    }
+
+    private static void extractString(String fullstring) {
+
+        if (countMatches(fullstring, quote) == 2) {
+            indexOfString = fullstring.indexOf(quote);
+            extractedString = fullstring.substring(indexOfString + 1, fullstring.lastIndexOf(quote));
+        }
+
+        if (extractedString != null) {
+            amountOfSpaces = countMatches(extractedString, " ");
+        }
+        else {
+            extractedString = "";
+        }
+
+        adjustArrays();
+    }
+
+    private static void adjustArrays() {
+        String[] temparr = rawParameters;
+        rawParameters = new String[rawParameters.length - amountOfSpaces];
+
+        String match = "";
+        int matchSize = -1;
+        for (int i = 0; i < temparr.length; i++) {
+            String current = temparr[i].replace(quote, "");
+
+            if (extractedString.contains(current)) {
+                match += current + " ";
+                matchSize++;
+            }
+            else {
+                rawParameters[i] = temparr[i];
+            }
+
+            if (match.equals(extractedString + " ")) {
+                rawParameters[i - matchSize] = extractedString;
+            }
+        }
     }
 
     private static void defineParameterTypes() {
@@ -152,8 +201,8 @@ public class Console {
         }
         //search objectStorage for object with name
         else if (name.startsWith(gameObjectRegex)) {
-            name.replace(gameObjectRegex, "");
-            object = NewObjectStorage.findObjects(name);
+            name = name.replace(gameObjectRegex, "");
+            object = NewObjectStorage.findObjects(name).get(0);
 
             if (object.equals(null)) {
                 object = NewObjectStorage.getObjectList().get(NewObjectStorage.getObjectList().size() - 1);
@@ -186,7 +235,7 @@ public class Console {
         return object;
     }
 
-    private static Class<?> findClass(String name) {
+    public static Class<?> findClass(String name) {
         Class<?> c = null;
 
         try {
@@ -249,6 +298,10 @@ public class Console {
         String[] arr = new String[log.size()];
         log.toArray(arr);
         return arr;
+    }
+
+    public static int countMatches(String line, String regex) {
+        return line.length() - line.replace(regex, "").length();
     }
 
 }

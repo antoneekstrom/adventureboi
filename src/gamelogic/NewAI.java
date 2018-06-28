@@ -25,7 +25,8 @@ public class NewAI implements Serializable {
 
     //direction switching
     private int setDirectionCooldown = 0;
-    private int SET_DIRECTION_COOLDOWN = 50;
+    private int SET_DIRECTION_COOLDOWN = 35;
+    private double spontaneousDirectionSwitchFrequency = 0.027;
 
     //edges
     private boolean closeToEdge = false;
@@ -57,9 +58,11 @@ public class NewAI implements Serializable {
 
     private void action() {
         if (Math.random() < jumpFrequency && !closeToEdge) {jump();}
+        if (Math.random() < spontaneousDirectionSwitchFrequency && !closeToEdge) {switchDirection();}
     }
     
     private void debug() {
+        
     }
     
     /** determine type of collision. */

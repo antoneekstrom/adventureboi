@@ -1,6 +1,7 @@
 package UI;
 
 import java.awt.Color;
+import java.awt.Dimension;
 
 import adventuregame.GlobalData;
 import gamelogic.MouseFunctions;
@@ -14,11 +15,12 @@ public class NewHUD extends GUI {
     private NewObject currentObject;
     public NewObject getCurrentObject() {return currentObject;}
     public void setCurrentObject(NewObject o) {currentObject = o;}
+    private Dimension barSize = new Dimension(300, 40);
 
     public NewHUD() {
         super("HUD");
         setGuidelineY1(100);
-        setGuidelineSpacing(150);
+        setGuidelineSpacing(110);
     }
 
     public void player1() {
@@ -28,6 +30,8 @@ public class NewHUD extends GUI {
         health.createText("Health");
         health.setForegroundColor(Color.red);
         health.setTag("player1");
+        health.setFontSize(FONT_SIZE);
+        health.get().setSize(barSize);
         addObject(health);
         //stamina
         UIMeter stamina = new UIMeter(getName());
@@ -35,6 +39,8 @@ public class NewHUD extends GUI {
         stamina.createText("Stamina");
         stamina.setForegroundColor(Color.green);
         stamina.setTag("player1");
+        stamina.setFontSize(FONT_SIZE);
+        stamina.get().setSize(barSize);
         addObject(stamina);
         //energy
         UIMeter energy = new UIMeter(getName());
@@ -42,6 +48,8 @@ public class NewHUD extends GUI {
         energy.createText("Energy");
         energy.setForegroundColor(Color.blue);
         energy.setTag("player1");
+        energy.setFontSize(FONT_SIZE);
+        energy.get().setSize(barSize);
         addObject(energy);
         //experience
     }
@@ -70,9 +78,14 @@ public class NewHUD extends GUI {
         //player1
         if (NewObjectStorage.getPlayer(1) != null) {
             NewPlayer p1 = NewObjectStorage.getPlayer(1);
+
             UIMeter health1 = (UIMeter) GUI.findObject(getObjectsByTag("player1"), "Health");
             health1.setValue( (double) p1.healthModule().health());
             health1.setMaxValue( (double) p1.healthModule().maxHealth());
+            
+            UIMeter energy2 = (UIMeter) GUI.findObject(getObjectsByTag("player1"), "Energy");
+            energy2.setValue((int)p1.energy());
+            energy2.setMaxValue((int)p1.playerData().maxenergy());
         }
         
         //player2
@@ -119,10 +132,11 @@ public class NewHUD extends GUI {
         energy.valueSide = "left";
         addObject(energy);
     }
-    
+
     public void start() {
         t1 = new UIText(getName(), "HUD", true);
         addObject(t1);
+        FONT_SIZE = 30;
      
         player1();
         player2();

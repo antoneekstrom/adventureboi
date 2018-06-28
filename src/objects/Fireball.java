@@ -49,7 +49,7 @@ public class Fireball extends NewObject implements ObjectMethods {
     public void intersect(NewObject collision) {
         NewObjectStorage.remove(this);
         if (collision.getHealthModule() != null) {
-            collision.getHealthModule().decreaseHealth(damage);
+            collision.getHealthModule().damage(damage);
         }
     }
 

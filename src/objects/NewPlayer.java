@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import UI.Console;
 import adventuregame.GameEnvironment;
 import adventuregame.GlobalData;
 import adventuregame.Images;
@@ -16,6 +17,7 @@ import gamelogic.AbilityValues;
 import gamelogic.Item;
 import gamelogic.NewCamera;
 import gamelogic.NewObjectStorage;
+import items.abilities.FireballItem;
 
 public class NewPlayer extends NewObject implements ObjectMethods {
 	//states
@@ -87,7 +89,15 @@ public class NewPlayer extends NewObject implements ObjectMethods {
     private double ABILITY_FACTOR_MAX = AbilityValues.factorMax.get(currentAbility);;
     private double ABILITY_FACTOR_INCREASE = AbilityValues.factorIncrease.get(currentAbility);
     private int ABILITY_COOLDOWN = AbilityValues.cooldown.get(currentAbility);
+    private double ABILITY_COST = 10;
+    private double ABILITY_CHARGE_COST = 0.5;
     private double abilityFactor = 1;
+
+    //statistics
+    double energy;
+    double stamina;
+    boolean energyRegen = true;
+    boolean staminaRegen = true;
 
     //jumping
     /** Amount of times player can jump before touching the ground again. */
@@ -187,6 +197,20 @@ public class NewPlayer extends NewObject implements ObjectMethods {
         }
         initiatePlayerData(data);
     }
+
+    public void statInit() {
+        energy = playerData.maxenergy();
+        stamina = playerData.maxstamina();
+    }
+
+    public boolean useEnergy(double e) {
+        boolean b = false;
+        if (energy - e >= 0) {
+            energy -= e;
+            b = true;
+        }
+        return b;
+    }
     
     public void initialize() {
         super.initialize();
@@ -196,7 +220,8 @@ public class NewPlayer extends NewObject implements ObjectMethods {
         healthModule().setMaxHealth(100);
         healthModule().setHealth(100);
         initializeData();
-        showDebug(true);
+        showDebug(false);
+        statInit();
 
         //animation/images
         playerimages = Images.getImageHashMap("assets/animated_sprites/aboi");
@@ -241,7 +266,25 @@ public class NewPlayer extends NewObject implements ObjectMethods {
         chargeAbility();
         if (PLAYER_ID == 1) {centerCamera();}
         healthLogic();
+        statLogic();
         debug();
+    }
+
+    public void statLogic() {
+        energyRegen();
+    }
+
+    public double energy() {return energy;}
+
+    private void energyRegen() {
+        if (energyRegen) {
+            if (energy + playerData.energyregen() <= playerData.maxenergy()) {
+                energy += playerData.energyregen();
+            }
+            else {
+                energy = playerData.maxenergy();
+            }
+        }
     }
 
     public void debug() {
@@ -261,6 +304,10 @@ public class NewPlayer extends NewObject implements ObjectMethods {
         get().setLocation(spawnPoint);
     }
 
+    public void addItem(String name) {
+        playerData().inventory().add(new FireballItem());
+    }
+
     public void selectAbility(String s) {
         currentAbility = s;
         ABILITY_FACTOR_MAX = AbilityValues.factorMax.get(s);
@@ -274,8 +321,9 @@ public class NewPlayer extends NewObject implements ObjectMethods {
 
     public void chargeAbility() {
         if (abilityCooldown == 0) {
-            if (abilityFactor + ABILITY_FACTOR_INCREASE <= ABILITY_FACTOR_MAX && abilityCharging) {
+            if (abilityFactor + ABILITY_FACTOR_INCREASE <= ABILITY_FACTOR_MAX && abilityCharging && useEnergy(ABILITY_CHARGE_COST)) {
                 abilityFactor += ABILITY_FACTOR_INCREASE;
+                energyRegen = false;
             }
             else if (abilityCharging && abilityFactor + ABILITY_FACTOR_INCREASE > ABILITY_FACTOR_MAX) {abilityFactor = ABILITY_FACTOR_MAX;}
             else if (!abilityCharging && abilityFactor != 1) {
@@ -291,6 +339,7 @@ public class NewPlayer extends NewObject implements ObjectMethods {
         abilities.get(currentAbility).run();
         abilityFactor = 1;
         abilityCooldown = ABILITY_COOLDOWN;
+        energyRegen = true;
     }
 
     /** Center camera on player */

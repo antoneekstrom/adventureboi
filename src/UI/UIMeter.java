@@ -122,7 +122,7 @@ public class UIMeter extends UIObject {
         calculateFillWidth();
         if (textObject != null) {textObject.update();}
         if (values != null) {values.update();}
-        textObject.get().setLocation(get().x + get().width / 2 - textObject.getTextWidth() / 2, get().y - 25); /* Center text in meter. */
+        textObject.get().setLocation(get().x + get().width / 2 - textObject.getTextWidth() / 2, get().y - 20); /* Center text in meter. */
         setValueLocation();
         values.setText(value + "/" + maxValue);
     }
@@ -133,8 +133,14 @@ public class UIMeter extends UIObject {
 
         g.setColor(FOREGROUND_COLOR);
         g.fillRect(getFill().x, getFill().y, getFill().width, getFill().height);
-        if (textObject != null) {textObject.paint(g);}
-        if (values != null) {values.paint(g);}
+        if (textObject != null) {
+            textObject.setFontSize(getFontSize());
+            textObject.paint(g);
+        }
+        if (values != null) {
+            values.setFontSize(getFontSize());
+            values.paint(g);
+        }
     }
 
 }

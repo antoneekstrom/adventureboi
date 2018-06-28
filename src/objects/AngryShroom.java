@@ -7,6 +7,8 @@ import items.DeceasedAngryShroom;
 public class AngryShroom extends NewObject implements ObjectMethods {
 
     private DeceasedAngryShroom drop;
+    private int contactDamage = 35;
+    private int healthOnPickup = 10;
 
     public AngryShroom() {
         setName("angryshroom");
@@ -41,7 +43,7 @@ public class AngryShroom extends NewObject implements ObjectMethods {
         //drop
         drop = new DeceasedAngryShroom();
 
-        showDebug(true);
+        showDebug(false);
     }
 
     public void ai() {
@@ -72,15 +74,27 @@ public class AngryShroom extends NewObject implements ObjectMethods {
     public void collide(NewObject collision) {
         super.collide(collision);
         getAI().collision(collision);
-        testPickup(collision);
+
+        //when in contact with a player
+        if (collision.getClass().equals(NewPlayer.class)) {
+            if (healthModule().isDead()) {
+                pickup(collision);
+            }
+            else {
+                contactDamage(collision);
+            }
+        }
     }
 
-    public void testPickup(NewObject collision) {
-        if (healthModule().isDead() && collision.getClass().equals(NewPlayer.class)) {
-            NewObjectStorage.remove(this);
-            NewPlayer player = (NewPlayer) collision;
-            player.playerData().inventory().add(drop);
-        }
+    private void contactDamage(NewObject col) {
+        col.healthModule().damage(contactDamage);
+    }   
+
+    public void pickup(NewObject collision) {
+        NewObjectStorage.remove(this);
+        NewPlayer player = (NewPlayer) collision;
+        player.playerData().inventory().add(drop);
+        player.healthModule().heal(healthOnPickup, false);
     }
 
     public void update() {

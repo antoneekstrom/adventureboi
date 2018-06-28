@@ -14,7 +14,7 @@ public class HealthModule implements Serializable {
 	int health, maxHealth;
 	int damage = 0;
 	
-	int dmgcooldown = 20;
+	int dmgcooldown = 35;
 	int cooldowncounter = dmgcooldown;
 
 	private boolean invulnerable = false;
@@ -75,7 +75,7 @@ public class HealthModule implements Serializable {
 	public void invincible(boolean b) {invincible = b;}
 	public boolean hpVisible() {return showHp;}
 	public Healthbar healthbar() {return hpbar;}
-	public boolean isDead() {if (health < 0 && canDie() && !invincible) {return true;} else {return false;}}
+	public boolean isDead() {if (health <= 0 && canDie() && !invincible) {return true;} else {return false;}}
 	
 	public void update(NewObject object) {
 		hpCheck();
@@ -84,12 +84,24 @@ public class HealthModule implements Serializable {
 		dmgNumTimer();
 	}
 	
-	public void decreaseHealth(int h) {
+	public void damage(int h) {
 		if (!invulnerable && !invincible) {
 			health -= h;
 			invulnerable = true;
 		}
 		damageNumber(h);
+	}
+
+	public void heal(int h, boolean overheal) {
+		if (health + h > maxHealth && overheal) {
+			health += h;
+		}
+		else if (health + h > maxHealth && !overheal) {
+			health = maxHealth;
+		}
+		else {
+			health += h;
+		}
 	}
 
 	private void dmgNumTimer() {
