@@ -13,8 +13,9 @@ public class FireballItem extends Item {
 
     public void start() {
         description = new String[] {"Summon incredibly epic", "fireballs upon your foes."};
-        effect = ability;
-        sortingTag = ability;
+        effect = ABILITY;
+        addTag(ABILITY);
+        equippable = true;
     }
 
 }

@@ -24,6 +24,14 @@ public class UIInventory extends UIList {
         return o;
     }
 
+    public void leftMouseReleased() {
+        super.leftMouseReleased();
+        for (UIObject o : list) {
+            UIInvItem i = (UIInvItem) o;
+            i.leftMouseReleased();
+        }
+    }
+
     public void refreshList(Item[] content) {
         list.clear();
         for (Item item : content) {

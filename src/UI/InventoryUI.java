@@ -11,7 +11,7 @@ import objects.NewPlayer;
 public class InventoryUI extends GUI {
 
     UIInventory inv;
-    String playerName = GameEnvironment.player1Name();
+    static String playerName = GameEnvironment.player1Name();
     String filter = "all";
 
     int invwidth = 700;
@@ -37,7 +37,7 @@ public class InventoryUI extends GUI {
             ArrayList<Item> l = new ArrayList<Item>();
             
             for (int i = 0; i < p.playerData().inventory().size(); i++) {
-                if (p.playerData().inventory().get(i).sortingTag().equals(filter) || filter.equals("all")) {
+                if (p.playerData().inventory().get(i).hasTag(filter) || filter.equals("all")) {
                     try {
                         l.add(p.playerData().inventory().get(i));
                     } catch (NullPointerException e) {e.printStackTrace();}

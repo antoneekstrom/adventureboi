@@ -397,7 +397,7 @@ public class UIObject {
                 Graphics2D g2d = (Graphics2D) g;
                 g2d.setStroke(new BasicStroke(BORDER_THICKNESS));
                 g2d.setColor(BORDER_COLOR);
-                g2d.drawRect(get().x - BORDER_THICKNESS * 2, get().y - BORDER_THICKNESS * 2, get().width + BORDER_THICKNESS * 4, get().height + BORDER_THICKNESS * 4);
+                g2d.drawRect(get().x - BORDER_THICKNESS * 2, get().y - BORDER_THICKNESS * 2, getFullWidth(), getFullHeight());
             }
             if (hasTooltip) {
                 tooltip.paint(g);

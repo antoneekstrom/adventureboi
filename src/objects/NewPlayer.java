@@ -6,6 +6,7 @@ import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import UI.Console;
 import adventuregame.GameEnvironment;
@@ -49,10 +50,11 @@ public class NewPlayer extends NewObject implements ObjectMethods {
 
     //abilities
     final private HashMap<String, Runnable> abilities = new HashMap<String, Runnable>() {
-        private static final long serialVersionUID = 1L;
-	{
-        put("fireball", () -> fireball());
-    }};
+         private static final long serialVersionUID = 1L;
+		{
+            put("fireball", () -> fireball());
+        }
+    };
     private String currentAbility = "fireball";
     private String abilityDirection = "none";
     private boolean abilityCharging = false;
@@ -198,6 +200,9 @@ public class NewPlayer extends NewObject implements ObjectMethods {
         initiatePlayerData(data);
     }
 
+    public void abilityInit() {
+    }
+
     public void statInit() {
         energy = playerData.maxenergy();
         stamina = playerData.maxstamina();
@@ -222,6 +227,7 @@ public class NewPlayer extends NewObject implements ObjectMethods {
         initializeData();
         showDebug(false);
         statInit();
+        abilityInit();
 
         //animation/images
         playerimages = Images.getImageHashMap("assets/animated_sprites/aboi");
@@ -308,10 +314,59 @@ public class NewPlayer extends NewObject implements ObjectMethods {
         playerData().inventory().add(new FireballItem());
     }
 
+    public boolean equip(Item i, String slot) {
+        boolean b = false;
+        Item l = null;
+        //check that item is in inventory
+        for (Iterator<Item> iterator = playerData.inventory().iterator(); iterator.hasNext();) {
+            Item k = iterator.next();
+            if (k.equals(i) && i.equippable() && !i.hasTag(Item.EQUIPPED)) {
+                l = k;
+                i.addTag(Item.EQUIPPED);
+                b = true;
+            }
+            else if (k.equals(i) && i.equippable()) {
+                l = null;
+                i.equip(false);
+            }
+        }
+
+        //determine slot
+        switch (slot) {
+            case PlayerData.SLOT1:
+            playerData.itemslot1().equip(false);
+            playerData.itemslot1(l);
+            break;
+
+            case PlayerData.SLOT2:
+            playerData.itemslot2().equip(false);
+            playerData.itemslot2(l);
+            break;
+
+            case PlayerData.SLOT3:
+            playerData.itemslot3().equip(false);
+            playerData.itemslot3(l);
+            break;
+
+            case PlayerData.ABILITY:
+            playerData.abilityslot().equip(false);
+            playerData.abilityslot(l);
+            break;
+        }
+
+        return b;
+    }
+
     public void selectAbility(String s) {
-        currentAbility = s;
-        ABILITY_FACTOR_MAX = AbilityValues.factorMax.get(s);
-        ABILITY_FACTOR_INCREASE = AbilityValues.factorIncrease.get(s);
+        boolean allowed = false;
+        Item item = playerData.abilityslot();
+        if (item != null) {allowed = true;}
+        if (allowed) {
+            currentAbility = s;
+
+            ABILITY_FACTOR_MAX = AbilityValues.factorMax.get(s);
+            ABILITY_FACTOR_INCREASE = AbilityValues.factorIncrease.get(s);
+        }
     }
 
     public void useAbility(String d, boolean b) {

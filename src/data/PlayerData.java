@@ -56,12 +56,18 @@ public class PlayerData implements Serializable {
     private Item itemslot1;
     private Item itemslot2;
     private Item itemslot3;
+    private Item abilityslot;
     public void itemslot1(Item h) {itemslot1 = h;}
     public Item itemslot1() {return itemslot1;}
     public void itemslot2(Item h) {itemslot2 = h;}
     public Item itemslot2() {return itemslot2;}
     public void itemslot3(Item h) {itemslot3 = h;}
     public Item itemslot3() {return itemslot3;}
+    public void abilityslot(Item h) {abilityslot = h;}
+    public Item abilityslot() {return abilityslot;}
+
+    //item slots
+    public static final String SLOT1 = "1", SLOT2 = "2", SLOT3 = "3", ABILITY = "ability";
     
     public PlayerData() {
 
