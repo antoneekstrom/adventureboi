@@ -22,14 +22,14 @@ public class Fireball extends NewObject implements ObjectMethods {
 
     public void charged() {
         charged = true;
-        setImage(Images.getImage("sprites", "chargedfire"));
+        setImage(Images.getImage("chargedfire"));
     }
     
     public void initialize() {
         super.initialize();
         get().setSize(50, 50);
         physics().setGravity(false);
-        setImage(Images.getImage("sprites", "fire"));
+        setImage(Images.getImage("fire"));
     }
 
     public void logic() {

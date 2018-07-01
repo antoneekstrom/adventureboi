@@ -84,9 +84,6 @@ public class UIList extends UIObject {
         determineHandleHeight();
     }
 
-    private void calcEntryHeight() {
-    }
-
     private void determineEntryLocation() {
         for (int i = 0; i < list.size(); i++) {
             list.get(i).get().y = get().y + (contentSpacing * (i-1)) + (i * entryHeight) + contentScrollHeight;
@@ -172,7 +169,6 @@ public class UIList extends UIObject {
     public void update() {
         super.update();
         handle.update();
-        calcEntryHeight();
         moveHandle();
         limitHandle();
         calculateScrollLength();

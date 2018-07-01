@@ -47,6 +47,8 @@ public class PlayerMovement extends AbstractAction {
                 NewObjectStorage.getPlayer(id).useAbility("left", released);
             }
             if (action.equals("ability1")) {
+                NewObjectStorage.getPlayer(id).selectAbility("fireball");
+                NewObjectStorage.getPlayer(id).releaseAbility();
             }
         }
 	}

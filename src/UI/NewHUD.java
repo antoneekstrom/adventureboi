@@ -71,7 +71,7 @@ public class NewHUD extends GUI {
     }
 
     public void debug() {
-        t1.setText(String.valueOf(NewObjectStorage.getPlayer(1).playerData().abilityslot()));
+        t1.setText(String.valueOf(MouseFunctions.getClickListener().isLeftPressed()));
     }
 
     public void updateStats() {
