@@ -17,7 +17,7 @@ public class AngryShroom extends NewObject implements ObjectMethods {
 
     public void initialize() {
         super.initialize();
-        super.setImage(Images.getImage("angryshroom"));
+        super.setImage(Images.getImage("angryshroom", "angryshroom"));
         get().setSize(125, 125);
         
         //ai
@@ -36,7 +36,7 @@ public class AngryShroom extends NewObject implements ObjectMethods {
 
         //animator
         enableAnimator();
-        getAnimator().addList(Images.getFolderImages("assets/animated_sprites/angryshroom"));
+        getAnimator().addList(Images.getFolderImages("angryshroom"));
         getAnimator().setIndexRange(0, 3);
         getAnimator().speed(5);
         

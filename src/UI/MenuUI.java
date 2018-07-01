@@ -3,7 +3,6 @@ package UI;
 import adventuregame.GameEnvironment;
 import adventuregame.GlobalData;
 import gamelogic.NewObjectStorage;
-import objects.NewPlayer;
 
 public class MenuUI extends GUI {
 
@@ -13,6 +12,9 @@ public class MenuUI extends GUI {
 
     public void setVisible(boolean b) {
         super.setVisible(b);
+        if (b && !GameEnvironment.levelData().name().equals("menu")) {
+            UIManager.enableGUI("HUD");
+        }
     }
 
     public void update() {

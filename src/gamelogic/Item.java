@@ -57,11 +57,13 @@ public class Item implements Serializable {
         return b;
     }
     public void removeTag(String tag) {
+        String tagToRemove = "none";
         for (String t : tags) {
             if (t.equals(tag)) {
-                tags.remove(t);
+                tagToRemove = t;
             }
         }
+        tags.remove(tagToRemove);
     }
 
     //values for easy access
