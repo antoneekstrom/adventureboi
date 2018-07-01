@@ -44,7 +44,7 @@ public class UIObject {
     private String submittedInput = "";
     private String inputPrefix = "input: ";
     private Rectangle parentRectangle;
-    private int BORDER_THICKNESS = 5;
+    protected int BORDER_THICKNESS = 10;
     private int backgroundPadding = 0;
     private Font font;
     private float FONT_SIZE = 40;
@@ -213,7 +213,15 @@ public class UIObject {
     }
 
     public int getFullHeight() {
-        return get().height + backgroundPadding;
+        int height = get().height + backgroundPadding;
+        if (hasBorder) {height += BORDER_THICKNESS;}
+        return height;
+    }
+
+    public int getFullWidth() {
+        int width = get().width + backgroundPadding;
+        if (hasBorder) {width += BORDER_THICKNESS;}
+        return width;
     }
     
     public GUI getParent() {
@@ -318,10 +326,6 @@ public class UIObject {
         }
     }
 
-    public int getFullWidth() {
-        return get().width + backgroundPadding;
-    }
-
     public void autoAdjustBackgroundWidth(boolean b) {
         autoAdjustBackgroundWidth = b;
     }
@@ -397,7 +401,7 @@ public class UIObject {
                 Graphics2D g2d = (Graphics2D) g;
                 g2d.setStroke(new BasicStroke(BORDER_THICKNESS));
                 g2d.setColor(BORDER_COLOR);
-                g2d.drawRect(get().x - BORDER_THICKNESS * 2, get().y - BORDER_THICKNESS * 2, getFullWidth(), getFullHeight());
+                g2d.drawRect(get().x - BORDER_THICKNESS / 2 - backgroundPadding / 2, get().y - BORDER_THICKNESS / 2 - backgroundPadding / 2, getFullWidth(), getFullHeight());
             }
             if (hasTooltip) {
                 tooltip.paint(g);

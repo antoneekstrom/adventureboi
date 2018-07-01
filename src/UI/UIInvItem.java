@@ -7,6 +7,8 @@ import gamelogic.NewObjectStorage;
 
 public class UIInvItem extends UIObject {
 
+    int BACKGROUND_PADDING = 0;
+
     public static Color EQUIPPED_COLOR = Color.cyan, BORDER_COLOR = Color.orange;
     Item item;
 
@@ -28,12 +30,12 @@ public class UIInvItem extends UIObject {
         super.update();
 
         if (item.hasTag(Item.EQUIPPED)) {
-            this.setBackgroundColor(EQUIPPED_COLOR);
-            hasBorder(true);
+            this.textColor(EQUIPPED_COLOR);
+            this.setBackgroundColor(Color.white);
         }
         else {
+            this.textColor(getParent().getUITextColor());
             this.setBackgroundColor(getParent().getUIBackgroundColor());
-            hasBorder(false);
         }
     }
 
@@ -42,11 +44,8 @@ public class UIInvItem extends UIObject {
         setTag("inventory");
         setText(item.name());
         centerTextY(true);
-        setBackgroundPadding(0);
+        setBackgroundPadding(BACKGROUND_PADDING);
 
-        this.setBorderColor(BORDER_COLOR);
-        this.setBorderThickness(getParent().getBorderThickness());
-        
         EnabletoolTip( new UITooltip(this, item) );
     }
 

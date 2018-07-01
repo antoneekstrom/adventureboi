@@ -48,6 +48,7 @@ public class GameEnvironment extends JPanel implements ActionListener {
     }
     public static String player1Name() {return playernames.get(0);}
     public static String player2Name() {return playernames.get(1);}
+    public static LevelData levelData() {return levelData;}
 
     //environment data
     private static LevelData levelData = new LevelData("menu", true, null);
