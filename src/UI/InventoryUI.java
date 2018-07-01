@@ -70,7 +70,7 @@ public class InventoryUI extends GUI {
 
     @Override
     public void start() {
-        setGuidelineSpacing(150);
+        setGuidelineSpacing(100);
         setGuidelineY1(100);
 
         //inventory list
@@ -114,6 +114,9 @@ public class InventoryUI extends GUI {
 
         //misc
         filterButton("Misc", "misc");
+
+        //equipped
+        filterButton("Equipped", "equipped");
 
         selectFilter("all");
     }
