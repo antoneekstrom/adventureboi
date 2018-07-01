@@ -27,10 +27,8 @@ public class UIInventory extends UIList {
     public void leftMouseReleased() {
         super.leftMouseReleased();
         for (UIObject o : list) {
-            if (o.checkMouse()) {
-                UIInvItem i = (UIInvItem) o;
-                i.leftMouseReleased();
-            }
+            UIInvItem i = (UIInvItem) o;
+            i.leftMouseReleased();
         }
     }
 
