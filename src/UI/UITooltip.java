@@ -24,6 +24,8 @@ public class UITooltip extends UIObject {
         int spacing = 75;
         int descOffset = 55;
         int titleOffset = 25;
+        int effectOffset = 20;
+        int imageOffset = 30;
         int lineSpacing = 35;
         //image
         int imgwidth = 75;
@@ -70,7 +72,7 @@ public class UITooltip extends UIObject {
             lines.add(t);
         }
         //title
-        lines.add(new UIText(getParentName(), getText(), false) {
+        lines.add(new UIText(getParentName(), "level " + item.level() + " " + getText(), false) {
             {
                 this.setTag("title");
                 setParentRectangle(get());
@@ -82,7 +84,8 @@ public class UITooltip extends UIObject {
         //effect
         lines.add(new UIText(getParentName(), item.effect(), false) {
             {
-                get().setLocation(get().x, get().y + descOffset);
+                this.setTag("effect");
+                get().setLocation(get().x, get().y + descOffset + effectOffset);
                 setParentRectangle(get());
                 centerInParentX(true);
                 textColor(getParent().getUIBackgroundColor());
@@ -106,7 +109,7 @@ public class UITooltip extends UIObject {
     public void start() {
         lines = new ArrayList<UIText>();
         populateLines();
-        image = Images.getImageHashMap("assets/items").get(item.name());
+        image = Images.getImageHashMap("assets/items").get(item.imageName());
         imagebox.setLocation(get().getLocation());
 
         get().setSize(width, height);
@@ -134,6 +137,11 @@ public class UITooltip extends UIObject {
             updateDescription(lines.get(i), i);
             lines.get(i).update();
         }
+
+        //position image below effect text
+        if (visible()) {
+            imagebox.setLocation(get().x + (get().width / 2) - (imagebox.width / 2), lines.get(lines.size()-1).get().y + imageOffset);
+        }
     }
 
     public int findLongest() {
@@ -151,6 +159,7 @@ public class UITooltip extends UIObject {
         for (UIText text : lines) {
             height += text.getFullHeight();
         }
+        height += (imagebox.height + imageOffset);
         return height;
     }
 
@@ -160,6 +169,9 @@ public class UITooltip extends UIObject {
 
         if (t.tag().equals("title")) {
             t.get().y = get().y + titleOffset;
+        }
+        else if (t.tag().equals("effect")) {
+            t.get().y = get().y + descOffset + effectOffset + (i * lineSpacing);
         }
         else {
             t.get().y = get().y + descOffset + (i * lineSpacing);
@@ -189,7 +201,9 @@ public class UITooltip extends UIObject {
         for (UIText t : lines) {
             t.paint(g);
         }
-        g.drawImage(image, imagebox.x, imagebox.y, imagebox.width, imagebox.height, null);
+        if (visible()) {
+            g.drawImage(image, imagebox.x, imagebox.y, imagebox.width, imagebox.height, null);
+        }
     }
 
 }

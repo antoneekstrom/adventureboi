@@ -37,19 +37,14 @@ public class InventoryUI extends GUI {
             ArrayList<Item> l = new ArrayList<Item>();
             
             for (int i = 0; i < p.playerData().inventory().size(); i++) {
-                if (p.playerData().inventory().get(i).hasTag(filter) || filter.equals("all")) {
+                if (p.playerData().inventory(). get(i).hasTag(filter) || filter.equals("all")) {
                     try {
                         l.add(p.playerData().inventory().get(i));
                     } catch (NullPointerException e) {e.printStackTrace();}
                 }
             }
 
-            Item[] arr = new Item[l.size()];
-            l.toArray(arr);
-
-            if (arr != null) {
-                inv.refreshList(arr);
-            }
+            inv.refreshList(l);
         }
     }
 
@@ -70,7 +65,7 @@ public class InventoryUI extends GUI {
 
     @Override
     public void start() {
-        setGuidelineSpacing(150);
+        setGuidelineSpacing(100);
         setGuidelineY1(100);
 
         //inventory list
@@ -89,7 +84,6 @@ public class InventoryUI extends GUI {
                 handle().hoverColorChange(handle().getBackgroundColor().brighter());
             }
         };
-        addObject(inv);
         
         //filters
         UIText t1 = new UIText(getName(), "Filters", false);
@@ -115,7 +109,29 @@ public class InventoryUI extends GUI {
         //misc
         filterButton("Misc", "misc");
 
+        //equipped
+        filterButton("Equipped", "equipped");
+
         selectFilter("all");
+
+        //inspect player
+        UIButton iplayer = new UIButton(getName(), "View Player", false) {
+            @Override
+            public void leftMouseReleased() {
+                InspectPlayerUI pui = (InspectPlayerUI) UIManager.getGUI("InspectPlayer"); 
+                pui.playerName(playerName);
+                UIManager.addToHistory("Inventory");
+                UIManager.getGUI("InspectPlayer").setVisible(true);
+            }
+            {
+                get().setSize(200, 100);
+                get().setLocation(inv.get().x - this.get().width - 100, 100);
+            }
+        };
+        applyGeneralStyle(iplayer);
+        addObject(iplayer);
+
+        addObject(inv);
     }
 
     public void filterButton(String text, String tag) {

@@ -19,6 +19,7 @@ public class CreativeUI extends GUI {
     UIButton inspect;
     UIButton console;
     static UIList clog;
+    static UIList history;
 
     int centerX = GlobalData.getScreenDim().width / 2;
     int y0 = 500;
@@ -26,7 +27,7 @@ public class CreativeUI extends GUI {
     int buttonWidth = 150;
 
     int logWidth = 800, logHeight = 270;
-    int consoleWidth = 800, consoleHeight = 100;
+    int consoleWidth = 900, consoleHeight = 100;
     String consolePrefix = "input";
 
     Color LOG_BACKGROUND = new Color(255, 255, 255, 200);
@@ -178,12 +179,35 @@ public class CreativeUI extends GUI {
                 return o;
             }
             {
-                logWidth = console.getFullWidth();
                 this.get().setSize(logWidth + 10, logHeight);
                 this.setSpacing(0);
                 this.setText("ConsoleLog");
                 this.hasText(false);
-                this.get().setLocation(xCenter(this.get().width), console.get().y - 25 - logHeight);
+                this.setBackgroundColor(LOG_BACKGROUND);
+                this.textColor(Color.black);
+                this.entry().setBackgroundColor(new Color(0, 0, 0, 0));
+                this.entry().setFontSize(30f);
+                this.handle().get().setSize(50, 100);
+                this.handle().hoverColorChange(this.handle().getBackgroundColor().brighter());
+                this.get().setLocation(GlobalData.getScreenDim().width - this.getFullWidth(), 0);
+            }
+        };
+        addObject(clog);
+
+        //console log
+        history = new UIList(getName()) {
+
+            @Override
+            public UIObject getEntry(String text) {
+                UIObject o = super.getEntry(text);
+                o.textColor(parseColor(o));
+                return o;
+            }
+            {
+                this.get().setSize(console.getFullWidth() + 10, 250);
+                this.setSpacing(0);
+                this.setText("ConsoleLog");
+                this.hasText(false);
                 this.setBackgroundColor(LOG_BACKGROUND);
                 this.textColor(Color.black);
                 this.entry().setBackgroundColor(new Color(0, 0, 0, 0));
@@ -192,12 +216,15 @@ public class CreativeUI extends GUI {
                 this.handle().hoverColorChange(this.handle().getBackgroundColor().brighter());
             }
         };
-        addObject(clog);
     }
 
     public static void refreshLog() {
         clog.refreshList(Console.getLog());
         clog.handle().get().y = (int)clog.get().getMaxY() - clog.handle().get().height;
+    }
+
+    public void setVisible(boolean b) {
+        super.setVisible(b);
     }
 
     private Color parseColor(UIObject o) {
@@ -223,11 +250,12 @@ public class CreativeUI extends GUI {
 
     public void update() {
         super.update();
-        img.setImage(images.get(ObjectCreator.getCurrentObject()));
-        current.setText(ObjectCreator.getCurrentObject());
+        img.setImage(images.get(ObjectCreator.getCurrentObjectName()));
+        current.setText(ObjectCreator.getCurrentObjectName());
         create.setText("create on click: " + ObjectCreator.isEnabled());
         inspect.setText("inspect on click: " + ObjectInspector.isEnabled());
         togglesize.setText("use size: " + ObjectCreator.customSize());
+        history.get().setLocation(console.get().x - console.BORDER_THICKNESS - console.getBackgroundPadding() / 2, console.get().y + 20 - console.getFullHeight() * 2);
     }
 
 }

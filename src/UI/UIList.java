@@ -62,6 +62,7 @@ public class UIList extends UIObject {
         o.setParentRectangle(get());
         o.centerTextY(true);
         o.setFontSize(getFontSize());
+        o.setBackgroundPadding(entry().getBackgroundPadding());
         
         o.takeInput(entry().takeInput());
         o.setBackgroundColor(entry().getBackgroundColor());
@@ -69,7 +70,7 @@ public class UIList extends UIObject {
         o.setHoverTextColor(entry().getHoverTextColor());
         o.hoverColorChange(entry().getHoverBackgroundColor());
 
-        if (entryFullWidth) {o.get().setSize(get().width - scrollbarWidth, entryHeight);}
+        if (entryFullWidth) {o.get().setSize(this.getFullWidth() - scrollbarWidth, entryHeight);}
         else {o.get().setSize(entryWidth, entryHeight);}
 
         return o;
@@ -84,9 +85,12 @@ public class UIList extends UIObject {
         determineHandleHeight();
     }
 
+    private void calcEntryHeight() {
+    }
+
     private void determineEntryLocation() {
         for (int i = 0; i < list.size(); i++) {
-            list.get(i).get().y = get().y + (contentSpacing * (i-1)) + (i * entryHeight) + contentScrollHeight;
+            list.get(i).get().y = get().y + (contentSpacing * (i)) + (i * entryHeight) + entry().getBackgroundPadding() / 2 + contentScrollHeight;
             list.get(i).get().x = get().x;
         }
     }
@@ -169,6 +173,7 @@ public class UIList extends UIObject {
     public void update() {
         super.update();
         handle.update();
+        calcEntryHeight();
         moveHandle();
         limitHandle();
         calculateScrollLength();

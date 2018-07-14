@@ -8,16 +8,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import UI.Console;
 import adventuregame.GameEnvironment;
 import adventuregame.GlobalData;
 import adventuregame.Images;
+import data.NumberFactory;
 import data.PlayerData;
 import data.Players;
 import gamelogic.AbilityValues;
 import gamelogic.Item;
 import gamelogic.NewCamera;
 import gamelogic.NewObjectStorage;
+import items.abilities.Ability;
 import items.abilities.FireballItem;
 
 public class NewPlayer extends NewObject implements ObjectMethods {
@@ -91,9 +92,11 @@ public class NewPlayer extends NewObject implements ObjectMethods {
     private double ABILITY_FACTOR_MAX = AbilityValues.factorMax.get(currentAbility);;
     private double ABILITY_FACTOR_INCREASE = AbilityValues.factorIncrease.get(currentAbility);
     private int ABILITY_COOLDOWN = AbilityValues.cooldown.get(currentAbility);
-    private double ABILITY_COST = 10;
-    private double ABILITY_CHARGE_COST = 0.5;
+    private double ABILITY_COST = 0;
+    private double ABILITY_DAMAGE_PERCENT;
+    private double ABILITY_CHARGE_COST = 0;
     private double abilityFactor = 1;
+    private String ABILITY_NAME = "none";
 
     //statistics
     double energy;
@@ -131,6 +134,17 @@ public class NewPlayer extends NewObject implements ObjectMethods {
     public NewPlayer(PlayerData data) {
         playerData = data;
         initiatePlayerData(data);
+        abilityInit();
+        xpInit();
+    }
+
+    private void xpInit() {
+        int level = playerData().experiencelevel();
+        if (level == -1) {
+            playerData().experiencelevel(0);
+            level = playerData().experiencelevel();
+            playerData().experiencegoal(NumberFactory.getXpGoal(level));
+        }
     }
 
     public int getMovementSpeed() {
@@ -201,6 +215,7 @@ public class NewPlayer extends NewObject implements ObjectMethods {
     }
 
     public void abilityInit() {
+        selectAbility();
     }
 
     public void statInit() {
@@ -232,7 +247,7 @@ public class NewPlayer extends NewObject implements ObjectMethods {
         //animation/images
         playerimages = Images.getImageHashMap("assets/animated_sprites/aboi");
         setImage(playerimages.get("still"));
-        chargeAnimation = new BufferedImage[Images.getFolderImages("assets/animated_sprites/boicharge").size()];
+        chargeAnimation = new BufferedImage[Images.getFolderImages("boicharge").size()];
         ArrayList<BufferedImage> l = new ArrayList<BufferedImage>();
         for (int i = 0; i <= 10; i++) {
             l.add(i, Images.getImage("charge" + i));
@@ -310,25 +325,49 @@ public class NewPlayer extends NewObject implements ObjectMethods {
         get().setLocation(spawnPoint);
     }
 
-    public void addItem(String name) {
-        playerData().inventory().add(new FireballItem());
+    public void addItem(Item i) {
+        playerData().inventory().add(i);
+        if (i.useOnPickup()) {i.use(this);}
+    }
+
+    public void giveXp(int amount) {
+        // add xp
+        playerData().experiencepoints(playerData().experiencepoints() + amount);
+
+        //check if goal is reached
+        if (playerData().experiencepoints() >= playerData().experiencegoal()) {
+            levelUp();
+        }
+    }
+
+    public void levelUp() {
+        playerData().increaselevel(1);
+        playerData().experiencepoints(playerData().experiencepoints() - playerData().experiencegoal());
+        playerData().experiencegoal(NumberFactory.getXpGoal(playerData().experiencelevel()));
+
+        if (playerData().experiencepoints() > playerData().experiencegoal()) {levelUp();}
     }
 
     public boolean equip(Item i, String slot) {
         boolean b = false;
         Item l = null;
+        boolean sameItem = false;
         //check that item is in inventory
         for (Iterator<Item> iterator = playerData.inventory().iterator(); iterator.hasNext();) {
-            Item k = iterator.next();
-            if (k.equals(i) && i.equippable() && !i.hasTag(Item.EQUIPPED)) {
-                l = k;
-                i.addTag(Item.EQUIPPED);
+            l = iterator.next();
+            if (l.equals(i) && l.equippable() && !l.hasTag(Item.EQUIPPED)) {
+                l.addTag(Item.EQUIPPED);
                 b = true;
+                break;
             }
-            else if (k.equals(i) && i.equippable()) {
-                l = null;
-                i.equip(false);
+            else if (l.equals(i) && i.equippable()) {
+                sameItem = true;
             }
+        }
+        if (sameItem) {
+            i.equip(false);
+            l.equip(false);
+            l = null;
         }
 
         //determine slot
@@ -349,23 +388,33 @@ public class NewPlayer extends NewObject implements ObjectMethods {
             break;
 
             case PlayerData.ABILITY:
-            playerData.abilityslot().equip(false);
+            if (playerData.abilityslot() != null) {
+                playerData.abilityslot().equip(false);
+            }
             playerData.abilityslot(l);
             break;
         }
+        selectAbility();
 
         return b;
     }
 
-    public void selectAbility(String s) {
+    public void selectAbility() {
         boolean allowed = false;
-        Item item = playerData.abilityslot();
-        if (item != null) {allowed = true;}
+        Ability item = null;
+        if (playerData().abilityslot() != null) {
+            item = (Ability) playerData.abilityslot();
+            if (playerData.abilityslot().hasTag(Item.ABILITY) && Ability.hasAllValues(item)) {allowed = true;}
+        }
+        else {ABILITY_NAME = "none";}
         if (allowed) {
-            currentAbility = s;
-
-            ABILITY_FACTOR_MAX = AbilityValues.factorMax.get(s);
-            ABILITY_FACTOR_INCREASE = AbilityValues.factorIncrease.get(s);
+            ABILITY_NAME = item.name();
+            ABILITY_DAMAGE_PERCENT = item.PERCENT_DAMAGE;
+            ABILITY_COOLDOWN = (int) item.COOLDOWN;
+            ABILITY_COST = item.COST;
+            ABILITY_CHARGE_COST = item.CHARGECOST;
+            ABILITY_FACTOR_MAX = item.FACTORMAX;
+            ABILITY_FACTOR_INCREASE = item.FACTORINCREASE;
         }
     }
 
@@ -374,15 +423,26 @@ public class NewPlayer extends NewObject implements ObjectMethods {
         abilityCharging = b;
     }
 
+    public boolean hasAbility() {
+        if (playerData().abilityslot() != null) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
     public void chargeAbility() {
         if (abilityCooldown == 0) {
-            if (abilityFactor + ABILITY_FACTOR_INCREASE <= ABILITY_FACTOR_MAX && abilityCharging && useEnergy(ABILITY_CHARGE_COST)) {
-                abilityFactor += ABILITY_FACTOR_INCREASE;
-                energyRegen = false;
-            }
-            else if (abilityCharging && abilityFactor + ABILITY_FACTOR_INCREASE > ABILITY_FACTOR_MAX) {abilityFactor = ABILITY_FACTOR_MAX;}
-            else if (!abilityCharging && abilityFactor != 1) {
-                releaseAbility();
+            if (hasAbility()) {
+                if (abilityFactor + ABILITY_FACTOR_INCREASE <= ABILITY_FACTOR_MAX && abilityCharging && useEnergy(ABILITY_CHARGE_COST)) {
+                    abilityFactor += ABILITY_FACTOR_INCREASE;
+                    energyRegen = false;
+                }
+                else if (abilityCharging && abilityFactor + ABILITY_FACTOR_INCREASE > ABILITY_FACTOR_MAX) {abilityFactor = ABILITY_FACTOR_MAX;}
+                else if (!abilityCharging && abilityFactor != 1) {
+                    releaseAbility();
+                }
             }
         }
         else {
@@ -391,7 +451,8 @@ public class NewPlayer extends NewObject implements ObjectMethods {
     }
 
     public void releaseAbility() {
-        abilities.get(currentAbility).run();
+        Runnable r = abilities.get(ABILITY_NAME);
+        if (r != null) {r.run();}
         abilityFactor = 1;
         abilityCooldown = ABILITY_COOLDOWN;
         energyRegen = true;
@@ -475,11 +536,14 @@ public class NewPlayer extends NewObject implements ObjectMethods {
         }
     }
 
+    private double calculateDamage() {
+        return ABILITY_DAMAGE_PERCENT * playerData().damage() * abilityFactor;
+    }
+
     public void fireball() {
         Fireball f = new Fireball(abilityDirection);
-        double d = playerData().damage();
-        d *= abilityFactor;
-        f.damage = (int) d;
+        f.damage = (int) calculateDamage();
+        f.player = playerData.name();
         if (chargePercentage == 10) {
             f.charged();
         }

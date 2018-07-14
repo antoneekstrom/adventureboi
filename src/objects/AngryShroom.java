@@ -9,6 +9,7 @@ public class AngryShroom extends NewObject implements ObjectMethods {
     private DeceasedAngryShroom drop;
     private int contactDamage = 35;
     private int healthOnPickup = 10;
+    private int experience = 10;
 
     public AngryShroom() {
         setName("angryshroom");
@@ -54,13 +55,18 @@ public class AngryShroom extends NewObject implements ObjectMethods {
         if (healthModule().isDead() && getAI().isEnabled()) {
             die();
         }
-        setDebugString(String.valueOf(doesIntersect()));
     }
 
     public void die() {
         getAI().setEnabled(false);
         getAnimator().setIndexRange(3, 3);
         healthModule().showHp(false);
+        dropXp();
+    }
+
+    private void dropXp() {
+        String pname = NewObjectStorage.findNearestPlayer(get().getLocation());
+        NewObjectStorage.getPlayer(pname).giveXp(experience);
     }
 
 
@@ -93,7 +99,7 @@ public class AngryShroom extends NewObject implements ObjectMethods {
     public void pickup(NewObject collision) {
         NewObjectStorage.remove(this);
         NewPlayer player = (NewPlayer) collision;
-        player.playerData().inventory().add(drop);
+        player.addItem(drop);
         player.healthModule().heal(healthOnPickup, false);
     }
 

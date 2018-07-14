@@ -2,6 +2,7 @@ package data;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import gamelogic.Item;
 
@@ -43,9 +44,18 @@ public class PlayerData implements Serializable {
     public double damage() {return damage;}
 
     //level
-    private double experiencelevel;
-    public void experiencelevel(double h) {experiencelevel = h;}
-    public double experiencelevel() {return experiencelevel;}
+    private int experiencelevel = -1;
+    public void experiencelevel(int h) {experiencelevel = h;}
+    public int experiencelevel() {return experiencelevel;}
+    public void increaselevel(int i) {experiencelevel += i;}
+
+    private double experiencepoints = 0;
+    public void experiencepoints(double h) {experiencepoints = h;}
+    public double experiencepoints() {return experiencepoints;}
+
+    private double experiencegoal = 0;
+    public void experiencegoal(int h) {experiencegoal = h;}
+    public double experiencegoal() {return experiencegoal;}
 
     //items
     private ArrayList<Item> inventory;
@@ -68,9 +78,27 @@ public class PlayerData implements Serializable {
 
     //item slots
     public static final String SLOT1 = "1", SLOT2 = "2", SLOT3 = "3", ABILITY = "ability";
+
+    public HashMap<String, Object> getStatMap() {
+
+        HashMap<String, Object> map = new HashMap<String, Object>() {
+
+            private static final long serialVersionUID = 1L;
+			{
+                put("level", experiencelevel());
+                put("health", maxHealth());
+                put("energy", maxenergy());
+                put("energy regen", energyregen());
+                put("stamina", maxstamina());
+                put("stamina regen", staminaregen());
+                put("damage", damage());
+            }
+        };
+
+        return map;
+    }
     
     public PlayerData() {
-
     }
 
 }

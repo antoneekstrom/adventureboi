@@ -8,5 +8,15 @@ public class Position {
 		r.setLocation( ( (p.width / 2) - (r.width / 2) ), (r.y) );
 		return r;
 	}
+
+	public static Rectangle centerY(Rectangle p, Rectangle r) {
+		r.setLocation( r.x, p.y - (r.height / 2) + (p.height / 2) );
+		return r;
+	}
+
+	public static Rectangle placeBetweenX(int x1, int x2, Rectangle r) {
+		r.x = x1 + ( (x2 - x1) / 2) - (r.width / 2);
+		return r;
+	}
 	
 }

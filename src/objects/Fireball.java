@@ -15,6 +15,8 @@ public class Fireball extends NewObject implements ObjectMethods {
     /** True if ability is fully charged. */
     private boolean charged = false;
 
+    String player;
+
     public Fireball(String d) {
         setName("fireball");
         direction = d;

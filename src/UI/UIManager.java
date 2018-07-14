@@ -3,6 +3,8 @@ package UI;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
+import adventuregame.GlobalData;
+
 /** This is were all the UI's are stored. */
 public class UIManager {
 
@@ -18,6 +20,7 @@ public class UIManager {
 
     public static void addToHistory(String name) {
         GUIHistory.add(name);
+        getGUI(name).addedToHistory();
         lastInHistory = name;
         /** Remove oldest entry if size is larger than max. */
         if (GUIHistory.size() > MAX_HISTORY_SIZE) {
@@ -33,6 +36,9 @@ public class UIManager {
         }
         return name;
     }
+
+    public static void removeFromHistory(int index) {GUIHistory.remove(index);}
+    public static void removeFromHistory(String name) {GUIHistory.remove(name);}
 
     /** A list containing all the UI's. */
     private static ArrayList<GUI> interfaces = new ArrayList<GUI>() {
@@ -50,6 +56,7 @@ public class UIManager {
         add(new InspectPlayerUI());
         add(new InputFieldUI("InputField_PlayerName", "Enter Name"));
         add(new InputFieldUI("InputField_RemovePlayer", "Enter Name"));
+        add(new InspectItemUI());
     }};
 
     /** Starts all UI's */
@@ -69,15 +76,17 @@ public class UIManager {
     }
 
     public static void enableHUD(boolean b) {
-        getGUI("HUD").setVisible(b);
+        enableGUI("HUD");
     }
 
     public static void enableLatestGUI() {
         String gui = getLatestGUI();
+        String currentgui = getCurrentGUI().getName();
         if (!gui.equals("none") && !lockCurrentGUI) {
             hideAll(false);
             enableGUI(gui);
         }
+        addToHistory(currentgui);
     }
 
     /** Returns true if no GUI's are visible. */
@@ -98,6 +107,8 @@ public class UIManager {
             getGUI(name).setVisible(true);
         }
     }
+
+    public static void clearHistory() {GUIHistory.clear();}
 
     public static ArrayList<GUI> getGUIList() {
         return interfaces;
@@ -123,11 +134,24 @@ public class UIManager {
         return ui;
     }
 
+    /* --------------------------------------------- */
+    private static String dstring = "";
+    private static int dstringwidth = 0;
+    private static void debug() {
+    }
+    /** For putting things on screen all the time regardless of active GUI. For debugging purposes. */
+    private static void debug(Graphics g) {
+        g.drawString(dstring, (GlobalData.getScreenDim().width / 2) - (dstringwidth / 2), 50);
+        dstringwidth = g.getFontMetrics().stringWidth(dstring);
+    }
+    /* --------------------------------------------- */
+
     /** Update all UI's. */
     public static void update() {
         for (GUI ui : interfaces) {
             if (ui.isVisible()) {ui.update();}
         }
+        debug();
     }
 
     /** Paint all UI's. */
@@ -135,5 +159,6 @@ public class UIManager {
         for (GUI ui : interfaces) {
             if (ui.isVisible()) {ui.paint(g);}
         }
+        debug(g);
     }
 }

@@ -47,11 +47,15 @@ public class Images {
 				return name.endsWith(".png");
 			}
 		});
-		Arrays.sort(files);
 
-		for (File f : files) {
-			map.put(f.getName(), dir.getPath());
+		try {
+			Arrays.sort(files);
+			for (File f : files) {
+				map.put(f.getName(), dir.getPath());
+			}
 		}
+		catch (NullPointerException e) {e.printStackTrace();}
+
 	}
 
 	public static void printPaths() {

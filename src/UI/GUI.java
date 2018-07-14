@@ -103,6 +103,9 @@ public class GUI {
 		return returnObject;
 	}
 
+	public void addedToHistory() {
+		
+	}
 
 	/** Adds UIObject to remove queue. */
 	public void remove(UIObject o) {
@@ -271,6 +274,16 @@ public class GUI {
 		o.centerTextY(true);
 		o.centerTextX(true);
 		o.setFontSize(40);
+	}
+
+	public void applyListStyle(UIList l) {
+		l.handle().get().setSize(50, 100);
+		l.setSpacing(0);
+		l.hasText(false);
+		l.entry().setBackgroundPadding(0);
+		l.setBackgroundColor(Color.white);
+		l.setFontSize(40);
+		l.handle().hoverColorChange(l.handle().getBackgroundColor().brighter());
 	}
 
 	public void addTitle(String text) {

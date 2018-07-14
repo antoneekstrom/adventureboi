@@ -48,6 +48,7 @@ public class GameEnvironment extends JPanel implements ActionListener {
     }
     public static String player1Name() {return playernames.get(0);}
     public static String player2Name() {return playernames.get(1);}
+    public static LevelData levelData() {return levelData;}
 
     //environment data
     private static LevelData levelData = new LevelData("menu", true, null);
@@ -85,6 +86,8 @@ public class GameEnvironment extends JPanel implements ActionListener {
         if (!name.equals("menu")) {
             //enable hud
             UIManager.enableGUI("HUD");
+            UIManager.clearHistory();
+            UIManager.addToHistory("HUD");
             
             //load players
             Players.loadPlayerData();

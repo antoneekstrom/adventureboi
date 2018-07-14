@@ -2,12 +2,15 @@ package objects;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+
+import javax.swing.Timer;
 
 import adventuregame.Animator;
 import adventuregame.HealthModule;
@@ -17,6 +20,7 @@ import gamelogic.NewCamera;
 import gamelogic.NewCollision;
 import gamelogic.NewObjectStorage;
 import gamelogic.Physics;
+import gamelogic.Shrinker;
 
 public class NewObject {
 
@@ -32,6 +36,10 @@ public class NewObject {
     private boolean hasImage = false;
     private boolean passThrough = false;
     private boolean selected = false;
+
+    private int IDNumber;
+    public void giveIdNumber(int i) {IDNumber = i;}
+    public int idNumber() {return IDNumber;}
 
     public boolean cameraFocus = false;
     public void cameraFocus(boolean b) {
@@ -109,6 +117,62 @@ public class NewObject {
     }
     public ObjectData extractData() {
         return new ObjectData(this);
+    }
+
+
+    private boolean shrinked = false;
+    private Dimension originalSize;
+    private int shrinkDelay = 10;
+    private Timer shrinkTimer;
+    private float shrinkAmount = 1;
+
+    public boolean beenShrunked = false;
+    public int shrinkSpeed = 2;
+
+    /** @param percent Percent to shrink, for example: "85" will shrink object to 15%. */
+    public void shrinkAmount(int percent) {
+        shrinkAmount = ((float) percent / (float) 100);
+    }
+
+    public void shrink() {
+        shrinked = true;
+        originalSize = get().getSize();
+
+        Shrinker s = new Shrinker(this, shrinkSpeed, shrinkAmount);
+        if (!removeActionListener(shrinkTimer)) {
+            shrinkTimer = new Timer(shrinkDelay, s);
+        }
+        else {shrinkTimer.addActionListener(s);}
+        shrinkTimer.start();
+    }
+    public void expand() {
+        if (shrinked) {
+            shrinked = false;
+            removeActionListener(shrinkTimer);
+            Shrinker s =  new Shrinker(this, shrinkSpeed, originalSize);
+            shrinkTimer.addActionListener(s);
+            shrinkTimer.start();
+        }
+    }
+    public void stopShrinker() {
+        shrinkTimer.stop();
+    }
+
+    public void shrink(int percent) {
+        shrinkAmount(percent);
+        shrink();
+    }
+
+    private boolean removeActionListener(Timer t) {
+        if (t != null) {
+            if (t.getActionListeners().length > 0) {
+                t.removeActionListener(t.getActionListeners()[0]);
+            }
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     public Color getColor() {return color_fg;}

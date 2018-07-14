@@ -1,5 +1,8 @@
 package UI;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
 import gamelogic.Item;
 
 public class UIInventory extends UIList {
@@ -27,13 +30,80 @@ public class UIInventory extends UIList {
     public void leftMouseReleased() {
         super.leftMouseReleased();
         for (UIObject o : list) {
-            UIInvItem i = (UIInvItem) o;
-            i.leftMouseReleased();
+            if (o.checkMouse()) {
+                UIInvItem i = (UIInvItem) o;
+                i.leftMouseReleased();
+            }
         }
     }
 
-    public void refreshList(Item[] content) {
-        list.clear();
+    private void compareLists(ArrayList<Item> n) {
+        for (Iterator<UIObject> iterator = list.iterator(); iterator.hasNext();) {
+            UIInvItem i = (UIInvItem) iterator.next();
+            if (n.contains(i.item)) {
+                n.remove(i.item);
+            }
+            else {
+                iterator.remove();
+            }
+        }
+    }
+
+    private void groupEntries(ArrayList<Item> l) {
+        int count = 0;
+        ArrayList<Item> unique = new ArrayList<Item>();
+        for (Item i : l) {
+            if (!contains(i, unique)) {
+                unique.add(i);
+            }
+        }
+        for (Item i : unique) {
+            count = 0;
+            count = containmentCount(i, l);
+            if (count > 1) {
+                for (int k = 0; k < count; k++) {
+                    l.remove(findItem(i, l));
+                }
+                try {
+                    Item collectionitem = i.getClass().newInstance();
+                    collectionitem.imageName(collectionitem.name());
+                    collectionitem.name(collectionitem.name() + ((count <= 1) ? ("") : (" (" + count + ")")) );
+                    l.add(collectionitem);
+                }
+                catch (Exception e) {e.printStackTrace();}
+            }
+        }
+    }
+
+    private boolean contains(Item i, ArrayList<Item> l) {
+        boolean b = false;
+
+        for (Item ci : l) {
+            if (ci.getIdentifier().equals(i.getIdentifier())) {b = true;}
+        }
+
+        return b;
+    }
+
+    private Item findItem(Item tofind, ArrayList<Item> l) {
+        for (Item i : l) {
+            if (i.getIdentifier().equals(tofind.getIdentifier())) {return i;}
+        }
+        return null;
+    }
+
+    private int containmentCount(Item i, ArrayList<Item> l) {
+        int count = 0;
+        for (Item item : l) {
+            if (item.getIdentifier().equals(i.getIdentifier())) {count++;}
+        }
+
+        return count;
+    }
+
+    public void refreshList(ArrayList<Item> content) {
+        compareLists(content);
+        groupEntries(content);
         for (Item item : content) {
             list.add(getEntry(item));
         }

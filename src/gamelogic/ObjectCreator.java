@@ -1,15 +1,21 @@
 package gamelogic;
 
+import java.lang.reflect.Constructor;
+import java.util.HashMap;
+
+import UI.Console;
 import UI.UIManager;
-import data.ObjectData;
+import adventuregame.Items;
+import items.*;
+import items.abilities.*;
 import objects.*;
 
 public class ObjectCreator {
 
-    private static String[] objects;
     private static int currentObjectIndex = 0;
-    private static String currentObject = "object";
+    private static Runnable currentObject;
     private static boolean enabled = false;
+    private static int enemyLevel = 3;
 
     private static boolean customSize = false;
     private static int width = 100;
@@ -19,38 +25,74 @@ public class ObjectCreator {
     public static void toggleCustomSize() {if (customSize) {customSize = false;} else {customSize = true;}}
     public static boolean customSize() {return customSize;}
 
+    static HashMap<String, Runnable> objects = new HashMap<String, Runnable>() {
+        {
+            put("angryshroom", () -> createObject(AngryShroom.class.getName()));
+            put("bigmush", () -> createEnemy(Bigmush.class.getName()));
+            put("object", () -> createObject(NewObject.class.getName()));
+            put("starman", () -> createObject(Starman.class.getName()));
+        }
+    };
+
     public static void start() {
-        objects = ObjectData.displayNames();
+        addItemObjectsToList();
     }
 
-    public static String getCurrentObject() {return currentObject;}
+    private static void addItemObjectsToList() {
+        objects.put("fireball", () -> createItemObject(new FireballItem()));
+        objects.put("deadangryshroom", () -> createItemObject(new DeceasedAngryShroom()));
+        objects.put("donut", () -> createItemObject(new Donut()));
+        objects.put("energyshroom", () -> createItemObject(new EnergyShroom()));
+        objects.put("tallmush", () -> createItemObject(new TallmushItem()));
+    }
+
+    public static void createEnemy(String className) {
+        try {
+            Enemy o = (Enemy) Class.forName(className).newInstance();
+            o.get().setLocation(NewCamera.getMouse());
+            o.level(enemyLevel);
+            NewObjectStorage.add(o);
+        }
+        catch (Exception e) {e.printStackTrace();}
+    }
+
+    public static String getCurrentObjectName() {return (String) objects.keySet().toArray()[currentObjectIndex];}
+
+    public static void createObject(String className) {
+        try {
+            NewObject o = (NewObject) Class.forName(className).newInstance();
+            o.get().setLocation(NewCamera.getMouse());
+            NewObjectStorage.add(o);
+        }
+        catch (Exception e) {e.printStackTrace();}
+    }
+
+    public static void createItemObject(Item i) {
+        try {
+            Constructor<?> c = Class.forName(ItemObject.class.getName()).getConstructor(Item.class);
+            NewObject o = (NewObject) c.newInstance(i);
+            o.get().setLocation(NewCamera.getMouse());
+            NewObjectStorage.add(o);
+        }
+        catch (Exception e) {e.printStackTrace();}
+    }
+
+    public static Runnable getCurrentObject() {return currentObject;}
 
     public static void previousObject() {
         if (currentObjectIndex - 1 >= 0) {
             currentObjectIndex -= 1;
         }
         else {
-            currentObjectIndex = objects.length -1;
+            currentObjectIndex = objects.size() -1;
         }
-        currentObject = objects[currentObjectIndex];
+
+        currentObject = objects.get(objects.keySet().toArray()[currentObjectIndex]);
     }
 
     public static void createOnMouse() {
         if (creationAllowed()) {
-            NewObject o = null;
-
-            try {
-                o = (NewObject) ObjectData.createObject(ObjectData.objects().get(currentObject));
-            }
-            catch (Exception e) {e.printStackTrace();}
-
-            if (o != null) {
-                o.get().setLocation(NewCamera.getMouse());
-                if (customSize) {
-                    o.get().setSize(width, height);
-                }
-                NewObjectStorage.add(o);
-            }
+            getCurrentObject().run();
         }
     }
 
@@ -62,13 +104,13 @@ public class ObjectCreator {
     }
     
     public static void nextObject() {
-        if (currentObjectIndex + 1 <= objects.length - 1) {
+        if (currentObjectIndex + 1 <= objects.size() - 1) {
             currentObjectIndex += 1;
         }
         else {
             currentObjectIndex = 0;
         }
-        currentObject = objects[currentObjectIndex];
+        currentObject = objects.get(objects.keySet().toArray()[currentObjectIndex]);
     }
 
     public static void enabled(boolean b) {
@@ -82,6 +124,26 @@ public class ObjectCreator {
         }
         else {
             enabled(true);
+        }
+    }
+
+    public static void createItem(String name, int x, int y) {
+        if (Items.itemClassNames.containsKey(name)) {
+
+            boolean failed = false;
+            String className = Items.itemClassNames.get(name);
+            Item i = null;
+            try {
+                i = (Item) Console.findClass(className).newInstance();
+            }
+            catch (Exception e) {e.printStackTrace(); failed = true;}
+
+            if (!failed) {
+                ItemObject o = new ItemObject(i);
+                o.get().setLocation(x, y);
+                NewObjectStorage.add(o);
+            }
+            else {Console.logError("No such item with the name " + name + ".");}
         }
     }
 
