@@ -2,6 +2,10 @@ package adventuregame;
 
 import java.util.HashMap;
 
+import gamelogic.Item;
+import items.DeceasedAngryShroom;
+import items.abilities.FireballItem;
+
 public class Items {
 	
 	private static HashMap<String, String[]> descriptions = new HashMap<String, String[]>() {
@@ -35,6 +39,13 @@ public class Items {
 		put("lowercaseb", "statup");
 		put("uppercaseb", "statup");
 	}};
+
+	public static HashMap<String, String> itemClassNames = new HashMap<String, String>() {
+		{
+			put("angryshroom", DeceasedAngryShroom.class.getName());
+			put("fireball", FireballItem.class.getName());
+		}
+	};
 
 	public static String[] getDescription(String item) {
 		return descriptions.get(item);

@@ -11,6 +11,7 @@ import java.util.Iterator;
 import adventuregame.GameEnvironment;
 import adventuregame.GlobalData;
 import adventuregame.Images;
+import data.NumberFactory;
 import data.PlayerData;
 import data.Players;
 import gamelogic.AbilityValues;
@@ -92,7 +93,7 @@ public class NewPlayer extends NewObject implements ObjectMethods {
     private double ABILITY_FACTOR_INCREASE = AbilityValues.factorIncrease.get(currentAbility);
     private int ABILITY_COOLDOWN = AbilityValues.cooldown.get(currentAbility);
     private double ABILITY_COST = 0;
-    private int ABILITY_DAMAGE;
+    private double ABILITY_DAMAGE_PERCENT;
     private double ABILITY_CHARGE_COST = 0;
     private double abilityFactor = 1;
     private String ABILITY_NAME = "none";
@@ -133,6 +134,17 @@ public class NewPlayer extends NewObject implements ObjectMethods {
     public NewPlayer(PlayerData data) {
         playerData = data;
         initiatePlayerData(data);
+        abilityInit();
+        xpInit();
+    }
+
+    private void xpInit() {
+        int level = playerData().experiencelevel();
+        if (level == -1) {
+            playerData().experiencelevel(0);
+            level = playerData().experiencelevel();
+            playerData().experiencegoal(NumberFactory.getXpGoal(level));
+        }
     }
 
     public int getMovementSpeed() {
@@ -203,9 +215,7 @@ public class NewPlayer extends NewObject implements ObjectMethods {
     }
 
     public void abilityInit() {
-        if (playerData.abilityslot() != null) {
-            selectAbility();
-        }
+        selectAbility();
     }
 
     public void statInit() {
@@ -235,12 +245,12 @@ public class NewPlayer extends NewObject implements ObjectMethods {
         abilityInit();
 
         //animation/images
-        playerimages = Images.getImageHashMap("aboi");
+        playerimages = Images.getImageHashMap("assets/animated_sprites/aboi");
         setImage(playerimages.get("still"));
         chargeAnimation = new BufferedImage[Images.getFolderImages("boicharge").size()];
         ArrayList<BufferedImage> l = new ArrayList<BufferedImage>();
         for (int i = 0; i <= 10; i++) {
-            l.add(i, Images.getImage("boicharge", "charge" + i));
+            l.add(i, Images.getImage("charge" + i));
         }
         BufferedImage[] arr = new BufferedImage[l.size()];
         arr = l.toArray(arr);
@@ -315,8 +325,27 @@ public class NewPlayer extends NewObject implements ObjectMethods {
         get().setLocation(spawnPoint);
     }
 
-    public void addItem(String name) {
-        playerData().inventory().add(new FireballItem());
+    public void addItem(Item i) {
+        playerData().inventory().add(i);
+        if (i.useOnPickup()) {i.use(this);}
+    }
+
+    public void giveXp(int amount) {
+        // add xp
+        playerData().experiencepoints(playerData().experiencepoints() + amount);
+
+        //check if goal is reached
+        if (playerData().experiencepoints() >= playerData().experiencegoal()) {
+            levelUp();
+        }
+    }
+
+    public void levelUp() {
+        playerData().increaselevel(1);
+        playerData().experiencepoints(playerData().experiencepoints() - playerData().experiencegoal());
+        playerData().experiencegoal(NumberFactory.getXpGoal(playerData().experiencelevel()));
+
+        if (playerData().experiencepoints() > playerData().experiencegoal()) {levelUp();}
     }
 
     public boolean equip(Item i, String slot) {
@@ -327,9 +356,9 @@ public class NewPlayer extends NewObject implements ObjectMethods {
         for (Iterator<Item> iterator = playerData.inventory().iterator(); iterator.hasNext();) {
             l = iterator.next();
             if (l.equals(i) && l.equippable() && !l.hasTag(Item.EQUIPPED)) {
-                i.addTag(Item.EQUIPPED);
                 l.addTag(Item.EQUIPPED);
                 b = true;
+                break;
             }
             else if (l.equals(i) && i.equippable()) {
                 sameItem = true;
@@ -373,14 +402,14 @@ public class NewPlayer extends NewObject implements ObjectMethods {
     public void selectAbility() {
         boolean allowed = false;
         Ability item = null;
-        if (playerData.abilityslot().hasTag(Item.ABILITY)) {
+        if (playerData().abilityslot() != null) {
             item = (Ability) playerData.abilityslot();
-            if (item != null && Ability.hasAllValues(item)) {allowed = true;}
+            if (playerData.abilityslot().hasTag(Item.ABILITY) && Ability.hasAllValues(item)) {allowed = true;}
         }
         else {ABILITY_NAME = "none";}
         if (allowed) {
             ABILITY_NAME = item.name();
-            ABILITY_DAMAGE = (int) item.DAMAGE;
+            ABILITY_DAMAGE_PERCENT = item.PERCENT_DAMAGE;
             ABILITY_COOLDOWN = (int) item.COOLDOWN;
             ABILITY_COST = item.COST;
             ABILITY_CHARGE_COST = item.CHARGECOST;
@@ -405,13 +434,15 @@ public class NewPlayer extends NewObject implements ObjectMethods {
 
     public void chargeAbility() {
         if (abilityCooldown == 0) {
-            if (abilityFactor + ABILITY_FACTOR_INCREASE <= ABILITY_FACTOR_MAX && abilityCharging && useEnergy(ABILITY_CHARGE_COST) && hasAbility()) {
-                abilityFactor += ABILITY_FACTOR_INCREASE;
-                energyRegen = false;
-            }
-            else if (abilityCharging && abilityFactor + ABILITY_FACTOR_INCREASE > ABILITY_FACTOR_MAX) {abilityFactor = ABILITY_FACTOR_MAX;}
-            else if (!abilityCharging && abilityFactor != 1) {
-                releaseAbility();
+            if (hasAbility()) {
+                if (abilityFactor + ABILITY_FACTOR_INCREASE <= ABILITY_FACTOR_MAX && abilityCharging && useEnergy(ABILITY_CHARGE_COST)) {
+                    abilityFactor += ABILITY_FACTOR_INCREASE;
+                    energyRegen = false;
+                }
+                else if (abilityCharging && abilityFactor + ABILITY_FACTOR_INCREASE > ABILITY_FACTOR_MAX) {abilityFactor = ABILITY_FACTOR_MAX;}
+                else if (!abilityCharging && abilityFactor != 1) {
+                    releaseAbility();
+                }
             }
         }
         else {
@@ -479,7 +510,7 @@ public class NewPlayer extends NewObject implements ObjectMethods {
 
     private void animateStatus() {
         if (sprinting) {
-            statusImage = Images.getImage("effects", "stamina_boi.png");
+            statusImage = Images.getImage("stamina_boi.png");
         }
         else {
             statusImage = null;
@@ -505,11 +536,14 @@ public class NewPlayer extends NewObject implements ObjectMethods {
         }
     }
 
+    private double calculateDamage() {
+        return ABILITY_DAMAGE_PERCENT * playerData().damage() * abilityFactor;
+    }
+
     public void fireball() {
         Fireball f = new Fireball(abilityDirection);
-        double d = playerData().damage();
-        d *= abilityFactor;
-        f.damage = ABILITY_DAMAGE;
+        f.damage = (int) calculateDamage();
+        f.player = playerData.name();
         if (chargePercentage == 10) {
             f.charged();
         }

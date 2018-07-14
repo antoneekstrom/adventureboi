@@ -113,6 +113,9 @@ public class UIMeter extends UIObject {
         else if (valueSide.equals("left")) {
             values.get().setLocation( (int) get().getMinX() - 20 - values.get().width, (int) get().getCenterY() - (values.get().height / 2) );     
         }
+        else if (valueSide.equals("middle")) {
+            values.get().setLocation( (int) get().x + (get().width / 2) - values.get().width / 2, (int) get().getCenterY() - (values.get().height / 2) );     
+        }
     }
 
     public void update() {
@@ -120,9 +123,11 @@ public class UIMeter extends UIObject {
         calculatePercentage();
         setFill();
         calculateFillWidth();
-        if (textObject != null) {textObject.update();}
+        if (textObject != null) {
+            textObject.update();
+            textObject.get().setLocation(get().x + get().width / 2 - textObject.getTextWidth() / 2, get().y - 20); /* Center text in meter. */
+        }
         if (values != null) {values.update();}
-        textObject.get().setLocation(get().x + get().width / 2 - textObject.getTextWidth() / 2, get().y - 20); /* Center text in meter. */
         setValueLocation();
         values.setText(value + "/" + maxValue);
     }

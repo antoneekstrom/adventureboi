@@ -7,7 +7,10 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import UI.Console;
 import gamelogic.NewObjectStorage;
+import items.Donut;
+import items.abilities.FireballItem;
 import objects.*;
 
 public class ObjectData implements Serializable {
@@ -101,7 +104,6 @@ public class ObjectData implements Serializable {
                     o.setText(d.text());
                     o.setIntersect(d.intersect());
                     o.physics().setGravity(d.gravity());
-                    
                     l.add(o);  
                 }
             }
@@ -116,7 +118,8 @@ public class ObjectData implements Serializable {
         private static final long serialVersionUID = 1L; {
             put("Angryshroom", AngryShroom.class.getName());
             put("Starman", Starman.class.getName());
-            put("Fireball", Fireball.class.getName());
+            put("Fireball", new ItemObject(new FireballItem()).getClass().getName());
+            put("donut", new ItemObject(new Donut()).getClass().getName());
             put("Object", NewObject.class.getName());
     }};
     /** Get hashmap with all object display names as keys and entries with their full classname. */

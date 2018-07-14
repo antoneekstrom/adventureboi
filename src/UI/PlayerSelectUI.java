@@ -164,7 +164,6 @@ public class PlayerSelectUI extends GUI {
         data.maxHealth(100);
         data.maxenergy(100);
         data.maxstamina(100);
-        data.experiencelevel(1);
         data.energyregen(0.2);
         Players.savePlayerData(data);
         Players.serializePlayerData();

@@ -1,5 +1,7 @@
 package items.abilities;
 
+import java.util.HashMap;
+
 import gamelogic.Item;
 
 public class Ability extends Item {
@@ -12,10 +14,10 @@ public class Ability extends Item {
         equippable = true;
     }
 
-    public double COST, CHARGECOST, DAMAGE, FACTORMAX, FACTORINCREASE, COOLDOWN;
+    public double COST, CHARGECOST, PERCENT_DAMAGE, FACTORMAX, FACTORINCREASE, COOLDOWN;
 
     public Double[] getValues() {
-        return new Double[] {COST, CHARGECOST, DAMAGE, FACTORMAX, FACTORINCREASE, COOLDOWN};
+        return new Double[] {COST, CHARGECOST, PERCENT_DAMAGE, FACTORMAX, FACTORINCREASE, COOLDOWN};
     }
 
     public static boolean hasAllValues(Ability a) {
@@ -24,6 +26,20 @@ public class Ability extends Item {
             if (d == null) {b = false;}
         }
         return b;
+    }
+
+    @Override
+    public HashMap<String, Object> getValueMap() {
+        HashMap<String, Object> map = super.getValueMap();
+
+        map.put("cost", COST);
+        map.put("chargecost", CHARGECOST);
+        map.put("damagepercent", PERCENT_DAMAGE);
+        map.put("factormax", FACTORMAX);
+        map.put("factor increase", FACTORINCREASE);
+        map.put("cooldown", COOLDOWN);
+
+        return map;
     }
 
 }

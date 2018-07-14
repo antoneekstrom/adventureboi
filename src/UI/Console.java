@@ -37,6 +37,18 @@ public class Console {
     private static String extractedString;
     private static int indexOfString;
 
+    private static int HISTORY_MAX = 7;
+    private static ArrayList<String> commandHistory = new ArrayList<String>();
+    public static String[] getCommandHistory() {
+        String[] arr = new String[commandHistory.size()];
+        commandHistory.toArray(arr);
+        return arr;
+    }
+    private static void addToHistory(String command) {
+        commandHistory.add(0, command);
+        if (commandHistory.size() + 1 > HISTORY_MAX) {commandHistory.remove(HISTORY_MAX - 1);}
+        CreativeUI.history.refreshList(getCommandHistory());
+    }
 
     private static HashMap<String, Class<?>> classes = new HashMap<String, Class<?>>() {
         private static final long serialVersionUID = 1L;
@@ -61,6 +73,9 @@ public class Console {
             
             //execute the method
             executeMethod();
+
+            //add to history
+            addToHistory(command);
         }
     }
 
@@ -93,7 +108,16 @@ public class Console {
                 parameterStart = 1;
             }
             else {
-                successful = false;
+                Class<?> c = testForClass(arr);
+                if (c == null) {
+                    successful = false;
+                }
+                else {
+                    object = c;
+                    className = c.getName();
+                    methodName = arr[arr.length - 1];
+                    parameterStart = 1;
+                }
             }
         }
         else {
@@ -111,11 +135,33 @@ public class Console {
         return successful;
     }
 
+    private static Class<?> testForClass(String[] arr) {
+        String comb = "";
+        Class<?> c = null;
+
+        if (arr.length > 2) {
+            for (String s : arr) {
+                comb += ((!s.equals(arr[0])) ? (".") : ("")) + s;
+                boolean failed = false;
+                try {
+                    c = Class.forName(comb);
+                }
+                catch (Exception e) {failed = true;}
+                if (!failed) {
+                    break;
+                }
+            }
+        }
+        return c;
+    }
+
     private static void extractString(String fullstring) {
+        boolean stringExists = false;
 
         if (countMatches(fullstring, quote) == 2) {
             indexOfString = fullstring.indexOf(quote);
             extractedString = fullstring.substring(indexOfString + 1, fullstring.lastIndexOf(quote));
+            stringExists = true;
         }
 
         if (extractedString != null) {
@@ -125,7 +171,9 @@ public class Console {
             extractedString = "";
         }
 
-        adjustArrays();
+        if (stringExists) {
+            adjustArrays();
+        }
     }
 
     private static void adjustArrays() {
@@ -220,8 +268,8 @@ public class Console {
         Class<?> c = null;
 
         c = classes.get(shortname);
-        if (c.equals(null)) {
-            c = classes.get("default");
+        if (c == null) {
+            c = classes.get(defaultClassName);
         }
 
         return c;
@@ -239,7 +287,7 @@ public class Console {
         Class<?> c = null;
 
         try {
-            c = Class.forName(className);
+            c = Class.forName(name);
         }
         catch (Exception e) {e.printStackTrace();}
 

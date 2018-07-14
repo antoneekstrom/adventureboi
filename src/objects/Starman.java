@@ -15,7 +15,7 @@ public class Starman extends NewObject implements ObjectMethods {
     public void initialize() {
         super.initialize();
         enableAnimator();
-        getAnimator().addList(Images.getFolderImages("star"));
+        getAnimator().addList(Images.getFolderImages("assets/animated_sprites/star"));
         getAnimator().speed(40);
         getAnimator().setIndexRange(0, getAnimator().getLastIndex());
         setImage(getAnimator().getSprite());

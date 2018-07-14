@@ -86,6 +86,8 @@ public class GameEnvironment extends JPanel implements ActionListener {
         if (!name.equals("menu")) {
             //enable hud
             UIManager.enableGUI("HUD");
+            UIManager.clearHistory();
+            UIManager.addToHistory("HUD");
             
             //load players
             Players.loadPlayerData();

@@ -84,7 +84,7 @@ public class UIObject {
         return FONT_SIZE;
     }
 
-    public void EnabletoolTip(UIObject tooltip) {
+    public void enableTooltip(UIObject tooltip) {
         hasTooltip = true;
         this.tooltip = tooltip;
     }

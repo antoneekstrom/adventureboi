@@ -6,7 +6,6 @@ import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 
 import javax.imageio.ImageIO;
 
@@ -14,11 +13,11 @@ public class Images {
 
 	//directories
 	private static final String[] directories = new String[] {
-		"assets/animated_sprites/angryshroom",
+		"assets/sprites",
+		"assets/animated_sprites",
 		"assets/animated_sprites/aboi/effects",
 		"assets/animated_sprites/boicharge",
-		"assets/animated_sprites/star",
-		"assets/sprites",
+		"assets/animated_sprites/star"
 	};
 
 	public String[] getDirectories() {
@@ -26,22 +25,21 @@ public class Images {
 	}
 
 	//images
-	private static HashMap<String, HashMap<String, BufferedImage>> images = new HashMap<String, HashMap<String, BufferedImage>>();
+	private static HashMap<String, BufferedImage> images = new HashMap<String, BufferedImage>();
 
-	//directories to imagepaths <directoryname, HashMap<filename, filepath>
-	private static HashMap<String, HashMap<String,String>> paths = new HashMap<String, HashMap<String, String>>();
+	//paths to images <Name, Path>
+	private static HashMap<String, String> paths = new HashMap<String, String>();
 
 	/** Index images from all directories into 'paths' hashmap. */
 	public static void indexAllImages() {
 		for (String dir : directories) {
-			indexDirectory(dir);
+			indexDirectory(dir, paths);
 		}
 	}
 
-	/** Index all images in specified directory, and put them into a map in the 'paths' map. */
-	private static void indexDirectory(String dirpath) {
+	/** Index all images in specified directory, and put them into 'paths' hashmap. */
+	private static void indexDirectory(String dirpath, HashMap<String, String> map) {
 		File dir = new File(dirpath);
-		HashMap<String, String> map = new HashMap<String, String>();
 
 		File[] files = dir.listFiles(new FilenameFilter(){
 			@Override
@@ -49,16 +47,15 @@ public class Images {
 				return name.endsWith(".png");
 			}
 		});
-		Arrays.sort(files);
 
-		for (File f : files) {
-			map.put(getOnlyName(f), f.getPath());
+		try {
+			Arrays.sort(files);
+			for (File f : files) {
+				map.put(f.getName(), dir.getPath());
+			}
 		}
-		paths.put(dir.getName(), map);
-	}
+		catch (NullPointerException e) {e.printStackTrace();}
 
-	public static String getOnlyName(File f) {
-		return f.getName().replace(".png", "");
 	}
 
 	public static void printPaths() {
@@ -70,7 +67,7 @@ public class Images {
 	public static HashMap<String, BufferedImage> getImageHashMap(String dir) {
 		HashMap<String, String> indexmap = new HashMap<String, String>();
 		HashMap<String, BufferedImage> imagemap = new HashMap<String, BufferedImage>();
-		indexDirectory(dir);
+		indexDirectory(dir, indexmap);
 		try {
 			for (String name : indexmap.keySet()) {
 				String path = indexmap.get(name);
@@ -83,47 +80,36 @@ public class Images {
 	}
 
 	/** Get all images in a folder. Uses full relative path (from game folder) */
-	public static ArrayList<BufferedImage> getFolderImages(String dirname) {
+	public static ArrayList<BufferedImage> getFolderImages(String dirpath) {
+		HashMap<String, String> map = new HashMap<String, String>();
+		indexDirectory(dirpath, map);
 		ArrayList<BufferedImage> imgs = new ArrayList<BufferedImage>();
-		for (String n : images.get(dirname).keySet()) {
-			imgs.add(images.get(dirname).get(n));
-		}
-
+		try {
+			for (String s : map.keySet()) {
+				imgs.add(ImageIO.read(new File(map.get(s) + "\\" + s)));
+			}
+		} catch (Exception e) {}
 		return imgs;
 	}
 	
 	/** Load images from 'paths' into 'images' */
 	public static void loadAllImages() {
-		for (Iterator<String> iterator = paths.keySet().iterator(); iterator.hasNext();) {
-				try {
-					String directoryName = iterator.next();
-					HashMap<String, String> pathmap = paths.get(directoryName);
-				} catch (Exception e) {e.printStackTrace();}
+		try {
+			for (String name : paths.keySet()) {
+				String path = paths.get(name);
+				images.put(name, ImageIO.read(new File(path + "\\" + name)));
 			}
-	}
-
-
-	/** Load images from a HashMap containing the name of an image and its path. */
-	public static HashMap<String, BufferedImage> loadHashMap(HashMap<String, String> map) {
-		HashMap<String, BufferedImage> imagemap = new HashMap<String, BufferedImage>();
-		for (String s : map.keySet()) {
-			try {
-				String imagepath = map.get(s);
-				imagemap.put(s, ImageIO.read(new File(imagepath)));
-			}
-			catch (Exception e) {e.printStackTrace();}
-		}
-		return imagemap;
+		} catch (Exception e) {e.printStackTrace();}
 	}
 
 	public static boolean isIndexed(String s) {
 		return images.containsKey(s);
 	}
 
-	public static BufferedImage getImage(String directory, String name) {
-		if (!name.endsWith(".png")) {
-			name = name + ".png";
+	public static BufferedImage getImage(String key) {
+		if (!key.endsWith(".png")) {
+			key = key + ".png";
 		}
-		return images.get(directory).get(name);
+		return images.get(key);
 	}
 }
