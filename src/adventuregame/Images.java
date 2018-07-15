@@ -17,7 +17,8 @@ public class Images {
 		"assets/animated_sprites",
 		"assets/animated_sprites/aboi/effects",
 		"assets/animated_sprites/boicharge",
-		"assets/animated_sprites/star"
+		"assets/animated_sprites/star",
+		"assets/items",
 	};
 
 	public String[] getDirectories() {

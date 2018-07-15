@@ -101,7 +101,6 @@ public class Enemy extends NewObject implements EnemyMold {
     @Override
     /** Called when enemy first dies. */
 	public void die() {
-        drop();
 
         //cleanup
         healthModule().showHp(false);
@@ -110,6 +109,7 @@ public class Enemy extends NewObject implements EnemyMold {
         //destruct
         if (destructOnDeath) {
             shrink();
+            moveWhenColliding(false);
             physics().setGravity(false);
         }
     }
@@ -118,6 +118,7 @@ public class Enemy extends NewObject implements EnemyMold {
     public void dead() {
         if (beenShrunked) {
             destruct();
+            drop();
         }
     }
 
@@ -151,6 +152,5 @@ public class Enemy extends NewObject implements EnemyMold {
         if (contactDamage > 0) {
             col.healthModule().damage(contactDamage);
         }
-	}
-
+    }
 }

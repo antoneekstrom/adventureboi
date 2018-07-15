@@ -28,14 +28,16 @@ public class NewObject {
     private boolean visible = true;
     /** Set to true if object should receive collision logic. Will still affect other collision enabled objects. */
     private boolean collision = true;
-    /** Set to true if object should be pushable. */
-    private boolean pushable = false;
+    /** Set to true if object should be moved when colliding. */
+    private boolean moveWhenColliding = true;
     private boolean intersect = false;
     private boolean camera = true;
     private boolean debug = false;
     private boolean hasImage = false;
-    private boolean passThrough = false;
     private boolean selected = false;
+
+    public boolean moveWhenColliding() {return moveWhenColliding;}
+    public void moveWhenColliding(boolean b) {moveWhenColliding = b;}
 
     private int IDNumber;
     public void giveIdNumber(int i) {IDNumber = i;}
@@ -100,17 +102,9 @@ public class NewObject {
         initialize();
     }
 
-    public boolean isPassThrough() {
-        return passThrough;
-    }
-
     public void name(String name) {this.name = name;}
     public void setCollisonSide(String s) {collisionSide = s;}
     public String collisionSide() {return collisionSide;}
-
-    public void setPassThrough(boolean b) {
-        passThrough = b;
-    }
 
     public String getText() {
         return text;
@@ -444,14 +438,6 @@ public class NewObject {
 
     public boolean ping() {
         return true;
-    }
-
-    public boolean isPushable() {
-        return pushable;
-    }
-
-    public void pushable(boolean b) {
-        pushable = b;
     }
 
     public void addForce(double x, double y) {

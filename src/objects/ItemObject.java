@@ -23,6 +23,8 @@ public class ItemObject extends NewObject {
         item.level(level);
     }
 
+    public int level() {return item.level();}
+
     public void start() {
         setImage(Images.getImage(item.imageName()));
         get().setSize(itemSize);

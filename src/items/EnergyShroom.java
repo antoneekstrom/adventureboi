@@ -1,5 +1,6 @@
 package items;
 
+import data.NumberFactory;
 import gamelogic.Item;
 import objects.NewPlayer;
 
@@ -13,6 +14,12 @@ public class EnergyShroom extends Item {
         description = new String[] {"It will make you have", "more energy than you did", "before consuming it."};
         effect = "+" + ENERGY + " max energy";
         addTag(Item.STATUP);
+    }
+
+    protected void scaleStats() {
+        super.scaleStats();
+        ENERGY *= NumberFactory.getStatScaling(level());
+        effect = "+" + ENERGY + " max energy";
     }
 
     @Override

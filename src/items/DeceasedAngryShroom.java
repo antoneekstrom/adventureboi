@@ -22,6 +22,7 @@ public class DeceasedAngryShroom extends Item {
     protected void scaleStats() {
         super.scaleStats();
         DAMAGE *= NumberFactory.getStatScaling(level());
+        effect = "+" + DAMAGE + " attack damage";
     }
 
     @Override
