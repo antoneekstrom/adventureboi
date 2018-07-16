@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 
 import adventuregame.GlobalData;
-import gamelogic.MouseFunctions;
+import data.PlayerData;
 import gamelogic.NewObjectStorage;
 import objects.NewObject;
 import objects.NewPlayer;
@@ -16,6 +16,17 @@ public class NewHUD extends GUI {
     public NewObject getCurrentObject() {return currentObject;}
     public void setCurrentObject(NewObject o) {currentObject = o;}
     private Dimension barSize = new Dimension(300, 40);
+
+    private int xpOffset = 250;
+    private int xpScreenTime = 100;
+    private int xpTimeCounter = 0;
+    private int xpIndexOffset = 50;
+
+    private int xpBarScreenTime = 250;
+    private int xpBarTimeCounter = 0;
+    private Dimension xpBarSize = new Dimension(400,  20);
+    private UIMeter xpMeter;
+    private int xpBarOffset = 150;
 
     public NewHUD() {
         super("HUD");
@@ -58,6 +69,7 @@ public class NewHUD extends GUI {
         super.update();
         determineUI();
         updateStats();
+        updateXp();
         debug();
     }
 
@@ -67,6 +79,55 @@ public class NewHUD extends GUI {
             if (!o.checkMouse()) {
                 getUIObjectList().remove(o);
             }
+        }
+    }
+
+    private void updateXp() {
+        //update xp text
+        int xponscreen = getObjectsByTag("xp").length;
+
+        if (xpTimeCounter + 1 <= xpScreenTime && xponscreen > 0) {xpTimeCounter++;}
+        else {
+            xpTimeCounter = 0;
+            UIObject[] arr = getObjectsByTag("xp");
+            if (arr.length > 0) {
+                remove(arr[0]);
+            }
+        }
+
+        //update xpbar
+        if (xpBarTimeCounter + 1 <= xpBarScreenTime && xpMeter.visible()) {xpBarTimeCounter++;}
+        else {
+            xpBarTimeCounter = 0;
+            xpMeter.setVisible(false);
+        }
+    }
+
+    public void gainXp(int amount, String playername) {
+        //show text
+        UIText t = new UIText(getName(), playername + ": " + "+" + amount + "xp", true) {
+            {
+                textColor(Color.green);
+                setTag("xp");
+                //set position to bottom of screen and higher depending on amount of other xp texts currently showing.
+                int xpObjectsOnScreen = getObjectsByTag("xp").length;
+                get().y = GlobalData.getScreenDim().height - xpOffset - (xpObjectsOnScreen * xpIndexOffset);
+            }
+        };
+        addObject(t);
+
+        showXpBar(xpBarScreenTime, playername);
+    }
+
+    public void showXpBar(int time, String playername) {
+        PlayerData pd = NewObjectStorage.getPlayer(playername).playerData();
+
+        xpMeter.setValue(pd.experiencepoints());
+        xpMeter.setMaxValue(pd.experiencegoal());
+
+        if (!xpMeter.visible()) {
+            xpMeter.setVisible(true);
+            xpBarScreenTime = time;
         }
     }
 
@@ -139,5 +200,23 @@ public class NewHUD extends GUI {
      
         player1();
         player2();
+
+        xpInit();
+    }
+
+    public void xpInit() {
+        xpMeter = new UIMeter(getName()) {
+            {
+                setTag("xpbar");
+                setValue(0);
+                setMaxValue(0);
+                setForegroundColor(Color.green);
+                setBackgroundPadding(10);
+                get().setSize(xpBarSize);
+                get().setLocation(0, GlobalData.getScreenDim().height - xpBarOffset);
+                centerInParentX(true);
+            }
+        };
+        addObject(xpMeter);
     }
 }

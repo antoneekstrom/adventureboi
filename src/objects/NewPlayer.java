@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import UI.UIManager;
 import adventuregame.GameEnvironment;
 import adventuregame.GlobalData;
 import adventuregame.Images;
@@ -19,7 +20,6 @@ import gamelogic.Item;
 import gamelogic.NewCamera;
 import gamelogic.NewObjectStorage;
 import items.abilities.Ability;
-import items.abilities.FireballItem;
 
 public class NewPlayer extends NewObject implements ObjectMethods {
 	//states
@@ -333,6 +333,9 @@ public class NewPlayer extends NewObject implements ObjectMethods {
     public void giveXp(int amount) {
         // add xp
         playerData().experiencepoints(playerData().experiencepoints() + amount);
+
+        //show on HUD
+        UIManager.getHUD().gainXp(amount, playerData().name());
 
         //check if goal is reached
         if (playerData().experiencepoints() >= playerData().experiencegoal()) {

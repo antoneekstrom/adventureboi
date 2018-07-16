@@ -128,6 +128,10 @@ public class NewObject {
         shrinkAmount = ((float) percent / (float) 100);
     }
 
+    public void shrinkDone() {
+        
+    }
+
     public void shrink() {
         shrinked = true;
         originalSize = get().getSize();
@@ -440,7 +444,7 @@ public class NewObject {
         return true;
     }
 
-    public void addForce(double x, double y) {
+    public void addForce(int x, int y) {
         physics.addForce(x, y);
     }
 

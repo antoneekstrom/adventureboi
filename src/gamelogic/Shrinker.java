@@ -142,7 +142,11 @@ public class Shrinker implements ActionListener {
             }
         }
 
-        if (w && h) {object.beenShrunked = true; object.stopShrinker(); negativeShrink = false;}
+        if (w && h) {
+            object.beenShrunked = true;
+            object.stopShrinker(); negativeShrink = false;
+            object.shrinkDone();
+        }
     }
 
 	@Override

@@ -89,6 +89,15 @@ public class UIManager {
         addToHistory(currentgui);
     }
 
+    /** Get a list of all currently visible GUI's. */
+    public static ArrayList<GUI> getAllVisible() {
+        ArrayList<GUI> arr = new ArrayList<GUI>();
+        for (GUI gui : interfaces) {
+            arr.add(gui);
+        }
+        return arr;
+    }
+
     /** Returns true if no GUI's are visible. */
     public static boolean allHidden() {
         boolean b = true;
@@ -121,6 +130,10 @@ public class UIManager {
             }
             gui.setVisible(false);
         }
+    }
+
+    public static NewHUD getHUD() {
+        return (NewHUD) getGUI("HUD");
     }
 
     /** Returns GUI with parameter name, else returns null. */

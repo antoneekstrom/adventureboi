@@ -1,9 +1,11 @@
 package objects;
 
 import java.awt.Point;
+import java.awt.Rectangle;
 
 import adventuregame.Animator;
 import adventuregame.Images;
+import adventuregame.Position;
 import data.NumberFactory;
 import gamelogic.Item;
 import gamelogic.NewObjectStorage;
@@ -114,12 +116,14 @@ public class Enemy extends NewObject implements EnemyMold {
         }
     }
 
+    @Override
+    public void shrinkDone() {
+        destruct();
+        drop();
+    }
+
     /** Repeatedly called when enemy is dead. */
     public void dead() {
-        if (beenShrunked) {
-            destruct();
-            drop();
-        }
     }
 
     public void dropXp() {
@@ -134,9 +138,10 @@ public class Enemy extends NewObject implements EnemyMold {
 
     public void dropItem() {
         if (drop != null) {
-            Point loc = get().getLocation();
+            Rectangle e = get();
             ItemObject io = new ItemObject(drop) {{
-                this.get().setLocation(loc);
+                Rectangle i = this.get();
+                this.get().setLocation(e.x - (i.width / 2), e.y - (i.height / 2));
             }};
             NewObjectStorage.add(io);
         }

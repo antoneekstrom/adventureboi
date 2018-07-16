@@ -26,8 +26,8 @@ public class CreativeUI extends GUI {
     int navbuttonoffset = 300;
     int buttonWidth = 150;
 
-    int logWidth = 800, logHeight = 270;
-    int consoleWidth = 900, consoleHeight = 100;
+    int logWidth = 800, logHeight = 240;
+    int consoleWidth = 900, consoleHeight = 75;
     String consolePrefix = "input";
 
     Color LOG_BACKGROUND = new Color(255, 255, 255, 200);
@@ -37,6 +37,7 @@ public class CreativeUI extends GUI {
     public CreativeUI() {
         super("Creative");
         images = Images.getImageHashMap("assets/items");
+        
     }
 
     public void start() {
@@ -163,7 +164,7 @@ public class CreativeUI extends GUI {
                 setInputPrefix(consolePrefix);
                 autoAdjustBackground(false);
                 this.get().setSize(consoleWidth, consoleHeight);
-                this.get().y = GlobalData.getScreenDim().height - 150;
+                this.get().y = GlobalData.getScreenDim().height - 120;
             }
         };
         applyGeneralStyle(console);
@@ -179,7 +180,7 @@ public class CreativeUI extends GUI {
                 return o;
             }
             {
-                this.get().setSize(logWidth + 10, logHeight);
+                this.get().setSize(console.getFullWidth() + 10, logHeight);
                 this.setSpacing(0);
                 this.setText("ConsoleLog");
                 this.hasText(false);
@@ -256,6 +257,7 @@ public class CreativeUI extends GUI {
         inspect.setText("inspect on click: " + ObjectInspector.isEnabled());
         togglesize.setText("use size: " + ObjectCreator.customSize());
         history.get().setLocation(console.get().x - console.BORDER_THICKNESS - console.getBackgroundPadding() / 2, console.get().y + 20 - console.getFullHeight() * 2);
+        clog.get().setLocation(console.get().x - console.BORDER_THICKNESS - console.getBackgroundPadding() / 2, console.get().y - console.getFullHeight() * 2 - 20);
     }
 
 }

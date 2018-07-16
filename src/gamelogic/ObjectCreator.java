@@ -38,6 +38,8 @@ public class ObjectCreator {
         addItemObjectsToList();
     }
 
+    public static void enemyLevel(int l) {enemyLevel = l;}
+
     private static void addItemObjectsToList() {
         objects.put("fireball", () -> createItemObject(new FireballItem()));
         objects.put("deadangryshroom", () -> createItemObject(new DeceasedAngryShroom()));

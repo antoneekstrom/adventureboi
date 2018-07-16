@@ -146,8 +146,8 @@ public class Item implements Serializable {
         return map;
     }
 
-    public static double SMALL_INCREASE_FACTOR = 1.05;
-    public static double SMALL_DECREASE_FACTOR = 0.95;
+    public static double SMALL_INCREASE_FACTOR = 1.1;
+    public static double SMALL_DECREASE_FACTOR = 0.90;
 
     public static int LEVEL_VARIANCE = 3;
 
