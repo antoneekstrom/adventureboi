@@ -132,6 +132,8 @@ public class NewObject {
         
     }
 
+    public boolean isShrinked() {return shrinked;}
+
     public void shrink() {
         shrinked = true;
         originalSize = get().getSize();
@@ -439,6 +441,8 @@ public class NewObject {
             NewCamera.setDisplayCoordinates(this);
         }
     }
+
+    public void damage(int i) {healthModule().damage(i);}
 
     public boolean ping() {
         return true;

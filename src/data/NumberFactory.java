@@ -3,12 +3,21 @@ package data;
 public class NumberFactory {
 
     private static double CONSTANT_FACTOR = 1.2;
+    private static double ENEMY_XP_FACTOR = 0.95;
 
-    /** Return a factor representing the amount an objects stats should scale given it's experience level.  */
+    /** Return a factor representing the amount an objects xp drop should scale given it's experience level.  */
     public static double getXpScaling(int level) {
-        double f = 0;
+        double g;
+        int CONSTANT_ONE = 100;
+        double CONSTANT_THREE = 0.05;
 
-        return f;
+        double factorOne = CONSTANT_FACTOR + (level * CONSTANT_THREE);
+
+        g = (level + 1) * (CONSTANT_ONE * (level+1)) * (factorOne);
+        g *= ENEMY_XP_FACTOR;
+
+
+        return (int) g;
     }
 
     /** Returns a number representing the amount of xp the player needs to advance to the next level. */

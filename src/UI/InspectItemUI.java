@@ -41,7 +41,7 @@ public class InspectItemUI extends GUI {
             k++;
         }
         refreshList(arr);
-        getObjectsByTag("title")[0].setText(i.name());
+        getObjectsThatStartsWithTag("title")[0].setText(i.name());
         inspectionstats.setText(i.name());
         inspectionstats.hasText(false);
         setVisible(true);
@@ -71,7 +71,9 @@ public class InspectItemUI extends GUI {
         UIButton close = new UIButton(getName(), "Close", false) {
             @Override
             public void leftMouseReleased() {   
-                UIManager.getGUI("InspectItem").setVisible(false);
+                GUI u = UIManager.getGUI("InspectItem");
+                u.setVisible(false);
+                UIManager.getCurrentGUI().onTop(true);
             }
             {
                 get().setLocation(500, 200);

@@ -22,10 +22,9 @@ public class NewHUD extends GUI {
     private int xpTimeCounter = 0;
     private int xpIndexOffset = 50;
 
-    private int xpBarScreenTime = 250;
+    private int xpBarScreenTime = 350;
     private int xpBarTimeCounter = 0;
     private Dimension xpBarSize = new Dimension(400,  20);
-    private UIMeter xpMeter;
     private int xpBarOffset = 150;
 
     public NewHUD() {
@@ -33,6 +32,12 @@ public class NewHUD extends GUI {
         setGuidelineY1(100);
         setGuidelineSpacing(110);
     }
+
+    public UIMeter getXpMeter() {
+        UIObject r[] = getObjectsByTag("xpbar");
+        if (r.length > 0) {return (UIMeter) r[0];} else {return new UIMeter(getName());}
+    }
+    public boolean xbarvis() {return getXpMeter().visible();}
 
     public void player1() {
         //healthbar
@@ -75,7 +80,7 @@ public class NewHUD extends GUI {
 
     @Override
     public void leftClick() {
-        for (UIObject o : getObjectsByTag("objectInspect")) {
+        for (UIObject o : getObjectsThatStartsWithTag("objectInspect")) {
             if (!o.checkMouse()) {
                 getUIObjectList().remove(o);
             }
@@ -96,6 +101,7 @@ public class NewHUD extends GUI {
         }
 
         //update xpbar
+        UIMeter xpMeter = getXpMeter();
         if (xpBarTimeCounter + 1 <= xpBarScreenTime && xpMeter.visible()) {xpBarTimeCounter++;}
         else {
             xpBarTimeCounter = 0;
@@ -121,9 +127,10 @@ public class NewHUD extends GUI {
 
     public void showXpBar(int time, String playername) {
         PlayerData pd = NewObjectStorage.getPlayer(playername).playerData();
-
+        UIMeter xpMeter = getXpMeter();
         xpMeter.setValue(pd.experiencepoints());
         xpMeter.setMaxValue(pd.experiencegoal());
+        xpMeter.textObject.setText("level " + pd.experiencelevel());
 
         if (!xpMeter.visible()) {
             xpMeter.setVisible(true);
@@ -140,11 +147,11 @@ public class NewHUD extends GUI {
         if (NewObjectStorage.getPlayer(1) != null) {
             NewPlayer p1 = NewObjectStorage.getPlayer(1);
 
-            UIMeter health1 = (UIMeter) GUI.findObject(getObjectsByTag("player1"), "Health");
+            UIMeter health1 = (UIMeter) GUI.findObject(getObjectsThatStartsWithTag("player1"), "Health");
             health1.setValue( (double) p1.healthModule().health());
             health1.setMaxValue( (double) p1.healthModule().maxHealth());
             
-            UIMeter energy2 = (UIMeter) GUI.findObject(getObjectsByTag("player1"), "Energy");
+            UIMeter energy2 = (UIMeter) GUI.findObject(getObjectsThatStartsWithTag("player1"), "Energy");
             energy2.setValue((int)p1.energy());
             energy2.setMaxValue((int)p1.playerData().maxenergy());
         }
@@ -152,14 +159,14 @@ public class NewHUD extends GUI {
         //player2
         if (NewObjectStorage.playerCount() > 1) {
             NewPlayer p2 = NewObjectStorage.getPlayer(2);
-            UIMeter health2 = (UIMeter) GUI.findObject(getObjectsByTag("player2"), "Health");
+            UIMeter health2 = (UIMeter) GUI.findObject(getObjectsThatStartsWithTag("player2"), "Health");
             health2.setValue( (double) p2.healthModule().health());
             health2.setMaxValue( (double) p2.healthModule().maxHealth());
         }
     }
     
     public void determineUI() {
-        for (UIObject o : getObjectsByTag("player2")) {
+        for (UIObject o : getObjectsThatStartsWithTag("player2")) {
             if (NewObjectStorage.playerCount() > 1) {o.setVisible(true);} else {o.setVisible(false);}
         }
     }
@@ -205,7 +212,7 @@ public class NewHUD extends GUI {
     }
 
     public void xpInit() {
-        xpMeter = new UIMeter(getName()) {
+        UIMeter xpMeter = new UIMeter(getName()) {
             {
                 setTag("xpbar");
                 setValue(0);
@@ -214,6 +221,8 @@ public class NewHUD extends GUI {
                 setBackgroundPadding(10);
                 get().setSize(xpBarSize);
                 get().setLocation(0, GlobalData.getScreenDim().height - xpBarOffset);
+                valueSide = "right";
+                createText("level");
                 centerInParentX(true);
             }
         };

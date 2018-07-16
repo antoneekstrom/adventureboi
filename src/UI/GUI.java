@@ -36,6 +36,11 @@ public class GUI {
 	private boolean visible = false;
 	private String name;
 
+	/** In which layer this GUI resides. */
+	private int layerIndex = 0;
+	/** If GUI has the highest/latest layerIndex */
+	private boolean onTop = true;
+
 	public GUI(String name) {
 		this.name = name;
 	}
@@ -85,10 +90,20 @@ public class GUI {
 		guidelineSpacing = 0;
 	}
 
-	public UIObject[] getObjectsByTag(String s) {
+	public UIObject[] getObjectsThatStartsWithTag(String s) {
 		ArrayList<UIObject> l = new ArrayList<UIObject>();
 		for (UIObject o : UIObjects) {
 			if (o.tag().startsWith(s)) {l.add(o);}
+		}
+		UIObject[] arr = new UIObject[l.size()];
+		l.toArray(arr);
+		return arr;
+	}
+
+	public UIObject[] getObjectsByTag(String s) {
+		ArrayList<UIObject> l = new ArrayList<UIObject>();
+		for (UIObject o : UIObjects) {
+			if (o.tag().equals(s)) {l.add(o);}
 		}
 		UIObject[] arr = new UIObject[l.size()];
 		l.toArray(arr);
@@ -120,7 +135,7 @@ public class GUI {
 	}
 
 	public void removeAlerts() {
-		for (UIObject object : getObjectsByTag("alert")) {
+		for (UIObject object : getObjectsThatStartsWithTag("alert")) {
 			remove(object);
 		}
 	}
@@ -176,7 +191,20 @@ public class GUI {
 
 	public void setVisible(boolean b) {
 		visible = b;
+
+		//determine layerindex
+		layerIndex = UIManager.getAllVisible().size() -1;
+
+		//put this one on top
+		for (GUI g : UIManager.getAllVisible()) {
+			g.onTop = false;
+		}
+		onTop = true;
 	}
+
+	public boolean onTop() {return onTop;}
+	public void onTop(boolean b) {onTop = b;}
+	public int getLayerIndex() {return layerIndex;}
 
 	public boolean isVisible() {
 		return visible;

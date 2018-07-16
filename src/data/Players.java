@@ -74,6 +74,12 @@ public class Players implements Serializable {
         return f;
     }
 
+    /** Check if profile with playername exists. */
+    public static boolean exists(String playername) {
+        for (String s : getPlayerNames()) {if (playername.equals(s)) {return true;}}
+        return false;
+    }
+
     private static String removeExtension(String getname) {
         int pos = getname.lastIndexOf(".");
         if (pos > 0) {

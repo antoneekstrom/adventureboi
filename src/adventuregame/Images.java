@@ -4,7 +4,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 import javax.imageio.ImageIO;
@@ -50,12 +49,14 @@ public class Images {
 		});
 
 		try {
-			Arrays.sort(files);
+			//Arrays.sort(files);
 			for (File f : files) {
 				map.put(f.getName(), dir.getPath());
 			}
 		}
-		catch (NullPointerException e) {e.printStackTrace();}
+		catch (NullPointerException e) {
+			e.printStackTrace();
+		}
 
 	}
 

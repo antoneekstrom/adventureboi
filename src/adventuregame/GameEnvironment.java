@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import UI.Console;
+import UI.LevelsUI;
 import UI.UIAlert;
 import UI.UIManager;
 import data.Configuration;
@@ -80,12 +82,18 @@ public class GameEnvironment extends JPanel implements ActionListener {
         olist.add(obj.extractData());
 
         levelData = new LevelData(name, true, olist);
+        saveGame();
+        LevelsUI.refreshList();
     }
 
     /** Save playerdata for all present players. */
     public static void savePlayers() {
         Players.extractAllPlayerData();
         Players.serializePlayerData();
+
+        //log it
+        Console.logSuccessful("Players have been saved.");
+        UIManager.getCurrentGUI().addObject(new UIAlert("Players have been saved.", UIManager.getCurrentGUI().getName(), false));
     }
 
     public static void loadLevel(String name) {

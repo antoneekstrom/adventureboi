@@ -40,6 +40,7 @@ public class UIAlert extends UIObject {
         setTag("alert");
         get().y = getParent().yCenter(get().height) - 100;
         autoAdjustBackground(true);
+        this.alwaysOnTop(true);
 
         //yes
         yesButton = new UIButton(getParentName(), yesButtonText, false) {
@@ -52,6 +53,7 @@ public class UIAlert extends UIObject {
             {
                 this.get().setLocation(getParent().xCenter(this.get().width) + buttonOffset, 550);
                 this.setTag("alert");
+                this.alwaysOnTop(true);
             }
         };
 
@@ -66,6 +68,7 @@ public class UIAlert extends UIObject {
                 {
                     this.get().setLocation(getParent().xCenter(this.get().width) - buttonOffset - this.get().width, 550);
                     this.setTag("alert");
+                    this.alwaysOnTop(true);
                 }
             };
             getParent().applyGeneralStyle(noButton);
@@ -74,17 +77,20 @@ public class UIAlert extends UIObject {
             
         getParent().applyGeneralStyle(yesButton);
         getParent().addObject(yesButton);
+
+        //disable parent mouse-checking
+        getParent().onTop(false);
     }
 
     public void onClose() {
-
+        getParent().onTop(true);
     }
 
     public void update() {
         super.update();
         //yes
         yesButton.setText(yesButtonText);
-        yesButton.get().setLocation(getParent().xCenter(yesButton.getFullWidth()) + buttonOffset + yesButton.getFullWidth() / 2, 550);
+        yesButton.get().setLocation(getParent().xCenter(yesButton.getFullWidth()) + yesButton.getBackgroundPadding() / 2, 550);
         //no
         if (showNoButton) {
             noButton.setText(noButtonText);

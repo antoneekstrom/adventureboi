@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
+import gamelogic.DefaultConsoleCommands;
 import gamelogic.NewObjectStorage;
 import gamelogic.ObjectInspector;
 import objects.NewObject;
@@ -24,7 +25,7 @@ public class Console {
     private static boolean selectedObject = false;
     
     private static int parameterStart = 1;
-    private static String defaultClassName = Console.class.getName();
+    private static String defaultClassName = DefaultConsoleCommands.class.getName();
 
     private static String regex = " ";
     private static String objectParseRegex = ".";

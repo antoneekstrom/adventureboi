@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import adventuregame.GlobalData;
 import adventuregame.Position;
+import data.PlayerData;
 import gamelogic.NewObjectStorage;
 import objects.NewPlayer;
 
@@ -13,7 +14,7 @@ public class InspectPlayerUI extends GUI {
     private String playerName = "PlayerName";
     public void playerName(String n) {
         playerName = n;
-        getObjectsByTag("title")[0].setText(playerName);
+        getObjectsThatStartsWithTag("title")[0].setText(playerName);
     }
 
     //xp bar
@@ -40,13 +41,16 @@ public class InspectPlayerUI extends GUI {
     }
 
     private void updateXp() {
-        UIMeter xp = (UIMeter) getObjectsByTag("xp")[0];
+        UIMeter xp = (UIMeter) getObjectsThatStartsWithTag("xp")[0];
         xp.get().width = p.getFullWidth();
         xp.get().setLocation(p.get().x, p.get().y - xp.get().height - xpOffsetY);
-        
-        xp.setValue((int) player().playerData().experiencepoints());
-        xp.setMaxValue((int) player().playerData().experiencegoal());
-        xp.textObject.setText("level " + String.valueOf(player().playerData().experiencelevel()));
+
+        PlayerData pd = player().playerData();
+        if (pd != null) {
+            xp.setValue((int) pd.experiencepoints());
+            xp.setMaxValue((int) pd.experiencegoal());
+            xp.textObject.setText("level " + String.valueOf(pd.experiencelevel()));
+        }
     }
 
     @Override

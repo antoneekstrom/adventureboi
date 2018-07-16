@@ -1,11 +1,9 @@
 package objects;
 
-import java.awt.Point;
 import java.awt.Rectangle;
 
 import adventuregame.Animator;
 import adventuregame.Images;
-import adventuregame.Position;
 import data.NumberFactory;
 import gamelogic.Item;
 import gamelogic.NewObjectStorage;
@@ -69,10 +67,10 @@ public class Enemy extends NewObject implements EnemyMold {
 
     public void scale() {
         double f = NumberFactory.getEnemyScaling(level);
-        experience *= f;
         health = (int) (health * f);
         contactDamage = (int) (contactDamage * f);
-
+        NumberFactory.getXpScaling(level);
+        
         healthModule().setMaxHealth(health);
         healthModule().setHealth(health);
     }
@@ -136,8 +134,14 @@ public class Enemy extends NewObject implements EnemyMold {
         dropItem();
     }
 
+    public void setDropLevel() {
+        drop.level(Item.getRandomLevel(level()));
+    }
+
     public void dropItem() {
         if (drop != null) {
+            setDropLevel();
+            
             Rectangle e = get();
             ItemObject io = new ItemObject(drop) {{
                 Rectangle i = this.get();

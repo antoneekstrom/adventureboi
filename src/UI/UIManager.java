@@ -90,6 +90,10 @@ public class UIManager {
         addToHistory(currentgui);
     }
 
+    public static boolean isVisible(String guiname) {
+        return getGUI(guiname).isVisible();
+    }
+
     /** Get a list of all currently visible GUI's. */
     public static ArrayList<GUI> getAllVisible() {
         ArrayList<GUI> arr = new ArrayList<GUI>();
@@ -155,8 +159,11 @@ public class UIManager {
     /* --------------------------------------------- */
     private static String dstring = "";
     private static int dstringwidth = 0;
+
+    /** --- DEBUG GOES HERE --- */
     private static void debug() {
     }
+
     /** For putting things on screen all the time regardless of active GUI. For debugging purposes. */
     private static void debug(Graphics g) {
         g.drawString(dstring, (GlobalData.getScreenDim().width / 2) - (dstringwidth / 2), 50);

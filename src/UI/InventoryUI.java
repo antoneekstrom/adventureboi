@@ -28,9 +28,13 @@ public class InventoryUI extends GUI {
         if (b) {
             refreshInv();
         }
+        else {
+            UIManager.getHUD().showXpBar(150, playerName);
+        }
     }
 
     public void refreshInv() {
+        playerName = GameEnvironment.player1Name();
         NewPlayer p = NewObjectStorage.getPlayer(playerName);
         if (p.playerData().inventory() != null) {
 
@@ -49,7 +53,7 @@ public class InventoryUI extends GUI {
     }
 
     public void selectFilter(String tag) {
-        for (UIObject object : getObjectsByTag("filter")) {
+        for (UIObject object : getObjectsThatStartsWithTag("filter")) {
             if (object.tag().replace("filter-", "").equals(tag)) {
                 filter = tag;
                 object.toggleForceHoverState();

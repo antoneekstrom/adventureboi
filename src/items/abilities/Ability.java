@@ -15,6 +15,9 @@ public class Ability extends Item {
     }
 
     public double COST, CHARGECOST, PERCENT_DAMAGE, FACTORMAX, FACTORINCREASE, COOLDOWN;
+    protected String abilityDescription;
+
+    public String abilityDescription() {return abilityDescription;}
 
     public Double[] getValues() {
         return new Double[] {COST, CHARGECOST, PERCENT_DAMAGE, FACTORMAX, FACTORINCREASE, COOLDOWN};
@@ -36,7 +39,7 @@ public class Ability extends Item {
         map.put("chargecost", CHARGECOST);
         map.put("damagepercent", PERCENT_DAMAGE);
         map.put("factormax", FACTORMAX);
-        map.put("factor increase", FACTORINCREASE);
+        map.put("factorincrease", FACTORINCREASE);
         map.put("cooldown", COOLDOWN);
 
         return map;

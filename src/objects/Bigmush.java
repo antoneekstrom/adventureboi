@@ -23,7 +23,6 @@ public class Bigmush extends Enemy implements EnemyMold {
     public void startMisc() {
         super.startMisc();
         drop = new Donut();
-        drop.level(level());
     }
 
     @Override

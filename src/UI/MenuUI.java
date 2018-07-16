@@ -2,6 +2,7 @@ package UI;
 
 import adventuregame.GameEnvironment;
 import adventuregame.GlobalData;
+import data.Players;
 import gamelogic.NewObjectStorage;
 
 public class MenuUI extends GUI {
@@ -19,10 +20,15 @@ public class MenuUI extends GUI {
 
     public void update() {
         super.update();
+        
+        if (Players.exists(GameEnvironment.player1Name())) {
+            getObjectsThatStartsWithTag("player1_Name")[0].setText("player 1: " + GameEnvironment.player1Name());
+        }
+        else {
+            getObjectsThatStartsWithTag("player1_Name")[0].setText("player unavailable");
+        }
 
-        getObjectsByTag("player1_Name")[0].setText("player 1: " + GameEnvironment.player1Name());
-
-        UIText p2 = (UIText) getObjectsByTag("player2_Name")[0];
+        UIText p2 = (UIText) getObjectsThatStartsWithTag("player2_Name")[0];
         p2.setText("player 2: " + GameEnvironment.player2Name());
         p2.get().setLocation(GlobalData.getScreenDim().width - 75 - p2.get().width, 100);
     }
@@ -70,6 +76,7 @@ public class MenuUI extends GUI {
         if (NewObjectStorage.playerCount() > 1) {
             player2.setText(NewObjectStorage.getPlayer(2).getName());
         }
+        if (NewObjectStorage.playersToSpawn() > 1) {player2.setVisible(true);} else {player2.setVisible(false);}
         addObject(player2);
 
         setVisible(true);

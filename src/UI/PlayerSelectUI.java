@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import data.PlayerData;
 import data.Players;
 import gamelogic.NewObjectStorage;
+import items.abilities.FireballItem;
 
 public class PlayerSelectUI extends GUI {
 
@@ -25,7 +26,7 @@ public class PlayerSelectUI extends GUI {
     public void nextPlayerSlot() {
         if (currentPlayerSlot + 1 <= playerslots.length -1) {currentPlayerSlot++;}
         else {currentPlayerSlot = 0;}
-        getObjectsByTag("playerSlotButton")[0].setText(playerslots[currentPlayerSlot]);
+        getObjectsThatStartsWithTag("playerSlotButton")[0].setText(playerslots[currentPlayerSlot]);
     }
     public int getCurrentPlayer() {return currentPlayerSlot + 1;}
 
@@ -165,6 +166,11 @@ public class PlayerSelectUI extends GUI {
         data.maxenergy(100);
         data.maxstamina(100);
         data.energyregen(0.2);
+
+        FireballItem fireball = new FireballItem();
+        fireball.level(0);
+        data.inventory().add(fireball);
+
         Players.savePlayerData(data);
         Players.serializePlayerData();
     }

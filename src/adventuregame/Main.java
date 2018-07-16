@@ -42,7 +42,7 @@ public class Main extends JFrame {
 
 		//set icon for frame
 		try {
-			ImageIcon icon = new ImageIcon("assets/animated_sprites/aboi/manboi.png");
+			ImageIcon icon = new ImageIcon("assets/icon/boi.png");
 			frame.setIconImage(icon.getImage());
 		}
 		catch (Exception e) {}

@@ -40,6 +40,7 @@ public class UIObject {
     private boolean takeInput = false;
     private boolean typeable = false;
     private boolean forceHoverState = false;
+    private boolean alwaysOnTop = false;
     
     private String submittedInput = "";
     private String inputPrefix = "input: ";
@@ -348,11 +349,13 @@ public class UIObject {
     /** Returns true if object contains mouse. */
     public boolean checkMouse() {
         boolean b = false;
-        if (UIManager.getGUI(parentName).isVisible() && getActualBox().contains(GlobalData.getMouse())) {
+        if (UIManager.getGUI(parentName).isVisible() && getActualBox().contains(GlobalData.getMouse()) && (getParent().onTop() || alwaysOnTop) ) {
             b = true;
         }
         return b;
     }
+
+    public void alwaysOnTop(boolean b) {alwaysOnTop = b;}
 
     /** Invoked when mouse is pressed on this element. */
     public void leftMousePressed() {

@@ -97,8 +97,9 @@ public class PlayerData implements Serializable {
 
         return map;
     }
-    
+
     public PlayerData() {
+        inventory = new ArrayList<Item>();
     }
 
 }

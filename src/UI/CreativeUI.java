@@ -40,6 +40,10 @@ public class CreativeUI extends GUI {
         
     }
 
+    public boolean mouseOverConsole() {
+        return console.checkMouse();
+    }
+
     public void start() {
         addTitle("Edit");
         getObjectByText("Edit").get().y -= 150;

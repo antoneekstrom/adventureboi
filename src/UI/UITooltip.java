@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import adventuregame.GlobalData;
 import adventuregame.Images;
 import gamelogic.Item;
+import items.abilities.Ability;
 
 public class UITooltip extends UIObject {
 
@@ -27,6 +28,7 @@ public class UITooltip extends UIObject {
         int effectOffset = 20;
         int imageOffset = 30;
         int lineSpacing = 35;
+        int abildescOffset = 15;
         //image
         int imgwidth = 75;
         int imgheight = 75;
@@ -72,7 +74,7 @@ public class UITooltip extends UIObject {
             lines.add(t);
         }
         //title
-        lines.add(new UIText(getParentName(), "level " + item.level() + " " + getText(), false) {
+        lines.add(new UIText(getParentName(), "level " + (int)item.level() + " " + getText(), false) {
             {
                 this.setTag("title");
                 setParentRectangle(get());
@@ -92,6 +94,22 @@ public class UITooltip extends UIObject {
                 this.setFontSize(descriptionFontSize + 5);
             }
         });
+        //effect description
+        try {
+            Ability a = (Ability) item;
+
+            lines.add(new UIText(getParentName(), a.abilityDescription(), false) {
+                {
+                    this.setTag("abilitydescription");
+                    get().setLocation(get().x, get().y + descOffset + effectOffset + abildescOffset);
+                    setParentRectangle(get());
+                    centerInParentX(true);
+                    textColor(DESCRIPTION_COLOR);
+                    this.setFontSize(descriptionFontSize);
+                }
+            });
+        }
+        catch (ClassCastException e) {}
     }
 
     @Override
@@ -172,6 +190,9 @@ public class UITooltip extends UIObject {
         }
         else if (t.tag().equals("effect")) {
             t.get().y = get().y + descOffset + effectOffset + (i * lineSpacing);
+        }
+        else if (t.tag().equals("abilitydescription")) {
+            t.get().y = get().y + descOffset + effectOffset + (i * lineSpacing) + abildescOffset;
         }
         else {
             t.get().y = get().y + descOffset + (i * lineSpacing);

@@ -46,6 +46,7 @@ public class ObjectCreator {
         objects.put("donut", () -> createItemObject(new Donut()));
         objects.put("energyshroom", () -> createItemObject(new EnergyShroom()));
         objects.put("tallmush", () -> createItemObject(new TallmushItem()));
+        objects.put("icecube", () -> createItemObject(new Icecube()));
     }
 
     public static void createEnemy(String className) {
@@ -53,6 +54,7 @@ public class ObjectCreator {
             Enemy o = (Enemy) Class.forName(className).newInstance();
             o.get().setLocation(NewCamera.getMouse());
             o.level(enemyLevel);
+            o.get().setSize(width, height);
             NewObjectStorage.add(o);
         }
         catch (Exception e) {e.printStackTrace();}
@@ -64,6 +66,7 @@ public class ObjectCreator {
         try {
             NewObject o = (NewObject) Class.forName(className).newInstance();
             o.get().setLocation(NewCamera.getMouse());
+            o.get().setSize(width, height);
             NewObjectStorage.add(o);
         }
         catch (Exception e) {e.printStackTrace();}
@@ -72,8 +75,10 @@ public class ObjectCreator {
     public static void createItemObject(Item i) {
         try {
             Constructor<?> c = Class.forName(ItemObject.class.getName()).getConstructor(Item.class);
-            NewObject o = (NewObject) c.newInstance(i);
+            ItemObject o = (ItemObject) c.newInstance(i);
             o.get().setLocation(NewCamera.getMouse());
+            o.get().setSize(width, height);
+            o.level(enemyLevel);
             NewObjectStorage.add(o);
         }
         catch (Exception e) {e.printStackTrace();}

@@ -104,12 +104,14 @@ public class Item implements Serializable {
 
     /** If item should invoke use() on being picked up. */
     public boolean useOnPickup() {return useOnPickup;}
+    public void useOnPickup(boolean b) {useOnPickup = b;}
 
     /** Activates this items effect on the player. When overriding invoke super last. */
     public void use(NewPlayer player) {
         uses++;
     }
 
+    /** Returns true if item has been used before. */
     public boolean used() {return uses > 0;}
 
     /** Get gameobject that can be picked up as item. */
@@ -152,7 +154,10 @@ public class Item implements Serializable {
     public static int LEVEL_VARIANCE = 3;
 
     public static int getRandomLevel(int lvl) {
-        return lvl;
+        Random r = new Random();
+        int lvar = r.nextInt(LEVEL_VARIANCE) + 1;
+        if (r.nextBoolean()) {lvar = -lvar;}
+        return lvl + lvar;
     }
 
     public double levelPow(double factor) {

@@ -11,11 +11,11 @@ public class Fireball extends NewObject implements ObjectMethods {
     int velocity = 25;
     int distanceTraveled = 0;
     int maxDistance = 1000;
-    int damage = 15;
+    public int damage = 15;
     /** True if ability is fully charged. */
     private boolean charged = false;
 
-    String player;
+    public String player;
 
     public Fireball(String d) {
         setName("fireball");

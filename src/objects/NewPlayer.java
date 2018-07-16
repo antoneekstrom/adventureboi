@@ -18,7 +18,6 @@ import data.Players;
 import gamelogic.AbilityValues;
 import gamelogic.Item;
 import gamelogic.NewCamera;
-import gamelogic.NewObjectStorage;
 import items.abilities.Ability;
 
 public class NewPlayer extends NewObject implements ObjectMethods {
@@ -50,17 +49,11 @@ public class NewPlayer extends NewObject implements ObjectMethods {
     private boolean lockCameraY = false;
 
     //abilities
-    final private HashMap<String, Runnable> abilities = new HashMap<String, Runnable>() {
-         private static final long serialVersionUID = 1L;
-		{
-            put("fireball", () -> fireball());
-        }
-    };
-    private String currentAbility = "fireball";
-    private String abilityDirection = "none";
-    private boolean abilityCharging = false;
-    private int abilityCooldown = AbilityValues.cooldown.get(currentAbility);
-    private int chargePercentage = 0;
+    public String currentAbility = "fireball";
+    public String abilityDirection = "none";
+    public boolean abilityCharging = false;
+    public int abilityCooldown = AbilityValues.cooldown.get(currentAbility);
+    public int chargePercentage = 0;
 
     //charge animation
     private BufferedImage[] chargeAnimation;
@@ -95,7 +88,7 @@ public class NewPlayer extends NewObject implements ObjectMethods {
     private double ABILITY_COST = 0;
     private double ABILITY_DAMAGE_PERCENT;
     private double ABILITY_CHARGE_COST = 0;
-    private double abilityFactor = 1;
+    public double abilityFactor = 1;
     private String ABILITY_NAME = "none";
 
     //statistics
@@ -247,7 +240,7 @@ public class NewPlayer extends NewObject implements ObjectMethods {
         //animation/images
         playerimages = Images.getImageHashMap("assets/animated_sprites/aboi");
         setImage(playerimages.get("still"));
-        chargeAnimation = new BufferedImage[Images.getFolderImages("boicharge").size()];
+        chargeAnimation = new BufferedImage[11];
         ArrayList<BufferedImage> l = new ArrayList<BufferedImage>();
         for (int i = 0; i <= 10; i++) {
             l.add(i, Images.getImage("charge" + i));
@@ -454,8 +447,8 @@ public class NewPlayer extends NewObject implements ObjectMethods {
     }
 
     public void releaseAbility() {
-        Runnable r = abilities.get(ABILITY_NAME);
-        if (r != null) {r.run();}
+        Ability a = (Ability) playerData().abilityslot();
+        if (a != null && useEnergy(ABILITY_COST)) {a.use(this);}
         abilityFactor = 1;
         abilityCooldown = ABILITY_COOLDOWN;
         energyRegen = true;
@@ -539,24 +532,7 @@ public class NewPlayer extends NewObject implements ObjectMethods {
         }
     }
 
-    private double calculateDamage() {
+    public double calculateDamage() {
         return ABILITY_DAMAGE_PERCENT * playerData().damage() * abilityFactor;
-    }
-
-    public void fireball() {
-        Fireball f = new Fireball(abilityDirection);
-        f.damage = (int) calculateDamage();
-        f.player = playerData.name();
-        if (chargePercentage == 10) {
-            f.charged();
-        }
-        f.get().setSize( (int) (f.get().getWidth() * abilityFactor), (int) (f.get().getHeight() * abilityFactor));
-        if (abilityDirection.equals("left")) {
-            f.get().setLocation((int) get().getCenterX() - (int) getWidth() / 2 - f.getWidth(), (int) get().getCenterY() - (int) f.get().getHeight() + 30);
-        }
-        else if (abilityDirection.equals("right")) {
-            f.get().setLocation((int) get().getCenterX() + (int) getWidth() / 2, (int) get().getCenterY() - (int) (f.get().getHeight()) + 30);
-        }
-        NewObjectStorage.add(f);
     }
 }

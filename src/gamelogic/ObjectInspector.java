@@ -1,5 +1,6 @@
 package gamelogic;
 
+import UI.CreativeUI;
 import UI.NewHUD;
 import UI.UIManager;
 import adventuregame.GlobalData;
@@ -24,7 +25,8 @@ public class ObjectInspector {
     }
 
     public static void selectWithMouse() {
-        if (isEnabled()) {
+        CreativeUI c = (CreativeUI) UIManager.getGUI("Creative");
+        if (isEnabled() && !c.mouseOverConsole()) {
             for (NewObject o : NewObjectStorage.getObjectList()) {
                 if (o.getDisplayBox().contains(GlobalData.getMouse()) && !o.isSelected()) {
                     o.select();

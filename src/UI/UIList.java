@@ -137,7 +137,7 @@ public class UIList extends UIObject {
 
     public void leftMouseReleased() {
         for (UIObject o : list) {
-            if (o.checkMouse() && getParent().getObjectsByTag("alert").length == 0) {
+            if (o.checkMouse() && getParent().getObjectsThatStartsWithTag("alert").length == 0) {
                 MouseFunctions.executeListAction(o);
             }
         }
