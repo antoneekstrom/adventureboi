@@ -44,7 +44,7 @@ public class OptionsUI extends GUI {
     public void setPosition() {
         UIButton resume = (UIButton) getObjectByText("Resume");
         savelevel.get().x = resume.get().x;
-        saveplayer.get().setLocation( (int) savelevel.get().x + savelevel.getFullWidth() + 40, savelevel.get().y);
+        saveplayer.get().setLocation( (int) savelevel.get().x + savelevel.getFullWidth() + savelevel.getBackgroundPadding() / 2 + savelevel.BORDER_THICKNESS, savelevel.get().y);
     }
 
     public void update() {

@@ -23,6 +23,7 @@ import gamelogic.MouseFunctions;
 import gamelogic.NewCamera;
 import gamelogic.NewObjectStorage;
 import gamelogic.ObjectCreator;
+import objects.NewObject;
 
 public class GameEnvironment extends JPanel implements ActionListener {
 
@@ -67,6 +68,18 @@ public class GameEnvironment extends JPanel implements ActionListener {
         levelData.objectDataList(ObjectData.createDataList());
         DataHandler.serialize(levelData, new File(saveDirectory + levelData.name() + ".ser"));
         UIManager.getCurrentGUI().addObject(new UIAlert("Game has been saved to " + levelData.name() + ".", UIManager.getCurrentGUI().getName(), false));
+    }
+
+    public static void newLevel(String name) {
+        ArrayList<ObjectData> olist = new ArrayList<ObjectData>();
+
+        NewObject obj = new NewObject();
+        obj.moveWhenColliding(false);
+        obj.physics().setGravity(false);
+        obj.setRectangle(new Rectangle(300, 800, 800, 100));
+        olist.add(obj.extractData());
+
+        levelData = new LevelData(name, true, olist);
     }
 
     /** Save playerdata for all present players. */

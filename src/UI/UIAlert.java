@@ -84,12 +84,13 @@ public class UIAlert extends UIObject {
         super.update();
         //yes
         yesButton.setText(yesButtonText);
-        yesButton.get().setLocation(getParent().xCenter(yesButton.get().width) + buttonOffset + yesButton.get().width / 2, 550);
+        yesButton.get().setLocation(getParent().xCenter(yesButton.getFullWidth()) + buttonOffset + yesButton.getFullWidth() / 2, 550);
         //no
         if (showNoButton) {
-            noButton.get().setLocation(getParent().xCenter(noButton.get().width) - buttonOffset - noButton.get().width / 2, 550);
             noButton.setText(noButtonText);
-            yesButton.get().x = getParent().xCenter(yesButton.get().width);
+            noButton.get().setLocation(getParent().xCenter(noButton.getFullWidth()) - noButton.getFullWidth() / 2 + noButton.getBackgroundPadding() / 2, 550);
+            
+            yesButton.get().x = getParent().xCenter(yesButton.getFullWidth()) + buttonOffset + yesButton.getFullWidth() + yesButton.getBackgroundPadding() / 2;
         }
     }
 

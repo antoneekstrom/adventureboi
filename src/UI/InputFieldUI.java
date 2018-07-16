@@ -1,5 +1,6 @@
 package UI;
 
+import adventuregame.GameEnvironment;
 import data.Players;
 
 public class InputFieldUI extends GUI {
@@ -46,7 +47,16 @@ public class InputFieldUI extends GUI {
             case "InputField_RemovePlayer":
                 removePlayer(input);
                 break;
+            
+            case "InputField_NewLevel":
+                newLevel(input);
         }
+    }
+
+    public void newLevel(String name) {
+        GameEnvironment.newLevel(name);
+        UIManager.lockCurrentGUI(false);
+        UIManager.enableGUI("Levels");
     }
 
     public void newPlayer(String name) {

@@ -56,6 +56,7 @@ public class UIManager {
         add(new InspectPlayerUI());
         add(new InputFieldUI("InputField_PlayerName", "Enter Name"));
         add(new InputFieldUI("InputField_RemovePlayer", "Enter Name"));
+        add(new InputFieldUI("InputField_NewLevel", "Enter Name"));
         add(new InspectItemUI());
     }};
 
@@ -112,7 +113,11 @@ public class UIManager {
      */
     public static void enableGUI(String name) {
         if (!lockCurrentGUI) {
-            hideAll(true);
+            //don't add to history if it is an inputfield GUI
+            boolean history = true;
+            if (name.startsWith("InputField")) {history = false;}
+
+            hideAll(history);
             getGUI(name).setVisible(true);
         }
     }
@@ -156,6 +161,11 @@ public class UIManager {
     private static void debug(Graphics g) {
         g.drawString(dstring, (GlobalData.getScreenDim().width / 2) - (dstringwidth / 2), 50);
         dstringwidth = g.getFontMetrics().stringWidth(dstring);
+    }
+    private static String getHudHistory() {
+        String ss = "";
+        for (String s : GUIHistory) {ss += s;}
+        return ss;
     }
     /* --------------------------------------------- */
 

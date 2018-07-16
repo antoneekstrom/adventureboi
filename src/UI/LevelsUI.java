@@ -3,6 +3,7 @@ package UI;
 import java.awt.Color;
 import java.awt.Rectangle;
 
+import adventuregame.GameEnvironment;
 import adventuregame.GlobalData;
 import data.LevelData;
 
@@ -55,6 +56,19 @@ public class LevelsUI extends GUI {
         };
         applyGeneralStyle(refresh);
         addObject(refresh);
+
+        //new level
+        UIButton newlevel = new UIButton(getName(), "New level", false) {
+            @Override
+            public void leftMouseReleased() {
+                UIManager.enableGUI("InputField_NewLevel");
+            }
+            {   
+                get().setLocation((int)levels.get().getMaxX() + 50, levels.get().height - 150);
+            }
+        };
+        applyGeneralStyle(newlevel);
+        addObject(newlevel);
 
         refreshList();
     }

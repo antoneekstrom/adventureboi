@@ -115,6 +115,8 @@ public class UIObject {
     }
     public String getInput() {return submittedInput;}
 
+    public void clearInput() {submittedInput = "";}
+
     public void toggleTyping() {
         if (takeInput) {
             toggleForceHoverState();
