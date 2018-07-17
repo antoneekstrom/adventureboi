@@ -4,6 +4,8 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 
 import adventuregame.GlobalData;
+import gamelogic.ObjectCreator;
+import gamelogic.ObjectPlacement;
 
 /** This is were all the UI's are stored. */
 public class UIManager {
@@ -186,6 +188,11 @@ public class UIManager {
 
     /** Paint all UI's. */
     public static void paint(Graphics g) {
+
+        if (ObjectCreator.useGrid()) {
+            ObjectPlacement.drawGrid(g);
+        }
+
         for (GUI ui : interfaces) {
             if (ui.isVisible()) {ui.paint(g);}
         }

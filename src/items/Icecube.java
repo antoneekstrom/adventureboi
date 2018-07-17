@@ -31,9 +31,9 @@ public class Icecube extends Ability {
         imageName("icecube2");
         useOnPickup(false);
 
-        PERCENT = 20;
-        COOLDOWN = 100;
-        TIME = 20;
+        PERCENT = 45;
+        COOLDOWN = 150;
+        TIME = 35;
         COST = 70;
 
         FACTORMAX = 0;

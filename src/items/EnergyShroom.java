@@ -4,7 +4,7 @@ import data.NumberFactory;
 import gamelogic.Item;
 import objects.NewPlayer;
 
-public class EnergyShroom extends Item {
+public class EnergyShroom extends Item implements Statup {
 
     private static final long serialVersionUID = 1L;
 	private double ENERGY = 5;
@@ -12,7 +12,7 @@ public class EnergyShroom extends Item {
     public EnergyShroom() {
         super("energyshroom");
         description = new String[] {"It will make you have", "more energy than you did", "before consuming it."};
-        effect = "+" + ENERGY + " max energy";
+        effect = getEffect();
         addTag(Item.STATUP);
     }
 
@@ -27,5 +27,15 @@ public class EnergyShroom extends Item {
         super.use(player);
         player.playerData().maxenergy(player.playerData().maxenergy() + ENERGY);
     }
+
+	@Override
+	public double getStat() {
+		return ENERGY;
+	}
+
+	@Override
+	public String getEffect() {
+		return "+" + (int)getStat() + " max energy";
+	}
 
 }

@@ -23,7 +23,7 @@ public class NewCollision {
             NewObject object2 = objects.get(k);
             //if object1 is not the same as object2 and they are intersecting
             if (object1.get().intersects(object2.get()) && !object2.equals(object1)) {
-                if (object1.getCollision()) {
+                if (object1.getCollision() && object2.collidable()) {
                     if (object1.moveWhenColliding()) {
                         collision(object1, object2);
                     }

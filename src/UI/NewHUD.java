@@ -3,6 +3,7 @@ package UI;
 import java.awt.Color;
 import java.awt.Dimension;
 
+import adventuregame.GameEnvironment;
 import adventuregame.GlobalData;
 import data.PlayerData;
 import gamelogic.NewObjectStorage;
@@ -126,11 +127,20 @@ public class NewHUD extends GUI {
     }
 
     public void showXpBar(int time, String playername) {
-        PlayerData pd = NewObjectStorage.getPlayer(playername).playerData();
+        playername = GameEnvironment.player1Name();
+
+        NewPlayer player = NewObjectStorage.getPlayer(playername);
+        PlayerData pd = null;
+        if (player != null) {
+            pd = player.playerData();
+        }
+
         UIMeter xpMeter = getXpMeter();
-        xpMeter.setValue(pd.experiencepoints());
-        xpMeter.setMaxValue(pd.experiencegoal());
-        xpMeter.textObject.setText("level " + pd.experiencelevel());
+        if (pd != null) {
+            xpMeter.setValue(pd.experiencepoints());
+            xpMeter.setMaxValue(pd.experiencegoal());
+            xpMeter.textObject.setText("level " + pd.experiencelevel());
+        }
 
         if (!xpMeter.visible()) {
             xpMeter.setVisible(true);

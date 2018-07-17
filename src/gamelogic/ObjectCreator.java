@@ -1,10 +1,13 @@
 package gamelogic;
 
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
 
 import UI.Console;
 import UI.UIManager;
+import adventuregame.Images;
 import adventuregame.Items;
 import items.*;
 import items.abilities.*;
@@ -16,6 +19,14 @@ public class ObjectCreator {
     private static Runnable currentObject;
     private static boolean enabled = false;
     private static int enemyLevel = 3;
+
+    public static String PREVIEW_OBJECT = "CreatorPreview";
+
+    private static boolean useGrid = true;
+
+    public static void grid(boolean b) {useGrid = b;}
+    public static boolean useGrid() {return useGrid;}
+    public static void gridSize(int size) {ObjectPlacement.gridSize(size);}
 
     private static boolean customSize = false;
     private static int width = 100;
@@ -54,7 +65,7 @@ public class ObjectCreator {
             Enemy o = (Enemy) Class.forName(className).newInstance();
             o.get().setLocation(NewCamera.getMouse());
             o.level(enemyLevel);
-            o.get().setSize(width, height);
+            if (customSize) {o.get().setSize(width, height);}
             NewObjectStorage.add(o);
         }
         catch (Exception e) {e.printStackTrace();}
@@ -66,10 +77,49 @@ public class ObjectCreator {
         try {
             NewObject o = (NewObject) Class.forName(className).newInstance();
             o.get().setLocation(NewCamera.getMouse());
-            o.get().setSize(width, height);
+            if (customSize) {o.get().setSize(width, height);}
             NewObjectStorage.add(o);
         }
         catch (Exception e) {e.printStackTrace();}
+    }
+
+    private static BufferedImage previewImage() {
+        return Images.getImage(getCurrentObjectName());
+    }
+
+    public static void addPreview() {
+        ObjectPreview op = new ObjectPreview(previewImage()) {
+            @Override
+            public void paint(Graphics g) {
+                if (ObjectCreator.isEnabled()) {
+                    super.paint(g);
+                }
+            }
+        };
+        op.setText(ObjectCreator.PREVIEW_OBJECT);
+        NewObjectStorage.add(op);
+    }
+
+    private static void preview() {
+        NewObject[] arr = NewObjectStorage.getObjectsByText(PREVIEW_OBJECT);
+        NewObject object = null;
+
+        if (arr.length > 0) {
+            object = arr[0];
+
+            object.setImage(previewImage());
+        }
+    }
+
+    private static void preview(NewObject object) {
+        NewObject[] arr = NewObjectStorage.getObjectsByText(PREVIEW_OBJECT);
+        ObjectPreview preview = null;
+
+        if (arr.length > 0) {
+            preview = (ObjectPreview) arr[0];
+
+            preview.set(object);
+        }
     }
 
     public static void createItemObject(Item i) {
@@ -77,7 +127,7 @@ public class ObjectCreator {
             Constructor<?> c = Class.forName(ItemObject.class.getName()).getConstructor(Item.class);
             ItemObject o = (ItemObject) c.newInstance(i);
             o.get().setLocation(NewCamera.getMouse());
-            o.get().setSize(width, height);
+            if (customSize) {o.get().setSize(width, height);}
             o.level(enemyLevel);
             NewObjectStorage.add(o);
         }
@@ -95,6 +145,7 @@ public class ObjectCreator {
         }
 
         currentObject = objects.get(objects.keySet().toArray()[currentObjectIndex]);
+        preview();
     }
 
     public static void createOnMouse() {
@@ -118,6 +169,7 @@ public class ObjectCreator {
             currentObjectIndex = 0;
         }
         currentObject = objects.get(objects.keySet().toArray()[currentObjectIndex]);
+        preview();
     }
 
     public static void enabled(boolean b) {

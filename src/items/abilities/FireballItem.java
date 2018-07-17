@@ -35,6 +35,7 @@ public class FireballItem extends Ability {
         description = new String[] {"cast incredibly epic", "fireballs at your foes."};
         abilityDescription = "Fireball spell";
         imageName("fire");
+        useOnPickup(false);
 
         COST = 0;
         CHARGECOST = 0.7;

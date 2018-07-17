@@ -25,6 +25,7 @@ import gamelogic.MouseFunctions;
 import gamelogic.NewCamera;
 import gamelogic.NewObjectStorage;
 import gamelogic.ObjectCreator;
+import gamelogic.ObjectPlacement;
 import objects.NewObject;
 
 public class GameEnvironment extends JPanel implements ActionListener {
@@ -120,6 +121,9 @@ public class GameEnvironment extends JPanel implements ActionListener {
 
             //add to config
             Configuration.setProperty("last_level_loaded", name);
+
+            //start objectcreator preview
+            ObjectCreator.addPreview();
         }
         else {
             NewCamera.centerCameraOn(new Point(-50, 300));
@@ -169,6 +173,9 @@ public class GameEnvironment extends JPanel implements ActionListener {
 
         //start object creator
         ObjectCreator.start();
+
+        //set grid
+        ObjectPlacement.gridSize(ObjectPlacement.gridSize());
 
         //start and attach input panel
         input = Input.start();

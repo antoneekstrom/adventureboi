@@ -85,6 +85,22 @@ public class NewObjectStorage {
         return objects;
     }
 
+    public static NewObject[] getObjectsByText(String text) {
+        ArrayList<NewObject> l = new ArrayList<NewObject>();
+        NewObject[] arr = null;
+
+        for (NewObject o : objects) {
+            if (o.getText().equals(text)) {l.add(o);}
+        }
+        
+        if (l.size() > 0) {
+            arr = new NewObject[l.size()];
+            l.toArray(arr);
+        }
+            
+        return arr;
+    }
+
     public static void setList(ArrayList<NewObject> l) {objects = l;}
 
     private static int idnCounter = 0;

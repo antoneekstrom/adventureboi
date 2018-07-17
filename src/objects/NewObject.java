@@ -30,6 +30,8 @@ public class NewObject {
     private boolean collision = true;
     /** Set to true if object should be moved when colliding. */
     private boolean moveWhenColliding = true;
+    /** Set to true if object should not be collidable with. */
+    private boolean collidable = true;
     private boolean intersect = false;
     private boolean camera = true;
     private boolean debug = false;
@@ -38,6 +40,9 @@ public class NewObject {
 
     public boolean moveWhenColliding() {return moveWhenColliding;}
     public void moveWhenColliding(boolean b) {moveWhenColliding = b;}
+
+    public boolean collidable() {return collidable;}
+    public void collidable(boolean b) {collidable = b;}
 
     private int IDNumber;
     public void giveIdNumber(int i) {IDNumber = i;}
