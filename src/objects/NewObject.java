@@ -441,7 +441,7 @@ public class NewObject {
     }
 
     /** Update camera/display coordinates */
-    private void updateDisplayCoordinates() {
+    protected void updateDisplayCoordinates() {
         if (camera) {
             NewCamera.setDisplayCoordinates(this);
         }

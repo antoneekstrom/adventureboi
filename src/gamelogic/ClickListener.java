@@ -25,6 +25,7 @@ public class ClickListener implements MouseListener {
 	public void mousePressed(MouseEvent e) {
 		if (e.getButton() == MouseEvent.BUTTON1) {
 			leftPressed = true;
+			objectLeftMousePressed();
 		}
 		if (e.getButton() == MouseEvent.BUTTON2) {
 			rightPressed = true;
@@ -80,6 +81,16 @@ public class ClickListener implements MouseListener {
 		for (UIObject o : UIManager.getCurrentGUI().getUIObjectList()) {
 			if (o.checkMouse()) {
 				o.leftMouseReleased();
+			}
+			o.leftMouseReleasedSomewhere();
+		}
+	}
+
+	/** Call UIObject click method. */
+	public void objectLeftMousePressed() {
+		for (UIObject o : UIManager.getCurrentGUI().getUIObjectList()) {
+			if (o.checkMouse()) {
+				o.leftMousePressed();
 			}
 		}
 	}

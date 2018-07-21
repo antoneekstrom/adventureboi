@@ -28,7 +28,7 @@ public class UIList extends UIObject {
     protected int scrollbarWidth = 50;
     private Rectangle scrollbar;
 
-    private UIObject entry = new UIObject();
+    private UIObject entry;
     public UIObject entry() {return entry;}
     public void setEntry(UIObject o) {entry = o;}
 
@@ -39,6 +39,11 @@ public class UIList extends UIObject {
         super();
         setParentName(parentname);
         start();
+        setEntry();
+    }
+
+    private void setEntry() {
+        entry = new UIObject(getParentName());
     }
     
     public void isEntryFullWidth(boolean b) {entryFullWidth = b;}

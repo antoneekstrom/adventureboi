@@ -1,6 +1,15 @@
 package UI;
 
+import java.awt.Dimension;
+
+import data.Configuration;
+
 public class SettingsUI extends GUI {
+
+    String UICOLOR = "Set UI Color";
+    int MAXVOLUME = 100;
+    Dimension SLIDERDIM = new Dimension(500, 55);
+    String VOLSLIDER_TEXT = "Volume";
 
     public SettingsUI() {
         super("Settings");
@@ -20,17 +29,33 @@ public class SettingsUI extends GUI {
         addMenuButton("Keybindings", getGuidelineY1());
 
         //volume slider
-        UISlider volumeSlider = new UISlider(getName(), 100) {{
-            centerInParentX(true);
-            get().setSize(getObjectByText("Keybindings").get().getSize());
-            get().height = 100;
-            handle().get().setSize(50, 25);
-            setBackgroundColor(getUIBackgroundColor());
-            hasBorder(true);
-            setBorderThickness(getBorderThickness());
-            setBorderColor(getUITextColor());
-            get().setLocation(get().x, getGuidelineY1());
-        }};
-        addObject(volumeSlider);
+        addObject(new UISlider(getName(), MAXVOLUME) {
+            @Override
+            void updateValue() {
+            super.updateValue();
+            Configuration.setProperty("volume", String.valueOf((int)value()));
+            }
+            {
+                //transform
+                get().y = getGuidelineY1();
+                centerInParentX(true);
+                centerTextX(true);
+                get().setSize(SLIDERDIM);
+
+                //style
+                applySliderStyle(this);
+                setText(VOLSLIDER_TEXT);
+                VALUE_UNIT = "%";
+            }
+        });
+
+        //UI color
+        addMenuButton(UICOLOR, getGuidelineY1(), new NavTask() {
+            @Override
+            public void run() {
+                UIManager.enableGUI("ColorPicker_UIColor");
+            }
+        });
+
     }
 }

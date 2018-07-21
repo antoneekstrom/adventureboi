@@ -22,8 +22,8 @@ public class GUI {
 	protected String FONT_NAME = "Comic Sans MS";
 	private int BORDER_THICKNESS = 10;
 
-	private int guidelineY1;
-	private int guidelineSpacing;
+	private int guidelineY1 = 150;
+	private int guidelineSpacing = 150;
 	private int guidelineUses = -1;
 
 	private Rectangle box = new Rectangle(0, 0, GlobalData.getScreenDim().width, GlobalData.getScreenDim().height);
@@ -238,8 +238,18 @@ public class GUI {
 		addObject(b);
 	}
 
+	public void applyMenuStyle(UIObject o) {
+		o.setFontSize(40);
+		o.autoAdjustBackgroundWidth(false);
+		o.get().width = 500;
+		o.hasBorder(true);
+		o.setBorderThickness(BORDER_THICKNESS);
+		o.setBackgroundPadding(40);
+	}
+
 	public void addMenuButton(String text, int y) {
-		addObject(new UIButton(getName(), text, true) {{
+		addObject(new UIButton(getName(), text, true) {
+			{
             this.get().y = y;
             setFontSize(40);
             autoAdjustBackgroundWidth(false);
@@ -247,7 +257,22 @@ public class GUI {
 			hasBorder(true);
 			setBorderThickness(BORDER_THICKNESS);
             setBackgroundPadding(40);
-        }});
+			}
+		});
+	}
+	public void addMenuButton(String text, int y, NavTask task) {
+		addObject(new UIButton(getName(), text, true) {
+			{
+            this.get().y = y;
+            setFontSize(40);
+            autoAdjustBackgroundWidth(false);
+			get().width = 500;
+			hasBorder(true);
+			setBorderThickness(BORDER_THICKNESS);
+			setBackgroundPadding(40);
+			giveTask(task);
+			}
+		});
 	}
 	/** Invoked when mouse is clicked while this GUI is active. */
 	public void leftClick() {
@@ -270,7 +295,7 @@ public class GUI {
 		ObjectInspector.inspectObject(o);
 
 		c.getList().handle().setBackgroundColor(Color.white);
-		c.getList().handle().hoverColorChange(Color.orange.brighter());
+		c.getList().handle().hoverColorChange(getUIBackgroundColor().brighter());
 
 		c.getList().get().setSize(c.get().getSize());
 		c.getList().get().setLocation(c.get().getLocation());
@@ -304,6 +329,16 @@ public class GUI {
 		o.setFontSize(40);
 	}
 
+	public void applySliderStyle(UISlider slider) {
+		applyGeneralStyle(slider);
+		slider.setBackgroundColor(getUITextColor());
+		slider.textColor(getUIBackgroundColor());
+		slider.setBorderColor(getUIBackgroundColor());
+		slider.handle().setBackgroundColor(getUIBackgroundColor());
+		slider.handle().hoverColorChange(getUIBackgroundColor().brighter());
+		slider.handle().hasText(true);
+	}
+
 	public void applyListStyle(UIList l) {
 		l.handle().get().setSize(50, 100);
 		l.setSpacing(0);
@@ -316,9 +351,10 @@ public class GUI {
 
 	public void addTitle(String text) {
 		addObject(new UIText(getName(), text, true) {{
-            this.textColor(Color.orange);
+            this.textColor(getBackgroundColor());
             this.get().y = 200;
-            this.setFontSize(80);
+			this.setFontSize(80);
+			this.setTag("title");
         }});
 	}
 

@@ -36,6 +36,15 @@ public class ObjectPreview extends NewObject {
         setImage(object.getImage());
     }
 
+    @Override
+    protected void updateDisplayCoordinates() {
+        super.updateDisplayCoordinates();
+    }
+
+    @Override
+    public void select() {
+    }
+
     public void setLocation(Point p) {
         get().setLocation(p);
     }
@@ -44,10 +53,11 @@ public class ObjectPreview extends NewObject {
         setCollision(false);
         moveWhenColliding(false);
         collidable(false);
+        setCamera(false);
     }
 
     void followMouse() {
-        if (followMouse && ObjectCreator.useGrid()) {
+        if (followMouse && ObjectCreator.useGrid() && ObjectPlacement.distanceToClosestPoint(get()) <= ObjectPlacement.MAX_SNAP_DISTANCE) {
             get().setLocation(ObjectPlacement.closestPoint(Position.centerOnPoint(NewCamera.getMouse(), get())));
         }
         else if (followMouse) {
@@ -71,6 +81,9 @@ public class ObjectPreview extends NewObject {
         super.paint(g);
 
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
+
+        //draw grid
+        ObjectPlacement.drawGrid(g, this);
     }
 
 }

@@ -139,7 +139,7 @@ public class InspectPlayerUI extends GUI {
                 this.valueSide = "middle";
                 this.values.textColor(Color.black);
                 this.values.setFontSize(this.values.getFontSize() - 10);
-                this.setBackgroundColor(Color.orange);
+                this.setBackgroundColor(getUIBackgroundColor());
             }
         };
         addObject(xp);

@@ -1,12 +1,21 @@
 package UI;
 
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
+import adventuregame.GlobalData;
+
 public class UISlider extends UIObject {
 
-    private double value = 0;
+    private double value = 25;
     private double maxValue;
+    String VALUE_UNIT = "";
+
+    Dimension HANDLE_SIZE = new Dimension(75, 35);
+
+    boolean handleGrabbed = false;
+    int grabOffset = 0;
 
     private UIObject handle;
 
@@ -18,26 +27,104 @@ public class UISlider extends UIObject {
     }
 
     public void start() {
-        setBackgroundPadding(40);
         //handle
-        handle = new UIObject();
-        handle.setParentName(getParentName());
-        handle.setBox(new Rectangle(get().x, get().y, 30, 30));
-        handle.setBackgroundColor(getTextColor());
+        handle = new UIObject(getParentName()) {
+            @Override
+            public void update() {
+                super.update();
+                if (this.hasText()) {
+                    setText((int)value + VALUE_UNIT);
+                }
+            }
+            @Override
+            public void leftMousePressed() {
+                super.leftMousePressed();
+                handleGrabbed = true;
+                grabOffset = GlobalData.getMouse().x - handle().get().x;
+            }
+            @Override
+            public void leftMouseReleasedSomewhere() {
+                super.leftMouseReleasedSomewhere();
+                handleGrabbed = false;
+            }
+            {
+                this.setParentName(getParentName());
+                this.setBox(new Rectangle(get().x, get().y, 50, 30));
+                this.setBackgroundColor(getTextColor());
+                this.setBackgroundPadding(0);
+                this.centerTextX(true);
+                this.centerTextY(true);
+                this.setFontSize(30);
+                this.autoAdjustBackgroundHeight(true);
+                this.get().setSize(HANDLE_SIZE);
+                this.setBackgroundPadding(10);
+            }
+        };
+
+        //this
+        get().setSize(500, 55);
+    }
+
+    @Override
+    public void setVisible(boolean b) {
+        super.setVisible(b);
+        if (b) {
+            setHandleStartPos();
+        }
     }
 
     public void setInnerPadding(int i) {
         handle.setBackgroundPadding(i);
     }
     
-    public void updateHandlePosition() {
-        handle.get().setLocation(get().x + handle.getBackgroundPadding(), get().y + (get().height / 2) - (handle.get().height / 2) );
+    public void setHandleStartPos() {
+        handle.get().setLocation(get().x + getHandlePos() + handle.getBackgroundPadding(), get().y + (get().height / 2) - (handle.get().height / 2) );
+    }
+
+    private int getHandlePos() {
+        return (int) ( (value / maxValue) * get().width );
+    }
+
+    private void moveHandle() {
+        if (handleGrabbed) {
+            handle().get().x = GlobalData.getMouse().x - grabOffset;
+        }
+        limitHandle();
+        updateValue();
+    }
+
+    private void limitHandle() {
+        if (handle().get().x <= get().x) {
+            handle().get().x = get().x;
+        }
+        else if (handle().get().getMaxX() >= get().getMaxX()) {
+            handle().get().x = (int) get().getMaxX() - handle().get().width;
+        }
+        handle().get().y = get().y + (get().height / 2) - (handle.get().height / 2);
+    }
+
+    @Override
+    public void leftMousePressed() {
+        super.leftMousePressed();
+        if (handle().checkMouse()) {
+            handle().leftMousePressed();
+        }
+    }
+
+    @Override
+    public void leftMouseReleasedSomewhere() {
+        super.leftMouseReleasedSomewhere();
+        handle().leftMouseReleasedSomewhere();
+    }
+
+    void updateValue() {
+        setValue(maxValue * (1 - ( (get().getMaxX() - handle().get().getMaxX()) / (get().width - handle().get().width) )));
     }
 
     public void update() {
         super.update();
         handle.update();
-        updateHandlePosition();
+        moveHandle();
     }
 
     public void paint(Graphics g) {

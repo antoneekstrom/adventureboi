@@ -3,8 +3,6 @@ package gamelogic;
 import java.awt.event.WindowEvent;
 import java.util.HashMap;
 
-import UI.GUI;
-import UI.LevelsUI;
 import UI.PlayerSelectUI;
 import UI.UIAlert;
 import UI.UIManager;

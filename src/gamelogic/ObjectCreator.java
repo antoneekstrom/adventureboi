@@ -16,7 +16,7 @@ import objects.*;
 public class ObjectCreator {
 
     private static int currentObjectIndex = 0;
-    private static Runnable currentObject;
+    private static Create currentObject;
     private static boolean enabled = false;
     private static int enemyLevel = 3;
 
@@ -36,12 +36,46 @@ public class ObjectCreator {
     public static void toggleCustomSize() {if (customSize) {customSize = false;} else {customSize = true;}}
     public static boolean customSize() {return customSize;}
 
-    static HashMap<String, Runnable> objects = new HashMap<String, Runnable>() {
+    static class Create {
+        String className, type;
+        Item item;
+
+        public Create(String className, String type) {
+            this.className = className;
+            this.type = type;
+        }
+        public Create(Item item, String type) {
+            this.item = item;
+            this.type = type;
+        }
+        public void run() {
+            switch (type) {
+                case "enemy":
+                    createEnemy(className);
+                break;
+
+                case "object":
+                    createObject(className);
+                break;
+
+                case "item":
+                    createItemObject(item);
+                break;
+            }
+
+        }
+        public String className() {
+            return className;
+        }
+    }
+
+    static HashMap<String, Create> objects = new HashMap<String, Create>() {
         {
-            put("angryshroom", () -> createObject(AngryShroom.class.getName()));
-            put("bigmush", () -> createEnemy(Bigmush.class.getName()));
-            put("object", () -> createObject(NewObject.class.getName()));
-            put("starman", () -> createObject(Starman.class.getName()));
+            put("angryshroom", new Create(AngryShroom.class.getName(), "object"));
+            put("bigmush", new Create(Bigmush.class.getName(), "enemy"));
+            put("object", new Create(NewObject.class.getName(), "object"));
+            put("starman", new Create(Starman.class.getName(), "object"));
+            put("platform", new Create(Platform.class.getName(), "object"));
         }
     };
 
@@ -52,18 +86,22 @@ public class ObjectCreator {
     public static void enemyLevel(int l) {enemyLevel = l;}
 
     private static void addItemObjectsToList() {
-        objects.put("fireball", () -> createItemObject(new FireballItem()));
-        objects.put("deadangryshroom", () -> createItemObject(new DeceasedAngryShroom()));
-        objects.put("donut", () -> createItemObject(new Donut()));
-        objects.put("energyshroom", () -> createItemObject(new EnergyShroom()));
-        objects.put("tallmush", () -> createItemObject(new TallmushItem()));
-        objects.put("icecube", () -> createItemObject(new Icecube()));
+        objects.put("fireball", new Create(new FireballItem(), "item"));
+        objects.put("deadangryshroom", new Create(new DeceasedAngryShroom(), "item"));
+        objects.put("donut", new Create(new Donut(), "item"));
+        objects.put("energyshroom", new Create(new EnergyShroom(), "item"));
+        objects.put("tallmush", new Create(new TallmushItem(), "item"));
+        objects.put("icecube", new Create(new Icecube(), "item"));
+    }
+
+    public static NewObject getPreview() {
+        return NewObjectStorage.getObjectsByText(PREVIEW_OBJECT)[0];
     }
 
     public static void createEnemy(String className) {
         try {
             Enemy o = (Enemy) Class.forName(className).newInstance();
-            o.get().setLocation(NewCamera.getMouse());
+            o.get().setLocation(getPreview().get().getLocation());
             o.level(enemyLevel);
             if (customSize) {o.get().setSize(width, height);}
             NewObjectStorage.add(o);
@@ -76,7 +114,7 @@ public class ObjectCreator {
     public static void createObject(String className) {
         try {
             NewObject o = (NewObject) Class.forName(className).newInstance();
-            o.get().setLocation(NewCamera.getMouse());
+            o.get().setLocation(getPreview().get().getLocation());
             if (customSize) {o.get().setSize(width, height);}
             NewObjectStorage.add(o);
         }
@@ -103,12 +141,23 @@ public class ObjectCreator {
     private static void preview() {
         NewObject[] arr = NewObjectStorage.getObjectsByText(PREVIEW_OBJECT);
         NewObject object = null;
-
+        
         if (arr.length > 0) {
             object = arr[0];
-
+            
             object.setImage(previewImage());
         }
+
+        try {
+            if (!currentObject.type.equals("item")) {
+                NewObject selectedClass = (NewObject) Class.forName(currentObject.className()).newInstance();
+                object.get().setSize(selectedClass.get().getSize());
+            }
+            else if (currentObject.type.equals("item")) {
+                object.get().setSize(new ItemObject(currentObject.item).get().getSize());
+            }
+        }
+        catch (Exception e) {e.printStackTrace();}
     }
 
     private static void preview(NewObject object) {
@@ -126,7 +175,7 @@ public class ObjectCreator {
         try {
             Constructor<?> c = Class.forName(ItemObject.class.getName()).getConstructor(Item.class);
             ItemObject o = (ItemObject) c.newInstance(i);
-            o.get().setLocation(NewCamera.getMouse());
+            o.get().setLocation(getPreview().get().getLocation());
             if (customSize) {o.get().setSize(width, height);}
             o.level(enemyLevel);
             NewObjectStorage.add(o);
@@ -134,7 +183,7 @@ public class ObjectCreator {
         catch (Exception e) {e.printStackTrace();}
     }
 
-    public static Runnable getCurrentObject() {return currentObject;}
+    public static Create getCurrentObject() {return currentObject;}
 
     public static void previousObject() {
         if (currentObjectIndex - 1 >= 0) {

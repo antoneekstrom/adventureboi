@@ -72,8 +72,19 @@ public class UIObject {
         return visible;
     }
 
+    private void setColors() {
+        BACKGROUND_COLOR = getParent().getUIBackgroundColor();
+        HIGHLIGHT_TEXT_COLOR = getParent().getUIBackgroundColor();
+    }
+
     public UIObject() {
         font = GlobalData.getStandardFont();
+    }
+
+    public UIObject(String parentname) {
+        font = GlobalData.getStandardFont();
+        setParentName(parentname);
+        setColors();
     }
 
     public void setTag(String s) {
@@ -365,6 +376,11 @@ public class UIObject {
     /** Invoked when mouse is released on this element. */
     public void leftMouseReleased() {
         toggleTyping();
+    }
+
+    /** Invoked when left mouse button has been released anywhere onscreen. */
+    public void leftMouseReleasedSomewhere() {
+
     }
 
     /** Get calculated box that includes padding and such. */

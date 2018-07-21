@@ -2,6 +2,8 @@ package UI;
 
 public class UIButton extends UIObject {
 
+    private NavTask task;
+
     public UIButton(String parentname, String text, boolean centered) {
         super();
         setParentName(parentname);
@@ -15,5 +17,21 @@ public class UIButton extends UIObject {
             centerTextY(true);
             centerTextX(true);
         }
+    }
+
+    public void giveTask(NavTask nt) {
+        task = nt;
+    }
+
+    public void doTask() {
+        if (task != null) {
+            task.run();
+        }
+    }
+
+    @Override
+    public void leftMouseReleased() {
+        super.leftMouseReleased();
+        doTask();
     }
 }

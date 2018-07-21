@@ -1,11 +1,11 @@
 package UI;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
 import adventuregame.GlobalData;
-import gamelogic.ObjectCreator;
-import gamelogic.ObjectPlacement;
+import data.Configuration;
 
 /** This is were all the UI's are stored. */
 public class UIManager {
@@ -19,6 +19,9 @@ public class UIManager {
     private static boolean lockCurrentGUI = false;
     public static void lockCurrentGUI(boolean b) {lockCurrentGUI = b;}
     public static boolean lockCurrentGUI() {return lockCurrentGUI;}
+
+    static Color globalBackgroundColor;
+    private static String CONFIG_BG_KEY = "background_color";
 
     public static void addToHistory(String name) {
         GUIHistory.add(name);
@@ -43,31 +46,62 @@ public class UIManager {
     public static void removeFromHistory(String name) {GUIHistory.remove(name);}
 
     /** A list containing all the UI's. */
-    private static ArrayList<GUI> interfaces = new ArrayList<GUI>() {
-        private static final long serialVersionUID = 1L;
-	{
-        add(new MenuUI());
-        add(new SettingsUI());
-        add(new KeybindingsUI());
-        add(new NewHUD());
-        add(new OptionsUI());
-        add(new CreativeUI());
-        add(new LevelsUI());
-        add(new PlayerSelectUI());
-        add(new InventoryUI());
-        add(new InspectPlayerUI());
-        add(new InputFieldUI("InputField_PlayerName", "Enter Name"));
-        add(new InputFieldUI("InputField_RemovePlayer", "Enter Name"));
-        add(new InputFieldUI("InputField_NewLevel", "Enter Name"));
-        add(new InspectItemUI());
-    }};
+    private static ArrayList<GUI> interfaces = new ArrayList<GUI>() {private static final long serialVersionUID = 1L;};
+
+    private static void addInterfaces() {
+        interfaces.add(new MenuUI());
+        interfaces.add(new SettingsUI());
+        interfaces.add(new KeybindingsUI());
+        interfaces.add(new NewHUD());
+        interfaces.add(new OptionsUI());
+        interfaces.add(new CreativeUI());
+        interfaces.add(new LevelsUI());
+        interfaces.add(new PlayerSelectUI());
+        interfaces.add(new InventoryUI());
+        interfaces.add(new InspectPlayerUI());
+        interfaces.add(new InputFieldUI("InputField_PlayerName", "Enter Name"));
+        interfaces.add(new InputFieldUI("InputField_RemovePlayer", "Enter Name"));
+        interfaces.add(new InputFieldUI("InputField_NewLevel", "Enter Name"));
+        interfaces.add(new InspectItemUI());
+        interfaces.add(new UIColor());
+    }
+
+    static class UIColor extends ColorPickerUI {
+        UIColor() {
+            super("UIColor");
+        }
+        @Override
+        void confirm(Color color) {
+            Configuration.setProperty(CONFIG_BG_KEY, String.valueOf(color.getRGB()));
+            reload();
+        }
+    }
 
     /** Starts all UI's */
-    public static void start() {
-        //start GUI's and update them once
+    private static void startAll() {
         for (GUI gui : interfaces) {
             gui.start();
         }
+    }
+
+    private static Color getGlobalBackgroundColor() {
+        String c = Configuration.getProperty(CONFIG_BG_KEY);
+        return new Color(Integer.parseInt(c));
+    }
+
+    /** Initiate UIManager on program start. */
+    public static void start() {
+        addInterfaces();
+        setBackgroundColor(getGlobalBackgroundColor());
+        startAll();
+    }
+
+    /** Clear and restart all GUI's. */
+    public static void reload() {
+        String currentGUI = getCurrentGUI().getName();
+        interfaces.clear();
+        start();
+        enableGUI(currentGUI);
     }
 
     public static GUI getCurrentGUI() {
@@ -90,6 +124,22 @@ public class UIManager {
             enableGUI(gui);
         }
         addToHistory(currentgui);
+    }
+
+    /** Change backgroundcolor for all UI's. */
+    public static void setBackgroundColor(Color color) {
+        for (GUI g : interfaces) {
+            g.setUIBackgroundColor(color);
+            g.TEXT_HOVER_COLOR = color;
+        }
+    }
+
+    public static void back() {
+        String gui = getLatestGUI();
+        if (!gui.equals("none") && !lockCurrentGUI) {
+            hideAll(false);
+            enableGUI(gui);
+        }    
     }
 
     public static boolean isVisible(String guiname) {
@@ -121,7 +171,7 @@ public class UIManager {
         if (!lockCurrentGUI) {
             //don't add to history if it is an inputfield GUI
             boolean history = true;
-            if (name.startsWith("InputField")) {history = false;}
+            if (name.startsWith("InputField") || name.startsWith("ColorPicker")) {history = false;}
 
             hideAll(history);
             getGUI(name).setVisible(true);
@@ -159,11 +209,12 @@ public class UIManager {
     }
 
     /* --------------------------------------------- */
-    private static String dstring = "";
+    public static String dstring = "";
     private static int dstringwidth = 0;
 
     /** --- DEBUG GOES HERE --- */
     private static void debug() {
+        dstring = getHudHistory();
     }
 
     /** For putting things on screen all the time regardless of active GUI. For debugging purposes. */
@@ -188,11 +239,6 @@ public class UIManager {
 
     /** Paint all UI's. */
     public static void paint(Graphics g) {
-
-        if (ObjectCreator.useGrid()) {
-            ObjectPlacement.drawGrid(g);
-        }
-
         for (GUI ui : interfaces) {
             if (ui.isVisible()) {ui.paint(g);}
         }

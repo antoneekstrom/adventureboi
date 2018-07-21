@@ -1,6 +1,7 @@
 package gamelogic;
 
 import UI.Console;
+import UI.UIManager;
 import objects.Enemy;
 
 public class DefaultConsoleCommands {
@@ -11,6 +12,14 @@ public class DefaultConsoleCommands {
     /** Set objectcreator level. */
     public static void level(int level) {
         ObjectCreator.enemyLevel(level); Console.logSuccessful("Spawn level set to " + level + ".");
+    }
+
+    public static void restartGUI() {
+        UIManager.getCurrentGUI().start();
+    }
+
+    public static void back() {
+        UIManager.enableLatestGUI();
     }
 
     /** Kill selected enemy. */
