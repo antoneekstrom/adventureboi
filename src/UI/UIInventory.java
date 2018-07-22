@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import gamelogic.Item;
+import items.Currency;
 
 public class UIInventory extends UIList {
 
@@ -66,13 +67,23 @@ public class UIInventory extends UIList {
                 }
                 try {
                     Item collectionitem = i.getClass().newInstance();
-                    collectionitem.imageName(collectionitem.name());
+                    collectionitem.imageName(collectionitem.imageName());
+                    fixCurrency(collectionitem, i);
                     collectionitem.name(collectionitem.name() + ((count <= 1) ? ("") : (" (" + count + ")")) );
                     l.add(collectionitem);
                 }
                 catch (Exception e) {e.printStackTrace();}
             }
         }
+    }
+
+    private void fixCurrency(Item colitem, Item item) {
+        try {
+            Currency colc = (Currency) colitem;
+            Currency c = (Currency) item;
+            colc.setValue(c.getValue());
+        }
+        catch (Exception e) {e.printStackTrace();}
     }
 
     private boolean contains(Item i, ArrayList<Item> l) {

@@ -19,9 +19,15 @@ public class StatupMold extends Item implements Statup {
 
     public StatupMold() {
         super("name");
-        description = new String[] {""}; /* Set a description. */
+        description = description();
         effect = getEffect();
         addTag("tag");
+        imageName(name()); /* Set a name for the image. */
+    }
+
+    @Override
+    public String[] description() {
+        return new String[] {""}; /* Set a description. */
     }
 
     @Override

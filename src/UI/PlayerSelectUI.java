@@ -39,21 +39,22 @@ public class PlayerSelectUI extends GUI {
 
     public void setVisible(boolean b) {
         super.setVisible(b);
-
+    }
+    
+    @Override
+    public void enable(boolean addToHistory) {
+        super.enable(addToHistory);
+        refreshList();
+        
         //lock gui
-        if (Players.playerData().size() > 0 && b) {
+        if (Players.playerData().size() > 0) {
             addBackButton();
         }
-        else if (b) {
-            UIManager.lockCurrentGUI(true);
+        else {
+            UIManager.lockCurrentGUI(false);
         }
-        else if (!b) {
-            getUIObjectList().remove(getObjectByText("Back"));
-        }
-
-        refreshList();
     }
-
+    
     public void start() {
         setGuidelineSpacing(150);
         setGuidelineY1(100);

@@ -1,5 +1,6 @@
 package UI;
 
+import java.awt.Color;
 import java.util.ArrayList;
 
 import adventuregame.GameEnvironment;
@@ -19,18 +20,32 @@ public class InventoryUI extends GUI {
     int buttonwidth = 175;
     int indentation = 100;
 
+    static final String BOIN_COUNTER = "BoinCounter";
+
     public InventoryUI() {
         super("Inventory");
     }
 
     public void setVisible(boolean b) {
         super.setVisible(b);
-        if (b) {
-            refreshInv();
-        }
-        else {
+        if (!b) {
             UIManager.getHUD().showXpBar(150, playerName);
         }
+        updateBoinCounter();
+    }
+
+    void updateBoinCounter() {
+        UIObject[] arr = getObjectsByTag(BOIN_COUNTER);
+        if (arr.length > 0) {
+            UIObject object = arr[0];
+            object.setText(String.valueOf(NewObjectStorage.getPlayer(playerName).boinCount()));
+        }
+    }
+
+    @Override
+    public void enable(boolean addToHistory) {
+        super.enable(addToHistory);
+        refreshInv();
     }
 
     public void refreshInv() {
@@ -50,6 +65,7 @@ public class InventoryUI extends GUI {
 
             inv.refreshList(l);
         }
+        updateBoinCounter();
     }
 
     public void selectFilter(String tag) {
@@ -125,7 +141,7 @@ public class InventoryUI extends GUI {
                 InspectPlayerUI pui = (InspectPlayerUI) UIManager.getGUI("InspectPlayer"); 
                 pui.playerName(playerName);
                 UIManager.addToHistory("Inventory");
-                UIManager.getGUI("InspectPlayer").setVisible(true);
+                UIManager.getGUI("InspectPlayer").enable(false);
             }
             {
                 get().setSize(200, 100);
@@ -134,6 +150,19 @@ public class InventoryUI extends GUI {
         };
         applyGeneralStyle(iplayer);
         addObject(iplayer);
+
+        
+        //boincounter
+        addObject(new UIText(getName(), "7", false) {
+            {
+                applyGeneralStyle(this);
+                get().setLocation(iplayer.get().x - getFullWidth() - 50, 100);
+                setTag(BOIN_COUNTER);
+                setBackgroundColor(getUIBackgroundColor());
+                textColor(Color.yellow);
+                setBorderColor(Color.yellow);
+            }
+        });
 
         addObject(inv);
     }

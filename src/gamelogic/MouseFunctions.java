@@ -22,7 +22,7 @@ public class MouseFunctions {
         put("Resume", () -> UIManager.enableGUI("HUD"));
         put("Settings", () -> UIManager.enableGUI("Settings"));
         put("Keybindings", () -> UIManager.enableGUI("Keybindings"));
-        put("Back", () -> UIManager.enableLatestGUI());
+        put("Back", () -> UIManager.back());
         put("Custom Levels", () -> UIManager.enableGUI("Levels"));
         put("Save Level", () -> GameEnvironment.saveGame());
         put("Save Player", () -> GameEnvironment.savePlayers());

@@ -16,6 +16,14 @@ public class SettingsUI extends GUI {
         setGuidelineSpacing(150);
         setGuidelineY1(200);
     }
+    int timesVisible = 0;
+    @Override
+    public void setVisible(boolean b) {
+        super.setVisible(b);
+        if (b) {
+            UISlider s = (UISlider) getObjectByText(VOLSLIDER_TEXT);
+        }
+    }
 
     public void start() {
         //back
@@ -29,11 +37,13 @@ public class SettingsUI extends GUI {
         addMenuButton("Keybindings", getGuidelineY1());
 
         //volume slider
+        int volume = Integer.parseInt(Configuration.getProperty("volume"));
+
         addObject(new UISlider(getName(), MAXVOLUME) {
             @Override
-            void updateValue() {
-            super.updateValue();
-            Configuration.setProperty("volume", String.valueOf((int)value()));
+            public void setValue(double d) {
+                super.setValue(d);
+                Configuration.setProperty("volume", String.valueOf((int)value()));
             }
             {
                 //transform
@@ -46,6 +56,9 @@ public class SettingsUI extends GUI {
                 applySliderStyle(this);
                 setText(VOLSLIDER_TEXT);
                 VALUE_UNIT = "%";
+
+                setValue(volume);
+                moveHandleToValue(value());
             }
         });
 

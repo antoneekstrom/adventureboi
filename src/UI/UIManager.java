@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import adventuregame.GlobalData;
 import data.Configuration;
+import gamelogic.NewObjectStorage;
 
 /** This is were all the UI's are stored. */
 public class UIManager {
@@ -14,7 +15,6 @@ public class UIManager {
     private static int MAX_HISTORY_SIZE = 5;
     /** History for recent GUI's in order. */
     private static ArrayList<String> GUIHistory = new ArrayList<String>();
-    private static String lastInHistory = "none";
 
     private static boolean lockCurrentGUI = false;
     public static void lockCurrentGUI(boolean b) {lockCurrentGUI = b;}
@@ -25,8 +25,6 @@ public class UIManager {
 
     public static void addToHistory(String name) {
         GUIHistory.add(name);
-        getGUI(name).addedToHistory();
-        lastInHistory = name;
         /** Remove oldest entry if size is larger than max. */
         if (GUIHistory.size() > MAX_HISTORY_SIZE) {
             GUIHistory.remove(0);
@@ -37,7 +35,9 @@ public class UIManager {
         String name = "none";
         if (GUIHistory.size() > 0) {
             name = GUIHistory.get(GUIHistory.size() - 1);
-            GUIHistory.remove(GUIHistory.size() - 1);
+            if (!getGUI(name).home()) {
+                GUIHistory.remove(GUIHistory.size() - 1);
+            }
         }
         return name;
     }
@@ -117,13 +117,21 @@ public class UIManager {
     }
 
     public static void enableLatestGUI() {
-        String gui = getLatestGUI();
-        String currentgui = getCurrentGUI().getName();
-        if (!gui.equals("none") && !lockCurrentGUI) {
-            hideAll(false);
-            enableGUI(gui);
+        String name = getLatestGUI();
+        enableGUI(name);
+    }
+
+    public static String getLast() {
+        String name = "none";
+        if (GUIHistory.size() > 0) {
+            name = GUIHistory.get(GUIHistory.size() - 2);
+            GUIHistory.remove(GUIHistory.size() - 1);
         }
-        addToHistory(currentgui);
+        return name;
+    }
+
+    public static void enableLast() {
+        enableGUI(getLast(), false);
     }
 
     /** Change backgroundcolor for all UI's. */
@@ -135,11 +143,7 @@ public class UIManager {
     }
 
     public static void back() {
-        String gui = getLatestGUI();
-        if (!gui.equals("none") && !lockCurrentGUI) {
-            hideAll(false);
-            enableGUI(gui);
-        }    
+        enableLast();
     }
 
     public static boolean isVisible(String guiname) {
@@ -168,13 +172,13 @@ public class UIManager {
      *  @param name : Name of GUI to enable.
      */
     public static void enableGUI(String name) {
-        if (!lockCurrentGUI) {
-            //don't add to history if it is an inputfield GUI
-            boolean history = true;
-            if (name.startsWith("InputField") || name.startsWith("ColorPicker")) {history = false;}
+        enableGUI(name, true);
+    }
 
-            hideAll(history);
-            getGUI(name).setVisible(true);
+    public static void enableGUI(String name, boolean addtohistory) {
+        if (!lockCurrentGUI) {
+            hideAll();
+            getGUI(name).enable(addtohistory);
         }
     }
 
@@ -184,13 +188,16 @@ public class UIManager {
         return interfaces;
     }
 
-    public static void hideAll(boolean addToHistory) {
+    public static void hideAll() {
         for (GUI gui : interfaces) {
-            if (gui.isVisible() && addToHistory && !gui.incognito() && !gui.getName().equals(lastInHistory)) {
-                UIManager.addToHistory(gui.getName());
-            }
             gui.setVisible(false);
         }
+    }
+
+    public static InventoryUI getInventory(int player) {
+        InventoryUI inv = (InventoryUI) getGUI("Inventory");
+        inv.playerName = NewObjectStorage.getPlayer(player).getName();
+        return inv;
     }
 
     public static NewHUD getHUD() {
@@ -203,6 +210,7 @@ public class UIManager {
         for (GUI gui : interfaces) {
             if (gui.getName().equals(name)) {
                 ui = gui;
+                break;
             }
         }
         return ui;
@@ -210,7 +218,6 @@ public class UIManager {
 
     /* --------------------------------------------- */
     public static String dstring = "";
-    private static int dstringwidth = 0;
 
     /** --- DEBUG GOES HERE --- */
     private static void debug() {
@@ -219,8 +226,6 @@ public class UIManager {
 
     /** For putting things on screen all the time regardless of active GUI. For debugging purposes. */
     private static void debug(Graphics g) {
-        g.drawString(dstring, (GlobalData.getScreenDim().width / 2) - (dstringwidth / 2), 50);
-        dstringwidth = g.getFontMetrics().stringWidth(dstring);
     }
     private static String getHudHistory() {
         String ss = "";

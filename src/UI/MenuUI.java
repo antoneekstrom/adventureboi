@@ -36,6 +36,7 @@ public class MenuUI extends GUI {
     public void start() {
         setGuidelineSpacing(150);
         setGuidelineY1(150);
+        home(true);
 
         //title
         addTitle("Adventureboi");

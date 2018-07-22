@@ -1,6 +1,8 @@
 package objects;
 
 import adventuregame.Images;
+import gamelogic.Item;
+import items.Coin;
 import items.Donut;
 
 public class Bigmush extends Enemy implements EnemyMold {
@@ -22,12 +24,17 @@ public class Bigmush extends Enemy implements EnemyMold {
     @Override
     public void startMisc() {
         super.startMisc();
-        drop = new Donut();
+        addDrop(new Donut());
+        addDrop(new Coin(Coin.SMALL));
+        addDrop(new Coin(Coin.LARGE));
+        addDrop(new Coin(Coin.HUGE));
     }
 
     @Override
     public void dropItem() {
-        drop.level(level());
+        for (Item drop : drops) {
+            drop.level(level());
+        }
         super.dropItem();
     }
 

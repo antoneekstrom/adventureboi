@@ -214,6 +214,8 @@ public class NewHUD extends GUI {
     public void start() {
         t1 = new UIText(getName(), "HUD", true);
         FONT_SIZE = 30;
+
+        home(true);
      
         player1();
         player2();

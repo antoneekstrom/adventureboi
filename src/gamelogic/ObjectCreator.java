@@ -31,12 +31,12 @@ public class ObjectCreator {
     private static boolean customSize = false;
     private static int width = 100;
     private static int height = 100;
-    public static void width(int i) {width = i;}
-    public static void height(int i) {height = i;}
-    public static void toggleCustomSize() {if (customSize) {customSize = false;} else {customSize = true;}}
+    public static void width(int i) {width = i; preview();}
+    public static void height(int i) {height = i; preview();}
+    public static void toggleCustomSize() {if (customSize) {customSize = false;} else {customSize = true;} preview();}
     public static boolean customSize() {return customSize;}
 
-    static class Create {
+    public static class Create {
         String className, type;
         Item item;
 
@@ -64,9 +64,8 @@ public class ObjectCreator {
             }
 
         }
-        public String className() {
-            return className;
-        }
+        public String className() {return className;}
+        public String type() {return type;}
     }
 
     static HashMap<String, Create> objects = new HashMap<String, Create>() {
@@ -92,10 +91,17 @@ public class ObjectCreator {
         objects.put("energyshroom", new Create(new EnergyShroom(), "item"));
         objects.put("tallmush", new Create(new TallmushItem(), "item"));
         objects.put("icecube", new Create(new Icecube(), "item"));
+        objects.put("boin", new Create(new Coin(), "item"));
     }
 
     public static NewObject getPreview() {
-        return NewObjectStorage.getObjectsByText(PREVIEW_OBJECT)[0];
+        NewObject[] arr = NewObjectStorage.getObjectsByText(PREVIEW_OBJECT);
+        if (arr.length > 0) {
+            return NewObjectStorage.getObjectsByText(PREVIEW_OBJECT)[0];
+        }
+        else {
+            throw new NullPointerException();
+        }
     }
 
     public static void createEnemy(String className) {
@@ -138,6 +144,7 @@ public class ObjectCreator {
         NewObjectStorage.add(op);
     }
 
+    /** Update object preview. */
     private static void preview() {
         NewObject[] arr = NewObjectStorage.getObjectsByText(PREVIEW_OBJECT);
         NewObject object = null;
@@ -145,16 +152,21 @@ public class ObjectCreator {
         if (arr.length > 0) {
             object = arr[0];
             
-            object.setImage(previewImage());
+            object.setImage(object.getImage());
         }
 
         try {
             if (!currentObject.type.equals("item")) {
                 NewObject selectedClass = (NewObject) Class.forName(currentObject.className()).newInstance();
                 object.get().setSize(selectedClass.get().getSize());
+                object.setImage(Images.getImage(ObjectCreator.getCurrentObjectName()));
             }
             else if (currentObject.type.equals("item")) {
                 object.get().setSize(new ItemObject(currentObject.item).get().getSize());
+                object.setImage(Images.getImage(currentObject.item.imageName()));
+            }
+            if (customSize) {
+                object.get().setSize(width, height);
             }
         }
         catch (Exception e) {e.printStackTrace();}
@@ -176,8 +188,15 @@ public class ObjectCreator {
             Constructor<?> c = Class.forName(ItemObject.class.getName()).getConstructor(Item.class);
             ItemObject o = (ItemObject) c.newInstance(i);
             o.get().setLocation(getPreview().get().getLocation());
+            i.level(enemyLevel);
+            
+            try {
+                Currency cur = (Currency) i;
+                cur.setValue(i.level());
+            } catch (ClassCastException e) {e.printStackTrace();}
+
+            o.get().setSize(i.size());
             if (customSize) {o.get().setSize(width, height);}
-            o.level(enemyLevel);
             NewObjectStorage.add(o);
         }
         catch (Exception e) {e.printStackTrace();}

@@ -255,7 +255,9 @@ public class CreativeUI extends GUI {
 
     public void update() {
         super.update();
-        img.setImage(images.get(ObjectCreator.getCurrentObjectName()));
+        try {
+            img.setImage(ObjectCreator.getPreview().getImage());
+        } catch (Exception e) {e.printStackTrace();}
         current.setText(ObjectCreator.getCurrentObjectName());
         create.setText("create on click: " + ObjectCreator.isEnabled());
         inspect.setText("inspect on click: " + ObjectInspector.isEnabled());

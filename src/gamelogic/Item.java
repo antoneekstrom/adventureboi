@@ -1,5 +1,6 @@
 package gamelogic;
 
+import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -28,12 +29,20 @@ public class Item implements Serializable {
     private boolean useOnPickup = true;
     private int level = 0;
 
+    protected Dimension size = new Dimension(75, 75);
+    public Dimension size() {return size;}
+
     //Description
     protected String[] description;
     protected String effect;
 
     public Item(String name) {
         this.name = name;
+    }
+
+    public Item(String name, int level) {
+        this.name = name;
+        level(level);
     }
 
     public BufferedImage image() {
@@ -50,7 +59,6 @@ public class Item implements Serializable {
     public boolean equippable() {return equippable;}
     public String name() {return name;}
     public void name(String n) {name = n;}
-    public String[] description() {return description;}
     public String effect() {return effect;}
     public String sortingTag() {return sortingTag;}
     public void equip(boolean b) {
@@ -86,14 +94,23 @@ public class Item implements Serializable {
         tags.remove(tagToRemove);
     }
 
+    public String[] description() {
+        return description;
+    }
+
     public int level() {return level;}
     public void level(int i) {
         level = i;
         scaleStats();
+        description = description();
     }
 
     protected void scaleStats() {
-        
+    }
+
+    /** Get a title to display in ex. a tooltip. */
+    public String getTitle() {
+        return "level " + level() + " " + name();
     }
 
     /** Return an ID string built from stats and data from this item. */
@@ -130,6 +147,12 @@ public class Item implements Serializable {
     /** This item is currently equipped. */
     public static final String EQUIPPED = "equipped";
 
+    /** This item is a currency. */
+    public static final String CURRENCY = "currency";
+
+    /** This item does not belong to any of the other categories. */
+    public static final String MISC = "misc";
+
     /** Get a hashmap of all values on this item. */
     public HashMap<String, Object> getValueMap() {
 
@@ -151,13 +174,37 @@ public class Item implements Serializable {
     public static double SMALL_INCREASE_FACTOR = 1.1;
     public static double SMALL_DECREASE_FACTOR = 0.90;
 
-    public static int LEVEL_VARIANCE = 3;
+    public static int SMALL_LEVEL_VARIANCE = 2;
+    public static int MEDIUM_LEVEL_VARIANCE = 5;
+    public static int LARGE_LEVEL_VARIANCE = 8;
+
+    public static int levelVariance(int level) {
+        if (level > 3 && level < 15) {
+            return SMALL_LEVEL_VARIANCE;
+        }
+        else if (level < 30) {
+            return MEDIUM_LEVEL_VARIANCE;
+        }
+        else if (level > 100) {
+             return LARGE_LEVEL_VARIANCE;
+        }
+        else {
+            return 0;
+        }
+    }
 
     public static int getRandomLevel(int lvl) {
         Random r = new Random();
-        int lvar = r.nextInt(LEVEL_VARIANCE) + 1;
+        int lvar = r.nextInt(levelVariance(lvl)) + 1;
         if (r.nextBoolean()) {lvar = -lvar;}
-        return lvl + lvar;
+
+        if (lvl + lvar > 0) {
+            lvl += lvar;
+        }
+        else {
+            lvl = 0;
+        }
+        return lvl;
     }
 
     public double levelPow(double factor) {

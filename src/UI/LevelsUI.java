@@ -3,7 +3,6 @@ package UI;
 import java.awt.Color;
 import java.awt.Rectangle;
 
-import adventuregame.GameEnvironment;
 import adventuregame.GlobalData;
 import data.LevelData;
 

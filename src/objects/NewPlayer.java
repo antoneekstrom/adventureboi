@@ -18,6 +18,8 @@ import data.Players;
 import gamelogic.AbilityValues;
 import gamelogic.Item;
 import gamelogic.NewCamera;
+import items.Coin;
+import items.Currency;
 import items.abilities.Ability;
 
 public class NewPlayer extends NewObject implements ObjectMethods {
@@ -318,9 +320,26 @@ public class NewPlayer extends NewObject implements ObjectMethods {
         get().setLocation(spawnPoint);
     }
 
+    public int boinCount() {
+        int count = 0;
+
+        for (Item item : playerData().inventory()) {
+            if (item.hasTag(Item.CURRENCY)) {
+                Currency c = (Currency) item;
+                count += c.getValue();
+            }
+        }
+
+        return count;
+    }
+
     public void addItem(Item i) {
         playerData().inventory().add(i);
         if (i.useOnPickup()) {i.use(this);}
+    }
+
+    public void emptyInventory() {
+        playerData().inventory().clear();
     }
 
     public void giveXp(int amount) {

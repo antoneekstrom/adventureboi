@@ -1,6 +1,7 @@
 package objects;
 
 import java.awt.Rectangle;
+import java.util.ArrayList;
 
 import adventuregame.Animator;
 import adventuregame.Images;
@@ -22,7 +23,7 @@ public class Enemy extends NewObject implements EnemyMold {
     protected boolean destructOnDeath = true;
 
     //drops
-    Item drop;
+    ArrayList<Item> drops = new ArrayList<Item>();
     double experience;
 
     public Enemy(int level, double experience, int health, String name) {
@@ -91,6 +92,12 @@ public class Enemy extends NewObject implements EnemyMold {
 
     }
 
+    public void addDrop(Item item) {
+        drops.add(item);
+    }
+
+    public int dropAmount() {return drops.size();}
+
     @Override
     public void collide(NewObject collision) {
         super.collide(collision);
@@ -135,19 +142,23 @@ public class Enemy extends NewObject implements EnemyMold {
     }
 
     public void setDropLevel() {
-        drop.level(Item.getRandomLevel(level()));
+        for (Item drop : drops) {
+            drop.level(Item.getRandomLevel(level()));
+        }
     }
 
     public void dropItem() {
-        if (drop != null) {
-            setDropLevel();
-            
-            Rectangle e = get();
-            ItemObject io = new ItemObject(drop) {{
-                Rectangle i = this.get();
-                this.get().setLocation(e.x - (i.width / 2), e.y - (i.height / 2));
-            }};
-            NewObjectStorage.add(io);
+        for (Item drop : drops) {
+            if (drop != null) {
+                setDropLevel();
+                
+                Rectangle e = get();
+                ItemObject io = new ItemObject(drop) {{
+                    Rectangle i = this.get();
+                    this.get().setLocation(e.x - (i.width / 2), e.y - (i.height / 2));
+                }};
+                NewObjectStorage.add(io);
+            }
         }
     }
 

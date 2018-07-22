@@ -74,7 +74,7 @@ public class UITooltip extends UIObject {
             lines.add(t);
         }
         //title
-        lines.add(new UIText(getParentName(), "level " + (int)item.level() + " " + getText(), false) {
+        lines.add(new UIText(getParentName(), item.getTitle(), false) {
             {
                 this.setTag("title");
                 setParentRectangle(get());
@@ -127,7 +127,7 @@ public class UITooltip extends UIObject {
     public void start() {
         lines = new ArrayList<UIText>();
         populateLines();
-        image = Images.getImageHashMap("assets/items").get(item.imageName());
+        image = Images.getImage(item.imageName());
         imagebox.setLocation(get().getLocation());
 
         get().setSize(width, height);

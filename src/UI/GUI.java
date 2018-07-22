@@ -34,7 +34,12 @@ public class GUI {
 	private boolean incognito = false;
 	private boolean showOutline = false;
 	private boolean visible = false;
+	/** This GUI should stay in history. */
+	private boolean home = false;
 	private String name;
+
+	public void home(boolean b) {home = b;}
+	public boolean home() {return home;}
 
 	/** In which layer this GUI resides. */
 	private int layerIndex = 0;
@@ -190,7 +195,23 @@ public class GUI {
 	}
 
 	public void setVisible(boolean b) {
-		visible = b;
+		//add to history
+		if (b) {
+			enable(true);
+		}
+		else {
+			visible = false;
+		}
+	}
+
+	/** Set visible to true. */
+	public void enable(boolean addToHistory) {
+		if (!isVisible() && addToHistory && !incognito()) {
+			UIManager.addToHistory(getName());
+		}
+
+		//change visibility
+		visible = true;
 
 		//determine layerindex
 		layerIndex = UIManager.getAllVisible().size() -1;
@@ -351,11 +372,12 @@ public class GUI {
 
 	public void addTitle(String text) {
 		addObject(new UIText(getName(), text, true) {{
-            this.textColor(getBackgroundColor());
+			this.textColor(getUIBackgroundColor());
             this.get().y = 200;
 			this.setFontSize(80);
 			this.setTag("title");
-        }});
+		}});
+		
 	}
 
 }

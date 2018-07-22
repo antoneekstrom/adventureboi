@@ -2,6 +2,7 @@ package UI;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.Rectangle;
 
 import adventuregame.GlobalData;
@@ -15,6 +16,7 @@ public class UISlider extends UIObject {
     Dimension HANDLE_SIZE = new Dimension(75, 35);
 
     boolean handleGrabbed = false;
+    public boolean grabbed() {return handleGrabbed;}
     int grabOffset = 0;
 
     private UIObject handle;
@@ -39,8 +41,6 @@ public class UISlider extends UIObject {
             @Override
             public void leftMousePressed() {
                 super.leftMousePressed();
-                handleGrabbed = true;
-                grabOffset = GlobalData.getMouse().x - handle().get().x;
             }
             @Override
             public void leftMouseReleasedSomewhere() {
@@ -63,6 +63,17 @@ public class UISlider extends UIObject {
 
         //this
         get().setSize(500, 55);
+    }
+
+    public void grab(Point pos) {
+        handleGrabbed = true;
+        if (handle().checkMouse()) {
+            grabOffset = pos.x - handle().get().x;
+        }
+
+        else {
+            grabOffset = handle().get().width / 2;
+        }
     }
 
     @Override
@@ -109,16 +120,22 @@ public class UISlider extends UIObject {
         if (handle().checkMouse()) {
             handle().leftMousePressed();
         }
+        grab(GlobalData.getMouse());
     }
 
     @Override
     public void leftMouseReleasedSomewhere() {
         super.leftMouseReleasedSomewhere();
         handle().leftMouseReleasedSomewhere();
+        setValue(value);
+    }
+
+    public void moveHandleToValue(double value) {
+        handle().get().x = get().x + (int) ((value / maxValue) * get().width);
     }
 
     void updateValue() {
-        setValue(maxValue * (1 - ( (get().getMaxX() - handle().get().getMaxX()) / (get().width - handle().get().width) )));
+        value = maxValue * (1 - ( (get().getMaxX() - handle().get().getMaxX()) / (get().width - handle().get().width) ));
     }
 
     public void update() {

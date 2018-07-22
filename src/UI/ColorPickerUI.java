@@ -1,6 +1,7 @@
 package UI;
 
 import java.awt.Color;
+import java.awt.Point;
 
 public class ColorPickerUI extends GUI {
 
@@ -11,6 +12,11 @@ public class ColorPickerUI extends GUI {
     public ColorPickerUI(String name) {
         super("ColorPicker");
         setName(getName() + "_" + name);
+    }
+
+    @Override
+    public void setVisible(boolean b) {
+        super.setVisible(b);
     }
 
     @Override
@@ -26,6 +32,11 @@ public class ColorPickerUI extends GUI {
                 super.setValue(d);
                 redValue = (int)value();
                 updateColors();
+            }
+            @Override
+            public void update() {
+                super.update();
+                if (grabbed()) {updateColors();}
             }
             {
                 Color COLOR = Color.red;
@@ -47,7 +58,11 @@ public class ColorPickerUI extends GUI {
             public void setValue(double d) {
                 super.setValue(d);
                 greenValue = (int)value();
-                updateColors();
+            }
+            @Override
+            public void update() {
+                super.update();
+                if (grabbed()) {updateColors();}
             }
             {
                 Color COLOR = Color.green;
@@ -70,6 +85,13 @@ public class ColorPickerUI extends GUI {
                 super.setValue(d);
                 blueValue = (int)value();
                 updateColors();
+            }
+            @Override
+            public void update() {
+                super.update();
+                if (grabbed()) {
+                    updateColors();
+                }
             }
             {
                 Color COLOR = Color.blue;

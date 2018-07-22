@@ -1,7 +1,5 @@
 package UI;
 
-import java.awt.Color;
-
 public class KeybindingsUI extends GUI {
 
     public KeybindingsUI() {
@@ -9,11 +7,17 @@ public class KeybindingsUI extends GUI {
     }
 
     public void start() {
+        //nav
+        incognito(true);
+
         //back
         addBackButton();
 
         //title
         addTitle("Keybindings");
+
+        //addbuttton
+        addBackButton();
     }
 
 }

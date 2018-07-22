@@ -14,12 +14,20 @@ public class DefaultConsoleCommands {
         ObjectCreator.enemyLevel(level); Console.logSuccessful("Spawn level set to " + level + ".");
     }
 
-    public static void restartGUI() {
-        UIManager.getCurrentGUI().start();
+    public static void reload() {
+        UIManager.reload();
     }
 
     public static void back() {
         UIManager.enableLatestGUI();
+    }
+
+    public static void test() {
+
+    }
+
+    public static void refreshInv() {
+        UIManager.getInventory(1).refreshInv();
     }
 
     /** Kill selected enemy. */

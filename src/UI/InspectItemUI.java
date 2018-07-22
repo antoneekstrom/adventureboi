@@ -50,6 +50,7 @@ public class InspectItemUI extends GUI {
     public void start() {
         addTitle("Inspect Item");
         getObjectByText("Inspect Item").setTag("title");
+        incognito(true);
 
         //list
         inspectionstats = new UIList(getName()) {

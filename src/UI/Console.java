@@ -29,7 +29,17 @@ public class Console {
 
     private static String regex = " ";
     private static String objectParseRegex = ".";
-    private static String selected = "selected";
+    private static String[] SELECTED = new String[] {"selected", "sel"};
+
+    /** Check if string matches any variation of key. */
+    private static boolean checkKey(String text, String[] key) {
+        for (String k : key) {
+            if (text.equals(k)) {
+                return true;
+            }
+        }
+        return false;
+    }
     private static String gameObjectRegex = "obj:";
 
     //'find string' values
@@ -243,7 +253,7 @@ public class Console {
 
         selectedObject = false;
         //if objectstring equals the syntax for choosing the currently selected object in the ObjectInspector.
-        if (name.equals(selected)) {
+        if (checkKey(name, SELECTED)) {
             object = getSelectedObject();
             className = object.getClass().getName();
             selectedObject = true;

@@ -12,6 +12,8 @@ public class LevelData implements Serializable {
 	private String name;
     private boolean creativeMode;
     private ArrayList<ObjectData> objectDataList;
+    
+    private int minLevel = 0, maxLevel = 5;
 
     public String name() {return name;}
     public boolean creativeMode() {return creativeMode;}

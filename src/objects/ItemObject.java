@@ -9,7 +9,7 @@ import gamelogic.NewObjectStorage;
 public class ItemObject extends NewObject {
 
     /** Size for GameObject Items */
-    public static transient Dimension itemSize = new Dimension(75, 75);
+    public static transient Dimension itemSize;
     
     Item item;
 
@@ -27,7 +27,13 @@ public class ItemObject extends NewObject {
 
     public void start() {
         setImage(Images.getImage(item.imageName()));
+        itemSize = item.size();
         get().setSize(itemSize);
+    }
+
+    @Override
+    protected void logic() {
+        super.logic();
     }
 
     @Override
