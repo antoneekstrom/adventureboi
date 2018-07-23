@@ -7,10 +7,10 @@ import adventuregame.Animator;
 import adventuregame.Images;
 import data.NumberFactory;
 import gamelogic.Item;
-import gamelogic.NewObjectStorage;
+import gamelogic.ObjectStorage;
 import objects.EnemyMold;
 
-public class Enemy extends NewObject implements EnemyMold {
+public class Enemy extends GameObject implements EnemyMold {
 
     int level = 0;
     int contactDamage = 0;
@@ -104,13 +104,9 @@ public class Enemy extends NewObject implements EnemyMold {
     public boolean isDead() {return dead;}
 
     @Override
-    public void collide(NewObject collision) {
+    public void collide(GameObject collision) {
         super.collide(collision);
         getAI().collision(collision);
-        
-        if (collision.getClass().equals(NewPlayer.class)) {
-            playerContact((NewPlayer)collision);
-        }
     }
 
     @Override
@@ -141,8 +137,8 @@ public class Enemy extends NewObject implements EnemyMold {
     }
 
     public void dropXp() {
-        String pname = NewObjectStorage.findNearestPlayer(get().getLocation());
-        NewObjectStorage.getPlayer(pname).giveXp((int)experience);
+        String pname = ObjectStorage.findNearestPlayer(get().getLocation());
+        ObjectStorage.getPlayer(pname).giveXp((int)experience);
     }
     
     public void drop() {
@@ -166,17 +162,18 @@ public class Enemy extends NewObject implements EnemyMold {
                     Rectangle i = this.get();
                     this.get().setLocation(e.x - (i.width / 2), e.y - (i.height / 2));
                 }};
-                NewObjectStorage.add(io);
+                ObjectStorage.add(io);
             }
         }
     }
 
     public void destruct() {
         super.destruct();
-        NewObjectStorage.remove(this);
+        ObjectStorage.remove(this);
     }
 
-	public void playerContact(NewPlayer col) {
+    @Override
+	public void playerContact(Player col) {
         if (contactDamage > 0) {
             col.healthModule().damage(contactDamage);
         }

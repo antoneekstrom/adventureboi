@@ -6,7 +6,7 @@ import java.util.TimerTask;
 
 import gamelogic.Item;
 import items.abilities.Ability;
-import objects.NewPlayer;
+import objects.Player;
 
 public class Icecube extends Ability {
 
@@ -17,7 +17,7 @@ public class Icecube extends Ability {
     private int INTERVAL = 100;
     private int timerCounter = 0;
 
-    private NewPlayer player;
+    private Player player;
 
 	public Icecube() {
         super("icecube");
@@ -41,7 +41,7 @@ public class Icecube extends Ability {
     }
 
     @Override
-    public void use(NewPlayer player) {
+    public void use(Player player) {
         if (!player.isShrinked()) {
             super.use(player);
             this.player = player;

@@ -1,11 +1,11 @@
 package gamelogic;
 
-import objects.NewObject;
+import objects.GameObject;
 import objects.Spawner;
 
 public interface TriggerEvent {
 
-    boolean check(NewObject object);
+    boolean check(GameObject object);
     
     boolean check(Spawner spawner);
 }

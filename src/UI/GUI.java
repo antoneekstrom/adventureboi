@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 import adventuregame.GlobalData;
 import gamelogic.ObjectInspector;
-import objects.NewObject;
+import objects.GameObject;
 
 public class GUI {
 
@@ -71,6 +71,10 @@ public class GUI {
 
 	public void setGuidelineY1(int y) {
 		guidelineY1 = y;
+	}
+
+	public void reuseGuideline() {
+		guidelineUses = -1;
 	}
 
 	public int getGuidelineY1() {
@@ -299,7 +303,7 @@ public class GUI {
 	public void leftClick() {
 	}
 
-	public void inspectionContextMenu(NewObject o) {
+	public void inspectionContextMenu(GameObject o) {
 		UIContextMenu c = new UIContextMenu(getName());
 		c.setText(o.getName());
 		c.get().setSize(320, 350);

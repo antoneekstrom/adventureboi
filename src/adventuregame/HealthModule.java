@@ -6,7 +6,7 @@ import java.awt.Point;
 import java.io.Serializable;
 
 import UI.Healthbar;
-import objects.NewObject;
+import objects.GameObject;
 
 public class HealthModule implements Serializable {
 	
@@ -31,7 +31,7 @@ public class HealthModule implements Serializable {
 	private int DMG_NUM_DISPLAY_TIME = 35;
 	private int dmgNumTimer = 0;
 
-	private NewObject object;
+	private GameObject object;
 	private Healthbar hpbar;
 	
 	public HealthModule(int maxhp) {
@@ -48,7 +48,7 @@ public class HealthModule implements Serializable {
 	public void showHp(boolean b) {
 		showHp = b;
 		if (b) {
-			hpbar = new Healthbar(150, 50);
+			hpbar = new Healthbar(125, 35);
 		}
 	}
 
@@ -77,7 +77,7 @@ public class HealthModule implements Serializable {
 	public Healthbar healthbar() {return hpbar;}
 	public boolean isDead() {if (health <= 0 && canDie() && !invincible) {return true;} else {return false;}}
 	
-	public void update(NewObject object) {
+	public void update(GameObject object) {
 		hpCheck();
 		this.object = object;
 		if (showHp) {hpbar.update((double) health, (double) maxHealth, object);}

@@ -1,6 +1,6 @@
 package objects;
 
-public class Platform extends NewObject {
+public class Platform extends GameObject {
 
     public Platform() {
         super();

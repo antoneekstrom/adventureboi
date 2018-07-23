@@ -9,8 +9,8 @@ import java.util.Random;
 
 import data.NumberFactory;
 import objects.ItemObject;
-import objects.NewObject;
-import objects.NewPlayer;
+import objects.GameObject;
+import objects.Player;
 
 public class Item implements Serializable {
 
@@ -129,7 +129,7 @@ public class Item implements Serializable {
     public void useOnPickup(boolean b) {useOnPickup = b;}
 
     /** Activates this items effect on the player. When overriding invoke super last. */
-    public void use(NewPlayer player) {
+    public void use(Player player) {
         uses++;
     }
 
@@ -137,7 +137,7 @@ public class Item implements Serializable {
     public boolean used() {return uses > 0;}
 
     /** Get gameobject that can be picked up as item. */
-    public NewObject getGameObject() {
+    public GameObject getGameObject() {
         return new ItemObject(this);
     }
 

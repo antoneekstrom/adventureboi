@@ -3,9 +3,9 @@ package items.abilities;
 import java.util.HashMap;
 
 import gamelogic.Item;
-import gamelogic.NewObjectStorage;
+import gamelogic.ObjectStorage;
 import objects.Fireball;
-import objects.NewPlayer;
+import objects.Player;
 
 public class FireballItem extends Ability {
 
@@ -46,12 +46,12 @@ public class FireballItem extends Ability {
     }
 
     @Override
-    public void use(NewPlayer player) {
+    public void use(Player player) {
         super.use(player);
         fireball(player);
     }
 
-    public void fireball(NewPlayer player) {
+    public void fireball(Player player) {
         Fireball f = new Fireball(player.abilityDirection);
         f.damage = (int) player.calculateDamage();
         f.player = player.playerData().name();
@@ -65,7 +65,7 @@ public class FireballItem extends Ability {
         else if (player.abilityDirection.equals("right")) {
             f.get().setLocation((int) player.get().getCenterX() + (int) player.getWidth() / 2, (int) player.get().getCenterY() - (int) (f.get().getHeight()) + 30);
         }
-        NewObjectStorage.add(f);
+        ObjectStorage.add(f);
     }
 
 }

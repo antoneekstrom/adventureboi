@@ -3,9 +3,9 @@ package objects;
 import java.awt.Graphics;
 
 import adventuregame.Images;
-import gamelogic.NewObjectStorage;
+import gamelogic.ObjectStorage;
 
-public class Fireball extends NewObject implements ObjectMethods {
+public class Fireball extends GameObject implements ObjectMethods {
 
     String direction = "";
     int velocity = 25;
@@ -44,12 +44,12 @@ public class Fireball extends NewObject implements ObjectMethods {
             distanceTraveled += velocity;
         }
         if (distanceTraveled >= maxDistance) {
-            NewObjectStorage.remove(this);
+            ObjectStorage.remove(this);
         }
     }
 
-    public void intersect(NewObject collision) {
-        NewObjectStorage.remove(this);
+    public void intersect(GameObject collision) {
+        ObjectStorage.remove(this);
         if (collision.getHealthModule() != null) {
             collision.getHealthModule().damage(damage);
         }

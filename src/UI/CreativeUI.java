@@ -1,12 +1,13 @@
 package UI;
 
 import java.awt.Color;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
 import adventuregame.GlobalData;
 import adventuregame.Images;
-import gamelogic.NewObjectStorage;
+import gamelogic.ObjectStorage;
 import gamelogic.ObjectCreator;
 import gamelogic.ObjectInspector;
 
@@ -146,7 +147,7 @@ public class CreativeUI extends GUI {
             @Override
             public void leftMouseReleased() {
                 if (ObjectInspector.selectedObject() != null) {
-                    NewObjectStorage.remove(ObjectInspector.selectedObject());
+                    ObjectStorage.remove(ObjectInspector.selectedObject());
                 }
             }
             {
@@ -221,6 +222,53 @@ public class CreativeUI extends GUI {
                 this.handle().hoverColorChange(this.handle().getBackgroundColor().brighter());
             }
         };
+        startRight();
+    }
+
+    private int getRightSideX(Rectangle r) {
+        return GlobalData.getScreenDim().width - r.width - 100;
+    }
+
+    private void startRight() {
+        reuseGuideline();
+        setGuidelineY1(100);
+
+        //set color
+        addObject(new UIButton(getName(), "Choose Color", false) {
+            @Override
+            public void leftMouseReleased() {
+                super.leftMouseReleased();
+                UIManager.enableGUI("ColorPicker_ObjectColor");
+            }
+            {
+                applyGeneralStyle(this);
+                get().setLocation(getRightSideX(get()), getGuidelineY1());
+                alignRight(true);
+            }
+        });
+        
+        //customize spawner 
+        addObject(new UIButton(getName(), "Create Spawner", false) {
+            @Override
+            public void leftMouseReleased() {
+                super.leftMouseReleased();
+                UIManager.enableGUI("CreateSpawner");
+            }
+            {
+                applyGeneralStyle(this);
+                get().setLocation(getRightSideX(get()), getGuidelineY1());
+                alignRight(true);
+            }
+        });
+
+        //more settings
+        addObject(new UIButton(getName(), "More Settings", false) {
+            {
+                applyGeneralStyle(this);
+                get().setLocation(getRightSideX(get()), getGuidelineY1());
+                alignRight(true);
+            }
+        });
     }
 
     public static void refreshLog() {

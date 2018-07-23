@@ -2,7 +2,7 @@ package gamelogic;
 
 import java.awt.Rectangle;
 
-import objects.NewObject;
+import objects.GameObject;
 
 public class Physics {
 
@@ -20,10 +20,10 @@ public class Physics {
     private double xVel = 0, yVel = 0;
 
     /** Object */
-    NewObject object;
+    GameObject object;
 
     /** Update physics */
-    public void update(NewObject o) {
+    public void update(GameObject o) {
         object = o;
         if (gravity) {gravity();}
         applyResistance();

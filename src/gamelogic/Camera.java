@@ -3,7 +3,7 @@ package gamelogic;
 import java.awt.Point;
 
 import adventuregame.GlobalData;
-import objects.NewObject;
+import objects.GameObject;
 
 /** The purpose of this class is to act as a "camera" to
  *  move around the environment and show things outside the 
@@ -11,14 +11,14 @@ import objects.NewObject;
  *  a "camera point" which will act as a center point and display
  *  objects relative to it.
  */
-public class NewCamera {
+public class Camera {
 
     /** Position of camera */
     private static Point cameraPosition = new Point(0,0);
     /** Position camera wants to be at, used for slow/smooth camera. */
     private static Point cameraDestination = new Point(0,0);
     private static boolean smoothCamera = true;
-    private static NewObject focusedObject;
+    private static GameObject focusedObject;
 
     /** Run the camera, position display coordinates
      *  relative to camera position for all objects */
@@ -31,13 +31,13 @@ public class NewCamera {
         else { cameraPosition = cameraDestination; }
 
         //update object camera position for all objects
-        for (int i = 0; i < NewObjectStorage.getObjectList().size(); i++) {
-            setDisplayCoordinates(NewObjectStorage.getObjectList().get(i));
+        for (int i = 0; i < ObjectStorage.getObjectList().size(); i++) {
+            setDisplayCoordinates(ObjectStorage.getObjectList().get(i));
         }
     }
 
     private static void setFocusObject() {
-        for (NewObject object : NewObjectStorage.getObjectList()) {
+        for (GameObject object : ObjectStorage.getObjectList()) {
             if (object.cameraFocus()) {focusedObject = object;}
         }
     }
@@ -85,7 +85,7 @@ public class NewCamera {
     }
 
     /** Set display coordinates for an object */
-    public static void setDisplayCoordinates(NewObject o) {
+    public static void setDisplayCoordinates(GameObject o) {
         Point p = new Point();
 
         int x = checkX(o.get().getLocation());

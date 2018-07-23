@@ -2,7 +2,7 @@ package items;
 
 import data.NumberFactory;
 import gamelogic.Item;
-import objects.NewPlayer;
+import objects.Player;
 
 public class EnergyShroom extends Item implements Statup {
 
@@ -23,7 +23,7 @@ public class EnergyShroom extends Item implements Statup {
     }
 
     @Override
-    public void use(NewPlayer player) {
+    public void use(Player player) {
         super.use(player);
         player.playerData().maxenergy(player.playerData().maxenergy() + ENERGY);
     }

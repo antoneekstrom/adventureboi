@@ -3,7 +3,7 @@ package UI;
 import adventuregame.GameEnvironment;
 import adventuregame.GlobalData;
 import data.Players;
-import gamelogic.NewObjectStorage;
+import gamelogic.ObjectStorage;
 
 public class MenuUI extends GUI {
 
@@ -63,8 +63,8 @@ public class MenuUI extends GUI {
         player1.setFontSize(40);
         player1.setTag("player1_Name");
         player1.autoAdjustBackground(true);
-        if (NewObjectStorage.playerCount() > 0) {
-            player1.setText(NewObjectStorage.getPlayer(1).getName());
+        if (ObjectStorage.playerCount() > 0) {
+            player1.setText(ObjectStorage.getPlayer(1).getName());
         }
         addObject(player1);
 
@@ -74,10 +74,10 @@ public class MenuUI extends GUI {
         player2.setFontSize(40);
         player2.setTag("player2_Name");
         player2.autoAdjustBackground(true);
-        if (NewObjectStorage.playerCount() > 1) {
-            player2.setText(NewObjectStorage.getPlayer(2).getName());
+        if (ObjectStorage.playerCount() > 1) {
+            player2.setText(ObjectStorage.getPlayer(2).getName());
         }
-        if (NewObjectStorage.playersToSpawn() > 1) {player2.setVisible(true);} else {player2.setVisible(false);}
+        if (ObjectStorage.playersToSpawn() > 1) {player2.setVisible(true);} else {player2.setVisible(false);}
         addObject(player2);
 
         setVisible(true);

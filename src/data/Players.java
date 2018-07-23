@@ -5,7 +5,7 @@ import java.io.FilenameFilter;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import gamelogic.NewObjectStorage;
+import gamelogic.ObjectStorage;
 
 public class Players implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -25,8 +25,8 @@ public class Players implements Serializable {
 
     public static void extractAllPlayerData() {
         playerdata.clear();
-        for (int i = 1; i <= NewObjectStorage.playerCount(); i++) {
-            playerdata.add(NewObjectStorage.getPlayer(i).extractPlayerData());
+        for (int i = 1; i <= ObjectStorage.playerCount(); i++) {
+            playerdata.add(ObjectStorage.getPlayer(i).extractPlayerData());
         }
     }
 

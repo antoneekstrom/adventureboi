@@ -6,8 +6,8 @@ import java.util.HashMap;
 import adventuregame.GlobalData;
 import adventuregame.Position;
 import data.PlayerData;
-import gamelogic.NewObjectStorage;
-import objects.NewPlayer;
+import gamelogic.ObjectStorage;
+import objects.Player;
 
 public class InspectPlayerUI extends GUI {
 
@@ -67,7 +67,7 @@ public class InspectPlayerUI extends GUI {
     UIObject background;
 
     public void refreshList() {
-        NewPlayer player = player();
+        Player player = player();
         HashMap<String, Object> map = player().playerData().getStatMap();
         String[] arr = new String[map.size()];
         int i = 0;
@@ -150,6 +150,6 @@ public class InspectPlayerUI extends GUI {
         addObject(xp);
     }
 
-    public NewPlayer player() {return NewObjectStorage.getPlayer(playerName);}
+    public Player player() {return ObjectStorage.getPlayer(playerName);}
 
 }

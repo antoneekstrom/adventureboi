@@ -6,7 +6,8 @@ import java.util.ArrayList;
 
 import adventuregame.GlobalData;
 import data.Configuration;
-import gamelogic.NewObjectStorage;
+import gamelogic.ObjectCreator;
+import gamelogic.ObjectStorage;
 
 /** This is were all the UI's are stored. */
 public class UIManager {
@@ -52,7 +53,7 @@ public class UIManager {
         interfaces.add(new MenuUI());
         interfaces.add(new SettingsUI());
         interfaces.add(new KeybindingsUI());
-        interfaces.add(new NewHUD());
+        interfaces.add(new HUD());
         interfaces.add(new OptionsUI());
         interfaces.add(new CreativeUI());
         interfaces.add(new LevelsUI());
@@ -64,6 +65,8 @@ public class UIManager {
         interfaces.add(new InputFieldUI("InputField_NewLevel", "Enter Name"));
         interfaces.add(new InspectItemUI());
         interfaces.add(new UIColor());
+        interfaces.add(new ObjectColor());
+        interfaces.add(new CreateSpawnerUI());
     }
 
     static class UIColor extends ColorPickerUI {
@@ -74,6 +77,17 @@ public class UIManager {
         void confirm(Color color) {
             Configuration.setProperty(CONFIG_BG_KEY, String.valueOf(color.getRGB()));
             reload();
+        }
+    }
+
+    static class ObjectColor extends ColorPickerUI {
+        ObjectColor() {
+            super("ObjectColor");
+        }
+        @Override
+        void confirm(Color color) {
+            ObjectCreator.setColor(color);
+            back();
         }
     }
 
@@ -196,12 +210,12 @@ public class UIManager {
 
     public static InventoryUI getInventory(int player) {
         InventoryUI inv = (InventoryUI) getGUI("Inventory");
-        inv.playerName = NewObjectStorage.getPlayer(player).getName();
+        inv.playerName = ObjectStorage.getPlayer(player).getName();
         return inv;
     }
 
-    public static NewHUD getHUD() {
-        return (NewHUD) getGUI("HUD");
+    public static HUD getHUD() {
+        return (HUD) getGUI("HUD");
     }
 
     /** Returns GUI with parameter name, else returns null. */

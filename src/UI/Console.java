@@ -7,9 +7,9 @@ import java.util.HashMap;
 import java.util.regex.Pattern;
 
 import gamelogic.DefaultConsoleCommands;
-import gamelogic.NewObjectStorage;
+import gamelogic.ObjectStorage;
 import gamelogic.ObjectInspector;
-import objects.NewObject;
+import objects.GameObject;
 
 public class Console {
 
@@ -261,10 +261,10 @@ public class Console {
         //search objectStorage for object with name
         else if (name.startsWith(gameObjectRegex)) {
             name = name.replace(gameObjectRegex, "");
-            object = NewObjectStorage.findObjects(name).get(0);
+            object = ObjectStorage.findObjects(name).get(0);
 
             if (object.equals(null)) {
-                object = NewObjectStorage.getObjectList().get(NewObjectStorage.getObjectList().size() - 1);
+                object = ObjectStorage.getObjectList().get(ObjectStorage.getObjectList().size() - 1);
             }
             className = object.getClass().getName();
         }
@@ -286,8 +286,8 @@ public class Console {
         return c;
     }
 
-    private static NewObject getSelectedObject() {
-        NewObject object = null;
+    private static GameObject getSelectedObject() {
+        GameObject object = null;
 
         object = ObjectInspector.selectedObject();
 

@@ -1,5 +1,6 @@
 package gamelogic;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.lang.reflect.Constructor;
@@ -27,6 +28,10 @@ public class ObjectCreator {
     public static void grid(boolean b) {useGrid = b;}
     public static boolean useGrid() {return useGrid;}
     public static void gridSize(int size) {ObjectPlacement.gridSize(size);}
+
+    private static Color color = Color.white;
+    public static void setColor(Color c) {color = c;}
+    public static Color getColor() {return color;}
 
     private static boolean customSize = false;
     private static int width = 100;
@@ -72,8 +77,9 @@ public class ObjectCreator {
         {
             put("angryshroom", new Create(AngryShroom.class.getName(), "object"));
             put("new angryshroom", new Create(NewAngryShroom.class.getName(), "enemy"));
+            put("coinman", new Create(Coinman.class.getName(), "enemy"));
             put("bigmush", new Create(Bigmush.class.getName(), "enemy"));
-            put("object", new Create(NewObject.class.getName(), "object"));
+            put("object", new Create(GameObject.class.getName(), "object"));
             put("starman", new Create(Starman.class.getName(), "object"));
             put("platform", new Create(Platform.class.getName(), "object"));
         }
@@ -95,10 +101,10 @@ public class ObjectCreator {
         objects.put("boin", new Create(new Coin(), "item"));
     }
 
-    public static NewObject getPreview() {
-        NewObject[] arr = NewObjectStorage.getObjectsByText(PREVIEW_OBJECT);
+    public static GameObject getPreview() {
+        GameObject[] arr = ObjectStorage.getObjectsByText(PREVIEW_OBJECT);
         if (arr.length > 0) {
-            return NewObjectStorage.getObjectsByText(PREVIEW_OBJECT)[0];
+            return ObjectStorage.getObjectsByText(PREVIEW_OBJECT)[0];
         }
         else {
             throw new NullPointerException();
@@ -109,9 +115,10 @@ public class ObjectCreator {
         try {
             Enemy o = (Enemy) Class.forName(className).newInstance();
             o.get().setLocation(getPreview().get().getLocation());
+            o.setColor(getColor());
             o.level(enemyLevel);
             if (customSize) {o.get().setSize(width, height);}
-            NewObjectStorage.add(o);
+            ObjectStorage.add(o);
         }
         catch (Exception e) {e.printStackTrace();}
     }
@@ -120,10 +127,11 @@ public class ObjectCreator {
 
     public static void createObject(String className) {
         try {
-            NewObject o = (NewObject) Class.forName(className).newInstance();
+            GameObject o = (GameObject) Class.forName(className).newInstance();
             o.get().setLocation(getPreview().get().getLocation());
+            o.setColor(getColor());
             if (customSize) {o.get().setSize(width, height);}
-            NewObjectStorage.add(o);
+            ObjectStorage.add(o);
         }
         catch (Exception e) {e.printStackTrace();}
     }
@@ -142,13 +150,13 @@ public class ObjectCreator {
             }
         };
         op.setText(ObjectCreator.PREVIEW_OBJECT);
-        NewObjectStorage.add(op);
+        ObjectStorage.add(op);
     }
 
     /** Update object preview. */
     private static void preview() {
-        NewObject[] arr = NewObjectStorage.getObjectsByText(PREVIEW_OBJECT);
-        NewObject object = null;
+        GameObject[] arr = ObjectStorage.getObjectsByText(PREVIEW_OBJECT);
+        GameObject object = null;
         
         if (arr.length > 0) {
             object = arr[0];
@@ -158,7 +166,7 @@ public class ObjectCreator {
 
         try {
             if (!currentObject.type.equals("item")) {
-                NewObject selectedClass = (NewObject) Class.forName(currentObject.className()).newInstance();
+                GameObject selectedClass = (GameObject) Class.forName(currentObject.className()).newInstance();
                 object.get().setSize(selectedClass.get().getSize());
                 object.setImage(Images.getImage(ObjectCreator.getCurrentObjectName()));
             }
@@ -173,8 +181,8 @@ public class ObjectCreator {
         catch (Exception e) {e.printStackTrace();}
     }
 
-    private static void preview(NewObject object) {
-        NewObject[] arr = NewObjectStorage.getObjectsByText(PREVIEW_OBJECT);
+    private static void preview(GameObject object) {
+        GameObject[] arr = ObjectStorage.getObjectsByText(PREVIEW_OBJECT);
         ObjectPreview preview = null;
 
         if (arr.length > 0) {
@@ -189,6 +197,7 @@ public class ObjectCreator {
             Constructor<?> c = Class.forName(ItemObject.class.getName()).getConstructor(Item.class);
             ItemObject o = (ItemObject) c.newInstance(i);
             o.get().setLocation(getPreview().get().getLocation());
+            o.setColor(getColor());
             i.level(enemyLevel);
             
             try {
@@ -198,7 +207,7 @@ public class ObjectCreator {
 
             o.get().setSize(i.size());
             if (customSize) {o.get().setSize(width, height);}
-            NewObjectStorage.add(o);
+            ObjectStorage.add(o);
         }
         catch (Exception e) {e.printStackTrace();}
     }
@@ -269,7 +278,7 @@ public class ObjectCreator {
             if (!failed) {
                 ItemObject o = new ItemObject(i);
                 o.get().setLocation(x, y);
-                NewObjectStorage.add(o);
+                ObjectStorage.add(o);
             }
             else {Console.logError("No such item with the name " + name + ".");}
         }

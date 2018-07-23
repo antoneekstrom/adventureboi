@@ -3,7 +3,7 @@ package items;
 import data.NumberFactory;
 import data.PlayerData;
 import gamelogic.Item;
-import objects.NewPlayer;
+import objects.Player;
 
 public class DeceasedAngryShroom extends Item {
 
@@ -37,7 +37,7 @@ public class DeceasedAngryShroom extends Item {
     }
 
     @Override
-    public void use(NewPlayer player) {
+    public void use(Player player) {
         if (!used()) {
             PlayerData d = player.playerData();
             d.damage(d.damage() + DAMAGE);

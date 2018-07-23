@@ -41,6 +41,9 @@ public class UIObject {
     private boolean typeable = false;
     private boolean forceHoverState = false;
     private boolean alwaysOnTop = false;
+    private boolean alignRight = false;
+
+    public void alignRight(boolean b) {alignRight = b;}
     
     private String submittedInput = "";
     private String inputPrefix = "input: ";
@@ -256,6 +259,12 @@ public class UIObject {
     public void setBox(Rectangle newBox) {
         box = newBox;
     }
+
+    private void alignRight() {
+        if (alignRight) {
+            get().x = GlobalData.getScreenDim().width - get().width - 100;
+        }
+    }
     
     public void update() {
         setTextCenterWidth();
@@ -264,6 +273,7 @@ public class UIObject {
         onMouseOver(checkMouse());
         write();
         forceHoverState();
+        alignRight();
         if (hasTooltip) {tooltip.update();}
         if (centerInParentX) {centerInParentX();}
     }

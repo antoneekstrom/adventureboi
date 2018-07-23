@@ -6,16 +6,16 @@ import java.awt.Dimension;
 import adventuregame.GameEnvironment;
 import adventuregame.GlobalData;
 import data.PlayerData;
-import gamelogic.NewObjectStorage;
-import objects.NewObject;
-import objects.NewPlayer;
+import gamelogic.ObjectStorage;
+import objects.GameObject;
+import objects.Player;
 
-public class NewHUD extends GUI {
+public class HUD extends GUI {
 
     private UIText t1;
-    private NewObject currentObject;
-    public NewObject getCurrentObject() {return currentObject;}
-    public void setCurrentObject(NewObject o) {currentObject = o;}
+    private GameObject currentObject;
+    public GameObject getCurrentObject() {return currentObject;}
+    public void setCurrentObject(GameObject o) {currentObject = o;}
     private Dimension barSize = new Dimension(300, 40);
 
     private int xpOffset = 250;
@@ -28,7 +28,7 @@ public class NewHUD extends GUI {
     private Dimension xpBarSize = new Dimension(400,  20);
     private int xpBarOffset = 150;
 
-    public NewHUD() {
+    public HUD() {
         super("HUD");
         setGuidelineY1(100);
         setGuidelineSpacing(110);
@@ -129,7 +129,7 @@ public class NewHUD extends GUI {
     public void showXpBar(int time, String playername) {
         playername = GameEnvironment.player1Name();
 
-        NewPlayer player = NewObjectStorage.getPlayer(playername);
+        Player player = ObjectStorage.getPlayer(playername);
         PlayerData pd = null;
         if (player != null) {
             pd = player.playerData();
@@ -149,13 +149,13 @@ public class NewHUD extends GUI {
     }
 
     public void debug() {
-        t1.setText(String.valueOf(NewObjectStorage.getPlayer(1).playerData().abilityslot()));
+        t1.setText(String.valueOf(ObjectStorage.getPlayer(1).playerData().abilityslot()));
     }
 
     public void updateStats() {
         //player1
-        if (NewObjectStorage.getPlayer(1) != null) {
-            NewPlayer p1 = NewObjectStorage.getPlayer(1);
+        if (ObjectStorage.getPlayer(1) != null) {
+            Player p1 = ObjectStorage.getPlayer(1);
 
             UIMeter health1 = (UIMeter) GUI.findObject(getObjectsThatStartsWithTag("player1"), "Health");
             health1.setValue( (double) p1.healthModule().health());
@@ -167,8 +167,8 @@ public class NewHUD extends GUI {
         }
         
         //player2
-        if (NewObjectStorage.playerCount() > 1) {
-            NewPlayer p2 = NewObjectStorage.getPlayer(2);
+        if (ObjectStorage.playerCount() > 1) {
+            Player p2 = ObjectStorage.getPlayer(2);
             UIMeter health2 = (UIMeter) GUI.findObject(getObjectsThatStartsWithTag("player2"), "Health");
             health2.setValue( (double) p2.healthModule().health());
             health2.setMaxValue( (double) p2.healthModule().maxHealth());
@@ -177,7 +177,7 @@ public class NewHUD extends GUI {
     
     public void determineUI() {
         for (UIObject o : getObjectsThatStartsWithTag("player2")) {
-            if (NewObjectStorage.playerCount() > 1) {o.setVisible(true);} else {o.setVisible(false);}
+            if (ObjectStorage.playerCount() > 1) {o.setVisible(true);} else {o.setVisible(false);}
         }
     }
     

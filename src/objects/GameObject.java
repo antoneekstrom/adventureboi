@@ -15,14 +15,14 @@ import javax.swing.Timer;
 import adventuregame.Animator;
 import adventuregame.HealthModule;
 import data.ObjectData;
-import gamelogic.NewAI;
-import gamelogic.NewCamera;
-import gamelogic.NewCollision;
-import gamelogic.NewObjectStorage;
+import gamelogic.AI;
+import gamelogic.Camera;
+import gamelogic.Collision;
+import gamelogic.ObjectStorage;
 import gamelogic.Physics;
 import gamelogic.Shrinker;
 
-public class NewObject {
+public class GameObject {
 
 	//switches
     private boolean visible = true;
@@ -50,7 +50,7 @@ public class NewObject {
 
     public boolean cameraFocus = false;
     public void cameraFocus(boolean b) {
-        for (NewObject o : NewObjectStorage.getObjectList()) {
+        for (GameObject o : ObjectStorage.getObjectList()) {
             if (o.cameraFocus()) {o.cameraFocus = false;}
         }
         cameraFocus = b;
@@ -70,7 +70,7 @@ public class NewObject {
     private String debugString = "";
 
     //modules
-    private NewAI ai;
+    private AI ai;
     private Animator animator;
     private HealthModule healthModule;
 
@@ -84,7 +84,7 @@ public class NewObject {
 
 
     //collision
-    private NewObject lastCollision;
+    private GameObject lastCollision;
     private String collisionSide = "none";
 
     //positioning
@@ -92,7 +92,7 @@ public class NewObject {
     private Point displayCoordinate;
     private int yLimit = 3000;
 
-    public NewObject() {
+    public GameObject() {
         r = new Rectangle(100, 100);
         r.setLocation(0, 0);
         setText("");
@@ -100,7 +100,7 @@ public class NewObject {
         initialize();
     }
 
-    public NewObject(Rectangle r) {
+    public GameObject(Rectangle r) {
         this.r = r;
         setText("");
         displayCoordinate = new Point(r.x, r.y);
@@ -182,7 +182,7 @@ public class NewObject {
 
     public Color getColor() {return color_fg;}
 
-    public NewObject(ObjectData data) {
+    public GameObject(ObjectData data) {
         setRectangle(data.rectangle());
         setColor(data.color());
         setText(data.text());
@@ -231,18 +231,18 @@ public class NewObject {
     }
 
     /** Pass object this one has collided with. */
-    public void passCollision(NewObject o) {
+    public void passCollision(GameObject o) {
         lastCollision = o;
     }
 
-    public NewObject getLastCollision() {
+    public GameObject getLastCollision() {
         return lastCollision;
     }
 
     public boolean isSelected() {return selected;}
     public void deselect() {selected = false;}
     public void select() {
-        for (NewObject o : NewObjectStorage.getObjectList()) {
+        for (GameObject o : ObjectStorage.getObjectList()) {
             if (o.isSelected()) {o.deselect();}
         }
         selected = true;
@@ -257,12 +257,19 @@ public class NewObject {
     }
 
     /** Is called when intersecting with another object. Use this one for removing/creating objects. Call super. */
-    public void intersect(NewObject collision) {
+    public void intersect(GameObject collision) {
     }
     
     /** Is called immediately upon intersection. Call super. */
-    public void collide(NewObject collision) {
+    public void collide(GameObject collision) {
         physics().collide();
+        if (collision.getClass().equals(Player.class)) {
+            playerContact((Player)collision);
+        }
+    }
+
+    public void playerContact(Player player) {
+
     }
 
     protected HealthModule getHealthModule() {
@@ -297,12 +304,12 @@ public class NewObject {
         animator = new Animator(image);
     }
 
-    public NewAI getAI() {
+    public AI getAI() {
         return ai;
     }   
 
     public void createAI() {
-        ai = new NewAI();
+        ai = new AI();
     }
 
     /** Get object rectangle/bouding box. This is also where position translation should occur. */
@@ -418,7 +425,7 @@ public class NewObject {
     /** Check collision */
     public void collision() {
         if (collision) {
-            NewCollision.check(this);
+            Collision.check(this);
         }
 
     }
@@ -443,7 +450,7 @@ public class NewObject {
     /** Update camera/display coordinates */
     protected void updateDisplayCoordinates() {
         if (camera) {
-            NewCamera.setDisplayCoordinates(this);
+            Camera.setDisplayCoordinates(this);
         }
     }
 

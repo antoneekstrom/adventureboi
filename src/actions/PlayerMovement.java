@@ -5,8 +5,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 
 import adventuregame.Input;
-import gamelogic.NewObjectStorage;
-import objects.NewPlayer;
+import gamelogic.ObjectStorage;
+import objects.Player;
 
 public class PlayerMovement extends AbstractAction {
 
@@ -26,25 +26,25 @@ public class PlayerMovement extends AbstractAction {
 	public void actionPerformed(ActionEvent e) {
         if (Input.getMovementEnabled()) {
             if (action.equals("moveleft")) {
-                NewObjectStorage.getPlayer(id).moveLeft(released);
+                ObjectStorage.getPlayer(id).moveLeft(released);
             }
             if (action.equals("moveright")) {
-                NewObjectStorage.getPlayer(id).MoveRight(released);
+                ObjectStorage.getPlayer(id).MoveRight(released);
             }
             if (action.equals("sit")) {
-                NewObjectStorage.getPlayer(id).sit(released);
+                ObjectStorage.getPlayer(id).sit(released);
             }
             if (action.equals("jump")) {
-                NewObjectStorage.getPlayer(id).doJump(released);
+                ObjectStorage.getPlayer(id).doJump(released);
             }
             if (action.equals("sprint")) {
-                NewObjectStorage.getPlayer(id).sprint(released);
+                ObjectStorage.getPlayer(id).sprint(released);
             }
             if (action.equals("abilityright")) {
-                NewObjectStorage.getPlayer(id).useAbility("right", released);
+                ObjectStorage.getPlayer(id).useAbility("right", released);
             }
             if (action.equals("abilityleft")) {
-                NewObjectStorage.getPlayer(id).useAbility("left", released);
+                ObjectStorage.getPlayer(id).useAbility("left", released);
             }
             if (action.equals("ability1")) {
             }

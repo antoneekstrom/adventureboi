@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import adventuregame.GameEnvironment;
 import adventuregame.GlobalData;
 import gamelogic.Item;
-import gamelogic.NewObjectStorage;
-import objects.NewPlayer;
+import gamelogic.ObjectStorage;
+import objects.Player;
 
 public class InventoryUI extends GUI {
 
@@ -40,7 +40,7 @@ public class InventoryUI extends GUI {
         UIObject[] arr = getObjectsByTag(BOIN_COUNTER);
         if (arr.length > 0) {
             UIObject object = arr[0];
-            int b = NewObjectStorage.getPlayer(playerName).boinCount();
+            int b = ObjectStorage.getPlayer(playerName).boinCount();
             int k = (int) Math.log10(b);
             if (k < 0) {
                 k = 0;
@@ -62,7 +62,7 @@ public class InventoryUI extends GUI {
 
     public void refreshInv() {
         playerName = GameEnvironment.player1Name();
-        NewPlayer p = NewObjectStorage.getPlayer(playerName);
+        Player p = ObjectStorage.getPlayer(playerName);
         if (p.playerData().inventory() != null) {
 
             ArrayList<Item> l = new ArrayList<Item>();
@@ -90,7 +90,7 @@ public class InventoryUI extends GUI {
                 if (object.getForceHoverState()) {object.toggleForceHoverState();}
             }
         }
-        if (NewObjectStorage.getPlayer(1) != null) {
+        if (ObjectStorage.getPlayer(1) != null) {
             refreshInv();
         }
     }

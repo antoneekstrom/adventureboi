@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import gamelogic.Item;
-import gamelogic.NewObjectStorage;
+import gamelogic.ObjectStorage;
 
 public class UIInvItem extends UIObject {
 
@@ -28,7 +28,7 @@ public class UIInvItem extends UIObject {
     public void leftMouseReleased() {
         super.leftMouseReleased();
         if (item.equippable() && item.hasTag(Item.ABILITY) && !inspectButton.checkMouse()) {
-            NewObjectStorage.getPlayer(InventoryUI.playerName).equip(item, Item.ABILITY);
+            ObjectStorage.getPlayer(InventoryUI.playerName).equip(item, Item.ABILITY);
         }
         if (inspectButton.checkMouse()) {
             inspectButton.leftMouseReleased();

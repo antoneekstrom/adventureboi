@@ -36,7 +36,7 @@ public class NewAngryShroom extends Enemy {
     }
 
     @Override
-    public void playerContact(NewPlayer col) {
+    public void playerContact(Player col) {
         if (isDead()) {
             shrinkDone();
         }

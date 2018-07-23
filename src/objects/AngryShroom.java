@@ -1,10 +1,10 @@
 package objects;
 
 import adventuregame.Images;
-import gamelogic.NewObjectStorage;
+import gamelogic.ObjectStorage;
 import items.DeceasedAngryShroom;
 
-public class AngryShroom extends NewObject implements ObjectMethods {
+public class AngryShroom extends GameObject implements ObjectMethods {
 
     private DeceasedAngryShroom drop;
     private int contactDamage = 35;
@@ -65,8 +65,8 @@ public class AngryShroom extends NewObject implements ObjectMethods {
     }
 
     private void dropXp() {
-        String pname = NewObjectStorage.findNearestPlayer(get().getLocation());
-        NewObjectStorage.getPlayer(pname).giveXp(experience);
+        String pname = ObjectStorage.findNearestPlayer(get().getLocation());
+        ObjectStorage.getPlayer(pname).giveXp(experience);
     }
 
 
@@ -74,15 +74,15 @@ public class AngryShroom extends NewObject implements ObjectMethods {
         super.animate();
     }
     
-	public void intersect(NewObject collision) {
+	public void intersect(GameObject collision) {
     }
     
-    public void collide(NewObject collision) {
+    public void collide(GameObject collision) {
         super.collide(collision);
         getAI().collision(collision);
 
         //when in contact with a player
-        if (collision.getClass().equals(NewPlayer.class)) {
+        if (collision.getClass().equals(Player.class)) {
             if (healthModule().isDead()) {
                 pickup(collision);
             }
@@ -92,13 +92,13 @@ public class AngryShroom extends NewObject implements ObjectMethods {
         }
     }
 
-    private void contactDamage(NewObject col) {
+    private void contactDamage(GameObject col) {
         col.healthModule().damage(contactDamage);
     }   
 
-    public void pickup(NewObject collision) {
-        NewObjectStorage.remove(this);
-        NewPlayer player = (NewPlayer) collision;
+    public void pickup(GameObject collision) {
+        ObjectStorage.remove(this);
+        Player player = (Player) collision;
         player.addItem(drop);
         player.healthModule().heal(healthOnPickup, false);
     }
@@ -111,6 +111,6 @@ public class AngryShroom extends NewObject implements ObjectMethods {
     public void destruct() {
         super.destruct();
         die();
-        NewObjectStorage.remove(this);
+        ObjectStorage.remove(this);
     }
 }

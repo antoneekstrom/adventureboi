@@ -37,7 +37,7 @@ public class DefaultConsoleCommands {
             e.die();
         }
         catch (ClassCastException e) {
-            NewObjectStorage.remove(ObjectInspector.selectedObject());
+            ObjectStorage.remove(ObjectInspector.selectedObject());
         }
     }
 

@@ -5,7 +5,7 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 
-import objects.NewObject;
+import objects.GameObject;
 
 public class Healthbar {
 
@@ -21,7 +21,7 @@ public class Healthbar {
         box = new Rectangle(width, height);
     }
 
-    public void update(double value, double maxvalue, NewObject obj) {
+    public void update(double value, double maxvalue, GameObject obj) {
         Point pos = obj.getDisplayCoordinate();
         box.setLocation(pos.x + (obj.get().width / 2) - (box.width / 2), pos.y + yOffset);
 
@@ -47,6 +47,7 @@ public class Healthbar {
 
         if (showNumbers) {
             g.setColor(TEXT_COLOR);
+            g.setFont(g.getFont().deriveFont(33f));
             g.drawString( numberText, box.x + (box.width / 2) - (g.getFontMetrics().stringWidth(numberText) / 2), box.y + (box.height / 2) - (g.getFontMetrics().getHeight() / 2) );
         }
     }

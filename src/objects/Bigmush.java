@@ -17,6 +17,8 @@ public class Bigmush extends Enemy implements EnemyMold {
     @Override
     public void startAnimator() {
         getAnimator().addList(Images.getFolderImages("assets/animated_sprites/bigmush"));
+        getAnimator().setIndexRange(0, getAnimator().size() - 1);
+        getAnimator().speed(15);
     }
 
     @Override
@@ -33,7 +35,7 @@ public class Bigmush extends Enemy implements EnemyMold {
     @Override
     public void startAI() {
         getAI().jumpFrequency(0f);
-        getAI().speed(5);
+        getAI().speed(3);
     }
 
 }

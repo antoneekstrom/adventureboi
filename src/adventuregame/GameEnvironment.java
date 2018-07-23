@@ -22,18 +22,18 @@ import data.LevelData;
 import data.ObjectData;
 import data.Players;
 import gamelogic.MouseFunctions;
-import gamelogic.NewCamera;
-import gamelogic.NewObjectStorage;
+import gamelogic.Camera;
+import gamelogic.ObjectStorage;
 import gamelogic.ObjectCreator;
 import gamelogic.ObjectPlacement;
-import objects.NewObject;
+import objects.Platform;
 
 public class GameEnvironment extends JPanel implements ActionListener {
 
     private static final long serialVersionUID = 1L;
     //timer
-    int FRAMERATE = 12;
-    int TIMER_DELAY = 14;
+    final double FRAMERATE = 12;
+    final int TIMER_DELAY = 14;
     Timer timer;
 
     //components
@@ -76,9 +76,7 @@ public class GameEnvironment extends JPanel implements ActionListener {
     public static void newLevel(String name) {
         ArrayList<ObjectData> olist = new ArrayList<ObjectData>();
 
-        NewObject obj = new NewObject();
-        obj.moveWhenColliding(false);
-        obj.physics().setGravity(false);
+        Platform obj = new Platform();
         obj.setRectangle(new Rectangle(300, 800, 800, 100));
         olist.add(obj.extractData());
 
@@ -101,8 +99,8 @@ public class GameEnvironment extends JPanel implements ActionListener {
         levelData = (LevelData) DataHandler.deserialize(new File(saveDirectory + name + ".ser"));
 
         //load level
-        NewObjectStorage.clearEnvironment();
-        NewObjectStorage.setList(ObjectData.createObjectList(levelData.objectDataList()));
+        ObjectStorage.clearEnvironment();
+        ObjectStorage.setList(ObjectData.createObjectList(levelData.objectDataList()));
 
         //load player and gui
         if (!name.equals("menu")) {
@@ -113,11 +111,11 @@ public class GameEnvironment extends JPanel implements ActionListener {
             
             //load players
             Players.loadPlayerData();
-            NewObjectStorage.addPlayers();
-            NewObjectStorage.spawnPlayers();
+            ObjectStorage.addPlayers();
+            ObjectStorage.spawnPlayers();
             
             //set camera to follow player 1
-            NewObjectStorage.getPlayer(1).cameraFocus(true);
+            ObjectStorage.getPlayer(1).cameraFocus(true);
 
             //add to config
             Configuration.setProperty("last_level_loaded", name);
@@ -126,7 +124,7 @@ public class GameEnvironment extends JPanel implements ActionListener {
             ObjectCreator.addPreview();
         }
         else {
-            NewCamera.centerCameraOn(new Point(-50, 300));
+            Camera.centerCameraOn(new Point(-50, 300));
         }
 
     }
@@ -155,13 +153,13 @@ public class GameEnvironment extends JPanel implements ActionListener {
         Players.loadPlayerData();
 
         //add players to playerlist
-        NewObjectStorage.addPlayers();
+        ObjectStorage.addPlayers();
 
         //set up save mechanism and load menu world
         loadLevel("menu");
 
         //set config things
-        NewObjectStorage.playersToSpawn(Integer.parseInt(Configuration.getProperty("PLAYER_COUNT")));
+        ObjectStorage.playersToSpawn(Integer.parseInt(Configuration.getProperty("PLAYER_COUNT")));
         
         //start UI
         UIManager.start();
@@ -184,7 +182,7 @@ public class GameEnvironment extends JPanel implements ActionListener {
 		this.requestFocus();
         
         //start camera and initialize world
-        NewCamera.centerCameraOn(new Point(-50, 300));
+        Camera.centerCameraOn(new Point(-50, 300));
 
         //start gameloop timer
         timer = new Timer(TIMER_DELAY, this);
@@ -193,17 +191,17 @@ public class GameEnvironment extends JPanel implements ActionListener {
 
     public void paint(Graphics g) {
         super.paintComponent(g);
-        NewObjectStorage.paint(g);
+        ObjectStorage.paint(g);
         UIManager.paint(g);
     }
 
 	double time1, time2;
 	public void actionPerformed(ActionEvent arg0) {
-		time1 = System.nanoTime() / 10000;
-		if (time1 - time2 > FRAMERATE) {
-            time2 = System.nanoTime() / 10000;
+		time1 = System.nanoTime() / 100000;
+		if (time1 - time2 >= FRAMERATE) {
+            time2 = System.nanoTime() / 100000;
 
-            NewObjectStorage.update();
+            ObjectStorage.update();
             UIManager.update();
 			repaint();
 		}

@@ -7,15 +7,15 @@ import java.awt.Rectangle;
 import adventuregame.Position;
 import gamelogic.Item;
 import objects.ItemObject;
-import objects.NewObject;
+import objects.GameObject;
 
 public class UIObjectDisplay extends UIObject {
 
-    NewObject object;
+    GameObject object;
     Item item;
     Rectangle imageBox;
     
-    public UIObjectDisplay(String parentname, NewObject object) {
+    public UIObjectDisplay(String parentname, GameObject object) {
         this.object = object;
         setParentName(parentname);
         start();

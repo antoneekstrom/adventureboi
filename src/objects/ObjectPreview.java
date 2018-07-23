@@ -7,11 +7,11 @@ import java.awt.Point;
 import java.awt.image.BufferedImage;
 
 import adventuregame.Position;
-import gamelogic.NewCamera;
+import gamelogic.Camera;
 import gamelogic.ObjectCreator;
 import gamelogic.ObjectPlacement;
 
-public class ObjectPreview extends NewObject {
+public class ObjectPreview extends GameObject {
 
     private float opacity = 0.5f;
     private boolean followMouse = true;
@@ -19,7 +19,7 @@ public class ObjectPreview extends NewObject {
     public void opacity(float f) {opacity = f;}
     public void followMouse(boolean b) {followMouse = b;}
 
-    public ObjectPreview(NewObject object) {
+    public ObjectPreview(GameObject object) {
         super();
         setImage(object.getImage());
         start();
@@ -31,7 +31,7 @@ public class ObjectPreview extends NewObject {
         start();
     }
 
-    public void set(NewObject object) {
+    public void set(GameObject object) {
         get().setSize(object.get().getSize());
         setImage(object.getImage());
     }
@@ -58,10 +58,10 @@ public class ObjectPreview extends NewObject {
 
     void followMouse() {
         if (followMouse && ObjectCreator.useGrid() && ObjectPlacement.distanceToClosestPoint(get()) <= ObjectPlacement.MAX_SNAP_DISTANCE) {
-            get().setLocation(ObjectPlacement.closestPoint(Position.centerOnPoint(NewCamera.getMouse(), get())));
+            get().setLocation(ObjectPlacement.closestPoint(Position.centerOnPoint(Camera.getMouse(), get())));
         }
         else if (followMouse) {
-            get().setLocation(Position.centerOnPoint(NewCamera.getMouse(), get()).getLocation());
+            get().setLocation(Position.centerOnPoint(Camera.getMouse(), get()).getLocation());
         }
     }
 

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import gamelogic.TriggerEvent;
 
-public class Spawner extends NewObject {
+public class Spawner extends GameObject {
 
     int amountToSpawn, maxAlive, cooldown, timer = 0;
     Class<?> classToSpawn;

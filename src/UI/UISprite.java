@@ -4,14 +4,14 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-import objects.NewObject;
+import objects.GameObject;
 
 public class UISprite extends UIObject {
 
     private BufferedImage image;
-    private NewObject object;
+    private GameObject object;
 
-    public UISprite(String pname, NewObject o) {
+    public UISprite(String pname, GameObject o) {
         super();
         setParentName(pname);
         if (o != null) {
@@ -33,7 +33,7 @@ public class UISprite extends UIObject {
         }
     }
 
-    public void setSprite(NewObject o) {
+    public void setSprite(GameObject o) {
         image = o.getImage();
         object = o;
     }

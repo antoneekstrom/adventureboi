@@ -2,7 +2,7 @@ package items;
 
 import data.NumberFactory;
 import gamelogic.Item;
-import objects.NewPlayer;
+import objects.Player;
 
 public class Donut extends Item {
 
@@ -24,7 +24,7 @@ public class Donut extends Item {
     }
 
     @Override
-    public void use(NewPlayer player) {
+    public void use(Player player) {
         super.use(player);
         player.playerData().maxHealth(player.playerData().maxHealth() + HEALTH);
         player.healthModule().setMaxHealth(player.healthModule().maxHealth() + HEALTH);

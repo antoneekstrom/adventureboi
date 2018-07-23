@@ -3,18 +3,18 @@ package gamelogic;
 import java.awt.Rectangle;
 import java.io.Serializable;
 
-import objects.NewObject;
+import objects.GameObject;
 
-public class NewAI implements Serializable {
+public class AI implements Serializable {
 
     private static final long serialVersionUID = 1L;
-	private NewObject object;
+	private GameObject object;
     private boolean enabled = true;
 
     //collision
-    private NewObject collision;
-    private NewObject lastGround;
-    private NewObject lastWall;
+    private GameObject collision;
+    private GameObject lastGround;
+    private GameObject lastWall;
     private String collisionType = "none";
     private String direction = "left";
 
@@ -32,7 +32,7 @@ public class NewAI implements Serializable {
     private boolean closeToEdge = false;
     private int edgeDetectionRadius = 50;
 
-    public void update(NewObject o) {
+    public void update(GameObject o) {
         if (isEnabled()) {
             object = o;
             //move object in current direction
@@ -44,7 +44,7 @@ public class NewAI implements Serializable {
         }
     }
     
-    public void collision(NewObject c) {
+    public void collision(GameObject c) {
         if (isEnabled()) {
             collision = c;
             //determine type of collision
@@ -81,7 +81,7 @@ public class NewAI implements Serializable {
         updateCooldown();
     }
 
-    private String sideOfObject(NewObject c) {
+    private String sideOfObject(GameObject c) {
         String side = "none";
         if (object.get().getMaxX() < c.get().getCenterX()) {
             side = "left";

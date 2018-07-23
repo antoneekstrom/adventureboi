@@ -5,7 +5,7 @@ import java.awt.Graphics;
 
 import adventuregame.Images;
 
-public class Starman extends NewObject implements ObjectMethods {
+public class Starman extends GameObject implements ObjectMethods {
 
     public Starman() {
         super();

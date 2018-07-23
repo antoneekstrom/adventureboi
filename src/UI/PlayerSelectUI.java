@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import data.PlayerData;
 import data.Players;
-import gamelogic.NewObjectStorage;
+import gamelogic.ObjectStorage;
 import items.abilities.FireballItem;
 
 public class PlayerSelectUI extends GUI {
@@ -127,15 +127,15 @@ public class PlayerSelectUI extends GUI {
             @Override
             public void useInput() {
                 int input = Integer.valueOf(getInput());
-                if (input > NewObjectStorage.maxPlayers()) {input = NewObjectStorage.maxPlayers();}
-                NewObjectStorage.playersToSpawn(input);
+                if (input > ObjectStorage.maxPlayers()) {input = ObjectStorage.maxPlayers();}
+                ObjectStorage.playersToSpawn(input);
                 setText("Active players:" + input);
             }
             {
                 setTag("playerAmount");
                 takeInput(true);
                 setInputPrefix("Active players");
-                setText("Active players:" + NewObjectStorage.playersToSpawn());
+                setText("Active players:" + ObjectStorage.playersToSpawn());
                 get().setLocation( (int) list.get().getMaxX() + 50, 670);
                 setTag("playerCount");
             }

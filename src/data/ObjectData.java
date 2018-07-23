@@ -7,8 +7,7 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import UI.Console;
-import gamelogic.NewObjectStorage;
+import gamelogic.ObjectStorage;
 import items.Donut;
 import items.abilities.FireballItem;
 import objects.*;
@@ -44,7 +43,7 @@ public class ObjectData implements Serializable {
     /** Create and return ObjectData that contains vital data for the object.
      *  @param object The object to extract data from.
      */
-    public ObjectData(NewObject object) {
+    public ObjectData(GameObject object) {
         rectangle(object.get());
         color(object.getColor());
         className(object.getClass().getName());
@@ -57,7 +56,7 @@ public class ObjectData implements Serializable {
 
         ArrayList<ObjectData> l = new ArrayList<ObjectData>();
 
-        for (NewObject o : NewObjectStorage.getObjectList()){
+        for (GameObject o : ObjectStorage.getObjectList()){
             l.add(o.extractData());
         }
 
@@ -90,14 +89,14 @@ public class ObjectData implements Serializable {
         return o;
     }
 
-    public static ArrayList<NewObject> createObjectList(ArrayList<ObjectData> datalist) {
+    public static ArrayList<GameObject> createObjectList(ArrayList<ObjectData> datalist) {
 
-        ArrayList<NewObject> l = new ArrayList<NewObject>();
+        ArrayList<GameObject> l = new ArrayList<GameObject>();
 
         for (ObjectData d : datalist) {
             try {
-                if (!d.className().equals(NewPlayer.class.getName())) {
-                    NewObject o = (NewObject) createObject(d.className());
+                if (!d.className().equals(Player.class.getName())) {
+                    GameObject o = (GameObject) createObject(d.className());
                     
                     o.setRectangle(d.rectangle());
                     o.setColor(d.color());
@@ -120,7 +119,7 @@ public class ObjectData implements Serializable {
             put("Starman", Starman.class.getName());
             put("Fireball", new ItemObject(new FireballItem()).getClass().getName());
             put("donut", new ItemObject(new Donut()).getClass().getName());
-            put("Object", NewObject.class.getName());
+            put("Object", GameObject.class.getName());
     }};
     /** Get hashmap with all object display names as keys and entries with their full classname. */
     public static HashMap<String, String> objects() {return objects;}

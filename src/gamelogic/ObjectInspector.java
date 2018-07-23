@@ -1,19 +1,19 @@
 package gamelogic;
 
 import UI.CreativeUI;
-import UI.NewHUD;
+import UI.HUD;
 import UI.UIManager;
 import adventuregame.GlobalData;
-import objects.NewObject;
+import objects.GameObject;
 
 public class ObjectInspector {
 
     private static boolean enabled = false;
-    private static NewObject inspectedObject;
-    public static void inspectObject(NewObject o) {inspectedObject = o;}
-    private static NewObject selectedObject;
-    public static void selectObject(NewObject o) {selectedObject = o;}
-    public static NewObject selectedObject() {return selectedObject;}
+    private static GameObject inspectedObject;
+    public static void inspectObject(GameObject o) {inspectedObject = o;}
+    private static GameObject selectedObject;
+    public static void selectObject(GameObject o) {selectedObject = o;}
+    public static GameObject selectedObject() {return selectedObject;}
 
     public static void enable(boolean b) {
         enabled = b;
@@ -27,7 +27,7 @@ public class ObjectInspector {
     public static void selectWithMouse() {
         CreativeUI c = (CreativeUI) UIManager.getGUI("Creative");
         if (isEnabled() && !c.mouseOverConsole()) {
-            for (NewObject o : NewObjectStorage.getObjectList()) {
+            for (GameObject o : ObjectStorage.getObjectList()) {
                 if (o.getDisplayBox().contains(GlobalData.getMouse()) && !o.isSelected()) {
                     o.select();
                     selectObject(o);
@@ -66,9 +66,9 @@ public class ObjectInspector {
 
     public static void inspect() {
         if (isEnabled()) {
-            for (NewObject o : NewObjectStorage.getObjectList()) {
+            for (GameObject o : ObjectStorage.getObjectList()) {
                 if (o.getDisplayBox().contains(GlobalData.getMouse()) && UIManager.getGUI("HUD").isVisible()) {
-                    NewHUD hud = (NewHUD) UIManager.getCurrentGUI();
+                    HUD hud = (HUD) UIManager.getCurrentGUI();
                     hud.inspectionContextMenu(o);
                     hud.setCurrentObject(o);
                 }

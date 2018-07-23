@@ -17,12 +17,11 @@ import data.PlayerData;
 import data.Players;
 import gamelogic.AbilityValues;
 import gamelogic.Item;
-import gamelogic.NewCamera;
-import items.Coin;
+import gamelogic.Camera;
 import items.Currency;
 import items.abilities.Ability;
 
-public class NewPlayer extends NewObject implements ObjectMethods {
+public class Player extends GameObject implements ObjectMethods {
 	//states
     private boolean sitting = false;
     private boolean movingRight = false;
@@ -123,10 +122,10 @@ public class NewPlayer extends NewObject implements ObjectMethods {
     /** Speed that will be combined with PLAYER_SPEED when sprinting */
     private int SPRINT_SPEED = 10;
 
-    public NewPlayer() {
+    public Player() {
     }
 
-    public NewPlayer(PlayerData data) {
+    public Player(PlayerData data) {
         playerData = data;
         initiatePlayerData(data);
         abilityInit();
@@ -476,10 +475,10 @@ public class NewPlayer extends NewObject implements ObjectMethods {
     /** Center camera on player */
     public void centerCamera() {
         if (lockCameraY) {
-            NewCamera.centerCameraOn(new Point( (int) get().getCenterX(), CAMERA_Y ));
+            Camera.centerCameraOn(new Point( (int) get().getCenterX(), CAMERA_Y ));
         }
         else {
-            NewCamera.centerCameraOn(new Point( (int) get().getCenterX(), (int) get().getCenterY()));
+            Camera.centerCameraOn(new Point( (int) get().getCenterX(), (int) get().getCenterY()));
         }
     }
     
@@ -532,7 +531,7 @@ public class NewPlayer extends NewObject implements ObjectMethods {
         }
     }
 
-    public void intersect(NewObject collision) {
+    public void intersect(GameObject collision) {
         if (collisionSide().equals("top")) {
             jumpCount = MAX_JUMP_COUNT;
         }

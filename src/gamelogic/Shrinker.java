@@ -4,11 +4,11 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import objects.NewObject;
+import objects.GameObject;
 
 public class Shrinker implements ActionListener {
 
-    NewObject object;
+    GameObject object;
 
     int shrinkSpeed;
     float shrinkAmount;
@@ -17,7 +17,7 @@ public class Shrinker implements ActionListener {
     Dimension originalSize;
     boolean negativeShrink = false;
 
-    public Shrinker(NewObject object, int shrinkSpeed, float shrinkAmount) {
+    public Shrinker(GameObject object, int shrinkSpeed, float shrinkAmount) {
         this.object = object;
         this.shrinkSpeed = shrinkSpeed;
         this.shrinkAmount = shrinkAmount;
@@ -25,7 +25,7 @@ public class Shrinker implements ActionListener {
         setGoalSize();
     }
 
-    public Shrinker(NewObject object, int shrinkSpeed, Dimension originalSize) {
+    public Shrinker(GameObject object, int shrinkSpeed, Dimension originalSize) {
         this.object = object;
         this.shrinkSpeed = shrinkSpeed;
         this.finalSize = originalSize;

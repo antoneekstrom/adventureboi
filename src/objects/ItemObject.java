@@ -4,9 +4,9 @@ import java.awt.Dimension;
 
 import adventuregame.Images;
 import gamelogic.Item;
-import gamelogic.NewObjectStorage;
+import gamelogic.ObjectStorage;
 
-public class ItemObject extends NewObject {
+public class ItemObject extends GameObject {
 
     /** Size for GameObject Items */
     public static transient Dimension itemSize;
@@ -38,12 +38,12 @@ public class ItemObject extends NewObject {
     }
 
     @Override
-    public void collide(NewObject collision) {
+    public void collide(GameObject collision) {
         super.collide(collision);
-        if (collision.getClass().equals(NewPlayer.class)) {
-            NewPlayer p = (NewPlayer) collision;
+        if (collision.getClass().equals(Player.class)) {
+            Player p = (Player) collision;
             p.addItem(item);
-            NewObjectStorage.remove(this);
+            ObjectStorage.remove(this);
         }
     }
 

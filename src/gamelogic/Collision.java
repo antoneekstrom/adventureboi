@@ -3,14 +3,14 @@ package gamelogic;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
-import objects.NewObject;
+import objects.GameObject;
 
-public class NewCollision {
+public class Collision {
 
-    public static void check(NewObject object1) {
+    public static void check(GameObject object1) {
 
         //frequent recreation of arraylist, might result in bad performance?
-        ArrayList<NewObject> objects = NewObjectStorage.getObjectList();
+        ArrayList<GameObject> objects = ObjectStorage.getObjectList();
 
         /* Object1 : Current object, object that will be acted upon and moved
            Object2 : other objects from list */
@@ -20,7 +20,7 @@ public class NewCollision {
 
         //loop through all other objects
         for (int k = 0; k < objects.size(); k++) {
-            NewObject object2 = objects.get(k);
+            GameObject object2 = objects.get(k);
             //if object1 is not the same as object2 and they are intersecting
             if (object1.get().intersects(object2.get()) && !object2.equals(object1)) {
                 if (object1.getCollision() && object2.collidable()) {
@@ -45,7 +45,7 @@ public class NewCollision {
     // Collision is hell and I am sorry for this code.
 
     /** Calculate collision for two objects. */
-    private static void collision(NewObject o1, NewObject o2) {
+    private static void collision(GameObject o1, GameObject o2) {
 
         //define hitboxes
         Rectangle r1 = o1.get();

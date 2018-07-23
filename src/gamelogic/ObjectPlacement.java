@@ -7,7 +7,7 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import UI.UIManager;
-import objects.NewObject;
+import objects.GameObject;
 
 public class ObjectPlacement {
 
@@ -73,7 +73,7 @@ public class ObjectPlacement {
             this.x1 = x1; this.x2 = x2; this.y1 = y1; this.y2 = y2;
         }
 
-        public void run(Graphics g, NewObject object) {
+        public void run(Graphics g, GameObject object) {
             Point dc = new Point(object.getDisplayCoordinate());
 
             dc.x -= (gridSize.width / 2) - (object.get().width / 2);
@@ -106,7 +106,7 @@ public class ObjectPlacement {
         }
     }
 
-    private static class Grid extends NewObject {
+    private static class Grid extends GameObject {
 
         @Override
         public void paint(Graphics g) {
@@ -124,7 +124,7 @@ public class ObjectPlacement {
 
     }
 
-    public static void drawGrid(Graphics g, NewObject object) {
+    public static void drawGrid(Graphics g, GameObject object) {
         for (DrawLine dl : gridLines) {
             dl.run(g, object);
         }

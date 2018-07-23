@@ -8,12 +8,12 @@ import adventuregame.GameEnvironment;
 import data.Configuration;
 import data.PlayerData;
 import data.Players;
-import objects.NewObject;
-import objects.NewPlayer;
+import objects.GameObject;
+import objects.Player;
 
-public class NewObjectStorage {
+public class ObjectStorage {
 
-    private static ArrayList<NewObject> objects = new ArrayList<NewObject>();
+    private static ArrayList<GameObject> objects = new ArrayList<GameObject>();
 
     //players
     private static int maxPlayers = 2;
@@ -26,10 +26,10 @@ public class NewObjectStorage {
         Configuration.setProperty("PLAYER_COUNT", String.valueOf(i));
     }
 
-    private static ArrayList<NewPlayer> players = new ArrayList<NewPlayer>();
-    public static ArrayList<NewPlayer> players() {return players;}
+    private static ArrayList<Player> players = new ArrayList<Player>();
+    public static ArrayList<Player> players() {return players;}
 
-    public static void addPlayer(NewPlayer player) {
+    public static void addPlayer(Player player) {
         if (players.size() + 1 <= maxPlayers) {
             players.add(player);
         }
@@ -37,9 +37,9 @@ public class NewObjectStorage {
 
     /** for the amount of players to are meant to spawn: If name from list in gamenvironment
      *  does not equal null and a {@link data.PlayerData} file with the same name is available,
-     *  initialize a {@link NewPlayer} with that data and put it in
-     *  the playerlist in {@link NewObjectStorage}. This will not put the {@link NewPlayer} in the
-     *  game. Also clears all present {@link NewPlayer} in the playerlist.
+     *  initialize a {@link Player} with that data and put it in
+     *  the playerlist in {@link ObjectStorage}. This will not put the {@link Player} in the
+     *  game. Also clears all present {@link Player} in the playerlist.
      */
     public static void addPlayers() {
         players.clear();
@@ -48,7 +48,7 @@ public class NewObjectStorage {
 
             if (GameEnvironment.playernames.get(i) != null) {
                 if (data != null) {
-                    players.add(new NewPlayer(data));
+                    players.add(new Player(data));
                 }
             }
         }
@@ -63,17 +63,17 @@ public class NewObjectStorage {
 
     public static int playerCount() {return players.size();}
 
-    public static NewPlayer getPlayer(String name) {
-        NewPlayer p = null;
-        for (NewPlayer player : players) {
+    public static Player getPlayer(String name) {
+        Player p = null;
+        for (Player player : players) {
             if (player.getName().equals(name)) {
                 return player;
             }
         }
         return p;    
     }
-    public static NewPlayer getPlayer(int index) {
-        NewPlayer p = null;
+    public static Player getPlayer(int index) {
+        Player p = null;
         index--;
         if (players.size() - 1 >= index) {
             p = players.get(index);
@@ -81,47 +81,47 @@ public class NewObjectStorage {
         return p;
     }
 
-    public static ArrayList<NewObject> getObjectList() {
+    public static ArrayList<GameObject> getObjectList() {
         return objects;
     }
 
-    public static NewObject[] getObjectsByText(String text) {
-        ArrayList<NewObject> l = new ArrayList<NewObject>();
-        NewObject[] arr = null;
+    public static GameObject[] getObjectsByText(String text) {
+        ArrayList<GameObject> l = new ArrayList<GameObject>();
+        GameObject[] arr = null;
 
-        for (NewObject o : objects) {
+        for (GameObject o : objects) {
             if (o.getText().equals(text)) {l.add(o);}
         }
         
         if (l.size() > 0) {
-            arr = new NewObject[l.size()];
+            arr = new GameObject[l.size()];
             l.toArray(arr);
         }
             
         return arr;
     }
 
-    public static void setList(ArrayList<NewObject> l) {objects = l;}
+    public static void setList(ArrayList<GameObject> l) {objects = l;}
 
     private static int idnCounter = 0;
     /** Add object to game.
      * @param object - Initialized object to add to game.
     */
-    public static void add(NewObject object) {
+    public static void add(GameObject object) {
         object.giveIdNumber(idnCounter);
         objects.add(object);
         idnCounter++;
     }
 
-    public static NewObject getObjectByIdNumber(int idn) {
-        NewObject o = null;
-        for (NewObject ob : objects) {
+    public static GameObject getObjectByIdNumber(int idn) {
+        GameObject o = null;
+        for (GameObject ob : objects) {
             if (ob.idNumber() == idn) {o = ob;}
         }
         return o;
     }
 
-    public static void remove(NewObject object) {
+    public static void remove(GameObject object) {
         objects.remove(object);
     }
 
@@ -129,7 +129,7 @@ public class NewObjectStorage {
         objects.clear();
     }
     
-    public static void addToIndex(NewObject object, int i) {
+    public static void addToIndex(GameObject object, int i) {
         objects.add(i, object);
     }
 
@@ -138,13 +138,13 @@ public class NewObjectStorage {
         for (int i = 0; i < objects.size(); i++) {
             objects.get(i).update();
         }
-        NewCamera.update();
+        Camera.update();
     }
 
     /** Find all objects of a certain type and return a list of them. */
     public static ArrayList<?> findObjects(Class<?> type) {
-        ArrayList<NewObject> arr = new ArrayList<NewObject>();
-        for (NewObject o : objects) {
+        ArrayList<GameObject> arr = new ArrayList<GameObject>();
+        for (GameObject o : objects) {
             if (checkForType(o, type)) {
                 arr.add(o);
             }
@@ -153,8 +153,8 @@ public class NewObjectStorage {
     }
 
     public static ArrayList<?> findObjects(String name) {
-        ArrayList<NewObject> arr = new ArrayList<NewObject>();
-        for (NewObject o : objects) {
+        ArrayList<GameObject> arr = new ArrayList<GameObject>();
+        for (GameObject o : objects) {
             if (o.getName().equals(name)) {
                 arr.add(o);
             }
@@ -169,7 +169,7 @@ public class NewObjectStorage {
 
     //paint all objects to screen
     public static void paint(Graphics g) {
-        for (NewObject o : objects) {
+        for (GameObject o : objects) {
             o.paint(g);
         }
     }
@@ -178,12 +178,23 @@ public class NewObjectStorage {
         String name = null;
 
         int shortest = -1;
-        for (NewPlayer player : players) {
+        for (Player player : players) {
             int distance = (int)Point.distance(p.x, p.y, player.get().x, player.get().y);
             if (shortest == -1) {shortest = distance; name = player.getName();}
             else if (distance < shortest) {shortest = distance; name = player.getName();}
         }
 
         return name;
+    }
+
+    /** Find all gameobjects in specified range.
+     *  @param distance as length of side on a square.
+     */
+    public static GameObject[] findNearbyObjects(int distance) {
+        GameObject[] arr = null;
+
+        
+
+        return arr;
     }
 }
