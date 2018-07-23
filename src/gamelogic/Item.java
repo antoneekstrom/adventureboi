@@ -19,6 +19,7 @@ public class Item implements Serializable {
     private ArrayList<String> tags = new ArrayList<String>();
 
     protected String name;
+    protected String displayName;
     protected String imageName;
     protected transient BufferedImage image;
     private String sortingTag;
@@ -38,6 +39,7 @@ public class Item implements Serializable {
 
     public Item(String name) {
         this.name = name;
+        displayName = name;
     }
 
     public Item(String name, int level) {
@@ -55,6 +57,9 @@ public class Item implements Serializable {
         }
         else {return imageName;}
     }
+
+    public void displayName(String n) {displayName = n;}
+    public String displayName() {return displayName;}
     public void imageName(String n) {imageName = n;}
     public boolean equippable() {return equippable;}
     public String name() {return name;}
@@ -164,6 +169,7 @@ public class Item implements Serializable {
                 put("tags", tags);
                 put("equippable", equippable());
                 put("level", level);
+                put("id", getIdentifier());
             }
 
         };

@@ -29,6 +29,7 @@ public class ItemObject extends NewObject {
         setImage(Images.getImage(item.imageName()));
         itemSize = item.size();
         get().setSize(itemSize);
+        collidable(false);
     }
 
     @Override

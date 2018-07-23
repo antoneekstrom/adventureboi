@@ -69,7 +69,7 @@ public class UIInventory extends UIList {
                     Item collectionitem = i.getClass().newInstance();
                     collectionitem.imageName(collectionitem.imageName());
                     fixCurrency(collectionitem, i);
-                    collectionitem.name(collectionitem.name() + ((count <= 1) ? ("") : (" (" + count + ")")) );
+                    collectionitem.displayName(collectionitem.name() + ((count <= 1) ? ("") : (" (" + count + ")")) );
                     l.add(collectionitem);
                 }
                 catch (Exception e) {e.printStackTrace();}
@@ -90,10 +90,9 @@ public class UIInventory extends UIList {
         boolean b = false;
 
         for (Item ci : l) {
-            if (ci.getIdentifier().equals(i.getIdentifier())) {b = true;}
+            if (ci.getIdentifier().equals(i.getIdentifier())) {return true;}
         }
-
-        return b;
+        return false;
     }
 
     private Item findItem(Item tofind, ArrayList<Item> l) {

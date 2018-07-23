@@ -2,7 +2,7 @@ package data;
 
 public class NumberFactory {
 
-    private static double CONSTANT_FACTOR = 1.2;
+    private static double CONSTANT_FACTOR = 1.7;
     private static double ENEMY_XP_FACTOR = 0.95;
 
     /** Return a factor representing the amount an objects xp drop should scale given it's experience level.  */
@@ -38,7 +38,7 @@ public class NumberFactory {
     public static double getStatScaling(int level) {
         double d = 1;
 
-        d += Math.log10(level  + 1) * CONSTANT_FACTOR;
+        d += Math.log10(level + 1) * CONSTANT_FACTOR;
 
         return d;
     }
@@ -50,6 +50,11 @@ public class NumberFactory {
         d += Math.log10(level + 1) * CONSTANT_FACTOR;
 
         return d;
+    }
+
+    public static double round(double value) {
+        int i = Math.round((float)value * 10);
+        return ((double)i / (double)10);
     }
 
 }

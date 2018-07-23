@@ -13,7 +13,7 @@ public class DeceasedAngryShroom extends Item {
     public DeceasedAngryShroom() {
         super("angryshroom");
         description = new String[] {"A very angery boi", "who has now been deceased."};
-        effect = "+" + DAMAGE + " attack damage";
+        effect = effect();
         imageName("deadangryshroom");
         addTag(STATUP);
     }
@@ -22,13 +22,18 @@ public class DeceasedAngryShroom extends Item {
     protected void scaleStats() {
         super.scaleStats();
         DAMAGE *= NumberFactory.getStatScaling(level());
-        effect = "+" + DAMAGE + " attack damage";
+        effect = effect();
     }
 
     @Override
     public String getIdentifier() {
-        String id = super.getIdentifier() + DAMAGE;
+        String id = super.getIdentifier() + NumberFactory.round(DAMAGE);
         return id;
+    }
+
+    @Override
+    public String effect() {
+        return "+" + NumberFactory.round(DAMAGE) + " attack damage";
     }
 
     @Override

@@ -6,7 +6,7 @@ public interface EnemyMold {
 
     public void die();
 
-    public void contactDamage(NewObject col);
+    public void playerContact(NewPlayer col);
 
     public void drop();
 

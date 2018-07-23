@@ -20,6 +20,8 @@ public class InventoryUI extends GUI {
     int buttonwidth = 175;
     int indentation = 100;
 
+    int boinCounterLength = 6;
+
     static final String BOIN_COUNTER = "BoinCounter";
 
     public InventoryUI() {
@@ -38,7 +40,17 @@ public class InventoryUI extends GUI {
         UIObject[] arr = getObjectsByTag(BOIN_COUNTER);
         if (arr.length > 0) {
             UIObject object = arr[0];
-            object.setText(String.valueOf(NewObjectStorage.getPlayer(playerName).boinCount()));
+            int b = NewObjectStorage.getPlayer(playerName).boinCount();
+            int k = (int) Math.log10(b);
+            if (k < 0) {
+                k = 0;
+            }
+            String d = "";
+            for (int i  = 0; i < boinCounterLength - (k + 1); i++) {
+                d += "0";
+            }
+            d += b;
+            object.setText(d);
         }
     }
 
@@ -156,7 +168,7 @@ public class InventoryUI extends GUI {
         addObject(new UIText(getName(), "7", false) {
             {
                 applyGeneralStyle(this);
-                get().setLocation(iplayer.get().x - getFullWidth() - 50, 100);
+                get().setLocation(iplayer.get().x - getFullWidth() - 75, 100);
                 setTag(BOIN_COUNTER);
                 setBackgroundColor(getUIBackgroundColor());
                 textColor(Color.yellow);

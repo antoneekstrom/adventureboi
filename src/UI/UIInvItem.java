@@ -91,7 +91,7 @@ public class UIInvItem extends UIObject {
     public void start() {
         setFontSize(getFontSize());
         setTag("inventory");
-        setText(item.name());
+        setText(item.displayName());
         centerTextY(true);
         setBackgroundPadding(BACKGROUND_PADDING);
 

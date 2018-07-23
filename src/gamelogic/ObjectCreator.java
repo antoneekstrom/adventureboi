@@ -71,6 +71,7 @@ public class ObjectCreator {
     static HashMap<String, Create> objects = new HashMap<String, Create>() {
         {
             put("angryshroom", new Create(AngryShroom.class.getName(), "object"));
+            put("new angryshroom", new Create(NewAngryShroom.class.getName(), "enemy"));
             put("bigmush", new Create(Bigmush.class.getName(), "enemy"));
             put("object", new Create(NewObject.class.getName(), "object"));
             put("starman", new Create(Starman.class.getName(), "object"));

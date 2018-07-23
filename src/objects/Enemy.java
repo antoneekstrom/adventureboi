@@ -15,22 +15,25 @@ public class Enemy extends NewObject implements EnemyMold {
     int level = 0;
     int contactDamage = 0;
     int health;
+    int money;
 
     public void level(int level) {this.level = level; scale();}
     public int level() {return level;}
     public double experience() {return experience;}
 
     protected boolean destructOnDeath = true;
+    boolean dead = false;
 
     //drops
     ArrayList<Item> drops = new ArrayList<Item>();
     double experience;
 
-    public Enemy(int level, double experience, int health, String name) {
+    public Enemy(int level, double experience, int health, int money, String name) {
         super();
         this.level = level;
         this.experience = experience;
         this.health = health;
+        this.money = money;
 
         setName(name);
         setText(name);
@@ -98,11 +101,16 @@ public class Enemy extends NewObject implements EnemyMold {
 
     public int dropAmount() {return drops.size();}
 
+    public boolean isDead() {return dead;}
+
     @Override
     public void collide(NewObject collision) {
         super.collide(collision);
         getAI().collision(collision);
-        if (collision.getClass().equals(NewPlayer.class)) {contactDamage(collision);}
+        
+        if (collision.getClass().equals(NewPlayer.class)) {
+            playerContact((NewPlayer)collision);
+        }
     }
 
     @Override
@@ -112,6 +120,7 @@ public class Enemy extends NewObject implements EnemyMold {
         //cleanup
         healthModule().showHp(false);
         getAI().setEnabled(false);
+        dead = true;
 
         //destruct
         if (destructOnDeath) {
@@ -167,8 +176,7 @@ public class Enemy extends NewObject implements EnemyMold {
         NewObjectStorage.remove(this);
     }
 
-	@Override
-	public void contactDamage(NewObject col) {
+	public void playerContact(NewPlayer col) {
         if (contactDamage > 0) {
             col.healthModule().damage(contactDamage);
         }

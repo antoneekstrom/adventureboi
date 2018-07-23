@@ -27,17 +27,22 @@ public class InspectPlayerUI extends GUI {
 
     public void setVisible(boolean b) {
         super.setVisible(b);
-        if (b) {
-            refreshList();
+    }
 
-            //set player view
-            p.setSprite(player());
-            p.fixSize();
-            p.resize(2f);
-            p.get().x = Position.placeBetweenX(background.get().x, stats.get().x, p.get()).x;
+    @Override
+    public void enable(boolean addToHistory) {
+        super.enable(addToHistory);
 
-            updateXp();
-        }
+        //refresh
+        refreshList();
+
+        //set player view
+        p.setSprite(player());
+        p.fixSize();
+        p.resize(2f);
+        p.get().x = Position.placeBetweenX(background.get().x, stats.get().x, p.get()).x;
+
+        updateXp();
     }
 
     private void updateXp() {
