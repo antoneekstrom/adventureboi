@@ -1,5 +1,10 @@
 package UI;
 
+import java.awt.Rectangle;
+
+import adventuregame.GameEnvironment;
+import adventuregame.Position;
+
 public class OptionsUI extends GUI {
 
     UIButton saveplayer, savelevel;
@@ -26,6 +31,7 @@ public class OptionsUI extends GUI {
         applyGeneralStyle(savelevel);
         savelevel.autoAdjustBackgroundWidth(false);
         addObject(savelevel);
+
         //save player state
         saveplayer = new UIButton(getName(), "Save Player", false) {
             {
@@ -39,6 +45,23 @@ public class OptionsUI extends GUI {
 
         addMenuButton("Settings", getGuidelineY1());
         addMenuButton("Menu", getGuidelineY1());
+
+        //level completion
+        Rectangle g = get();
+        addObject(new UIMeter(getName()) {
+            @Override
+            public String getValueText() {
+                setPercent(GameEnvironment.background().percentTraveled);
+                return percent() + "%";
+            }
+            {
+                get().setSize(600, 25);
+                setFontSize(getFontSize() - 5);
+                get().setLocation(Position.centerX(g, get()).x, 100);
+                setForegroundColor(getUIBackgroundColor());
+                createText("Level Completion");
+            }
+        });
     }
 
     public void setPosition() {

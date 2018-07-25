@@ -20,7 +20,7 @@ public class UIMeter extends UIObject {
     UIText textObject;
 
     /** Show value of meter. */
-    UIText values;
+    UIText  values;
 
     /** If meter values should be on the left or right. */
     String valueSide = "right";
@@ -64,6 +64,11 @@ public class UIMeter extends UIObject {
 
     public double value() {
         return value;
+    }
+
+    public void setPercent(double percent) {
+        setValue(100 * percent);
+        setMaxValue(100);
     }
 
     public void showValues() {
@@ -129,7 +134,15 @@ public class UIMeter extends UIObject {
         }
         if (values != null) {values.update();}
         setValueLocation();
-        values.setText(value + "/" + maxValue);
+        values.setText(getValueText());
+    }
+
+    public String getValueText() {
+        return value + "/" + maxValue;
+    }
+
+    public int percent() {
+        return (int) ((value / maxValue) * 100);
     }
 
     public void paint(Graphics g) {

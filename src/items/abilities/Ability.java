@@ -40,7 +40,7 @@ public class Ability extends Item {
         map.put("chargecost", NumberFactory.round(CHARGECOST));
         map.put("damagepercent", NumberFactory.round(PERCENT_DAMAGE));
         map.put("factormax", NumberFactory.round(FACTORMAX));
-        map.put("factorincrease", NumberFactory.round(FACTORINCREASE));
+        map.put("factorincrease", FACTORINCREASE);
         map.put("cooldown", NumberFactory.round(COOLDOWN));
 
         return map;

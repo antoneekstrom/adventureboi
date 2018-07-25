@@ -37,6 +37,8 @@ public class ObjectCreator {
     private static int width = 100;
     private static int height = 100;
     public static void width(int i) {width = i; preview();}
+    public static int width() {return width;}
+    public static int height() {return height;}
     public static void height(int i) {height = i; preview();}
     public static void toggleCustomSize() {if (customSize) {customSize = false;} else {customSize = true;} preview();}
     public static boolean customSize() {return customSize;}
@@ -75,8 +77,7 @@ public class ObjectCreator {
 
     static HashMap<String, Create> objects = new HashMap<String, Create>() {
         {
-            put("angryshroom", new Create(AngryShroom.class.getName(), "object"));
-            put("new angryshroom", new Create(NewAngryShroom.class.getName(), "enemy"));
+            put("angryshroom", new Create(NewAngryShroom.class.getName(), "enemy"));
             put("coinman", new Create(Coinman.class.getName(), "enemy"));
             put("bigmush", new Create(Bigmush.class.getName(), "enemy"));
             put("object", new Create(GameObject.class.getName(), "object"));
@@ -98,6 +99,7 @@ public class ObjectCreator {
         objects.put("energyshroom", new Create(new EnergyShroom(), "item"));
         objects.put("tallmush", new Create(new TallmushItem(), "item"));
         objects.put("icecube", new Create(new Icecube(), "item"));
+        objects.put("barrage", new Create(new Barrage(), "item"));
         objects.put("boin", new Create(new Coin(), "item"));
     }
 
@@ -165,16 +167,27 @@ public class ObjectCreator {
         }
 
         try {
-            if (!currentObject.type.equals("item")) {
+            if (currentObject.type.equals("item")) {
+
+                object.get().setSize(new ItemObject(currentObject.item).get().getSize());
+                object.setImage(Images.getImage(currentObject.item.imageName()));
+            }
+            else if (currentObject.type.equals("enemy")) {
+
+                GameObject selectedClass = (GameObject) Class.forName(currentObject.className()).newInstance();
+                object.setText(PREVIEW_OBJECT);
+                object.getAI().stopEvents();
+                object.get().setSize(selectedClass.get().getSize());
+                object.setImage(Images.getImage(ObjectCreator.getCurrentObjectName()));
+            }
+            else {
+
                 GameObject selectedClass = (GameObject) Class.forName(currentObject.className()).newInstance();
                 object.get().setSize(selectedClass.get().getSize());
                 object.setImage(Images.getImage(ObjectCreator.getCurrentObjectName()));
             }
-            else if (currentObject.type.equals("item")) {
-                object.get().setSize(new ItemObject(currentObject.item).get().getSize());
-                object.setImage(Images.getImage(currentObject.item.imageName()));
-            }
             if (customSize) {
+                
                 object.get().setSize(width, height);
             }
         }

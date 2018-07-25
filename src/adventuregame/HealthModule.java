@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import UI.Healthbar;
 import objects.GameObject;
@@ -21,15 +22,14 @@ public class HealthModule implements Serializable {
 	private boolean showHp = false;
 	private boolean invincible = false;
 	private boolean canDie = true;
-	private boolean damageNumber = false;
 
 	private Color DAMAGEVALUE_COLOR = Color.red;
 
-	private String damageNumberText = "";
 	private int numberXOffset = 15, numberYOffset = 15;
 	private Point damageNumberPosition;
 	private int DMG_NUM_DISPLAY_TIME = 35;
 	private int dmgNumTimer = 0;
+	private ArrayList<HealthModule.DamageNumber> damageNumbers = new ArrayList<HealthModule.DamageNumber>();
 
 	private GameObject object;
 	private Healthbar hpbar;
@@ -64,6 +64,7 @@ public class HealthModule implements Serializable {
 		}
 	}
 
+	public void dmgCooldown(int c) {dmgcooldown = c;}
 	public int maxHealth() {return maxHealth;}
 	public void setDamage(int i) {damage = i;}
 	public void setMaxHealth(int h) {maxHealth = h;}
@@ -87,9 +88,11 @@ public class HealthModule implements Serializable {
 	public void damage(int h) {
 		if (!invulnerable && !invincible) {
 			health -= h;
+			if (object != null) {
+				damageNumber(h);
+			}
 			invulnerable = true;
 		}
-		damageNumber(h);
 	}
 
 	public void heal(int h, boolean overheal) {
@@ -106,15 +109,35 @@ public class HealthModule implements Serializable {
 
 	private void dmgNumTimer() {
 		if (dmgNumTimer > 0) {dmgNumTimer--;}
-		if (dmgNumTimer <= 0) {damageNumber = false;}
+		if (dmgNumTimer <= 0) {
+			if (damageNumbers.size() > 0) {
+				damageNumbers.remove(0);
+			}
+		}
+	}
+
+	private static class DamageNumber {
+		Point pos;
+		int damage;
+
+		DamageNumber(Point pos, int damage) {
+			this.pos = pos;
+			this.damage = damage;
+		}
+
+		void paint(Graphics g) {
+			g.drawString(String.valueOf(damage), pos.x, pos.y);
+		}
 	}
 
 	/** Generate a number showing how much damage was dealt above object. */
 	private void damageNumber(int d) {
 		Point pos = object.getDisplayCoordinate();
 		damageNumberPosition = new Point(pos.x + numberXOffset, pos.y + numberYOffset);
-		damageNumberText = String.valueOf(d);
-		damageNumber = true;
+			
+		DamageNumber dn = new DamageNumber(damageNumberPosition, d);
+		damageNumbers.add(dn);
+			
 		dmgNumTimer = DMG_NUM_DISPLAY_TIME;
 	}
 
@@ -122,9 +145,11 @@ public class HealthModule implements Serializable {
 		if (showHp) {
 			hpbar.paint(g);
 		}
-		if (damageNumber) {
+		if (damageNumbers.size() > 0) {
 			g.setColor(DAMAGEVALUE_COLOR);
-			g.drawString(damageNumberText, damageNumberPosition.x, damageNumberPosition.y);
+			for (HealthModule.DamageNumber dn : damageNumbers) {
+				dn.paint(g);
+			}
 		}
 	}
 	

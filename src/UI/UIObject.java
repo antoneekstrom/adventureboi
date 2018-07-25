@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.event.MouseWheelEvent;
 
 import adventuregame.GlobalData;
 import adventuregame.Input;
@@ -60,6 +61,18 @@ public class UIObject {
     private boolean centerTextY = false;
     private int textCenterWidth = 0;
     protected int textCenterHeight = 0;
+
+    private NavTask task;
+
+    public void giveTask(NavTask nt) {
+        task = nt;
+    }
+
+    public void doTask() {
+        if (task != null) {
+            task.run();
+        }
+    }
     
     private String parentName;
     
@@ -154,7 +167,7 @@ public class UIObject {
     public String tag() {
         return tag;
     }
-    
+
     public void setFontSize(float i) {
         FONT_SIZE = i;
         font = font.deriveFont(FONT_SIZE);
@@ -376,7 +389,15 @@ public class UIObject {
         return b;
     }
 
-    public void alwaysOnTop(boolean b) {alwaysOnTop = b;}
+    public void alwaysOnTop(boolean b) {
+        alwaysOnTop = b;
+    }
+    public boolean alwaysOnTop() {return alwaysOnTop;}
+
+    /** When object is scrolled on. */
+    public void scroll(MouseWheelEvent e) {
+
+    }
 
     /** Invoked when mouse is pressed on this element. */
     public void leftMousePressed() {
@@ -400,7 +421,7 @@ public class UIObject {
 
     /** Returns calculated position that includes padding and such. */
     public Point getActualLocation() {
-        return new Point(get().x - backgroundPadding / 2, get().y - backgroundPadding / 2);
+        return new Point(get().x - (backgroundPadding / 2) - (BORDER_THICKNESS), get().y - (backgroundPadding / 2) - (BORDER_THICKNESS));
     }
     
     /** Method called when object is clicked. */

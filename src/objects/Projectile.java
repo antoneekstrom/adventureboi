@@ -9,7 +9,7 @@ import gamelogic.ObjectStorage;
 public class Projectile extends GameObject {
     
     String direction;
-    int speed, maxDistance, distanceTraveled = 0, offset = 15;
+    int speed, maxDistance, distanceTraveled = 0, offset = 15, collisions = 0;
     public int contactDamage = 0;
     GameObject origin;
 
@@ -67,9 +67,12 @@ public class Projectile extends GameObject {
     }
 
     @Override
-    public void playerContact(Player player) {
-        super.playerContact(player);
-        player.healthModule().damage(contactDamage);
+    public void collide(GameObject collision) {
+        super.collide(collision);
+        if (collision.getHealthModule() != null && collisions == 0) {
+            collision.healthModule().damage(contactDamage);
+            collisions++;
+        }
     }
 
     private void startPos() {

@@ -162,7 +162,7 @@ public class PlayerSelectUI extends GUI {
         PlayerData data = new PlayerData();
         data.name(name);
         data.healthregen(0);
-        data.damage(15);
+        data.damage(25);
         data.maxHealth(100);
         data.maxenergy(100);
         data.maxstamina(100);

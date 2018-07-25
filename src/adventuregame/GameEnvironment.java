@@ -22,10 +22,13 @@ import data.LevelData;
 import data.ObjectData;
 import data.Players;
 import gamelogic.MouseFunctions;
+import gamelogic.MouseListener;
 import gamelogic.Camera;
+import gamelogic.EventTimer;
 import gamelogic.ObjectStorage;
 import gamelogic.ObjectCreator;
 import gamelogic.ObjectPlacement;
+import objects.Background;
 import objects.Platform;
 
 public class GameEnvironment extends JPanel implements ActionListener {
@@ -35,6 +38,7 @@ public class GameEnvironment extends JPanel implements ActionListener {
     final double FRAMERATE = 12;
     final int TIMER_DELAY = 14;
     Timer timer;
+    boolean readyToPaint = false;
 
     //components
     JPanel input;
@@ -120,14 +124,49 @@ public class GameEnvironment extends JPanel implements ActionListener {
             //add to config
             Configuration.setProperty("last_level_loaded", name);
 
+            //start events
+            ObjectStorage.startEvents();
+
             //start objectcreator preview
             ObjectCreator.addPreview();
+
+            //background stuff
+            background.reCalculate();
         }
         else {
             Camera.centerCameraOn(new Point(-50, 300));
         }
-
     }
+
+    private static Background background;
+    public static Background background() {return background;}
+
+    private static ArrayList<EventTimer> eventTimers = new ArrayList<EventTimer>();
+
+    public static EventTimer getEventTimer(int interval) {
+
+        EventTimer timer = null;
+        for (EventTimer t : eventTimers) {
+            if (t.getInterval() == interval) {
+                timer = t;
+            }
+        }
+
+        if (timer == null) {
+            timer = new EventTimer(interval);
+            eventTimers.add(timer);
+            return timer;
+        }
+        else {
+            return timer;
+        }
+    }
+
+    public static void clearAllEvents() {
+        for (EventTimer t : GameEnvironment.getEventTimers()) {t.clearEvents();}
+    }
+
+    public static ArrayList<EventTimer> getEventTimers() {return eventTimers;}
 
     public void start() {
         //set up panel
@@ -142,6 +181,7 @@ public class GameEnvironment extends JPanel implements ActionListener {
         playernames.add(1, Configuration.getProperty("player2_name"));
 
         //add listeners
+        addMouseWheelListener(new MouseListener());
         addMouseListener(MouseFunctions.getClickListener());
         addKeyListener(Input.getKeyListener());
 
@@ -184,15 +224,23 @@ public class GameEnvironment extends JPanel implements ActionListener {
         //start camera and initialize world
         Camera.centerCameraOn(new Point(-50, 300));
 
+        //set a background
+        background = new Background(Images.getImage("mushforest"));
+
+        readyToPaint = true;
+
         //start gameloop timer
         timer = new Timer(TIMER_DELAY, this);
         timer.start();
     }
 
     public void paint(Graphics g) {
-        super.paintComponent(g);
-        ObjectStorage.paint(g);
-        UIManager.paint(g);
+        if (readyToPaint) {
+            super.paintComponent(g);
+            background.paint(g);
+            ObjectStorage.paint(g);
+            UIManager.paint(g);
+        }
     }
 
 	double time1, time2;
@@ -201,6 +249,7 @@ public class GameEnvironment extends JPanel implements ActionListener {
 		if (time1 - time2 >= FRAMERATE) {
             time2 = System.nanoTime() / 100000;
 
+            background.update();
             ObjectStorage.update();
             UIManager.update();
 			repaint();

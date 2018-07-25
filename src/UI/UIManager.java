@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
+import adventuregame.GameEnvironment;
 import adventuregame.GlobalData;
 import data.Configuration;
 import gamelogic.ObjectCreator;
@@ -67,6 +68,7 @@ public class UIManager {
         interfaces.add(new UIColor());
         interfaces.add(new ObjectColor());
         interfaces.add(new CreateSpawnerUI());
+        interfaces.add(new RandomLevelUI());
     }
 
     static class UIColor extends ColorPickerUI {
@@ -115,7 +117,7 @@ public class UIManager {
         String currentGUI = getCurrentGUI().getName();
         interfaces.clear();
         start();
-        enableGUI(currentGUI);
+        enableGUI("HUD");
     }
 
     public static GUI getCurrentGUI() {
@@ -235,11 +237,11 @@ public class UIManager {
 
     /** --- DEBUG GOES HERE --- */
     private static void debug() {
-        dstring = getHudHistory();
     }
 
     /** For putting things on screen all the time regardless of active GUI. For debugging purposes. */
     private static void debug(Graphics g) {
+        g.drawString(dstring, GlobalData.getScreenDim().width / 2, 75);
     }
     private static String getHudHistory() {
         String ss = "";

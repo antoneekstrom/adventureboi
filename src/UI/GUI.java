@@ -252,6 +252,10 @@ public class GUI {
 		}
 	}
 
+	public void addSplitMenuButton(String text1, String text2, NavTask n1, NavTask n2) {
+		
+	}
+
 	public void addBackButton() {
 		UIButton b = new UIButton(getName(), "Back", false);
 		b.get().setLocation(100, 100);
@@ -284,6 +288,17 @@ public class GUI {
             setBackgroundPadding(40);
 			}
 		});
+	}
+	public void addMenuButton(int y, UIButton object) {
+		object.get().y = y;
+		object.setFontSize(40);
+		object.autoAdjustBackgroundWidth(false);
+		object.get().width = 500;
+		object.hasBorder(true);
+		object.setBorderThickness(BORDER_THICKNESS);
+		object.setBackgroundPadding(40);
+			
+		addObject(object);
 	}
 	public void addMenuButton(String text, int y, NavTask task) {
 		addObject(new UIButton(getName(), text, true) {
@@ -381,7 +396,15 @@ public class GUI {
 			this.setFontSize(80);
 			this.setTag("title");
 		}});
-		
+	}
+	public void addTitle(String text, int yOffset) {
+		addObject(new UIText(getName(), text, true) {{
+			this.textColor(getUIBackgroundColor());
+            this.get().y = 200;
+			this.setFontSize(80);
+			this.setTag("title");
+			get().y += yOffset;
+		}});
 	}
 
 }

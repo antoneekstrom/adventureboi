@@ -109,7 +109,7 @@ public class Player extends GameObject implements ObjectMethods {
     private int jumpTime = 0;
 
     /** Velocity of jump. This will be added to the strength of gravity when calculated. */
-    private int JUMP_SPEED = 30;
+    private int JUMP_SPEED = 25;
 
     //positioning
     Point spawnPoint = new Point(0,0);
@@ -313,6 +313,18 @@ public class Player extends GameObject implements ObjectMethods {
     public void die() {
         respawn();
         healthModule().setHealth(healthModule().maxHealth());
+    }
+
+    @Override
+    public void shrink() {
+        super.shrink();
+        physics().setGravity(false);
+    }
+    
+    @Override
+    public void shrinkDone() {
+        super.shrinkDone();
+        physics().setGravity(true);
     }
 
     public void respawn() {

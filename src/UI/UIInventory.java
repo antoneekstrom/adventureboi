@@ -83,7 +83,7 @@ public class UIInventory extends UIList {
             Currency c = (Currency) item;
             colc.setValue(c.getValue());
         }
-        catch (Exception e) {e.printStackTrace();}
+        catch (Exception e) {}
     }
 
     private boolean contains(Item i, ArrayList<Item> l) {

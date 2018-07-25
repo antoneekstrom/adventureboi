@@ -100,6 +100,14 @@ public class GameObject {
         initialize();
     }
 
+    public GameObject(String text) {
+        setText(text);
+        r = new Rectangle(100, 100);
+        r.setLocation(0, 0);
+        displayCoordinate = new Point(r.x, r.y);
+        initialize();
+    }
+
     public GameObject(Rectangle r) {
         this.r = r;
         setText("");
@@ -177,6 +185,15 @@ public class GameObject {
         }
         else {
             return false;
+        }
+    }
+
+    public String sideOfObject(GameObject object) {
+        if (get().getCenterX() < object.get().getCenterX()) {
+            return "left";
+        }
+        else {
+            return "right";
         }
     }
 

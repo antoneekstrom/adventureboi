@@ -28,7 +28,7 @@ public class ObjectInspector {
         CreativeUI c = (CreativeUI) UIManager.getGUI("Creative");
         if (isEnabled() && !c.mouseOverConsole()) {
             for (GameObject o : ObjectStorage.getObjectList()) {
-                if (o.getDisplayBox().contains(GlobalData.getMouse()) && !o.isSelected()) {
+                if (o.getDisplayBox().contains(GlobalData.getMouse()) && !o.getText().equals(ObjectCreator.PREVIEW_OBJECT) && !o.isSelected()) {
                     o.select();
                     selectObject(o);
                 }
@@ -67,7 +67,7 @@ public class ObjectInspector {
     public static void inspect() {
         if (isEnabled()) {
             for (GameObject o : ObjectStorage.getObjectList()) {
-                if (o.getDisplayBox().contains(GlobalData.getMouse()) && UIManager.getGUI("HUD").isVisible()) {
+                if (o.getDisplayBox().contains(GlobalData.getMouse()) && UIManager.getGUI("HUD").isVisible() && !o.getText().equals(ObjectCreator.PREVIEW_OBJECT)) {
                     HUD hud = (HUD) UIManager.getCurrentGUI();
                     hud.inspectionContextMenu(o);
                     hud.setCurrentObject(o);

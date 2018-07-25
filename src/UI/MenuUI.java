@@ -43,7 +43,15 @@ public class MenuUI extends GUI {
         getObjectByText("Adventureboi").get().y = getGuidelineY1() - 50;
 
         //campaign
-        addMenuButton("Campaign (Not Available)", getGuidelineY1());
+        //addMenuButton("Campaign (Not Available)", getGuidelineY1());
+
+        //random levels
+        addMenuButton("Random Levels", getGuidelineY1(), new NavTask() {
+            @Override
+            public void run() {
+                UIManager.enableGUI("RandomLevel");
+            }
+        });
 
         //custom levels button
         addMenuButton("Custom Levels", getGuidelineY1());

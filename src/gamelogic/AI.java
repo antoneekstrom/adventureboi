@@ -2,7 +2,9 @@ package gamelogic;
 
 import java.awt.Rectangle;
 import java.io.Serializable;
+import java.util.ArrayList;
 
+import adventuregame.GameEnvironment;
 import objects.GameObject;
 
 public class AI implements Serializable {
@@ -12,11 +14,22 @@ public class AI implements Serializable {
     private boolean enabled = true;
 
     //collision
+    GameObject lastWall;
     private GameObject collision;
     private GameObject lastGround;
-    private GameObject lastWall;
     private String collisionType = "none";
     private String direction = "left";
+
+    //events
+    ArrayList<String> events = new ArrayList<String>();
+    public void addEvent(RandomEvent e, int interval) {GameEnvironment.getEventTimer(interval).addRandomEvent(e); events.add(e.getName());}
+    public void stopEvents() {
+        for (EventTimer et : GameEnvironment.getEventTimers()) {
+            for (String eventName : events) {
+                et.removeEvent(eventName);
+            }
+        }
+    }
 
     //values
     private int speed = 10;
@@ -67,11 +80,13 @@ public class AI implements Serializable {
     
     /** determine type of collision. */
     private void determineCollision() {
-        if (object.collisionSide().equals("top")) {
-            collisionType = "ground";
-        }
-        else if (object.collisionSide().equals("left") && object.collisionSide().equals("right")) {
-            collisionType = "wall";            
+        if (object != null) {
+            if (object.collisionSide().equals("top")) {
+                collisionType = "ground";
+            }
+            else if (object.collisionSide().equals("left") && object.collisionSide().equals("right")) {
+                collisionType = "wall";            
+            }
         }
     }
 

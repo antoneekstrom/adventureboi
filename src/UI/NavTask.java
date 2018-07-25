@@ -1,10 +1,8 @@
 package UI;
 
-public class NavTask implements Runnable {
+public interface NavTask extends Runnable {
 
 	@Override
-	public void run() {
-		
-	}
+	public void run();
 
 }

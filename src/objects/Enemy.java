@@ -21,6 +21,8 @@ public class Enemy extends GameObject implements EnemyMold {
     public int level() {return level;}
     public double experience() {return experience;}
 
+    private int eventDelay = 1600;
+
     protected boolean destructOnDeath = true;
     boolean dead = false;
 
@@ -65,8 +67,14 @@ public class Enemy extends GameObject implements EnemyMold {
         scale();
     }
 
+    @Override
+    public void setText(String t) {
+        super.setText(t);
+    }
+
     public void startMisc() {
         shrinkSpeed = 4;
+        getHealthModule().dmgCooldown(0);
     }
 
     public void scale() {
@@ -92,7 +100,6 @@ public class Enemy extends GameObject implements EnemyMold {
     }
 
     public void startAI() {
-
     }
 
     public void addDrop(Item item) {
@@ -102,6 +109,9 @@ public class Enemy extends GameObject implements EnemyMold {
     public int dropAmount() {return drops.size();}
 
     public boolean isDead() {return dead;}
+
+    public void startEvents() {
+    }
 
     @Override
     public void collide(GameObject collision) {
@@ -169,6 +179,7 @@ public class Enemy extends GameObject implements EnemyMold {
 
     public void destruct() {
         super.destruct();
+        getAI().stopEvents();
         ObjectStorage.remove(this);
     }
 

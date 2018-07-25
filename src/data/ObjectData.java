@@ -53,10 +53,13 @@ public class ObjectData implements Serializable {
     }
 
     public static ArrayList<ObjectData> createDataList() {
+        return createDataList(ObjectStorage.getObjectList());
+    }
+    public static ArrayList<ObjectData> createDataList(ArrayList<GameObject> objectl) {
 
         ArrayList<ObjectData> l = new ArrayList<ObjectData>();
 
-        for (GameObject o : ObjectStorage.getObjectList()){
+        for (GameObject o : objectl){
             l.add(o.extractData());
         }
 

@@ -38,8 +38,6 @@ public class ObjectPlacement {
         int xoffset = (int) ( (r.x - r.width) % (SQUARE_SIZE) ),
         yoffset = (int) ( (r.y - r.height) % (SQUARE_SIZE) );
 
-        UIManager.dstring = "xoffset:" + xoffset + " yoffset:" + yoffset;
-
         r.x -= xoffset;
         r.y -= yoffset;
 

@@ -2,6 +2,7 @@ package gamelogic;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Iterator;
 
 import javax.swing.SwingUtilities;
 
@@ -83,6 +84,9 @@ public class ClickListener implements MouseListener {
 				o.leftMouseReleased();
 			}
 			o.leftMouseReleasedSomewhere();
+			if (o.alwaysOnTop()) {
+				break;
+			}
 		}
 	}
 

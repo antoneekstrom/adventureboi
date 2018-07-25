@@ -2,6 +2,7 @@ package UI;
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.awt.event.MouseWheelEvent;
 import java.util.ArrayList;
 
 import adventuregame.GlobalData;
@@ -22,6 +23,8 @@ public class UIList extends UIObject {
     protected int entryHeight = 50;
     protected int entryWidth = 100;
     protected boolean entryFullWidth = true;
+
+    public float scrollSpeedMultiplier = 20;
 
     /** The distance the handle is offset from the mouse when holding/pressing on scrollbar. */
     private int handleHoldOffset = 0;
@@ -52,7 +55,18 @@ public class UIList extends UIObject {
     public void setSpacing(int i) {contentSpacing = i;}
     
     public void start() {
-        handle = new UIObject();
+        handle = new UIObject() {
+            @Override
+            public void leftMousePressed() {
+                super.leftMousePressed();
+                pressed = true;
+            }
+            @Override
+            public void leftMouseReleasedSomewhere() {
+                super.leftMouseReleasedSomewhere();
+                pressed = false;
+            }
+        };
         handle.setParentName(getParentName());
         handle.setBackgroundColor(getParent().getUIBackgroundColor());
         handle.get().height = handleHeight;
@@ -61,6 +75,14 @@ public class UIList extends UIObject {
 
     public UIObject getEntry(String text) {
         UIObject o = new UIObject();
+        this.text = text;
+
+        cloneEntry(o);
+
+        return o;
+    }
+
+    public UIObject cloneEntry(UIObject o) {
         o.setParentName(getParentName());
         o.setTag(tag());
         o.setText(text);
@@ -100,9 +122,16 @@ public class UIList extends UIObject {
         }
     }
 
-    public void scroll(int distance) {contentScrollHeight = distance;}
+    public void scroll(int distance) {
+        contentScrollHeight = distance;
+    }
     public int getScrollHeight() {return contentScrollHeight;}
 
+    @Override
+    public void scroll(MouseWheelEvent e) {
+        super.scroll(e);
+        handle.get().y += e.getWheelRotation() * scrollSpeedMultiplier;
+    }
 
     protected void determineContentHeight() {
         //content height
@@ -159,7 +188,9 @@ public class UIList extends UIObject {
         int handleDistance = (int) (get().getMinY() - handle.get().getMinY());
         double scrollRatio = ( ((double) handleDistance ) / get().height) + 1;        
         int scrollDistance = (int) ( (listContentHeight * scrollRatio) - listContentHeight);
-        scroll(scrollDistance);        
+        if (scrollDistance != 0) {
+            scroll(scrollDistance);
+        }
     }
 
     /** Prevent handle from leaving scrollbar area. */

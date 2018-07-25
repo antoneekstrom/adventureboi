@@ -2,6 +2,7 @@ package UI;
 
 import java.awt.Color;
 import java.awt.Rectangle;
+import java.awt.event.MouseWheelEvent;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
@@ -26,6 +27,8 @@ public class CreativeUI extends GUI {
     int y0 = 500;
     int navbuttonoffset = 300;
     int buttonWidth = 150;
+
+    int numberIncrease = 50;
 
     int logWidth = 800, logHeight = 240;
     int consoleWidth = 900, consoleHeight = 75;
@@ -83,13 +86,25 @@ public class CreativeUI extends GUI {
         addObject(next);
         
         //object image
-        img = new UIImage(getName()) {{
-            get().setSize(250, 250);
-            setImageSize(200, 200);
-            setBackgroundColor(Color.white);
-            setBorderColor(getParent().getUIBackgroundColor());
-            get().setLocation(centerX - get().width / 2, y0 - getFullHeight() / 2);
-        }};
+        img = new UIImage(getName()) {
+            @Override
+            public void scroll(MouseWheelEvent e) {
+                super.scroll(e);
+                if (e.getWheelRotation() > 0) {
+                    ObjectCreator.nextObject();
+                }
+                else {
+                    ObjectCreator.previousObject();
+                }
+            }
+            {
+                get().setSize(250, 250);
+                setImageSize(200, 200);
+                setBackgroundColor(Color.white);
+                setBorderColor(getParent().getUIBackgroundColor());
+                get().setLocation(centerX - get().width / 2, y0 - getFullHeight() / 2);
+            }
+        };
         addObject(img);
         
         //previous object
@@ -107,6 +122,17 @@ public class CreativeUI extends GUI {
             public void useInput() {
                 ObjectCreator.width(Integer.parseInt(this.getInput()));
             }
+            @Override
+            public void scroll(MouseWheelEvent e) {
+                super.scroll(e);
+                if (e.getWheelRotation() < 0) {
+                    ObjectCreator.width(ObjectCreator.width() + numberIncrease);
+                }
+                else {
+                    ObjectCreator.width(ObjectCreator.width() - numberIncrease);
+                }
+                setText("width:" + ObjectCreator.width());
+            }
             {
                 this.takeInput(true);
                 this.setInputPrefix("width");
@@ -118,6 +144,17 @@ public class CreativeUI extends GUI {
             @Override
             public void useInput() {
                 ObjectCreator.height(Integer.parseInt(this.getInput()));
+            }
+            @Override
+            public void scroll(MouseWheelEvent e) {
+                super.scroll(e);
+                if (e.getWheelRotation() < 0) {
+                    ObjectCreator.height(ObjectCreator.height() + numberIncrease);
+                }
+                else {
+                    ObjectCreator.height(ObjectCreator.height() - numberIncrease);
+                }
+                setText("height:" + ObjectCreator.height());
             }
             {
                 this.takeInput(true);

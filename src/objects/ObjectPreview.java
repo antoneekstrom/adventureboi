@@ -42,6 +42,10 @@ public class ObjectPreview extends GameObject {
     }
 
     @Override
+    public void destruct() {
+    }
+
+    @Override
     public void select() {
     }
 

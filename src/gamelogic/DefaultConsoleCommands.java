@@ -2,6 +2,7 @@ package gamelogic;
 
 import UI.Console;
 import UI.UIManager;
+import adventuregame.GameEnvironment;
 import objects.Enemy;
 
 public class DefaultConsoleCommands {
@@ -22,8 +23,27 @@ public class DefaultConsoleCommands {
         UIManager.enableLatestGUI();
     }
 
-    public static void test() {
+    public static void zoom(int i) {
+        ObjectStorage.zoom((float) (i / 100));
+    }
 
+    public static void focusOnObject(int id) {
+        ObjectStorage.getObjectByIdNumber(id).cameraFocus(true);
+    }
+
+    public static int levelSize() {
+        return GameEnvironment.levelData().objectDataList().size();
+    }
+
+    public static void clearEvents() {
+        for (EventTimer t : GameEnvironment.getEventTimers()) {t.clearEvents();}
+    }
+
+    public static int eventCount() {
+        return 0;
+    }
+
+    public static void test() {
     }
 
     public static void refreshInv() {

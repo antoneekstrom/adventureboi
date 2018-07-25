@@ -8,6 +8,7 @@ import adventuregame.GameEnvironment;
 import data.Configuration;
 import data.PlayerData;
 import data.Players;
+import objects.Enemy;
 import objects.GameObject;
 import objects.Player;
 
@@ -108,10 +109,44 @@ public class ObjectStorage {
      * @param object - Initialized object to add to game.
     */
     public static void add(GameObject object) {
+        //give id
         object.giveIdNumber(idnCounter);
+
+        //start events
+        startEvents(object);
+
+        //add it to the game
         objects.add(object);
+
+        //increase id counter
         idnCounter++;
     }
+
+    /** Run startEvents() method for an object if it is an enemy. */
+    public static void startEvents(GameObject object) {
+        if (isEnemy(object)) {
+            Enemy e = (Enemy) object;
+            e.startEvents();
+        }
+    }
+
+    /** Start events for all enemies. */
+    public static void startEvents() {
+        for (GameObject o : getObjectList()) {
+            startEvents(o);
+        }
+    }
+
+    public static boolean isEnemy(GameObject object) {
+        return Enemy.class.isAssignableFrom(object.getClass());
+    }
+    
+    public static void zoom(float percent) {
+        for (GameObject o : getObjectList()) {
+            o.get().setLocation((int)(o.get().x * percent), (int)(o.get().y * percent));
+            o.get().setSize((int)(o.get().width * percent), (int)(o.get().height * percent));
+        }
+    } 
 
     public static GameObject getObjectByIdNumber(int idn) {
         GameObject o = null;
@@ -126,6 +161,7 @@ public class ObjectStorage {
     }
 
     public static void clearEnvironment() {
+        GameEnvironment.clearAllEvents();
         objects.clear();
     }
     
