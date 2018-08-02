@@ -12,7 +12,7 @@ import items.Donut;
 import items.abilities.FireballItem;
 import objects.*;
 
-public class ObjectData implements Serializable {
+public class ObjectData implements Serializable, Recreatable {
 
     private static final long serialVersionUID = 1L;
     
@@ -92,6 +92,20 @@ public class ObjectData implements Serializable {
         return o;
     }
 
+    public GameObject clone() {
+        GameObject object = (GameObject) createObject(className());
+        return clone(object);
+    }
+    
+    public GameObject clone(GameObject object) {
+        object.setRectangle(rectangle());
+        object.setColor(color());
+        object.setText(text());
+        object.setIntersect(intersect());
+        object.physics().setGravity(gravity());
+        return object;
+    }
+
     public static ArrayList<GameObject> createObjectList(ArrayList<ObjectData> datalist) {
 
         ArrayList<GameObject> l = new ArrayList<GameObject>();
@@ -99,14 +113,7 @@ public class ObjectData implements Serializable {
         for (ObjectData d : datalist) {
             try {
                 if (!d.className().equals(Player.class.getName())) {
-                    GameObject o = (GameObject) createObject(d.className());
-                    
-                    o.setRectangle(d.rectangle());
-                    o.setColor(d.color());
-                    o.setText(d.text());
-                    o.setIntersect(d.intersect());
-                    o.physics().setGravity(d.gravity());
-                    l.add(o);  
+                    l.add(d.clone());
                 }
             }
             catch (Exception e) {e.printStackTrace();}

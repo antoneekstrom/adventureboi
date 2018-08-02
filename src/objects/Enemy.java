@@ -4,8 +4,11 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import adventuregame.Animator;
+import adventuregame.HealthModule;
 import adventuregame.Images;
+import data.EnemyData;
 import data.NumberFactory;
+import data.ObjectData;
 import gamelogic.Item;
 import gamelogic.ObjectStorage;
 import objects.EnemyMold;
@@ -68,13 +71,20 @@ public class Enemy extends GameObject implements EnemyMold {
     }
 
     @Override
+    public ObjectData extractData() {
+        return new EnemyData(this);
+    }
+
+    @Override
     public void setText(String t) {
         super.setText(t);
     }
 
     public void startMisc() {
         shrinkSpeed = 4;
-        getHealthModule().dmgCooldown(0);
+        HealthModule h = getHealthModule();
+        h.dmgCooldown(0);
+        h.healthbar().showLevel();
     }
 
     public void scale() {
@@ -147,7 +157,7 @@ public class Enemy extends GameObject implements EnemyMold {
     }
 
     public void dropXp() {
-        String pname = ObjectStorage.findNearestPlayer(get().getLocation());
+        String pname = ObjectStorage.findNearestPlayerName(get().getLocation());
         ObjectStorage.getPlayer(pname).giveXp((int)experience);
     }
     

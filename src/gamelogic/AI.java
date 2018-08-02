@@ -22,12 +22,15 @@ public class AI implements Serializable {
 
     //events
     ArrayList<String> events = new ArrayList<String>();
-    public void addEvent(RandomEvent e, int interval) {GameEnvironment.getEventTimer(interval).addRandomEvent(e); events.add(e.getName());}
+
+    public void addEvent(RandomEvent e, int interval) {
+        GameEnvironment.getEventTimer(interval).addRandomEvent(e);
+        events.add(e.getName());
+    }
+
     public void stopEvents() {
-        for (EventTimer et : GameEnvironment.getEventTimers()) {
-            for (String eventName : events) {
-                et.removeEvent(eventName);
-            }
+        for (String event : events) {
+            GameEnvironment.removeEvent(event);
         }
     }
 

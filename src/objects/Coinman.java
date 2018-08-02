@@ -65,13 +65,13 @@ public class Coinman extends Enemy {
         getAI().addEvent(new RandomEvent(new ActionEvent(){
             @Override
             public void run(GameObject object) {
-                GameObject nearestPlayer = ObjectStorage.getPlayer(ObjectStorage.findNearestPlayer(get().getLocation()));
+                GameObject nearestPlayer = ObjectStorage.getPlayer(ObjectStorage.findNearestPlayerName(get().getLocation()));
                 shoot(o, nearestPlayer.sideOfObject(o));
             }
         }, o, 0.7f, shootEventName()), 1500);
     }
 
-    public String shootEventName() {return EVENT_SHOOT_COIN + "_" + idNumber();}
+    public String shootEventName() {return EVENT_SHOOT_COIN + "_" + NumberFactory.randomString(16);}
     static String EVENT_SHOOT_COIN = "ShootCoin";
 
     @Override

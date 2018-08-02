@@ -1,11 +1,13 @@
 package gamelogic;
 
-import objects.GameObject;
+import java.io.Serializable;
+
+import objects.Player;
 import objects.Spawner;
 
-public interface TriggerEvent {
+public interface TriggerEvent extends Serializable {
 
-    boolean check(GameObject object);
+    boolean check(Spawner spawner, Player player);
     
     boolean check(Spawner spawner);
 }

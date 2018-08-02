@@ -198,6 +198,19 @@ public class ObjectStorage {
         return arr;
     }
 
+    /** This is probably quite resource intensive and very inefficient but I do not care to be honest. */
+    public static int countType(Class<?> c) {
+        int i = 0;
+
+        for (GameObject object : objects) {
+            if (checkForType(object, c)) {
+                i++;
+            }
+        }
+
+        return i;
+    }
+
     /** Check if object is of a certain subclass. */
     public static boolean checkForType(Object candidate, Class<?> type){
         return type.isInstance(candidate);
@@ -210,7 +223,7 @@ public class ObjectStorage {
         }
     }
 
-    public static String findNearestPlayer(Point p) {
+    public static String findNearestPlayerName(Point p) {
         String name = null;
 
         int shortest = -1;
@@ -221,6 +234,9 @@ public class ObjectStorage {
         }
 
         return name;
+    }
+    public static Player findNearestPlayer(Point p) {
+        return getPlayer(findNearestPlayerName(p));
     }
 
     /** Find all gameobjects in specified range.

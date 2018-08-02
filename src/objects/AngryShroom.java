@@ -65,7 +65,7 @@ public class AngryShroom extends GameObject implements ObjectMethods {
     }
 
     private void dropXp() {
-        String pname = ObjectStorage.findNearestPlayer(get().getLocation());
+        String pname = ObjectStorage.findNearestPlayerName(get().getLocation());
         ObjectStorage.getPlayer(pname).giveXp(experience);
     }
 

@@ -1,9 +1,21 @@
 package data;
 
+import java.util.Random;
+
 public class NumberFactory {
 
     private static double CONSTANT_FACTOR = 1.7;
     private static double ENEMY_XP_FACTOR = 0.95;
+
+    /** Get a random string of numbers and hope that it is unique, otherwise it will cause problems. */
+    public static String randomString(int length) {
+        Random r = new Random();
+        String s = "";
+        for (int i = 0; i < length; i++) {
+            s += r.nextInt(10);
+        }
+        return s;
+    }
 
     /** Return a factor representing the amount an objects xp drop should scale given it's experience level.  */
     public static double getXpScaling(int level) {

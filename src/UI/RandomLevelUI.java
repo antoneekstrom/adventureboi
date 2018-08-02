@@ -128,6 +128,8 @@ public class RandomLevelUI extends GUI {
     TaskSet[] lengthSet() {
         return new TaskSet[] {
             new TaskSet("short", shortLength),
+            new TaskSet("medium", mediumLength),
+            new TaskSet("long", longLength),
         };
     }
 
@@ -136,6 +138,20 @@ public class RandomLevelUI extends GUI {
         public void run() {
             generator.length = RandomLevel.LENGTH_SHORT;
             updateLengthDisplay("short");
+        }
+    };
+    NavTask mediumLength = new NavTask() {
+        @Override
+        public void run() {
+            generator.length = RandomLevel.LENGH_MEDIUM;
+            updateLengthDisplay("medium");
+        }
+    };
+    NavTask longLength = new NavTask() {
+        @Override
+        public void run() {
+            generator.length = RandomLevel.LENGH_LONG;
+            updateLengthDisplay("long");
         }
     };
 

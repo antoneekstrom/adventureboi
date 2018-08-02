@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -26,6 +27,7 @@ import gamelogic.MouseListener;
 import gamelogic.Camera;
 import gamelogic.EventTimer;
 import gamelogic.ObjectStorage;
+import gamelogic.RandomEvent;
 import gamelogic.ObjectCreator;
 import gamelogic.ObjectPlacement;
 import objects.Background;
@@ -159,6 +161,28 @@ public class GameEnvironment extends JPanel implements ActionListener {
         }
         else {
             return timer;
+        }
+    }
+
+    public static RandomEvent findEvent(String name) {
+        for (EventTimer et : GameEnvironment.getEventTimers()) {
+            for (RandomEvent e : et.getEvents()) {
+                if (e.getName().equals(name)) {
+                    return e;
+                }
+            }
+        }
+        throw new NullPointerException();
+    }
+
+    public static void removeEvent(String name) {
+        for (EventTimer et : GameEnvironment.getEventTimers()) {
+            for (Iterator<RandomEvent> i = et.getEvents().iterator(); i.hasNext();) {
+                RandomEvent e = i.next();
+                if (e.getName().equals(name)) {
+                    i.remove();
+                }
+            }
         }
     }
 

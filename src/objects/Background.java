@@ -69,7 +69,7 @@ public class Background {
         boolean b = true;
 
         if (object.getText().equals(ObjectCreator.PREVIEW_OBJECT)) {b = false;}
-        if (object.getClass().equals(Player.class)) {b = false;}
+        if (object.getClass().equals(Player.class) || Projectile.class.isInstance(object)) {b = false;}
 
         return b;
     }

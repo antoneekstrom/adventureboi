@@ -9,6 +9,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import javax.swing.Timer;
 
@@ -23,6 +24,15 @@ import gamelogic.Physics;
 import gamelogic.Shrinker;
 
 public class GameObject {
+
+    /* --- static stuff --- */
+    public static int getLevel(GameObject object) {
+        if (ObjectStorage.isEnemy(object)) {
+            Enemy e = (Enemy) object;
+            return e.level();
+        }
+        return 0;
+    }
 
 	//switches
     private boolean visible = true;
@@ -76,6 +86,26 @@ public class GameObject {
 
     //physics
     private Physics physics = new Physics();
+
+    //tags
+    private ArrayList<String> tags = new ArrayList<String>();
+    public void addTag(String tag) {tags.add(tag);}
+    public boolean hasTag(String tag) {
+        for (String t : tags) {
+            if (t.equals(tag)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean hasTagThatContains(String text) {
+        for (String t : tags) {
+            if (t.contains(text)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     //velocity
     private double velocityX = 0;

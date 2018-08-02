@@ -10,6 +10,8 @@ public class EventTimer extends Timer {
     TimerTask timerTask;
     ArrayList<RandomEvent> events = new ArrayList<RandomEvent>();
 
+    public ArrayList<RandomEvent> getEvents() {return events;}
+
     int interval;
 
     public EventTimer() {

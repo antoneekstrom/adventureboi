@@ -77,16 +77,13 @@ public class ClickListener implements MouseListener {
 		ObjectInspector.selectWithMouse();
 	}
 
-	/** Call UIObject click method. */
+	/** Call UIObject click method. */	
 	public void objectLeftMouseReleased() {
 		for (UIObject o : UIManager.getCurrentGUI().getUIObjectList()) {
 			if (o.checkMouse()) {
 				o.leftMouseReleased();
 			}
 			o.leftMouseReleasedSomewhere();
-			if (o.alwaysOnTop()) {
-				break;
-			}
 		}
 	}
 

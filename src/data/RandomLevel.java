@@ -7,12 +7,16 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Random;
 
+import adventuregame.Position;
+import gamelogic.TriggerEvent;
 import objects.AngryShroom;
 import objects.Bigmush;
 import objects.Coinman;
 import objects.Enemy;
 import objects.GameObject;
+import objects.NewAngryShroom;
 import objects.Platform;
+import objects.Spawner;
 
 public class RandomLevel {
 
@@ -28,10 +32,17 @@ public class RandomLevel {
     //generation
     int startElevation = 500;
     int minX = 0, maxX = 0, levelWidth = 0;
-    int standardPlatformSize = 800, platformVariance = 450;
+    int standardPlatformWidth = 1200, platformWidthVariance = 600;
+    int standardPlatformHeight = 100, platformHeightVariance = 0;
     int standardPlatformDistance = 550, platformDistanceVariance = 400;
-    int platformHeightVariance = 175;
+    int platformElevationVariance = 225;
     int standardDecorationCount = 4, decorationCountVariance = 3;
+    int arenaSpawnerHeightOffset = 500;
+
+    //spawner parameters
+    TriggerEvent[] spawnerTriggers;
+    int spawnerMaxAlive, spawnerCooldown, amountToSpawn, spawnerPlayerDistance;
+    Dimension spawnerRange;
 
     ArrayList<GameObject> objectList;
     Point nextPos;
@@ -44,6 +55,11 @@ public class RandomLevel {
     public RandomLevel(long seed, String name) {
         this.seed = seed;
         level = new LevelData(name, false, null);
+        start();
+    }
+
+    private void start() {
+        setDefaultSpawnerSettings();
     }
 
     /** Get the {@link LevelData} of the random level. */
@@ -91,25 +107,26 @@ public class RandomLevel {
     public static int LENGTH_SHORT = 5, LENGH_MEDIUM = 15, LENGH_LONG = 30, LENGTH_VERYLONG = 50;
 
     /** Type of decoration */
-    static String DECORATION_ENEMY = "enemy", DECORATION_TREASURE = "treasure", DECORATION_HEALTH = "health", DECORATION_BOIN = "boin";
+    static String DECORATION_ENEMY = "enemy", DECORATION_TREASURE = "treasure", DECORATION_HEALTH = "health", DECORATION_BOIN = "boin", DECORATION_SPAWNER = "spawner";
     static String[] DECORATION_TYPES = new String[] {
         DECORATION_ENEMY,
         DECORATION_TREASURE,
         DECORATION_HEALTH,
         DECORATION_BOIN,
+        DECORATION_SPAWNER,
     };
 
     /** Mushroom enemies */
     static Class<?>[] MUSHROOM_ENEMIES = new Class<?>[] {
         Bigmush.class,
-        AngryShroom.class,
+        NewAngryShroom.class,
     };
 
     /** Misc enemies */
     static Class<?>[] MISC_ENEMIES = new Class<?>[] {
         Coinman.class,
         Bigmush.class,
-        AngryShroom.class,
+        NewAngryShroom.class,
     };
 
     /** Decoration size */
@@ -124,14 +141,42 @@ public class RandomLevel {
         }
     }
 
+    /* ---  Misc methods --- */
+    String type() {
+        return type;
+    }
+
     /* --- Generation methods --- */
 
     void next() {
-        miscPlatform();
+        choosePlatform();
+    }
+
+    void choosePlatform() {
+        double r = random.nextDouble();
+        if (r < 0.4) {
+            spawnerPlatform();
+        }
+        else {
+            miscPlatform();
+        }
     }
 
     void addObject(GameObject o) {
         objectList.add(o);
+    }
+
+    void setDefaultSpawnerSettings() {
+        spawnerMaxAlive = 3;
+        spawnerCooldown = 175;
+        amountToSpawn = 9;
+        spawnerRange = new Dimension(250, 250);
+        spawnerPlayerDistance = 450;
+
+        TriggerEvent e1 = Spawner.playerProximity(spawnerPlayerDistance);
+        spawnerTriggers = new TriggerEvent[] {
+            e1,
+        };
     }
 
     void decorateRandom(int amount) {
@@ -148,10 +193,13 @@ public class RandomLevel {
 
     void placeDecoration(String decorationType) {
         if (decorationType.equals(DECORATION_ENEMY)) {
-            placeBlock(smallRandomSize(), randomColor());
+            placeEnemy(getEnemyClass(type()));
         }
         else if (decorationType.equals(DECORATION_HEALTH)) {
             placeHealth();
+        }
+        else if (decorationType.equals(DECORATION_SPAWNER)) {
+            placeSpawner(getEnemyClass(type()));
         }
         else {
             placeBlock(smallRandomSize(), randomColor());
@@ -166,7 +214,7 @@ public class RandomLevel {
         return new Size(50, 15).get();
     }
 
-    Class<?> randomEnemyClass(String type) {
+    Class<?> getEnemyClass(String type) {
         if (type.equals(TYPE_MUSHROOM)) {
             return MUSHROOM_ENEMIES[random.nextInt(MUSHROOM_ENEMIES.length)];
         }
@@ -179,6 +227,7 @@ public class RandomLevel {
         try {
             Enemy e = (Enemy) c.newInstance();
             e.level(getRandomLevel());
+            e.get().setLocation(getPlacement(e.get()));
             addObject(e);
         }
         catch (Exception e) {e.printStackTrace();}
@@ -186,7 +235,8 @@ public class RandomLevel {
 
     /** Return a random (experience) level between min and max. */
     int getRandomLevel() {
-        return random.nextInt(maxLevel + minLevel) - minLevel;
+        int r = random.nextInt(maxLevel + minLevel) - minLevel;
+        return r;
     }
 
     void placeBlock(Dimension size, Color color) {
@@ -196,6 +246,45 @@ public class RandomLevel {
         block.setColor(randomColor());
         
         addObject(block);
+    }
+
+    Spawner getSpawner(Class<?> sample) {
+        determineSpawnerSettings(sample);
+        Spawner spawner = new Spawner(amountToSpawn, spawnerMaxAlive, spawnerCooldown, sample, spawnerTriggers);
+        spawner.level = getRandomLevel();
+        return spawner;
+    }
+
+    /** Choose settings based on enemy type. */
+    void determineSpawnerSettings(Class<?> c) {
+        if (c.equals(Bigmush.class)) {
+            spawnerMaxAlive = 1;
+            amountToSpawn = 1;
+        }
+        else if (c.equals(Coinman.class)) {
+            spawnerMaxAlive = 2;
+            amountToSpawn = 3;
+
+        }
+        else if (c.equals(NewAngryShroom.class)) {
+            spawnerMaxAlive = 2;
+            amountToSpawn = 4;
+        }
+        else {
+            setDefaultSpawnerSettings();
+        }
+    }
+    
+    void placeSpawner(Class<?> sample) {
+        Spawner spawner = getSpawner(sample);
+        spawner.get().setLocation(getPlacement(spawner.get()));
+
+        addObject(spawner);
+    }
+
+    Spawner getSpawner(GameObject specimen) {
+        Spawner spawner = getSpawner(specimen.getClass());
+        return spawner;
     }
 
     void placeTreasure() {
@@ -241,16 +330,32 @@ public class RandomLevel {
 
     /** Platform with random decorations. */
     void miscPlatform() {
-        platform();
+        newPlatform();
         decorateRandom(variate(standardDecorationCount, decorationCountVariance));
     }
 
-    /** Basic platform template. */
-    void platform() {
+    /** Platform with a spawner that spawns a certain amounts of enemies. Kind of like some kind of arena you know, haha hell yeah */
+    void spawnerPlatform() {
+        //create a kind of large platform for the "arena"
+        newPlatform(new Dimension(800, 200));
+
+        //decorate it with a spawner in the middle, in the air
+        Spawner spawner = getSpawner(getEnemyClass(type()));
+        spawner.get().setLocation(Position.placeBetweenX(platform.x, (int)platform.getMaxX(), spawner.get()).x, platform.y - arenaSpawnerHeightOffset);
+        addObject(spawner);
+    }
+
+    /** Basic platform template with a random size. */
+    void newPlatform() {
+        newPlatform(platformSize());
+    }
+
+    /** Basic platform with a custom size. */
+    void newPlatform(Dimension size) {
         Platform p = new Platform();
 
         p.get().setLocation(nextPos);
-        p.get().setSize(platformSize());
+        p.get().setSize(size);
         p.setColor(platformColor());
 
         objectList.add(p);
@@ -274,13 +379,13 @@ public class RandomLevel {
     }
 
     Color platformColor() {
-        if (type.equals(TYPE_MUSHROOM)) {
+        if (type().equals(TYPE_MUSHROOM)) {
             return Color.blue;
         }
-        else if (type.equals(TYPE_GOLD)) {
+        else if (type().equals(TYPE_GOLD)) {
             return Color.yellow;
         }
-        else if (type.equals(TYPE_MISC)) {
+        else if (type().equals(TYPE_MISC)) {
             return Color.orange;
         }
         else {
@@ -289,7 +394,15 @@ public class RandomLevel {
     }
 
     Dimension platformSize() {
-        return new Dimension(variate(standardPlatformSize, platformVariance), 100);
+        return new Dimension(platformWidth(), platformHeight());
+    }
+
+    int platformWidth() {
+        return variate(standardPlatformWidth, platformWidthVariance);
+    }
+
+    int platformHeight() {
+        return variate(standardPlatformHeight, platformHeightVariance);
     }
 
     int variate(int subject, int variance) {
@@ -307,6 +420,11 @@ public class RandomLevel {
 
         return subject;
     }
+
+    /** Get the size and position of the current platform. */
+    Rectangle platform() {
+        return platform;
+    }
     
     void measure() {
         minX = 0;
@@ -320,7 +438,7 @@ public class RandomLevel {
 
     void setNextPos() {
         nextPos.x = maxX + platformDistance();
-        nextPos.y = variate(nextPos.y, platformHeightVariance);
+        nextPos.y = variate(nextPos.y, platformElevationVariance);
     }
 
     void measureObject(GameObject object) {

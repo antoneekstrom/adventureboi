@@ -41,7 +41,9 @@ public class UIDropdown extends UIList {
     @Override
     public void leftMouseReleased() {
         for (UIObject o : list) {
-            o.leftMouseReleased();
+            if (o.checkMouse()) {
+                o.leftMouseReleased();
+            }
         }
     }
 
@@ -66,6 +68,7 @@ public class UIDropdown extends UIList {
         handle().hoverColorChange(handle().getBackgroundColor().brighter());
         setBackgroundColor(getParent().getUITextColor());
         textColor(getParent().getUITextColor());
+        setSpacing(0);
     }
 
 }

@@ -176,7 +176,9 @@ public class ObjectCreator {
 
                 GameObject selectedClass = (GameObject) Class.forName(currentObject.className()).newInstance();
                 object.setText(PREVIEW_OBJECT);
-                object.getAI().stopEvents();
+                if (object.getAI() != null) {
+                    object.getAI().stopEvents();
+                }
                 object.get().setSize(selectedClass.get().getSize());
                 object.setImage(Images.getImage(ObjectCreator.getCurrentObjectName()));
             }

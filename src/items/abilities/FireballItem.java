@@ -5,6 +5,7 @@ import java.util.HashMap;
 import gamelogic.Item;
 import gamelogic.ObjectStorage;
 import objects.Fireball;
+import objects.NewFireball;
 import objects.Player;
 
 public class FireballItem extends Ability {
@@ -49,6 +50,11 @@ public class FireballItem extends Ability {
     public void use(Player player) {
         super.use(player);
         fireball(player);
+    }
+
+    public void newFireball(Player player) {
+        NewFireball f = new NewFireball(player);
+        ObjectStorage.add(f);
     }
 
     public void fireball(Player player) {

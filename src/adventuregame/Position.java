@@ -26,5 +26,10 @@ public class Position {
 
 		return r;
 	}
+
+	public static int distance(Point p1, Point p2) {
+		int d = (int) Point.distance(p1.x, p1.y, p2.x, p2.y);
+		return d; 
+	}
 	
 }

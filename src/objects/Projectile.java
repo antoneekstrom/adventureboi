@@ -9,11 +9,15 @@ import gamelogic.ObjectStorage;
 public class Projectile extends GameObject {
     
     String direction;
+    String owner = "none";
     int speed, maxDistance, distanceTraveled = 0, offset = 15, collisions = 0;
     public int contactDamage = 0;
     GameObject origin;
 
     public static final String RIGHT = "right", LEFT = "left", NONE = "none";
+
+    public void owner(String owner) {this.owner = owner;}
+    public String owner() {return owner;}
 
     public Projectile(int speed, String direction, int maxDistance, GameObject origin, Dimension size) {
         super();
