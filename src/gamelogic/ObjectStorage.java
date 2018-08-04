@@ -36,6 +36,12 @@ public class ObjectStorage {
         }
     }
 
+    public static void doneLoading() {
+        for (GameObject o : objects) {
+            o.onLevelLoad();
+        }
+    }
+
     /** for the amount of players to are meant to spawn: If name from list in gamenvironment
      *  does not equal null and a {@link data.PlayerData} file with the same name is available,
      *  initialize a {@link Player} with that data and put it in
@@ -114,6 +120,7 @@ public class ObjectStorage {
 
         //start events
         startEvents(object);
+        object.addedToLevel();
 
         //add it to the game
         objects.add(object);
@@ -178,7 +185,7 @@ public class ObjectStorage {
     }
 
     /** Find all objects of a certain type and return a list of them. */
-    public static ArrayList<?> findObjects(Class<?> type) {
+    public static ArrayList<GameObject> findObjects(Class<?> type) {
         ArrayList<GameObject> arr = new ArrayList<GameObject>();
         for (GameObject o : objects) {
             if (checkForType(o, type)) {

@@ -49,7 +49,7 @@ public class FireballItem extends Ability {
     @Override
     public void use(Player player) {
         super.use(player);
-        fireball(player);
+        newFireball(player);
     }
 
     public void newFireball(Player player) {

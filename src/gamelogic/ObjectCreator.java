@@ -83,6 +83,8 @@ public class ObjectCreator {
             put("object", new Create(GameObject.class.getName(), "object"));
             put("starman", new Create(Starman.class.getName(), "object"));
             put("platform", new Create(Platform.class.getName(), "object"));
+            put("mushroomblock", new Create(MushroomBlock.class.getName(), "object"));
+            put("lure", new Create(Lure.class.getName(), "object"));
         }
     };
 

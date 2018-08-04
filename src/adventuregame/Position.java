@@ -31,5 +31,31 @@ public class Position {
 		int d = (int) Point.distance(p1.x, p1.y, p2.x, p2.y);
 		return d; 
 	}
+
+	public static int distanceX(Point p1, Point p2) {
+		int d = 0;
+		if (p1.x > p2.x) {
+			d = p1.x - p2.x;
+		}
+		else {
+			d = p2.x - p1.x;
+		}
+		return d; 
+	}
+
+	public static int distanceY(Point p1, Point p2) {
+		int d = 0;
+		if (p1.y > p2.y) {
+			d = p1.y - p2.y;
+		}
+		else {
+			d = p2.y - p1.y;
+		}
+		return d; 
+	}
+
+	public static Point CenterPos(Rectangle r) {
+		return new Point((int) r.getCenterX(), (int) r.getCenterY());
+	}
 	
 }

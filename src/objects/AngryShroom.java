@@ -79,7 +79,6 @@ public class AngryShroom extends GameObject implements ObjectMethods {
     
     public void collide(GameObject collision) {
         super.collide(collision);
-        getAI().collision(collision);
 
         //when in contact with a player
         if (collision.getClass().equals(Player.class)) {

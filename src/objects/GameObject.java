@@ -10,6 +10,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.swing.Timer;
 
@@ -19,6 +20,7 @@ import data.ObjectData;
 import gamelogic.AI;
 import gamelogic.Camera;
 import gamelogic.Collision;
+import gamelogic.CollisionEngine;
 import gamelogic.ObjectStorage;
 import gamelogic.Physics;
 import gamelogic.Shrinker;
@@ -47,6 +49,31 @@ public class GameObject {
     private boolean debug = false;
     private boolean hasImage = false;
     private boolean selected = false;
+    private boolean onGround = false;
+
+    /** A list containing objects this one is CURRENTLY colliding with, none of that "last collision" bs */
+    private ArrayList<Collision> currentCollisions = new ArrayList<Collision>();
+    public ArrayList<Collision> collisions() {return currentCollisions;}
+    public boolean checkForCollisionSide(String side) {
+        for (Collision col : currentCollisions) {
+            if (col.side().equals(side)) {
+                return true;
+            }
+            else if (side.equals("wall")) {
+                if (col.side().equals("left") || col.side().equals("right")) {return true;}
+            }
+            else if (side.equals("ground")) {
+                if (col.side().equals("bottom") || col.side().equals("top")) {return true;}
+            }
+        }
+        return false;
+    }
+
+    public void addedToLevel() {
+        
+    }
+    
+    public boolean onGround() {return onGround;}
 
     public boolean moveWhenColliding() {return moveWhenColliding;}
     public void moveWhenColliding(boolean b) {moveWhenColliding = b;}
@@ -57,6 +84,10 @@ public class GameObject {
     private int IDNumber;
     public void giveIdNumber(int i) {IDNumber = i;}
     public int idNumber() {return IDNumber;}
+
+    public boolean isOfType(Class<?> c) {
+        return c.isInstance(getClass());
+    }
 
     public boolean cameraFocus = false;
     public void cameraFocus(boolean b) {
@@ -127,6 +158,7 @@ public class GameObject {
         r.setLocation(0, 0);
         setText("");
         displayCoordinate = new Point(r.x, r.y);
+        onLevelLoad();
         initialize();
     }
 
@@ -156,6 +188,8 @@ public class GameObject {
         return new ObjectData(this);
     }
 
+    public void onLevelLoad() {
+    }
 
     private boolean shrinked = false;
     private Dimension originalSize;
@@ -313,6 +347,17 @@ public class GameObject {
         if (collision.getClass().equals(Player.class)) {
             playerContact((Player)collision);
         }
+        Collision col = new Collision(collision, collisionSide);
+        if (!collisionExists(col)) {
+            currentCollisions.add(col);
+        }
+    }
+
+    public boolean collisionExists(Collision c) {
+        for (Collision col : currentCollisions) {
+            if (col.object().equals(c.object()) && col.side().equals(c.side())) {return true;}
+        }
+        return false;
     }
 
     public void playerContact(Player player) {
@@ -347,6 +392,10 @@ public class GameObject {
         return animator;
     }
 
+    public void setLocation(Point location) {
+        get().setLocation(location);
+    }
+
     public void enableAnimator() {
         animator = new Animator(image);
     }
@@ -356,7 +405,7 @@ public class GameObject {
     }   
 
     public void createAI() {
-        ai = new AI();
+        ai = new AI(this);
     }
 
     /** Get object rectangle/bouding box. This is also where position translation should occur. */
@@ -401,11 +450,19 @@ public class GameObject {
         basicLogic(); /* Basic logic for all objects */
         calculateVelocity();
         if (intersect) {intersect(lastCollision);}
+        updateCollisionList();
         calculatePosition(); /* Calculate forces and positioning */
         updateDisplayCoordinates(); /* Update position on screen */
         animate(); /* Do animation. */
         if (healthModule != null) {healthModule().update(this);}
         debug();
+    }
+
+    private void updateCollisionList() {
+        for (Iterator<Collision> i = currentCollisions.iterator(); i.hasNext();) {
+            GameObject col = i.next().object();
+            if (!col.get().intersects(get())) {i.remove();}
+        }
     }
     
     /** Update method for debugging. */
@@ -417,6 +474,7 @@ public class GameObject {
         if (get().y > yLimit) {
             destruct();
         }
+        onGround = checkForCollisionSide("top");
     }
 
     /** Called when object dies/is destroyed. Should invoke super. */
@@ -472,7 +530,7 @@ public class GameObject {
     /** Check collision */
     public void collision() {
         if (collision) {
-            Collision.check(this);
+            CollisionEngine.check(this);
         }
 
     }
@@ -542,7 +600,7 @@ public class GameObject {
             if (debug) {
                 g.setColor(Color.black);
                 g.drawRect(getDisplayCoordinate().x, getDisplayCoordinate().y, get().width, get().height);
-                g.drawString(debugString, getDisplayCoordinate().x - 250, getDisplayCoordinate().y -100);
+                g.drawString(debugString, getDisplayCoordinate().x - 125, getDisplayCoordinate().y -100);
             }
             if (isSelected()) {
                 Graphics2D g2d = (Graphics2D) g;

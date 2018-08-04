@@ -22,10 +22,17 @@ public class RandomLevelUI extends GUI {
 
     String SEED_INPUT = "SeedInput", NAME_INPUT = "NameInput", LENGTH_INPUT = "LengthInput";
 
+    void startGenerator() {
+        generator.type = RandomLevel.TYPE_MUSHROOM;
+    }
+
     @Override
     public void start() {
         setGuidelineSpacing(150);
         setGuidelineY1(350);
+
+        //set up generator
+        startGenerator();
 
         //title
         addTitle("Generate a random level", -100);

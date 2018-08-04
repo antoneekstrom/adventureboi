@@ -49,6 +49,7 @@ public class LevelGenerator {
         RandomLevel rl = new RandomLevel(seed, name);
 
         //set it up
+        rl.type = type;
 
         //return it
         return rl.create();

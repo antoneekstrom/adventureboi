@@ -138,6 +138,8 @@ public class GameEnvironment extends JPanel implements ActionListener {
         else {
             Camera.centerCameraOn(new Point(-50, 300));
         }
+
+        ObjectStorage.doneLoading();
     }
 
     private static Background background;

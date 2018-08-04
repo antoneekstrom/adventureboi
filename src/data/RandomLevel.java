@@ -9,11 +9,11 @@ import java.util.Random;
 
 import adventuregame.Position;
 import gamelogic.TriggerEvent;
-import objects.AngryShroom;
 import objects.Bigmush;
 import objects.Coinman;
 import objects.Enemy;
 import objects.GameObject;
+import objects.MushroomBlock;
 import objects.NewAngryShroom;
 import objects.Platform;
 import objects.Spawner;
@@ -101,10 +101,10 @@ public class RandomLevel {
     /* --- Static resources --- */
 
     /** Type of level. */
-    static String TYPE_MUSHROOM = "mushroom", TYPE_GOLD = "gold", TYPE_MISC = "misc";
+    public static final String TYPE_MUSHROOM = "mushroom", TYPE_GOLD = "gold", TYPE_MISC = "misc";
 
     /** Length of level. */
-    public static int LENGTH_SHORT = 5, LENGH_MEDIUM = 15, LENGH_LONG = 30, LENGTH_VERYLONG = 50;
+    public static final int LENGTH_SHORT = 5, LENGH_MEDIUM = 15, LENGH_LONG = 30, LENGTH_VERYLONG = 50;
 
     /** Type of decoration */
     static String DECORATION_ENEMY = "enemy", DECORATION_TREASURE = "treasure", DECORATION_HEALTH = "health", DECORATION_BOIN = "boin", DECORATION_SPAWNER = "spawner";
@@ -113,7 +113,6 @@ public class RandomLevel {
         DECORATION_TREASURE,
         DECORATION_HEALTH,
         DECORATION_BOIN,
-        DECORATION_SPAWNER,
     };
 
     /** Mushroom enemies */
@@ -154,7 +153,7 @@ public class RandomLevel {
 
     void choosePlatform() {
         double r = random.nextDouble();
-        if (r < 0.4) {
+        if (r < 0.25) {
             spawnerPlatform();
         }
         else {
@@ -168,9 +167,9 @@ public class RandomLevel {
 
     void setDefaultSpawnerSettings() {
         spawnerMaxAlive = 3;
-        spawnerCooldown = 175;
+        spawnerCooldown = 300;
         amountToSpawn = 9;
-        spawnerRange = new Dimension(250, 250);
+        spawnerRange = new Dimension(325, 325);
         spawnerPlayerDistance = 450;
 
         TriggerEvent e1 = Spawner.playerProximity(spawnerPlayerDistance);
@@ -352,7 +351,7 @@ public class RandomLevel {
 
     /** Basic platform with a custom size. */
     void newPlatform(Dimension size) {
-        Platform p = new Platform();
+        Platform p = getPlatformType();
 
         p.get().setLocation(nextPos);
         p.get().setSize(size);
@@ -368,6 +367,18 @@ public class RandomLevel {
 
         //set position for next platform
         setNextPos();
+    }
+
+    Platform getPlatformType() {
+        if (type().equals(TYPE_MUSHROOM)) {
+            return new MushroomBlock();
+        }
+        else if (type().equals(TYPE_MISC)) {
+            return new Platform();
+        }
+        else {
+            return new Platform();
+        }
     }
 
     void setPlatformPos(Platform p) {

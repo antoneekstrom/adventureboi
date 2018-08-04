@@ -1,11 +1,15 @@
 package gamelogic;
 
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.TimerTask;
 
 import adventuregame.GameEnvironment;
+import adventuregame.Position;
 import objects.GameObject;
+import objects.Player;
 
 public class AI implements Serializable {
 
@@ -13,11 +17,21 @@ public class AI implements Serializable {
 	private GameObject object;
     private boolean enabled = true;
 
+    public AI(GameObject object) {
+        this.object = object;
+        start();
+    }
+
+    void start() {
+        home = object.get().getLocation();
+        pathGoal = home;
+    }
+
     //collision
     GameObject lastWall;
-    private GameObject collision;
+    private GameObject collisionObject;
     private GameObject lastGround;
-    private String collisionType = "none";
+    private Collision collision;
     private String direction = "left";
 
     //events
@@ -36,13 +50,34 @@ public class AI implements Serializable {
 
     //values
     private int speed = 10;
-    private double jumpFrequency = 0.05;
+    private double standardJumpFrequency = 0.05;
+    private double jumpFreq = standardJumpFrequency;
     private double jumpforce = 600;
+
+    //path to player
+    private boolean ignorePlayer = false;
+    private boolean pathToPlayer = true;
+    private boolean playerWithinRange = false;
+    public boolean jumpToPlayer = false;
+    private double jumpFreqBonus = 0.07;
+    private int pathToPlayerRange = 700; 
+    private int jumpToPlayerDistance = 325;
+
+    /* General pathing */
+    private Countdowner homeCountdown;
+    private boolean isCountingDownToReturn = false;
+    private boolean followGoal = false;
+    private Point home = new Point(0,0);
+    private int returnToHomeDelay = 5000;
+    int wallJumpHeight = 115;
+    /** Position to navigate to if enabled. */
+    private Point pathGoal = home;
+    private int homeRange = 75;
 
     //direction switching
     private int setDirectionCooldown = 0;
     private int SET_DIRECTION_COOLDOWN = 35;
-    private double spontaneousDirectionSwitchFrequency = 0.027;
+    public double spontaneousDirectionSwitchFrequency = 0.022;
 
     //edges
     private boolean closeToEdge = false;
@@ -51,6 +86,8 @@ public class AI implements Serializable {
     public void update(GameObject o) {
         if (isEnabled()) {
             object = o;
+            //do things when colliding
+            collisionLogic();
             //move object in current direction
             move();
             //method for debugging
@@ -60,35 +97,45 @@ public class AI implements Serializable {
         }
     }
     
-    public void collision(GameObject c) {
+    public void collide(Collision c) {
         if (isEnabled()) {
+            collisionObject = c.object();
             collision = c;
             //determine type of collision
             determineCollision();
             //change direction when colliding
             detectCollision();
             //potentially execute an action
-            action();
+            collisionAction();
         }
     }
 
-    private void action() {
-        if (Math.random() < jumpFrequency && !closeToEdge) {jump();}
+    void collisionLogic() {
+        for (Collision col : object.collisions()) {
+            collide(col);
+        }
+    }
+
+    private void collisionAction() {
+        if (Math.random() < jumpFreq && (!closeToEdge || playerWithinRange)) {jump();}
         if (Math.random() < spontaneousDirectionSwitchFrequency && !closeToEdge) {switchDirection();}
+        if (collision.isWall()) {
+            jumpWall();
+        }
     }
     
     private void debug() {
         
     }
-    
+
     /** determine type of collision. */
     private void determineCollision() {
         if (object != null) {
             if (object.collisionSide().equals("top")) {
-                collisionType = "ground";
+                lastGround = collisionObject;
             }
-            else if (object.collisionSide().equals("left") && object.collisionSide().equals("right")) {
-                collisionType = "wall";            
+            if (object.collisionSide().equals("left") || object.collisionSide().equals("right")) {
+                lastWall = collisionObject;
             }
         }
     }
@@ -97,6 +144,123 @@ public class AI implements Serializable {
         edgeDetection();
         fallOfPrevention();
         updateCooldown();
+        if (followGoal) {
+            pathToGoal();
+        }
+        if (pathToPlayer && !ignorePlayer) {
+            pathToPlayer();
+        }
+    }
+
+    void jumpWall() {
+        int height = Position.distanceY(object.get().getLocation(), collisionObject.get().getLocation());
+        boolean jumpable = wallJumpHeight >= height;
+        if (!playerWithinRange && jumpable) {
+            jump();
+        }
+        else {
+            switchDirection();
+        }
+    }
+
+    void pathToGoal() {
+        /* Set direction to current goal. */
+        String direction = object.get().x < pathGoal.x ? "right" : "left";
+        setDirection(direction);
+
+        int distanceToHome = Position.distanceX(pathGoal, object.get().getLocation());
+        /* Check if goal has been reached */
+        if (distanceToHome < homeRange) {
+            followGoal(false);
+        }
+    }
+
+    public void ignorePlayer(int duration) {
+        ignorePlayer = true;
+        new Countdowner(duration, new TimerTask(){
+            @Override
+            public void run() {
+                ignorePlayer = false;
+                returnHomeDelay(returnToHomeDelay);
+            }
+        });
+    }
+
+    Countdowner homeCountdown() {return homeCountdown;}
+
+    void returnHome() {
+        setGoal(home);
+        followGoal(true);
+    }
+
+    void returnHomeDelay(int delay) {
+        if (!isCountingDownToReturn) {
+            isCountingDownToReturn = true;
+            homeCountdown = new Countdowner(delay, newReturnHomeTask());
+        }
+    }
+
+    TimerTask newReturnHomeTask() {
+        return new TimerTask(){
+            @Override
+            public void run() {
+                isCountingDownToReturn = false;
+                returnHome();
+            }
+        };
+    }
+
+    public boolean followGoal() {return followGoal;}
+    public void followGoal(boolean b) {followGoal = b;}
+    /** Try to navigate to a specific point. */
+    public void setGoal(Point pos) {
+        pathGoal = pos;
+    }
+    public void setHome(Point pos) {home = pos;}
+
+    /** Try to reach the same elevation as the player by jumping while moving towards player. */
+    private void pathToPlayer() {
+        Player player = ObjectStorage.findNearestPlayer(object.get().getLocation());
+        boolean prevPlayerWithinRange = playerWithinRange;
+
+        /* Determine if player is within range */
+        Point playerCenter = Position.CenterPos(player.get()), objectCenter = Position.CenterPos(object.get());
+        int distance = Position.distance(playerCenter, objectCenter);
+        playerWithinRange = distance <= pathToPlayerRange;
+
+        /* If player is above this object and not too close, try to jump. */
+        jumpToPlayer = (distance >= jumpToPlayerDistance) && playerWithinRange;
+        /* Still jump if too close but there is a wall */
+        boolean colWithWall = object.checkForCollisionSide("wall");
+        boolean playerAbove = player.get().y < object.get().y;
+
+        /* Change the jump freq according to conditions */
+        if ( (playerAbove && jumpToPlayer) || (colWithWall && playerWithinRange)) {
+            jumpFreq = standardJumpFrequency + jumpFreqBonus;
+        }
+        else {
+            jumpFreq = standardJumpFrequency;
+        }
+        
+        /* if player is within range  */
+        if (playerWithinRange) {
+            /* Stop following current goal. */
+            followGoal(false);
+
+            /* Get direction of player */
+            String playerDirection = "none";
+            if (player.get().x < object.get().x) {
+                playerDirection = "left";
+            }
+            else {
+                playerDirection = "right";
+            }
+            /* Switch direction towards player */
+            setDirection(playerDirection);
+        }
+        if (prevPlayerWithinRange && !playerWithinRange) {
+            returnHomeDelay(returnToHomeDelay);
+        }
     }
 
     private String sideOfObject(GameObject c) {
@@ -139,21 +303,20 @@ public class AI implements Serializable {
     }
 
     public void jump() {
-        object.physics().addForce(0, -jumpforce);
+        if (object.onGround()) {
+            object.physics().addForce(0, -jumpforce);
+        }
     }
     
     /** Determine if object should change direction. */
     private void detectCollision() {
-        if (collisionType.equals("ground")) {
-            lastGround = collision;
-            if (newPosition().getMaxX() > collision.get().getMaxX() || newPosition().getMinX() < collision.get().getMinX()) {
+        if (collision.isGround()) {
+            if (newPosition().getMaxX() > collisionObject.get().getMaxX() || newPosition().getMinX() < collisionObject.get().getMinX()) {
                 switchDirection();       
             }
         }
-        else if (collisionType.equals("wall")) {
-            lastWall = collision;
-            if (object.collisionSide().equals("left")) {setDirection("right");}
-            else if (object.collisionSide().equals("right")) {setDirection("left");}
+        else if (collision.isWall()) {
+            switchDirection();
         }
     }
 
@@ -192,7 +355,11 @@ public class AI implements Serializable {
 
     public boolean isEnabled() {return enabled;}
     public void setEnabled(boolean b) {enabled = b;}
-    public void jumpFrequency(float f) {jumpFrequency = f;}
+    public void jumpFrequency(float f) {standardJumpFrequency = f; jumpFreq = f;}
+    public double currentJumpFrequency() {return jumpFreq;}
+    public boolean playerWithinRange() {return playerWithinRange;}
+    public GameObject groundCollision() {return lastGround;}
+    public GameObject wallCollision() {return lastWall;}
     public void jumpforce(double d) {jumpforce = d;}
     public void speed(int s) {speed = s;}
 }

@@ -36,6 +36,7 @@ public class Bigmush extends Enemy implements EnemyMold {
     public void startAI() {
         getAI().jumpFrequency(0f);
         getAI().speed(3);
+        getAI().spontaneousDirectionSwitchFrequency = 0.017;
     }
 
 }

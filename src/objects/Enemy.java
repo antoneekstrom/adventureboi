@@ -11,6 +11,7 @@ import data.NumberFactory;
 import data.ObjectData;
 import gamelogic.Item;
 import gamelogic.ObjectStorage;
+import gamelogic.ThreadEvent;
 import objects.EnemyMold;
 
 public class Enemy extends GameObject implements EnemyMold {
@@ -23,8 +24,6 @@ public class Enemy extends GameObject implements EnemyMold {
     public void level(int level) {this.level = level; scale();}
     public int level() {return level;}
     public double experience() {return experience;}
-
-    private int eventDelay = 1600;
 
     protected boolean destructOnDeath = true;
     boolean dead = false;
@@ -52,6 +51,7 @@ public class Enemy extends GameObject implements EnemyMold {
         super.initialize();
     }
 
+    /** Start vital things for game not to crash. */
     public void startCore() {
         get().setSize(100, 100);
     }
@@ -64,11 +64,18 @@ public class Enemy extends GameObject implements EnemyMold {
         createAI();
         startAI();
         startMisc();
+        
+        showDebug(false);
 
         setImage(Images.getImage("object"));
 
         scale();
     }
+
+    void debug() {
+        setDebugString("jump:" + getAI().jumpToPlayer + " follow:" + getAI().playerWithinRange() + " goal:" + getAI().followGoal());
+    }
+
 
     @Override
     public ObjectData extractData() {
@@ -87,6 +94,30 @@ public class Enemy extends GameObject implements EnemyMold {
         h.healthbar().showLevel();
     }
 
+    void setHome() {
+        new ThreadEvent(new Runnable(){
+            int i = 0;
+            @Override
+            public void run() {
+
+                while (getAI() == null) {
+                    i++;
+                    if (i >= 100) {
+                        break;
+                    }
+                };
+                if (i < 100) {
+                    getAI().setHome(get().getLocation());
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onLevelLoad() {
+        setHome();
+    }
+
     public void scale() {
         double f = NumberFactory.getEnemyScaling(level);
         health = (int) (health * f);
@@ -102,6 +133,7 @@ public class Enemy extends GameObject implements EnemyMold {
             die();
         }
         dead();
+        debug();
     }
 
     public void startAnimator() {
@@ -126,7 +158,7 @@ public class Enemy extends GameObject implements EnemyMold {
     @Override
     public void collide(GameObject collision) {
         super.collide(collision);
-        getAI().collision(collision);
+        //getAI().collision(collision);
     }
 
     @Override
