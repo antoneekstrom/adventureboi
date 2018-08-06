@@ -43,6 +43,15 @@ public class Position {
 		return d; 
 	}
 
+	public static int distance(int p1, int p2) {
+		if (p1 > p2) {
+			return p1-p2;
+		}
+		else {
+			return p2-p1;
+		}
+	}
+
 	public static int distanceY(Point p1, Point p2) {
 		int d = 0;
 		if (p1.y > p2.y) {

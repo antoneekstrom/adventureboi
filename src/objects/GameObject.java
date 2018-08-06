@@ -14,6 +14,8 @@ import java.util.Iterator;
 
 import javax.swing.Timer;
 
+import com.sun.istack.internal.Nullable;
+
 import adventuregame.Animator;
 import adventuregame.HealthModule;
 import data.ObjectData;
@@ -70,7 +72,54 @@ public class GameObject {
     }
 
     public void addedToLevel() {
-        
+    }
+
+    public Point getCenter() {
+        return new Point((int) get().getCenterX(), (int) get().getCenterY());
+    }
+
+    /** First object to the left of this one. */
+    @Nullable public GameObject objectToLeft(int range) {
+        ArrayList<GameObject> l = ObjectStorage.findNearbyObjects(range, get().getLocation());
+        GameObject mostleft = null;
+
+        int i = 0;
+        for (GameObject o : l) {
+            if (i == 0) {
+                mostleft = o;
+            }
+            else {
+                boolean leftOfThis = o.get().x < mostleft.get().x;
+                if (!o.equals(this) && leftOfThis) {
+                    mostleft = o;
+                }
+            }
+            i++;
+        }
+
+        return mostleft;
+    }
+
+    /** First object to the right of this one. */
+    @Nullable public GameObject objectToRight(int range) {
+        ArrayList<GameObject> l = ObjectStorage.findNearbyObjects(range, get().getLocation());
+        GameObject mostleft = null;
+
+        int i = 0;
+        for (GameObject o : l) {
+            if (i == 0) {
+                mostleft = o;
+            }
+            else {
+                boolean rightOfThis = o.get().x > mostleft.get().x;
+                if (!o.equals(this) && rightOfThis) {
+                    mostleft = o;
+                }
+            }
+            i++;
+        }
+
+        return mostleft;
     }
     
     public boolean onGround() {return onGround;}

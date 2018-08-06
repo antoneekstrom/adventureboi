@@ -65,7 +65,7 @@ public class Enemy extends GameObject implements EnemyMold {
         startAI();
         startMisc();
         
-        showDebug(false);
+        showDebug(true);
 
         setImage(Images.getImage("object"));
 
@@ -73,7 +73,7 @@ public class Enemy extends GameObject implements EnemyMold {
     }
 
     void debug() {
-        setDebugString("jump:" + getAI().jumpToPlayer + " follow:" + getAI().playerWithinRange() + " goal:" + getAI().followGoal());
+        setDebugString("follow:" + getAI().playerWithinRange());
     }
 
 

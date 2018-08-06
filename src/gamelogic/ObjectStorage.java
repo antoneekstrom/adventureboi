@@ -2,6 +2,7 @@ package gamelogic;
 
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import adventuregame.GameEnvironment;
@@ -249,11 +250,18 @@ public class ObjectStorage {
     /** Find all gameobjects in specified range.
      *  @param distance as length of side on a square.
      */
-    public static GameObject[] findNearbyObjects(int distance) {
-        GameObject[] arr = null;
+    public static ArrayList<GameObject> findNearbyObjects(int distance, Point origin) {
+        ArrayList<GameObject> l = new ArrayList<GameObject>();
 
-        
+        /** Area to search in */
+        Rectangle area = new Rectangle(origin.x - (distance / 2), origin.y - (distance / 2), distance, distance);
 
-        return arr;
+        for (GameObject object : objects) {
+            if (area.intersects(object.get())) {
+                l.add(object);
+            }
+        }
+
+        return l;
     }
 }

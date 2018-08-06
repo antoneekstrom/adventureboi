@@ -52,7 +52,7 @@ public class AI implements Serializable {
     private int speed = 10;
     private double standardJumpFrequency = 0.05;
     private double jumpFreq = standardJumpFrequency;
-    private double jumpforce = 600;
+    private double jumpForce = 600;
 
     //path to player
     private boolean ignorePlayer = false;
@@ -69,10 +69,14 @@ public class AI implements Serializable {
     private boolean followGoal = false;
     private Point home = new Point(0,0);
     private int returnToHomeDelay = 5000;
-    int wallJumpHeight = 115;
+    int obstacleJumpHeight = 115;
     /** Position to navigate to if enabled. */
     private Point pathGoal = home;
     private int homeRange = 75;
+    private int maxGapWidth = 125;
+    public boolean ledgeJumpAvailable = true;
+    private int ledgeJumpCooldown = 1500;
+    private boolean canJumpGap = false;
 
     //direction switching
     private int setDirectionCooldown = 0;
@@ -81,7 +85,7 @@ public class AI implements Serializable {
 
     //edges
     private boolean closeToEdge = false;
-    private int edgeDetectionRadius = 50;
+    private int edgeDetectionRadius = 35;
 
     public void update(GameObject o) {
         if (isEnabled()) {
@@ -117,7 +121,7 @@ public class AI implements Serializable {
     }
 
     private void collisionAction() {
-        if (Math.random() < jumpFreq && (!closeToEdge || playerWithinRange)) {jump();}
+        if (Math.random() < jumpFreq && (!closeToEdge || playerWithinRange)) {jump(jumpForce);}
         if (Math.random() < spontaneousDirectionSwitchFrequency && !closeToEdge) {switchDirection();}
         if (collision.isWall()) {
             jumpWall();
@@ -142,7 +146,6 @@ public class AI implements Serializable {
 
     private void logic() {
         edgeDetection();
-        fallOfPrevention();
         updateCooldown();
         if (followGoal) {
             pathToGoal();
@@ -150,13 +153,116 @@ public class AI implements Serializable {
         if (pathToPlayer && !ignorePlayer) {
             pathToPlayer();
         }
+        if (closeToEdge) {
+            defeatEdge();
+        }
+    }
+
+    /** Choose a way to overcome this potentially incredibly dangerous obstacle. */
+    void defeatEdge() {
+        /** Next platform. */
+        GameObject nextO = null;
+        String side = sideOfObject(lastGround);
+
+        /** Find platform to jump to if possible. */
+        if (side.equals("left")) {
+            nextO = object.objectToLeft(maxGapWidth);
+        }
+        else if (side.equals("right")) {
+            nextO = object.objectToRight(maxGapWidth);
+        }
+
+        canJumpGap = false;
+        if (nextO != null) {
+            canJumpGap = canJumpGap(nextO);
+        }
+        int d2l = distanceToLedge();
+        boolean closeEnough = d2l <= edgeDetectionRadius;
+
+        /* Determine if a jump should take place, or perhaps a change of direction */
+        if (nextO == null || !canJumpGap) { /* If nextO is null then there is no platform within range. If there is nothing within range and jump is not possible then turn around. */
+            fallOfPrevention();
+        }
+        else if (canJumpGap && closeEnough) {
+            jumpGap(nextO);
+        }
+    }
+
+    public int ledgeDistanceOffset() {
+        return (int) (object.get().width * 0.25);
+    }
+
+    boolean canJumpGap(GameObject destination) {
+        boolean withinReach = false;
+        Point ledgeCorner = null;
+
+        String side = sideOfObject(lastGround);
+        if (side.equals("right")) {
+            ledgeCorner = new Point((int) destination.get().getMinX(), (int) destination.get().getMinY());
+        }
+        else if (side.equals("left")) {
+            ledgeCorner = new Point((int) destination.get().getMaxX(), (int) destination.get().getMinY());
+        }
+        else {
+            ledgeCorner = destination.getCenter();
+        }
+
+        boolean destinationBelow = destination.get().y >= lastGround.get().y;
+        int gapDistance = Position.distanceX(ledgeCorner, object.getCenter());
+
+        if (gapDistance <= obstacleJumpHeight && gapDistance <= maxGapWidth || (destinationBelow && gapDistance <= maxGapWidth)) {
+            withinReach = true;
+        }
+
+        return closeToEdge && withinReach && ledgeJumpAvailable;
+    }
+
+    /** Attempt to jump off a ledge.
+     *  @return Wether the jump was executed/successful
+     */
+    void jumpGap(GameObject destination) {
+
+        setDirection(sideOfObject(lastGround));
+        jump(jumpForce + ledgeJumpForceBoost());
+        ledgeJumpSpeedBoost();
+
+        gapJumpCooldown();
+    }
+
+    double ledgeJumpForceBoost() {
+        return jumpForce + jumpForce * 0.6;
+    }
+
+    void ledgeJumpSpeedBoost() {
+        int oldSpeed = speed;
+        int newSpeed = (int) (speed *2);
+
+        speed = newSpeed;
+        new Countdowner(500, new TimerTask() {
+            @Override
+            public void run() {
+                speed = oldSpeed;
+            }
+        });
+    }
+
+    void gapJumpCooldown() {
+        if (ledgeJumpAvailable) {
+            ledgeJumpAvailable = false;
+            new Countdowner(ledgeJumpCooldown, new TimerTask() {
+                @Override
+                public void run() {
+                    ledgeJumpAvailable = true;
+                }
+            });
+        }
     }
 
     void jumpWall() {
         int height = Position.distanceY(object.get().getLocation(), collisionObject.get().getLocation());
-        boolean jumpable = wallJumpHeight >= height;
+        boolean jumpable = obstacleJumpHeight >= height;
         if (!playerWithinRange && jumpable) {
-            jump();
+            jump(jumpForce);
         }
         else {
             switchDirection();
@@ -235,7 +341,7 @@ public class AI implements Serializable {
         boolean playerAbove = player.get().y < object.get().y;
 
         /* Change the jump freq according to conditions */
-        if ( (playerAbove && jumpToPlayer) || (colWithWall && playerWithinRange)) {
+        if ( (playerAbove && jumpToPlayer && !closeToEdge) || (colWithWall && playerWithinRange) ) {
             jumpFreq = standardJumpFrequency + jumpFreqBonus;
         }
         else {
@@ -265,15 +371,18 @@ public class AI implements Serializable {
 
     private String sideOfObject(GameObject c) {
         String side = "none";
-        if (object.get().getMaxX() < c.get().getCenterX()) {
-            side = "left";
-        }
-        else if (object.get().getMinX() > c.get().getCenterX()) {
-            side = "right";
+        if (c != null) {
+            if (object.get().getMaxX() < c.get().getCenterX()) {
+                side = "left";
+            }
+            else if (object.get().getMinX() > c.get().getCenterX()) {
+                side = "right";
+            }
         }
         return side;
     }
 
+    /** Change direction. */
     private void fallOfPrevention() {
         if (closeToEdge && sideOfObject(lastGround).equals("left")) {
             setDirection("right");
@@ -283,16 +392,33 @@ public class AI implements Serializable {
         }
     }
     
-    /** check if close to edge */
+    /** check if close to edge
+     *  @return Side of object that the edge is present.
+     */
     private void edgeDetection() {
         if (lastGround != null) {
-            if (object.get().getMinX() < lastGround.get().getMinX() + edgeDetectionRadius 
-            || object.get().getMaxX() > lastGround.get().getMaxX() - edgeDetectionRadius) {
+            if (object.get().getMinX() < lastGround.get().getMinX() + edgeDetectionRadius) {
+                closeToEdge = true;
+            }
+            else if (object.get().getMaxX() > lastGround.get().getMaxX() - edgeDetectionRadius) {
                 closeToEdge = true;
             }
             else {
                 closeToEdge = false;
             }
+        }
+    }
+
+    public int distanceToLedge() {
+        String side = sideOfObject(lastGround);
+        if (side.equals("right")) {
+            return Position.distance((int)object.get().getMaxX(), (int)lastGround.get().getMaxX());
+        }
+        else if (side.equals("left")) {
+            return Position.distance((int)object.get().getMinX(), (int)lastGround.get().getMinX());
+        }
+        else {
+            return 0;
         }
     }
 
@@ -302,9 +428,9 @@ public class AI implements Serializable {
         }
     }
 
-    public void jump() {
+    public void jump(double force) {
         if (object.onGround()) {
-            object.physics().addForce(0, -jumpforce);
+            object.physics().addForce(0, -force);
         }
     }
     
@@ -360,6 +486,8 @@ public class AI implements Serializable {
     public boolean playerWithinRange() {return playerWithinRange;}
     public GameObject groundCollision() {return lastGround;}
     public GameObject wallCollision() {return lastWall;}
-    public void jumpforce(double d) {jumpforce = d;}
+    public boolean closeToEdge() {return closeToEdge;}
+    public int speed() {return speed;}
+    public void jumpforce(double d) {jumpForce = d;}
     public void speed(int s) {speed = s;}
 }
