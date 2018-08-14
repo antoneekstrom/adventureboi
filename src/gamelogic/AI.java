@@ -85,7 +85,7 @@ public class AI implements Serializable {
 
     //edges
     private boolean closeToEdge = false;
-    private int edgeDetectionRadius = 35;
+    private int edgeDetectionRadius = 40;
 
     public void update(GameObject o) {
         if (isEnabled()) {
@@ -177,7 +177,7 @@ public class AI implements Serializable {
             canJumpGap = canJumpGap(nextO);
         }
         int d2l = distanceToLedge();
-        boolean closeEnough = d2l <= edgeDetectionRadius;
+        boolean closeEnough = true;
 
         /* Determine if a jump should take place, or perhaps a change of direction */
         if (nextO == null || !canJumpGap) { /* If nextO is null then there is no platform within range. If there is nothing within range and jump is not possible then turn around. */
@@ -230,12 +230,12 @@ public class AI implements Serializable {
     }
 
     double ledgeJumpForceBoost() {
-        return jumpForce + jumpForce * 0.6;
+        return jumpForce * 0.5;
     }
 
     void ledgeJumpSpeedBoost() {
         int oldSpeed = speed;
-        int newSpeed = (int) (speed *2);
+        int newSpeed = (int) (speed *3);
 
         speed = newSpeed;
         new Countdowner(500, new TimerTask() {

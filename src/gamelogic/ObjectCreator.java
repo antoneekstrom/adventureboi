@@ -85,6 +85,8 @@ public class ObjectCreator {
             put("platform", new Create(Platform.class.getName(), "object"));
             put("mushroomblock", new Create(MushroomBlock.class.getName(), "object"));
             put("lure", new Create(Lure.class.getName(), "object"));
+            put("fallingplatform", new Create(FallingPlatform.class.getName(), "object"));
+            put("kantarell", new Create(ShrinkingPlatform.class.getName(), "object"));
         }
     };
 
