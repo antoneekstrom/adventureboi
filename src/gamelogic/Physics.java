@@ -9,8 +9,8 @@ public class Physics {
     private boolean gravity = true;
 
     private int MASS = 10;
-    private double GRAVITY = 2;
-    private double RESISTANCE_CONSTANT = 0.05;
+    private double GRAVITY = 1;
+    private double RESISTANCE_CONSTANT = 1;
     
     private double xResistance, yResistance;
     /** Force */

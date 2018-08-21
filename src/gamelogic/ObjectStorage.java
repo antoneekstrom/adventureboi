@@ -12,6 +12,7 @@ import data.Players;
 import objects.Enemy;
 import objects.GameObject;
 import objects.Player;
+import objects.Property;
 
 public class ObjectStorage {
 
@@ -130,6 +131,19 @@ public class ObjectStorage {
         idnCounter++;
     }
 
+    /** Returns true if object is a player or is owned by a player. */
+    public static boolean isOfPlayer(GameObject object) {
+        boolean ofPlayer = checkForType(object, Player.class);
+        try {
+            Property p = (Property) object;
+            if (checkForType(p.owner(), Player.class)) {
+                ofPlayer = true;
+            }
+        }
+        catch (ClassCastException e) {}
+        return ofPlayer;
+    }
+
     /** Run startEvents() method for an object if it is an enemy. */
     public static void startEvents(GameObject object) {
         if (isEnemy(object)) {
@@ -220,8 +234,13 @@ public class ObjectStorage {
     }
 
     /** Check if object is of a certain subclass. */
-    public static boolean checkForType(Object candidate, Class<?> type){
-        return type.isInstance(candidate);
+    public static boolean checkForType(Object candidate, Class<?> type) {
+        if (candidate != null) {
+            return type.isInstance(candidate);
+        }
+        else {
+            return false;
+        }
     }
 
     //paint all objects to screen

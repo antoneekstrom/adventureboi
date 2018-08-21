@@ -9,6 +9,7 @@ import adventuregame.Images;
 import data.EnemyData;
 import data.NumberFactory;
 import data.ObjectData;
+import gamelogic.Camera;
 import gamelogic.Item;
 import gamelogic.ObjectStorage;
 import gamelogic.ThreadEvent;
@@ -158,7 +159,12 @@ public class Enemy extends GameObject implements EnemyMold {
     @Override
     public void collide(GameObject collision) {
         super.collide(collision);
+        if (ObjectStorage.isOfPlayer(collision)) {hitByPlayer(collision);}
         //getAI().collision(collision);
+    }
+
+    public void hitByPlayer(GameObject collision) {
+        Camera.shake(150, 25, 10);
     }
 
     @Override

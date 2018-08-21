@@ -52,7 +52,7 @@ public class AI implements Serializable {
     private int speed = 10;
     private double standardJumpFrequency = 0.05;
     private double jumpFreq = standardJumpFrequency;
-    private double jumpForce = 600;
+    private double jumpForce = 500;
 
     //path to player
     private boolean ignorePlayer = false;

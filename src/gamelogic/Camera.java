@@ -1,6 +1,8 @@
 package gamelogic;
 
 import java.awt.Point;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import adventuregame.GlobalData;
 import objects.GameObject;
@@ -60,6 +62,9 @@ public class Camera {
         cameraDestination.setLocation(p.x - GlobalData.getScreenDim().width / 2,
         p.y - GlobalData.getScreenDim().height / 2);
     }
+
+    public static void shake(int duration, int strength) { new Screenshaker(duration, strength).run(); }
+    public static void shake(int duration, int strength, int frequency) { new Screenshaker(duration, strength, frequency).run(); }
 
     /** Advance camera position towards destination. */
     public static void moveCameraTo(Point p) {

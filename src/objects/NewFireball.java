@@ -34,10 +34,11 @@ public class NewFireball extends Projectile {
 
     private void start() {
         contactDamage = (int) player.calculateDamage();
-        owner(player.getName());
+        owner(player);
         charge();
         setSize();
         placement();
+        destroyOnHit = true;
     }
 
 }

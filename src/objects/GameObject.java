@@ -24,7 +24,7 @@ import gamelogic.Camera;
 import gamelogic.Collision;
 import gamelogic.CollisionEngine;
 import gamelogic.ObjectStorage;
-import gamelogic.Physics;
+import gamelogic.Physics2;
 import gamelogic.Shrinker;
 
 public class GameObject {
@@ -165,7 +165,7 @@ public class GameObject {
     private HealthModule healthModule;
 
     //physics
-    private Physics physics = new Physics();
+    private Physics2 physics = new Physics2();
 
     //tags
     private ArrayList<String> tags = new ArrayList<String>();
@@ -209,6 +209,7 @@ public class GameObject {
         displayCoordinate = new Point(r.x, r.y);
         onLevelLoad();
         initialize();
+        showDebug(true);
     }
 
     public GameObject(String text) {
@@ -340,7 +341,7 @@ public class GameObject {
 
     /** setup object to specified type. Overwrite this method if this is not a generic object. */
     public void initialize() {
-        physics = new Physics();
+        physics = new Physics2();
         lastPos = get().getLocation();
     }
 
@@ -392,7 +393,7 @@ public class GameObject {
     
     /** Is called immediately upon intersection. Call super. */
     public void collide(GameObject collision) {
-        physics().collide();
+        physics().collide(collision);
         if (collision.getClass().equals(Player.class)) {
             playerContact((Player)collision);
         }
@@ -618,7 +619,7 @@ public class GameObject {
         physics.addForce(x, y);
     }
 
-    public Physics physics() {
+    public Physics2 physics() {
         return physics;
     }
 

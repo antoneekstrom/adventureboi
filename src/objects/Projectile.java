@@ -6,18 +6,20 @@ import java.awt.Rectangle;
 import adventuregame.Images;
 import gamelogic.ObjectStorage;
 
-public class Projectile extends GameObject {
+public class Projectile extends GameObject implements Property {
     
     String direction;
-    String owner = "none";
     int speed, maxDistance, distanceTraveled = 0, offset = 15, collisions = 0;
     public int contactDamage = 0;
     GameObject origin;
+    GameObject owner;
+    
+    boolean destroyOnHit = true;
 
     public static final String RIGHT = "right", LEFT = "left", NONE = "none";
 
-    public void owner(String owner) {this.owner = owner;}
-    public String owner() {return owner;}
+    public void owner(GameObject owner) {this.owner = owner;}
+    public GameObject owner() {return owner;}
 
     public Projectile(int speed, String direction, int maxDistance, GameObject origin, Dimension size) {
         super();
@@ -76,6 +78,9 @@ public class Projectile extends GameObject {
         if (collision.getHealthModule() != null && collisions == 0) {
             collision.healthModule().damage(contactDamage);
             collisions++;
+        }
+        if (destroyOnHit) {
+            ObjectStorage.remove(this);
         }
     }
 

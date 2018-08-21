@@ -8,10 +8,12 @@ import gamelogic.Countdowner;
 public class ShrinkingPlatform extends GameObject {
 
     int delay = 1500;
+    boolean shouldActivate = true;
 
     public ShrinkingPlatform() {
         super();
         start();
+        showDebug(true);
     }
 
     @Override
@@ -20,21 +22,33 @@ public class ShrinkingPlatform extends GameObject {
         activate();
     }
 
+    @Override
+    protected void logic() {
+        super.logic();
+        setDebugString("shouldactivate: " + shouldActivate + " delay: " + delay);
+    }
+
     void activate() {
-        if (!isShrinked()) {    
+        if (!isShrinked() && shouldActivate) {
+            shouldActivate = false;
             new Countdowner(delay, new TimerTask(){
                 @Override
                 public void run() {
                     shrink();
-                    new Countdowner(delay, new TimerTask(){
-                        @Override
-                        public void run() {
-                            expand();
-                        }
-                    });
+                    inactivate();
                 }
             });
         }
+    }
+
+    void inactivate() {
+        new Countdowner(delay, new TimerTask(){
+            @Override
+            public void run() {
+                shouldActivate = true;
+                expand();
+            }
+        });
     }
 
     void start() {

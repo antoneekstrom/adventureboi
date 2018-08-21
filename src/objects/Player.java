@@ -303,7 +303,6 @@ public class Player extends GameObject implements ObjectMethods {
     }
 
     public void debug() {
-        setDebugString("y:" + (float)physics().yVelocity());
     }
 
     public void healthLogic() {

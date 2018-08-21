@@ -23,6 +23,10 @@ public class DefaultConsoleCommands {
         UIManager.enableLatestGUI();
     }
 
+    public static void shake(int dur, int str, int freq) {
+        Camera.shake(dur, str, freq);
+    }
+
     public static void zoom(int i) {
         ObjectStorage.zoom((float) (i / 100));
     }
