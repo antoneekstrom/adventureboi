@@ -72,10 +72,14 @@ public class Projectile extends GameObject implements Property {
         }
     }
 
+    public void hit(GameObject collision) {
+    }
+
     @Override
     public void collide(GameObject collision) {
         super.collide(collision);
         if (collision.getHealthModule() != null && collisions == 0) {
+            hit(collision);
             collision.healthModule().damage(contactDamage);
             collisions++;
         }

@@ -54,6 +54,7 @@ public class NewAngryShroom extends Enemy {
     @Override
     public void startAI() {
         super.startAI();
+        getAI().jumpSpeedMultiplier = 1.1;
     }
 
 }

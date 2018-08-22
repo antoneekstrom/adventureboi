@@ -3,6 +3,7 @@ package objects;
 import java.awt.Dimension;
 
 import adventuregame.Images;
+import data.NumberFactory;
 import gamelogic.Camera;
 
 public class NewFireball extends Projectile {
@@ -29,16 +30,27 @@ public class NewFireball extends Projectile {
         get().setSize( (int) (get().getWidth() * player.abilityFactor), (int) (get().getHeight() * player.abilityFactor));
     }
 
-    void shake() {
-        Camera.shake(65, 15, 5);
+    void chargeShake() { Camera.shake(65, 15, 5); }
+
+    int MIN_HIT_SHAKE_STRENGTH = 5, MAX_HIT_SHAKE_STRENGTH = 15;
+    void hitShake() {
+        double percent = player.chargePercentage;
+        int strength = (int)NumberFactory.percentFromMinToMax(MIN_HIT_SHAKE_STRENGTH, MAX_HIT_SHAKE_STRENGTH, percent * 10);
+        Camera.shake(65, strength, 5);
     }
 
     void charge() {
         if (player.chargePercentage == 10) {
             charged = true;
             setImage(Images.getImage("chargedfire"));
-            shake();
+            chargeShake();
         }
+    }
+
+    @Override
+    public void hit(GameObject collision) {
+        super.hit(collision);
+        hitShake();
     }
 
     @Override

@@ -50,11 +50,12 @@ public class AI implements Serializable {
 
     //values
     private int speed = 10;
+    private double jumpVelocity = 12;
     private double standardJumpFrequency = 0.05;
     private double jumpFreq = standardJumpFrequency;
-    private double jumpForce = 250;
     private int JUMP_COOLDOWN = 500;
     public boolean canJump = true;
+    public double jumpSpeedMultiplier = 3;
 
     //path to player
     private boolean ignorePlayer = false;
@@ -123,7 +124,7 @@ public class AI implements Serializable {
     }
 
     private void collisionAction() {
-        if (Math.random() < jumpFreq && (!closeToEdge || playerWithinRange)) {jump(jumpForce);}
+        if (Math.random() < jumpFreq && (!closeToEdge || playerWithinRange)) {jump(jumpForce());}
         if (Math.random() < spontaneousDirectionSwitchFrequency && !closeToEdge) {switchDirection();}
         if (collision.isWall()) {
             jumpWall();
@@ -225,19 +226,19 @@ public class AI implements Serializable {
     void jumpGap(GameObject destination) {
 
         setDirection(sideOfObject(lastGround));
-        jump(jumpForce + ledgeJumpForceBoost());
+        jump(jumpForce() + ledgeJumpForceBoost());
         ledgeJumpSpeedBoost();
 
         gapJumpCooldown();
     }
 
     double ledgeJumpForceBoost() {
-        return jumpForce * 0.2;
+        return jumpForce() * 0.2;
     }
 
     void ledgeJumpSpeedBoost() {
         int oldSpeed = speed;
-        int newSpeed = (int) (speed *3);
+        int newSpeed = (int) (speed * jumpSpeedMultiplier);
 
         speed = newSpeed;
         new Countdowner(500, new TimerTask() {
@@ -264,7 +265,7 @@ public class AI implements Serializable {
         int height = Position.distanceY(object.get().getLocation(), collisionObject.get().getLocation());
         boolean jumpable = obstacleJumpHeight >= height;
         if (!playerWithinRange && jumpable) {
-            jump(jumpForce);
+            jump(jumpForce());
         }
         else {
             switchDirection();
@@ -442,6 +443,10 @@ public class AI implements Serializable {
             });
         }
     }
+
+    public double jumpForce() {
+        return object.physics().calcForce(jumpVelocity) + object.physics().yVelocity();
+    }
     
     /** Determine if object should change direction. */
     private void detectCollision() {
@@ -497,6 +502,6 @@ public class AI implements Serializable {
     public GameObject wallCollision() {return lastWall;}
     public boolean closeToEdge() {return closeToEdge;}
     public int speed() {return speed;}
-    public void jumpforce(double d) {jumpForce = d;}
+    public void jumpVelocity(double d) {jumpVelocity = d;}
     public void speed(int s) {speed = s;}
 }

@@ -69,4 +69,11 @@ public class NumberFactory {
         return ((double)i / (double)10);
     }
 
+    /**
+     *  @param percent from 1 to 100
+     */
+    public static double percentFromMinToMax(double min, double max, double percent) {
+        return min + (int) ((1-((100 - percent) / 100)) * (max - min));
+    }
+
 }

@@ -3,8 +3,10 @@ package items.abilities;
 import java.awt.Dimension;
 import java.util.HashMap;
 
+import gamelogic.Camera;
 import gamelogic.Item;
 import gamelogic.ObjectStorage;
+import objects.GameObject;
 import objects.Player;
 import objects.Projectile;
 
@@ -23,12 +25,14 @@ public class Barrage extends Ability {
         imageName("explosion"); /* Set a name for the image. */
         useOnPickup(false);
 
+        autoFire = true;
+
         COST = 0;
         CHARGECOST = 0.01;
         PERCENT_DAMAGE = 1;
         FACTORMAX = 1;
         FACTORINCREASE = 0.1;
-        COOLDOWN = 0;
+        COOLDOWN = 10;
     }
 
     @Override
@@ -47,7 +51,14 @@ public class Barrage extends Ability {
     }
 
     public void shoot(Player player) {
-        Projectile p = new Projectile(10, player.abilityDirection, 400, player, new Dimension(25, 25), "explosion");
+        Projectile p = new Projectile(10, player.abilityDirection, 400, player, new Dimension(25, 25), "explosion") {
+            @Override
+            public void hit(GameObject collision) {
+                super.hit(collision);
+                Camera.shake(60, 15, 20);
+            }
+        };
+        p.contactDamage = (int)player.calculateDamage();
         ObjectStorage.add(p);
     }
 

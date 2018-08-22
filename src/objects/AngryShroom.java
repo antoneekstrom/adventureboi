@@ -24,7 +24,7 @@ public class AngryShroom extends GameObject implements ObjectMethods {
         //ai
         createAI();
         getAI().jumpFrequency(0.03f);
-        getAI().jumpforce(240);
+        getAI().jumpVelocity(240);
         getAI().speed(14);
         
         //physics

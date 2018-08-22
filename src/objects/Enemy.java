@@ -223,8 +223,13 @@ public class Enemy extends GameObject implements EnemyMold {
         }
     }
 
+    public void destructShake() {
+        Camera.shake(65, 50, 10);
+    }
+
     public void destruct() {
         super.destruct();
+        destructShake();
         getAI().stopEvents();
         ObjectStorage.remove(this);
     }

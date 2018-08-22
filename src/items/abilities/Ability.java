@@ -17,6 +17,7 @@ public class Ability extends Item {
 
     public double COST, CHARGECOST, PERCENT_DAMAGE, FACTORMAX, FACTORINCREASE, COOLDOWN;
     protected String abilityDescription;
+    public boolean autoFire = false;
 
     public String abilityDescription() {return abilityDescription;}
 

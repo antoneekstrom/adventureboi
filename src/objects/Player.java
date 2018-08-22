@@ -100,7 +100,7 @@ public class Player extends GameObject implements ObjectMethods {
 
     //jumping
     /** Amount of times player can jump before touching the ground again. */
-    private int MAX_JUMP_COUNT = 2;
+    private int MAX_JUMP_COUNT = 1;
     private int jumpCount = MAX_JUMP_COUNT;
 
     private boolean firstJumpPress = false;
@@ -109,7 +109,7 @@ public class Player extends GameObject implements ObjectMethods {
     private int jumpTime = 0;
 
     /** Velocity of jump. This will be added to the strength of gravity when calculated. */
-    private int JUMP_SPEED = 15;
+    private int JUMP_SPEED = 20;
 
     //positioning
     Point spawnPoint = new Point(0,0);
@@ -199,7 +199,7 @@ public class Player extends GameObject implements ObjectMethods {
     }
 
     public int jumpSpeed() {
-        return physics().yVelocity() + JUMP_SPEED;
+        return JUMP_SPEED;
     }
 
     public void initializeData() {
@@ -239,7 +239,7 @@ public class Player extends GameObject implements ObjectMethods {
         healthModule().setMaxHealth(100);
         healthModule().setHealth(100);
         initializeData();
-        showDebug(false);
+        showDebug(true);
         statInit();
         abilityInit();
 
@@ -348,7 +348,12 @@ public class Player extends GameObject implements ObjectMethods {
         return count;
     }
 
+    void pickupShake() {
+        Camera.shake(10, 10, 30);
+    }
+
     public void addItem(Item i) {
+        pickupShake();
         playerData().inventory().add(i);
         if (i.useOnPickup()) {i.use(this);}
     }
@@ -463,6 +468,7 @@ public class Player extends GameObject implements ObjectMethods {
     }
 
     public void chargeAbility() {
+        Ability a = (Ability) playerData().abilityslot();
         if (abilityCooldown == 0) {
             if (hasAbility()) {
                 if (abilityFactor + ABILITY_FACTOR_INCREASE <= ABILITY_FACTOR_MAX && abilityCharging && useEnergy(ABILITY_CHARGE_COST)) {
@@ -471,6 +477,9 @@ public class Player extends GameObject implements ObjectMethods {
                 }
                 else if (abilityCharging && abilityFactor + ABILITY_FACTOR_INCREASE > ABILITY_FACTOR_MAX) {abilityFactor = ABILITY_FACTOR_MAX;}
                 else if (!abilityCharging && abilityFactor != 1) {
+                    releaseAbility();
+                }
+                if (a.autoFire && abilityCharging) {
                     releaseAbility();
                 }
             }
