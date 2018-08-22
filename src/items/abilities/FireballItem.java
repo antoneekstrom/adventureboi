@@ -2,6 +2,7 @@ package items.abilities;
 
 import java.util.HashMap;
 
+import gamelogic.Camera;
 import gamelogic.Item;
 import gamelogic.ObjectStorage;
 import objects.Fireball;

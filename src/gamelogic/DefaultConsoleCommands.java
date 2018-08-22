@@ -4,6 +4,7 @@ import UI.Console;
 import UI.UIManager;
 import adventuregame.GameEnvironment;
 import objects.Enemy;
+import objects.GameObject;
 
 public class DefaultConsoleCommands {
 
@@ -17,6 +18,11 @@ public class DefaultConsoleCommands {
 
     public static void reload() {
         UIManager.reload();
+    }
+
+    public static void addForce(int x, int y) {
+        GameObject o = ObjectInspector.selectedObject();
+        o.physics().addForce(x, y);
     }
 
     public static void back() {

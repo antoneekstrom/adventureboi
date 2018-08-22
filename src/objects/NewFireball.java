@@ -2,6 +2,9 @@ package objects;
 
 import java.awt.Dimension;
 
+import adventuregame.Images;
+import gamelogic.Camera;
+
 public class NewFireball extends Projectile {
 
     Player player;
@@ -26,9 +29,15 @@ public class NewFireball extends Projectile {
         get().setSize( (int) (get().getWidth() * player.abilityFactor), (int) (get().getHeight() * player.abilityFactor));
     }
 
+    void shake() {
+        Camera.shake(65, 15, 5);
+    }
+
     void charge() {
         if (player.chargePercentage == 10) {
             charged = true;
+            setImage(Images.getImage("chargedfire"));
+            shake();
         }
     }
 

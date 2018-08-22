@@ -175,6 +175,7 @@ public class Player extends GameObject implements ObjectMethods {
     public void doJump(boolean b) {
         if (!jumping) {
             firstJumpPress = true;
+            physics().resetFallAcceleration();
             jumping = b;
         }
         else {

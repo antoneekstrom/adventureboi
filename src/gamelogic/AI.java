@@ -232,7 +232,7 @@ public class AI implements Serializable {
     }
 
     double ledgeJumpForceBoost() {
-        return jumpForce * 0.5;
+        return jumpForce * 0.2;
     }
 
     void ledgeJumpSpeedBoost() {

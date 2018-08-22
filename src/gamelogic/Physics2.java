@@ -5,19 +5,19 @@ import objects.GameObject;
 public class Physics2 {
 
     /** Mass. */
-    int MASS = 65;
+    int MASS = 45;
     public void mass(int mass) {MASS = mass;}
 
     /** Object */
     private GameObject object;
     
     /** Resistance. */
-    private static double RESISTANCE_FACTOR = 0.35;
+    private static double RESISTANCE_FACTOR = 0.266;
     private int xRes = 0, yRes = 0;
 
     /** Gravity. */
-    private static double MAX_GRAV_VEL = 35;
-    private static double GRAV_SPEED = 0.3;
+    private static double MAX_GRAV_VEL = 30;
+    private static double GRAV_SPEED = 0.3234;
     private double gravityVelocity = 0;
     
     private boolean gravity = true;
@@ -74,6 +74,11 @@ public class Physics2 {
         return f;
     }
 
+    public void resetFallAcceleration() {
+        yVel = 0;
+        gravityVelocity = 0;
+    }
+
     /** Calculate resistance. */
     void resistance() {
         xRes = getRes(xVel);
@@ -92,8 +97,10 @@ public class Physics2 {
 
     /** Apply resistance. */
     void applyResistance() {
-        xVel += (xVel < 0) ? (xRes) : (-xRes);
-        yVel += (yVel < 0) ? (yRes) : (-yRes);
+        int x = (xVel < 0) ? ((xVel + xRes > 0) ? (0) : (xRes)) : ((xVel - xRes < 0) ? (0) : (-xRes));
+        int y = (yVel < 0) ? ((yVel + yRes > 0) ? (0) : (yRes)) : ((yVel - yRes < 0) ? (0) : (-yRes));
+        xVel += x;
+        yVel += y;
     }
 
     /** Apply force to object. */
@@ -108,7 +115,7 @@ public class Physics2 {
     }
 
     void debug() {
-        object.setDebugString("yv:" + yVel + " yr:" + yRes + " yp:" + object.get().y + " gv:" + gravityVelocity);
+        //object.setDebugString("yv:" + yVel + " yr:" + yRes + " yp:" + object.get().y + " gv:" + gravityVelocity);
     }
 
     /** Update physics for this object. */
