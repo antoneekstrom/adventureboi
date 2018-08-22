@@ -74,7 +74,6 @@ public class Enemy extends GameObject implements EnemyMold {
     }
 
     void debug() {
-        setDebugString("follow:" + getAI().playerWithinRange());
     }
 
 
@@ -164,7 +163,6 @@ public class Enemy extends GameObject implements EnemyMold {
     }
 
     public void hitByPlayer(GameObject collision) {
-        Camera.shake(150, 25, 10);
     }
 
     @Override

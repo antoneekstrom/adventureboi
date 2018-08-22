@@ -32,6 +32,11 @@ public class NewFireball extends Projectile {
         }
     }
 
+    @Override
+    public void playerContact(Player player) {
+        super.playerContact(player);
+    }
+
     private void start() {
         contactDamage = (int) player.calculateDamage();
         owner(player);

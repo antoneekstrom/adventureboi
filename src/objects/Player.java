@@ -109,7 +109,7 @@ public class Player extends GameObject implements ObjectMethods {
     private int jumpTime = 0;
 
     /** Velocity of jump. This will be added to the strength of gravity when calculated. */
-    private int JUMP_SPEED = 25;
+    private int JUMP_SPEED = 15;
 
     //positioning
     Point spawnPoint = new Point(0,0);
@@ -193,8 +193,12 @@ public class Player extends GameObject implements ObjectMethods {
         }
         if (jumping && jumpTime - 1 >= 0) {
             jumpTime--;
-            get().y = get().y - JUMP_SPEED;
+            get().y = get().y - jumpSpeed();
         }
+    }
+
+    public int jumpSpeed() {
+        return physics().yVelocity() + JUMP_SPEED;
     }
 
     public void initializeData() {

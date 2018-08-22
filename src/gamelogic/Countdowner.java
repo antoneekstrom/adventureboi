@@ -39,13 +39,24 @@ public class Countdowner implements Runnable {
 
     private void autoStart() {
         timer = new Timer();
-        timer.schedule(task, delay);
+        timer.schedule(doTask(), delay);
+    }
+
+    private TimerTask doTask() {
+        return new TimerTask(){
+            @Override
+            public void run() {
+                timer.cancel();
+                timer.purge();
+                task.run();     
+            }
+        };
     }
 
 	@Override
 	public void run() {
         timer = new Timer();
-        timer.schedule(task, 0, interval);
+        timer.schedule(doTask(), 0, interval);
 	}
 
 }

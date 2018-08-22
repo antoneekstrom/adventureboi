@@ -52,7 +52,9 @@ public class AI implements Serializable {
     private int speed = 10;
     private double standardJumpFrequency = 0.05;
     private double jumpFreq = standardJumpFrequency;
-    private double jumpForce = 500;
+    private double jumpForce = 250;
+    private int JUMP_COOLDOWN = 500;
+    public boolean canJump = true;
 
     //path to player
     private boolean ignorePlayer = false;
@@ -429,8 +431,15 @@ public class AI implements Serializable {
     }
 
     public void jump(double force) {
-        if (object.onGround()) {
+        if (object.onGround() && canJump) {
             object.physics().addForce(0, -force);
+            canJump = false;
+            new Countdowner(JUMP_COOLDOWN, new TimerTask(){
+                @Override
+                public void run() {
+                    canJump = true;
+                }
+            });
         }
     }
     

@@ -12,18 +12,21 @@ public class Physics2 {
     private GameObject object;
     
     /** Resistance. */
-    private static double RESISTANCE_FACTOR = 0.25;
+    private static double RESISTANCE_FACTOR = 0.35;
     private int xRes = 0, yRes = 0;
 
     /** Gravity. */
+    private static double MAX_GRAV_VEL = 35;
+    private static double GRAV_SPEED = 0.3;
+    private double gravityVelocity = 0;
+    
     private boolean gravity = true;
     public boolean hasGravity() {return gravity;}
     public void setGravity(boolean bool) {gravity = bool;}
-    private static double GRAVITY_STRENGTH = 5;
-    public static void setGravity(double strength) { GRAVITY_STRENGTH = strength; }
 
     /** Velocity. */
     private int xVel = 0, yVel = 0;
+    public int yVelocity() {return yVel;}
 
     public Physics2(int mass) {
         this.MASS = mass;
@@ -47,16 +50,28 @@ public class Physics2 {
     /** Apply gravity. */
     void gravity() {
         if (!object.onGround() && hasGravity()) {
-            yVel += getGrav();
+            addForce(0, getGrav());
         }
         if (object.onGround() && yVel > 0) {
             yVel = 1;
+            gravityVelocity = 0;
         }
     }
 
     double getGrav() {
-        double g = GRAVITY_STRENGTH - ((yVel > 0) ? (Math.sqrt(yVel)) : (GRAVITY_STRENGTH));
-        return GRAVITY_STRENGTH;
+        if (yVel + (gravityVelocity + GRAV_SPEED) <= MAX_GRAV_VEL) {
+            gravityVelocity += GRAV_SPEED;
+        }
+        double g = gravityVelocity;
+        return calcForce(g);
+    }
+
+    public double calcForce(double velocity) {
+        double f = 0;
+
+        f = MASS * velocity;
+
+        return f;
     }
 
     /** Calculate resistance. */
@@ -93,7 +108,7 @@ public class Physics2 {
     }
 
     void debug() {
-        object.setDebugString("yv:" + yVel + " yr:" + yRes + " yp:" + object.get().y + " g:" + object.onGround());
+        object.setDebugString("yv:" + yVel + " yr:" + yRes + " yp:" + object.get().y + " gv:" + gravityVelocity);
     }
 
     /** Update physics for this object. */
