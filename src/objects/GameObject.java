@@ -209,7 +209,7 @@ public class GameObject {
         displayCoordinate = new Point(r.x, r.y);
         onLevelLoad();
         initialize();
-        showDebug(true);
+        showDebug(false);
     }
 
     public GameObject(String text) {
