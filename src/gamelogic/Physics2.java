@@ -44,6 +44,7 @@ public class Physics2 {
     /** Calculate force things. */
     void calculate() {
         gravity();
+        applyResistance();
     }
 
     /** Apply gravity. */
@@ -93,10 +94,10 @@ public class Physics2 {
 
     /** Apply resistance. */
     void applyResistance() {
-        double x = (xVel < 0) ? ((xVel + xRes > 0) ? (0) : (xRes)) : ((xVel - xRes < 0) ? (0) : (-xRes));
-        double y = (yVel < 0) ? ((yVel + yRes > 0) ? (0) : (yRes)) : ((yVel - yRes < 0) ? (0) : (-yRes));
+        double x = (xVel < 0) ? ((xVel + xRes > 0) ? (-xVel) : (xRes)) : ((xVel - xRes < 0) ? (-xVel) : (-xRes));
+        //double y = (yVel < 0) ? ((yVel + yRes > 0) ? (-yVel) : (yRes)) : ((yVel - yRes < 0) ? (-yVel) : (-yRes));
         xVel += x;
-        yVel += y;
+        //yVel += y;
     }
 
     /** Apply force to object. */
