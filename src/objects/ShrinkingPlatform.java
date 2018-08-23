@@ -13,7 +13,7 @@ public class ShrinkingPlatform extends GameObject {
     public ShrinkingPlatform() {
         super();
         start();
-        showDebug(true);
+        showDebug(false);
     }
 
     @Override

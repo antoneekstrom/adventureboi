@@ -66,7 +66,7 @@ public class Enemy extends GameObject implements EnemyMold {
         startAI();
         startMisc();
         
-        showDebug(true);
+        showDebug(false);
 
         setImage(Images.getImage("object"));
 
@@ -179,6 +179,7 @@ public class Enemy extends GameObject implements EnemyMold {
             shrink();
             moveWhenColliding(false);
             physics().setGravity(false);
+            physics().resetVelocity();
         }
     }
 

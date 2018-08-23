@@ -175,7 +175,6 @@ public class Player extends GameObject implements ObjectMethods {
     public void doJump(boolean b) {
         if (!jumping) {
             firstJumpPress = true;
-            physics().resetFallAcceleration();
             jumping = b;
         }
         else {
@@ -188,6 +187,7 @@ public class Player extends GameObject implements ObjectMethods {
         if (firstJumpPress) {
             firstJumpPress = false;
             if (jumpCount - 1 >= 0) {
+                physics().resetFallAcceleration();
                 jumpCount--;
                 jumpTime = MAX_JUMP_TIME;
             }
@@ -239,7 +239,7 @@ public class Player extends GameObject implements ObjectMethods {
         healthModule().setMaxHealth(100);
         healthModule().setHealth(100);
         initializeData();
-        showDebug(true);
+        showDebug(false);
         statInit();
         abilityInit();
 

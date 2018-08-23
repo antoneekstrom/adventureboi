@@ -12,13 +12,13 @@ public class Physics2 {
     private GameObject object;
     
     /** Resistance. */
-    private static double RESISTANCE_FACTOR = 0.136;
+    private static double RESISTANCE_FACTOR = 0.116;
     private double xRes = 0, yRes = 0;
 
     /** Gravity. */
-    private static double MAX_GRAV_VEL = 20;
-    private static double GRAV = 0.412;
-    private static double START_VEL = 6;
+    private static double MAX_GRAV_VEL = 30;
+    private static double GRAV = 0.612;
+    private static double START_VEL = 7;
     
     private boolean gravity = true;
     public boolean hasGravity() {return gravity;}
@@ -74,6 +74,12 @@ public class Physics2 {
         f = MASS * velocity;
 
         return f;
+    }
+
+    public void resetVelocity() {
+        yVel = 0;
+        xVel = 0;
+        resetFallAcceleration();
     }
 
     public void resetFallAcceleration() {

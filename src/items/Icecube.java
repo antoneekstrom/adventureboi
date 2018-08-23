@@ -46,6 +46,8 @@ public class Icecube extends Ability {
             super.use(player);
             this.player = player;
             player.shrink(PERCENT);
+            player.physics().setGravity(false);
+            player.physics().resetVelocity();
             startTimer();
         }
     }
@@ -68,6 +70,7 @@ public class Icecube extends Ability {
 
     private void timerDone() {
         timerCounter = 0;
+        player.physics().setGravity(true);
         player.expand();
     }
 

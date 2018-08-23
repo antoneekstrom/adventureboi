@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class NumberFactory {
 
-    private static double CONSTANT_FACTOR = 1.7;
+    private static double CONSTANT_FACTOR = 1.4;
     private static double ENEMY_XP_FACTOR = 0.95;
 
     /** Get a random string of numbers and hope that it is unique, otherwise it will cause problems. */
