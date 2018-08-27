@@ -210,7 +210,7 @@ public class RandomLevel {
     }
 
     Dimension smallRandomSize() {
-        return new Size(50, 15).get();
+        return new Size(150, 15).get();
     }
 
     Class<?> getEnemyClass(String type) {
