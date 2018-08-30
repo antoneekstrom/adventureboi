@@ -562,6 +562,13 @@ public class Player extends GameObject implements ObjectMethods {
         }
     }
 
+    @Override
+    public void collide(GameObject collision) {
+        if (collision.collideWithPlayers) {
+            super.collide(collision);
+        }
+    }
+
     public void destruct() {
         get().setLocation(spawnPoint);
     }

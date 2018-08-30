@@ -12,10 +12,19 @@ public class Checkpoint extends GameObject {
         super();
         start();
         setImage(Images.getImage("checkpoint"));
+        get().setSize(300, 300);
     }
 
     void start() {
         collidable(false);
+        collideWithPlayers = false;
+        showDebug(true);
+    }
+    
+    @Override
+    public void collide(GameObject collision) {
+        super.collide(collision);
+        setDebugString("isPlayer: " + ObjectStorage.isOfPlayer(collision));
     }
 
     @Override

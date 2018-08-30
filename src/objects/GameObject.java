@@ -40,6 +40,8 @@ public class GameObject {
 
 	//switches
     private boolean visible = true;
+    /** If this object should collide with players */
+    public boolean collideWithPlayers = true;
     /** Set to true if object should receive collision logic. Will still affect other collision enabled objects. */
     private boolean collision = true;
     /** Set to true if object should be moved when colliding. */
@@ -393,12 +395,20 @@ public class GameObject {
     /** Is called immediately upon intersection. Call super. */
     public void collide(GameObject collision) {
         physics().collide(collision);
+        boolean collisionIsPlayer = false;
         if (collision.getClass().equals(Player.class)) {
             playerContact((Player)collision);
+            collisionIsPlayer = true;
         }
-        Collision col = new Collision(collision, collisionSide);
-        if (!collisionExists(col)) {
-            currentCollisions.add(col);
+        //collide with players only if allowed
+        boolean shouldCollide = true;
+        if (collisionIsPlayer) {shouldCollide = collideWithPlayers;}
+
+        if (shouldCollide) {
+            Collision col = new Collision(collision, collisionSide);
+            if (!collisionExists(col)) {
+                currentCollisions.add(col);
+            }
         }
     }
 
