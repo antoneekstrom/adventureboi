@@ -73,10 +73,12 @@ public class GameEnvironment extends JPanel implements ActionListener {
     }
 
     /** Save world state. */
-    public static void saveGame() {
+    public static void saveGame(boolean alert) {
         levelData.objectDataList(ObjectData.createDataList());
         DataHandler.serialize(levelData, new File(saveDirectory + levelData.name() + ".ser"));
-        UIManager.getCurrentGUI().addObject(new UIAlert("Game has been saved to " + levelData.name() + ".", UIManager.getCurrentGUI().getName(), false));
+        if (alert) {
+            UIManager.getCurrentGUI().addObject(new UIAlert("Game has been saved to " + levelData.name() + ".", UIManager.getCurrentGUI().getName(), false));
+        }
     }
 
     public static void newLevel(String name) {
@@ -87,18 +89,20 @@ public class GameEnvironment extends JPanel implements ActionListener {
         olist.add(obj.extractData());
 
         levelData = new LevelData(name, true, olist);
-        saveGame();
+        saveGame(false);
         LevelsUI.refreshList();
     }
 
     /** Save playerdata for all present players. */
-    public static void savePlayers() {
+    public static void savePlayers(boolean alert) {
         Players.extractAllPlayerData();
         Players.serializePlayerData();
 
         //log it
+        if (alert) {
+            UIManager.getCurrentGUI().addObject(new UIAlert("Players have been saved.", UIManager.getCurrentGUI().getName(), false));
+        }
         Console.logSuccessful("Players have been saved.");
-        UIManager.getCurrentGUI().addObject(new UIAlert("Players have been saved.", UIManager.getCurrentGUI().getName(), false));
     }
 
     public static void loadLevel(String name) {

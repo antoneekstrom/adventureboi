@@ -7,7 +7,7 @@ import items.DeceasedAngryShroom;
 public class AngryShroom extends GameObject implements ObjectMethods {
 
     private DeceasedAngryShroom drop;
-    private int contactDamage = 35;
+    private float contactDamageFactor = 0.3f;
     private int healthOnPickup = 10;
     private int experience = 10;
 
@@ -92,8 +92,12 @@ public class AngryShroom extends GameObject implements ObjectMethods {
     }
 
     private void contactDamage(GameObject col) {
-        col.healthModule().damage(contactDamage);
-    }   
+        col.healthModule().damage(getContactDamage(col.getHealthModule().maxHealth()));
+    }
+
+    public int getContactDamage(int hp) {
+        return (int) contactDamageFactor * hp;
+    }
 
     public void pickup(GameObject collision) {
         ObjectStorage.remove(this);

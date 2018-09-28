@@ -88,6 +88,7 @@ public class ObjectCreator {
             put("fallingplatform", new Create(FallingPlatform.class.getName(), "object"));
             put("kantarell", new Create(ShrinkingPlatform.class.getName(), "object"));
             put("checkpoint", new Create(Checkpoint.class.getName(), "object"));
+            put("dummy", new Create(Dummy.class.getName(), "object"));
         }
     };
 

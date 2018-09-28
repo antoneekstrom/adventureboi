@@ -131,7 +131,7 @@ public class HealthModule implements Serializable {
 	}
 
 	/** Generate a number showing how much damage was dealt above object. */
-	private void damageNumber(int d) {
+	public void damageNumber(int d) {
 		Point pos = object.getDisplayCoordinate();
 		damageNumberPosition = new Point(pos.x + numberXOffset, pos.y + numberYOffset);
 			

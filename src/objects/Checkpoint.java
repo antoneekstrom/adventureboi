@@ -18,7 +18,15 @@ public class Checkpoint extends GameObject {
     void start() {
         collidable(false);
         collideWithPlayers = false;
-        showDebug(true);
+        showDebug(false);
+        createColFilter();
+        physics().setGravity(true);
+    }
+
+    void createColFilter() {
+        colFilter = (GameObject col) -> {
+            return !col.isOfType(Player.class);
+        };
     }
     
     @Override
@@ -47,11 +55,11 @@ public class Checkpoint extends GameObject {
     }
 
     void saveProgress() {
-        GameEnvironment.saveGame();
+        GameEnvironment.saveGame(false);
     }
 
     void savePlayer() {
-        GameEnvironment.savePlayers();
+        GameEnvironment.savePlayers(false);
     }
 
     void setAsActive() {

@@ -7,7 +7,11 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import UI.GUI;
+import UI.OptionsUI;
 import UI.UIManager;
 import adventuregame.GameEnvironment;
 import adventuregame.GlobalData;
@@ -28,6 +32,11 @@ public class Player extends GameObject implements ObjectMethods {
     private boolean movingLeft = false;
     private boolean jumping = false;
     private boolean sprinting = false;
+
+    //death
+    private int RESPAWN_DELAY = 1500;
+    private boolean dead = false;
+    private int deathCount = 0;
     
     //animation
     private HashMap <String, BufferedImage> playerimages;
@@ -307,6 +316,10 @@ public class Player extends GameObject implements ObjectMethods {
         }
     }
 
+    public int getDeathCount() {
+        return deathCount;
+    }
+
     public void debug() {
     }
 
@@ -315,8 +328,35 @@ public class Player extends GameObject implements ObjectMethods {
     }
 
     public void die() {
-        respawn();
-        healthModule().setHealth(healthModule().maxHealth());
+        if (!dead) {
+            deathCount++;
+            getHealthModule().setHealth(0);
+            dead = true;
+            dieTemporarily();
+            respawn();
+            updateDeathCounter();
+        }
+    }
+
+    private void updateDeathCounter() {
+        OptionsUI ui = (OptionsUI) UIManager.getGUI("Options");
+        ui.updateDeathCount();
+    }
+
+    void dieTemporarily() {
+        setVisibility(false);
+        physics().setGravity(false);
+        setCollision(false);
+        collidable(false);
+        moveWhenColliding(false);
+    }
+
+    void stopDyingTemporarily() {
+        setVisibility(true);
+        physics().setGravity(true);
+        setCollision(true);
+        collidable(true);
+        moveWhenColliding(true);
     }
 
     @Override
@@ -332,6 +372,20 @@ public class Player extends GameObject implements ObjectMethods {
     }
 
     public void respawn() {
+        Timer t = new Timer("playerRespawnTimer");
+        t.schedule(new TimerTask(){
+            @Override
+            public void run() {
+                respawnInstantly();
+                this.cancel();
+            }
+        }, RESPAWN_DELAY);
+    }
+
+    public void respawnInstantly() {
+        stopDyingTemporarily();
+        dead = false;
+        healthModule().setHealth(healthModule().maxHealth());
         get().setLocation(spawnPoint);
     }
 
@@ -570,7 +624,7 @@ public class Player extends GameObject implements ObjectMethods {
     }
 
     public void destruct() {
-        get().setLocation(spawnPoint);
+        die();
     }
 
     public void paint(Graphics g) {

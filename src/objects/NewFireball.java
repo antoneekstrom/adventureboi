@@ -10,6 +10,7 @@ public class NewFireball extends Projectile {
 
     Player player;
     boolean charged = false;
+    double SIZE_LIMIT = 6;
 
     public NewFireball(Player player) {
         super(25, player.abilityDirection, 1000, player, new Dimension(50, 50), "fireball");
@@ -27,7 +28,9 @@ public class NewFireball extends Projectile {
     }
 
     void setSize() {
-        get().setSize( (int) (get().getWidth() * player.abilityFactor), (int) (get().getHeight() * player.abilityFactor));
+        double f = player.abilityFactor;
+        if (f > SIZE_LIMIT) {f = SIZE_LIMIT;}
+        get().setSize( (int) (get().getWidth() * f), (int) (get().getHeight() * f));
     }
 
     void chargeShake() { Camera.shake(65, 15, 5); }

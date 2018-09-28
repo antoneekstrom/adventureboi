@@ -4,8 +4,10 @@ import java.util.Random;
 
 public class NumberFactory {
 
-    private static double CONSTANT_FACTOR = 1.4;
-    private static double ENEMY_XP_FACTOR = 0.95;
+    private static double CONSTANT_FACTOR = 1.4,
+    ENEMY_XP_FACTOR = 0.95,
+    LINEAR_ENEMY_SCALE_FACTOR = 0.37,
+    LINEAR_ITEM_SCALE_FACTOR = 0.32;
 
     /** Get a random string of numbers and hope that it is unique, otherwise it will cause problems. */
     public static String randomString(int length) {
@@ -50,7 +52,8 @@ public class NumberFactory {
     public static double getStatScaling(int level) {
         double d = 1;
 
-        d += Math.log10(level + 1) * CONSTANT_FACTOR;
+        //d += Math.log10(level + 1) * CONSTANT_FACTOR;
+        d += LINEAR_ITEM_SCALE_FACTOR * level;
 
         return d;
     }
@@ -59,7 +62,8 @@ public class NumberFactory {
     public static double getEnemyScaling(int level) {
         double d = 1;
 
-        d += Math.log10(level + 1) * CONSTANT_FACTOR;
+        //d += Math.log10(level + 1) * CONSTANT_FACTOR; --- old
+        d += LINEAR_ENEMY_SCALE_FACTOR * level;
 
         return d;
     }

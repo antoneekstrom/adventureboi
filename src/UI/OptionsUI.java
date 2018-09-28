@@ -3,7 +3,10 @@ package UI;
 import java.awt.Rectangle;
 
 import adventuregame.GameEnvironment;
+import adventuregame.GlobalData;
 import adventuregame.Position;
+import gamelogic.ObjectStorage;
+import objects.Player;
 
 public class OptionsUI extends GUI {
 
@@ -13,6 +16,12 @@ public class OptionsUI extends GUI {
         super("Options");
         setGuidelineSpacing(150);
         setGuidelineY1(200);
+    }
+
+    @Override
+    public void enable(boolean addToHistory) {
+        super.enable(addToHistory);
+        updateDeathCount();
     }
 
     public void start() {
@@ -62,6 +71,43 @@ public class OptionsUI extends GUI {
                 createText("Level Completion");
             }
         });
+
+        //deathcount
+        int deathY = (int) (GlobalData.getScreenDim().getHeight() / 2);
+        for (Player p : ObjectStorage.players()) {
+            addDeathText(deathY, p);
+            deathY += 75;
+        }
+    }
+
+    public void updateDeathCount() {
+        for (UIObject o : getObjectsByTag("deathCount")) {
+            o.setText(deathCount(getPlayerFromCounter(o.getText())));
+        }
+    }
+
+    private Player getPlayerFromCounter(String text) {
+        String n = text.substring(0, text.indexOf(":"));
+        Player p = ObjectStorage.getPlayer(n);
+        return p;
+    }
+
+    public void addDeathText(int y, Player p) {
+        if (p != null) {
+            addObject(new UIText(getName(), deathCount(p), false) {
+                {
+                    setTag("deathCount");
+                    get().setLocation(0, y);
+                }
+            });
+        }
+    }
+
+    public String deathCount(Player p) {
+        if (p != null) {
+            return p.getName() + ": " + p.getDeathCount();
+        }
+        return "nice:";
     }
 
     public void setPosition() {

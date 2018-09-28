@@ -23,6 +23,7 @@ import gamelogic.AI;
 import gamelogic.Camera;
 import gamelogic.Collision;
 import gamelogic.CollisionEngine;
+import gamelogic.CollisionFilter;
 import gamelogic.ObjectStorage;
 import gamelogic.Physics2;
 import gamelogic.Shrinker;
@@ -54,6 +55,14 @@ public class GameObject {
     private boolean hasImage = false;
     private boolean selected = false;
     private boolean onGround = false;
+
+    public void setVisibility(boolean b) {visible = b;}
+
+    protected CollisionFilter colFilter = (GameObject col) -> (true);
+
+    public boolean checkCollisionFilter(GameObject col) {
+        return colFilter.check(col);
+    }
 
     /** A list containing objects this one is CURRENTLY colliding with, none of that "last collision" bs */
     private ArrayList<Collision> currentCollisions = new ArrayList<Collision>();
@@ -137,7 +146,7 @@ public class GameObject {
     public int idNumber() {return IDNumber;}
 
     public boolean isOfType(Class<?> c) {
-        return c.isInstance(getClass());
+        return getClass().isAssignableFrom(c);
     }
 
     public boolean cameraFocus = false;

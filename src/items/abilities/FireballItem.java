@@ -2,7 +2,6 @@ package items.abilities;
 
 import java.util.HashMap;
 
-import gamelogic.Camera;
 import gamelogic.Item;
 import gamelogic.ObjectStorage;
 import objects.Fireball;
@@ -21,10 +20,12 @@ public class FireballItem extends Ability {
     @Override
     protected void scaleStats() {
         super.scaleStats();
-        FACTORMAX *= levelPow(Item.SMALL_INCREASE_FACTOR);
-        COOLDOWN *= levelPow(Item.SMALL_DECREASE_FACTOR);
-        FACTORINCREASE *= levelPow(Item.SMALL_INCREASE_FACTOR);
-        CHARGECOST *= levelPow(Item.SMALL_DECREASE_FACTOR);
+        double small = levelPow(Item.SMALL_INCREASE_FACTOR), smallbad = levelPow(SMALL_DECREASE_FACTOR);
+
+        PERCENT_DAMAGE *= small;
+        FACTORMAX *= small;
+        COOLDOWN *= smallbad;
+        FACTORINCREASE *= small;
     }
 
     public HashMap<String, Object> getValueMap() {

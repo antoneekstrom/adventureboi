@@ -24,8 +24,8 @@ public class MouseFunctions {
         put("Keybindings", () -> UIManager.enableGUI("Keybindings"));
         put("Back", () -> UIManager.back());
         put("Custom Levels", () -> UIManager.enableGUI("Levels"));
-        put("Save Level", () -> GameEnvironment.saveGame());
-        put("Save Player", () -> GameEnvironment.savePlayers());
+        put("Save Level", () -> GameEnvironment.saveGame(true));
+        put("Save Player", () -> GameEnvironment.savePlayers(true));
         put("Select Player", () -> UIManager.enableGUI("PlayerSelect"));
         put("New Player", () -> UIManager.enableGUI("InputField_PlayerName"));
         put("Remove Player", () -> UIManager.enableGUI("InputField_RemovePlayer"));
