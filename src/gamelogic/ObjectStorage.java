@@ -266,6 +266,10 @@ public class ObjectStorage {
         return getPlayer(findNearestPlayerName(p));
     }
 
+    public static double distanceToNearestPlayer(Point p) {
+        return findNearestPlayer(p).get().getLocation().distance(p);
+    }
+
     /** Find all gameobjects in specified range.
      *  @param distance as length of side on a square.
      */

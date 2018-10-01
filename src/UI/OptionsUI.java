@@ -73,7 +73,17 @@ public class OptionsUI extends GUI {
         });
 
         //deathcount
-        int deathY = (int) (GlobalData.getScreenDim().getHeight() / 2);
+        int deathY = (int) (GlobalData.getScreenDim().getHeight() / 2) - 75;
+
+        UIText d = new UIText(getName(), "deaths:", false);
+        d.get().setLocation(0, deathY);
+        d.setBackgroundColor(getUIBackgroundColor());
+        d.setBackgroundPadding(25);
+        d.autoAdjustBackground(true);
+        d.centerText();
+        addObject(d);
+        deathY += 75;
+
         for (Player p : ObjectStorage.players()) {
             addDeathText(deathY, p);
             deathY += 75;
@@ -83,6 +93,10 @@ public class OptionsUI extends GUI {
     public void updateDeathCount() {
         for (UIObject o : getObjectsByTag("deathCount")) {
             o.setText(deathCount(getPlayerFromCounter(o.getText())));
+            o.setBackgroundColor(getUIBackgroundColor());
+            o.setBackgroundPadding(25);
+            o.autoAdjustBackground(true);
+            o.centerText();
         }
     }
 

@@ -31,24 +31,15 @@ public class ShrinkingPlatform extends GameObject {
     void activate() {
         if (!isShrinked() && shouldActivate) {
             shouldActivate = false;
-            new Countdowner(delay, new TimerTask(){
-                @Override
-                public void run() {
-                    shrink();
-                    inactivate();
-                }
-            });
+
+            Countdowner.wait(delay);
+            deactivate();
         }
     }
 
-    void inactivate() {
-        new Countdowner(delay, new TimerTask(){
-            @Override
-            public void run() {
-                shouldActivate = true;
-                expand();
-            }
-        });
+    void deactivate() {
+        shouldActivate = true;
+        expand();
     }
 
     void start() {

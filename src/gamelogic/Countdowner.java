@@ -18,6 +18,9 @@ public class Countdowner implements Runnable {
         this.interval = interval;
     }
 
+    private Countdowner() {
+    }
+
     /** @param delay delay in milliseconds to execute
      *  @param task task to execute after delay
      */
@@ -57,6 +60,27 @@ public class Countdowner implements Runnable {
 	public void run() {
         timer = new Timer();
         timer.schedule(doTask(), 0, interval);
-	}
+    }
+
+    public TimerTask getWaitTask() {
+        return new TimerTask() {
+            @Override
+            public void run() {
+                done = true;
+            }
+        };
+    }
+    
+    /* Nice */
+    public static void wait(int milliseconds) {
+        Countdowner c = new Countdowner();
+        c.delay = milliseconds;
+        c.done = false;
+
+        c.giveTask(c.getWaitTask());
+        c.autoStart();
+
+        while (!c.done);
+    }
 
 }

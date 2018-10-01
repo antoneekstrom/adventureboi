@@ -80,6 +80,11 @@ public class UIObject {
         parentName = s;
     }
 
+    public void centerText() {
+        centerTextX(true);
+        centerTextY(true);
+    }
+
     public void setVisible(boolean b) {
         visible = b;
     }

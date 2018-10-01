@@ -89,6 +89,7 @@ public class ObjectCreator {
             put("kantarell", new Create(ShrinkingPlatform.class.getName(), "object"));
             put("checkpoint", new Create(Checkpoint.class.getName(), "object"));
             put("dummy", new Create(Dummy.class.getName(), "object"));
+            put("vendor", new Create(Vendor.class.getName(), "object"));
         }
     };
 
