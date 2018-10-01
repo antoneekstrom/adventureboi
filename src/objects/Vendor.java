@@ -13,8 +13,13 @@ public class Vendor extends GameObject implements Interactable {
         givePrompt("nice");
     }
 
+    /** Range that player has to be within to interact with this vendor. */
     double playerRange = 300;
+    public void setPlayerRange(double range) {playerRange = range;}
+    public double getPlayerRange() {return playerRange;}
 
+
+    /** Give the vendor a prompt to display when a player is near. */
     public void givePrompt(String text) {
         setText(text);
         dialog = new Dialog(this);
@@ -33,10 +38,10 @@ public class Vendor extends GameObject implements Interactable {
     protected void logic() {
         super.logic();
         if (getText().equals("nice")) {
-            givePrompt(ObjectStorage.findNearestPlayer(getCenter()).getName());
+            givePrompt("greetings " + ObjectStorage.findNearestPlayer(getCenter()).getName());
         }
         else {
-            setText(ObjectStorage.findNearestPlayer(getCenter()).getName());
+            setText("greetings " + ObjectStorage.findNearestPlayer(getCenter()).getName());
         }
     }
 

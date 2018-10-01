@@ -15,10 +15,19 @@ public abstract class Graphic {
 
     public Graphic() {}
 
+    public void setObject(GameObject object) {
+        this.object = object;
+    }
+
     public abstract void paint(Graphics2D g);
 
     public void paint(Graphics2D g, GameObject object) {
-        this.object = object;
+        setObject(object);
+        paint(g);
+    }
+
+    public void paint(Graphics g, GameObject object) {
+        setObject(object);
         paint(g);
     }
 

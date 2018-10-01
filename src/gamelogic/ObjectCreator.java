@@ -13,6 +13,7 @@ import adventuregame.Items;
 import items.*;
 import items.abilities.*;
 import objects.*;
+import vendors.Shroomboi;
 
 public class ObjectCreator {
 
@@ -89,7 +90,8 @@ public class ObjectCreator {
             put("kantarell", new Create(ShrinkingPlatform.class.getName(), "object"));
             put("checkpoint", new Create(Checkpoint.class.getName(), "object"));
             put("dummy", new Create(Dummy.class.getName(), "object"));
-            put("vendor", new Create(Vendor.class.getName(), "object"));
+            put("shroomboi", new Create(Shroomboi.class.getName(), "object"));
+            put("teleporter", new Create(Teleporter.class.getName(), "object"));
         }
     };
 

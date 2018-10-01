@@ -1,10 +1,13 @@
 package gamelogic;
 
+import java.awt.Point;
+
 import UI.Console;
 import UI.UIManager;
 import adventuregame.GameEnvironment;
 import objects.Enemy;
 import objects.GameObject;
+import objects.Teleporter;
 
 public class DefaultConsoleCommands {
 
@@ -23,6 +26,17 @@ public class DefaultConsoleCommands {
     public static void addForce(int x, int y) {
         GameObject o = ObjectInspector.selectedObject();
         o.physics().addForce(x, y);
+    }
+
+    public static void setDestination(int x, int y) {
+        try {
+            Teleporter t = (Teleporter) ObjectInspector.selectedObject();
+            t.setDestination(new Point(x,y));
+        }
+        catch (Exception e) {
+            Console.logError(e.getLocalizedMessage());
+            e.printStackTrace();
+        }
     }
 
     public static void back() {
