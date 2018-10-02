@@ -10,7 +10,6 @@ import java.util.Iterator;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import UI.GUI;
 import UI.OptionsUI;
 import UI.UIManager;
 import adventuregame.GameEnvironment;
@@ -22,6 +21,7 @@ import data.Players;
 import gamelogic.AbilityValues;
 import gamelogic.Item;
 import gamelogic.Camera;
+import items.Coin;
 import items.Currency;
 import items.abilities.Ability;
 
@@ -323,6 +323,64 @@ public class Player extends GameObject implements ObjectMethods {
     public void debug() {
     }
 
+    public boolean purchase(int boins) {
+        boolean justRight = false;
+        int amount = boins;
+
+        if (boinCount() >= boins) {
+            justRight = true;
+
+            for (Currency c : getBoins()) {
+                int val = (int) c.getValue();
+
+                if (amount <= 0) { break; }
+
+                if (amount >= val) {
+                    amount -= val;
+                    getInventory().remove((Item) c);
+                }
+                else {
+                    getInventory().remove((Item) c);
+                    val -= amount;
+                    addCurrencyAmount(val);
+                }
+            }
+        }
+
+        return justRight;
+    }
+
+    public void addCurrencyAmount(int cur) {
+        int amount = cur;
+
+        while (amount > 0) {
+            for (int i : Currency.VALUES) {
+                if (i <= amount) {
+                    amount -= i;
+                    getInventory().add(new Coin(i));
+
+                    continue;
+                }
+            }
+        }
+    }
+
+    public ArrayList<Item> getInventory() {
+        return playerData().inventory();
+    }
+
+    public Currency[] getBoins() {
+        ArrayList<Currency> arr = new ArrayList<>();
+
+        for (Item i : playerData().inventory()) {
+            if (i.getClass().isAssignableFrom(Coin.class)) {
+                arr.add((Currency) i);
+            }
+        }
+
+        return arr.toArray(new Currency[arr.size()]);
+    }
+
     public void healthLogic() {
         if (healthModule().isDead()) {die();}
     }
@@ -400,6 +458,45 @@ public class Player extends GameObject implements ObjectMethods {
         }
 
         return count;
+    }
+
+    ArrayList<Interactable> nearbyInteractables = new ArrayList<>();
+
+    private ArrayList<Interactable> nearbyInteractables() {
+        return nearbyInteractables;
+    }
+
+    public void removeNearbyInteractable(Interactable i) {
+        boolean oldbool = nearbyInteractables().contains(i);
+
+        nearbyInteractables().remove(i);
+        i.nearbyPlayers().remove(this);
+
+        interactableState(oldbool, false, i);
+    }
+
+    public void registerNearbyInteractable(Interactable i) {
+        boolean oldbool = nearbyInteractables().contains(i);
+
+        nearbyInteractables().add(i);
+        i.nearbyPlayers().add(this);
+
+        interactableState(oldbool, true, i);
+    }
+
+    public void interactableState(boolean oldbool, boolean newbool, Interactable i) {
+        if (!newbool && oldbool) {
+            i.playerEntersRange(this);
+        }
+        else if (newbool && !oldbool) {
+            i.playerLeavesRange(this);
+        }
+    }
+
+    public void interact() {
+        if (nearbyInteractables().size() > 0) {
+            nearbyInteractables().get(0).interact(this);
+        }
     }
 
     void pickupShake() {

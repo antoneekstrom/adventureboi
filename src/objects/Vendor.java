@@ -3,57 +3,66 @@ package objects;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
-import gamelogic.ObjectStorage;
 import graphic.Dialog;
 
-public class Vendor extends GameObject implements Interactable {
+public abstract class Vendor extends Interactable {
 
     public Vendor() {
-        super("nice");
+        super();
         givePrompt("nice");
     }
-
-    /** Range that player has to be within to interact with this vendor. */
-    double playerRange = 300;
-    public void setPlayerRange(double range) {playerRange = range;}
-    public double getPlayerRange() {return playerRange;}
-
 
     /** Give the vendor a prompt to display when a player is near. */
     public void givePrompt(String text) {
         setText(text);
-        dialog = new Dialog(this);
+
+        if (dialog == null) {
+            dialog = new Dialog(this);
+        }
     }
 
     Dialog dialog;
 
     @Override
-    public boolean interact(Player player) {
-
-
-        return true;
+    public void playerEntersRange(Player p) {
+        super.playerEntersRange(p);
+        givePrompt(addressNearbyPlayers());
     }
 
     @Override
     protected void logic() {
         super.logic();
-        if (getText().equals("nice")) {
-            givePrompt("greetings " + ObjectStorage.findNearestPlayer(getCenter()).getName());
-        }
-        else {
-            setText("greetings " + ObjectStorage.findNearestPlayer(getCenter()).getName());
-        }
     }
 
-    public boolean playerInRange() {
-        return ObjectStorage.distanceToNearestPlayer(getCenter()) <= playerRange;
+    public String GREETING = "Greetings";
+
+    public String addressNearbyPlayers() {
+        String text = GREETING;
+
+        switch (nearbyPlayers().size()) {
+        case 1:
+            text += " " + nearbyPlayers().get(0).getName();
+            break;
+            
+        case 2:
+            text += " " + nearbyPlayers().get(0).getName() + " and " + nearbyPlayers().get(1).getName();
+            break;
+
+        default:
+            for (Player p : nearbyPlayers()) {
+                text += " " + p.getName() + ",";
+            }
+            break;
+        }
+
+        return text;
     }
 
     @Override
     public void paint(Graphics g) {
         super.paint(g);
 
-        if (dialog != null && playerInRange()) {
+        if (dialog != null && playerWithinRange()) {
             dialog.paint((Graphics2D) g, this);
         }
     }

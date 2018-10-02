@@ -11,6 +11,7 @@ import data.PlayerData;
 import data.Players;
 import objects.Enemy;
 import objects.GameObject;
+import objects.Interactable;
 import objects.Player;
 import objects.Property;
 
@@ -264,6 +265,18 @@ public class ObjectStorage {
     }
     public static Player findNearestPlayer(Point p) {
         return getPlayer(findNearestPlayerName(p));
+    }
+
+    public static Player[] findPlayersWithinRange(int range, Point point) {
+        ArrayList<Player> pList = new ArrayList<>();
+
+        for (Player p : players) {
+            if (p.get().getLocation().distance(point) <= range) {
+                pList.add(p);
+            }
+        }
+
+        return pList.toArray(new Player[pList.size()]);
     }
 
     public static double distanceToNearestPlayer(Point p) {

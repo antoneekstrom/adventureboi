@@ -23,9 +23,17 @@ public class DefaultConsoleCommands {
         UIManager.reload();
     }
 
+    public static void focus() {
+        ObjectInspector.selectedObject().cameraFocus(true);
+    }
+
     public static void addForce(int x, int y) {
         GameObject o = ObjectInspector.selectedObject();
         o.physics().addForce(x, y);
+    }
+
+    public static void giveBoin(int amount) {
+        ObjectStorage.getPlayer(1).addCurrencyAmount(amount);
     }
 
     public static void setDestination(int x, int y) {

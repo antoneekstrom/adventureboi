@@ -84,7 +84,11 @@ public class Input {
 
         actions.put("abilityright1", new PlayerMovement("abilityright", false, 1));
         releasedActions.put("abilityright1", new PlayerMovement("abilityright", true, 1));
+
+        actions.put("interact1", new actions.InputInteract("interact1", false, 1));
+        releasedActions.put("interact1", new actions.InputInteract("interact1", true, 1));
     }
+
     private static void player2() {
         //player2
         actions.put("moveleft2", new PlayerMovement("moveleft", false, 2));
@@ -149,6 +153,7 @@ public class Input {
         keybindings.put("abilityleft1", KeyEvent.VK_LEFT);
         keybindings.put("abilityright1", KeyEvent.VK_RIGHT);
         keybindings.put("ability1", KeyEvent.VK_1);
+        keybindings.put("interact1", KeyEvent.VK_E);
         //player2
         keybindings.put("moveright2", KeyEvent.VK_NUMPAD6);
         keybindings.put("moveleft2", KeyEvent.VK_NUMPAD4);
