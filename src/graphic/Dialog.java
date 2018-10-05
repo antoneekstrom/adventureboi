@@ -29,7 +29,7 @@ public class Dialog extends Graphic {
         calc(g);
 
         //draw
-        g.setColor(Color.green);
+        g.setColor(Color.black);
         g.drawString(object.getText(), p.x + xOffset, p.y + yOffset);
     }
 }

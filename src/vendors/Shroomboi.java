@@ -1,6 +1,7 @@
 package vendors;
 
 import adventuregame.Images;
+import gamelogic.Item;
 import items.DeceasedAngryShroom;
 import objects.Player;
 import objects.Vendor;
@@ -17,18 +18,18 @@ public class Shroomboi extends Vendor {
     int price = 23;
 
     @Override
-    public boolean interact(Player player) {
-        boolean successful = player.purchase(price);
-
-        if (successful) {
-            givePrompt("haha nice get scammed bitch that was way too expensive");
-            player.addItem(new DeceasedAngryShroom());
-        }
-        else {
-            givePrompt("Woah you are to poor to purchase my wares, that is very unfortunate.");
-        }
-
-        return successful;
+    public double getPrice(Item i) {
+        return 23;
 	}
+
+    @Override
+    public boolean interact(Player player) {
+        return purchase(new DeceasedAngryShroom(), player);
+    }
+
+    @Override
+    public boolean hasItem(Item i) {
+        return true;
+    }
 
 }

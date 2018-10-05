@@ -1,6 +1,7 @@
 package objects;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import gamelogic.ObjectStorage;
 
@@ -14,45 +15,51 @@ public abstract class Interactable extends GameObject {
     public abstract boolean interact(Player player);
 
     ArrayList<Player> nearbyPlayers = new ArrayList<>();
-    boolean playerWithinRange = false;
 
     public ArrayList<Player> nearbyPlayers() {
         return nearbyPlayers;
     }
 
     public void playerEntersRange(Player p) {
-        nearbyPlayers().add(p);
     }
 
     public void playerLeavesRange(Player p) {
-        nearbyPlayers().remove(p);
-    }
-
-    private void updatePlayerInRange() {
-        playerWithinRange = ObjectStorage.distanceToNearestPlayer(getCenter()) <= playerRange;
     }
 
     public Player[] playersWithinRange() {
         return ObjectStorage.findPlayersWithinRange((int)getPlayerRange(), getCenter());
     }
 
-    public boolean playerWithinRange() { return playerWithinRange; }
+    public boolean playerWithinRange() { return nearbyPlayers.size() > 0; }
 
-    public void updatePlayerLists() {
-        for (Player p : ObjectStorage.players()) {
-            p.removeNearbyInteractable(this);
+    public void updatePlayerList() {
+        ArrayList<Player> newl = ObjectStorage.listPlayersWithinRange((int)playerRange, getCenter());
+
+        //player leaves range if old list contains a player that the new one doesn't
+        for (Iterator<Player> i = nearbyPlayers.iterator(); i.hasNext();) {
+            Player p = i.next();
+
+            if (!newl.contains(p)) {
+                i.remove();
+                playerLeavesRange(p);
+                p.removeNearbyInteractable(this);
+            }
         }
 
-        for (Player p : playersWithinRange()) {
-            p.registerNearbyInteractable(this);
+        //player enters range if new list contains player the old one doesn't
+        for (Player p : newl) {
+            if (!nearbyPlayers.contains(p)) {
+                nearbyPlayers.add(p);
+                playerEntersRange(p);
+                p.addNearbyInteractable(this);
+            }
         }
     }
 
     @Override
     protected void logic() {
         super.logic();
-        updatePlayerInRange();
-        updatePlayerLists();
+        updatePlayerList();
     }
 
 }

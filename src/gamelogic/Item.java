@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Random;
 
 import data.NumberFactory;
+import items.Coin;
 import objects.ItemObject;
 import objects.GameObject;
 import objects.Player;
@@ -111,6 +112,17 @@ public class Item implements Serializable {
     }
 
     protected void scaleStats() {
+    }
+
+    public Item duplicate() {
+        Item i = null;
+        try {
+            i = this.getClass().newInstance();
+        }
+        catch (Exception e) {
+            i = new Coin(0);
+        }
+        return i;
     }
 
     /** Get a title to display in ex. a tooltip. */

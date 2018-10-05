@@ -14,12 +14,12 @@ public interface Currency {
     int HUGE = 50;
 
     int[] VALUES = {
-        SMALL,
-        SMALL2,
-        MEDIUM1,
-        MEDIUM2,
+        HUGE,
         LARGE,
-        HUGE
+        MEDIUM2,
+        MEDIUM1,
+        SMALL2,
+        SMALL,
     };
     
 }

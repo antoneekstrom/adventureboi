@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import UI.InventoryUI;
 import UI.OptionsUI;
 import UI.UIManager;
 import adventuregame.GameEnvironment;
@@ -20,6 +21,7 @@ import data.PlayerData;
 import data.Players;
 import gamelogic.AbilityValues;
 import gamelogic.Item;
+import gamelogic.ObjectStorage;
 import gamelogic.Camera;
 import items.Coin;
 import items.Currency;
@@ -347,7 +349,7 @@ public class Player extends GameObject implements ObjectMethods {
             }
         }
 
-        return justRight;
+       return justRight;
     }
 
     public void addCurrencyAmount(int cur) {
@@ -359,10 +361,14 @@ public class Player extends GameObject implements ObjectMethods {
                     amount -= i;
                     getInventory().add(new Coin(i));
 
-                    continue;
+                    break;
                 }
             }
         }
+    }
+
+    public void refreshInventory() {
+        UIManager.getInventory(getName()).refreshInv();
     }
 
     public ArrayList<Item> getInventory() {
@@ -467,30 +473,11 @@ public class Player extends GameObject implements ObjectMethods {
     }
 
     public void removeNearbyInteractable(Interactable i) {
-        boolean oldbool = nearbyInteractables().contains(i);
-
         nearbyInteractables().remove(i);
-        i.nearbyPlayers().remove(this);
-
-        interactableState(oldbool, false, i);
     }
 
-    public void registerNearbyInteractable(Interactable i) {
-        boolean oldbool = nearbyInteractables().contains(i);
-
+    public void addNearbyInteractable(Interactable i) {
         nearbyInteractables().add(i);
-        i.nearbyPlayers().add(this);
-
-        interactableState(oldbool, true, i);
-    }
-
-    public void interactableState(boolean oldbool, boolean newbool, Interactable i) {
-        if (!newbool && oldbool) {
-            i.playerEntersRange(this);
-        }
-        else if (newbool && !oldbool) {
-            i.playerLeavesRange(this);
-        }
     }
 
     public void interact() {
