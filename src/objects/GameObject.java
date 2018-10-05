@@ -587,6 +587,10 @@ public class GameObject {
         return displayCoordinate;
     }
 
+    public Point getDisplayCenter() {
+        return new Point(displayCoordinate.x + (getWidth() / 2), displayCoordinate.y + (getHeight() / 2));
+    }
+
     public Rectangle getDisplayBox() {
         return new Rectangle(getDisplayCoordinate().x, getDisplayCoordinate().y, get().width, get().height);
     }

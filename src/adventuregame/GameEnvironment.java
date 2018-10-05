@@ -2,6 +2,7 @@ package adventuregame;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
@@ -28,6 +29,7 @@ import gamelogic.Camera;
 import gamelogic.EventTimer;
 import gamelogic.ObjectStorage;
 import gamelogic.RandomEvent;
+import graphic.Graphic;
 import gamelogic.ObjectCreator;
 import gamelogic.ObjectPlacement;
 import objects.Background;
@@ -70,6 +72,10 @@ public class GameEnvironment extends JPanel implements ActionListener {
 
     public GameEnvironment(Main f) {
         frame = f;
+    }
+
+    public static Graphics2D getGraphics2D() {
+        return (Graphics2D) getFrame().getGraphics();
     }
 
     /** Save world state. */
@@ -251,7 +257,7 @@ public class GameEnvironment extends JPanel implements ActionListener {
         this.setFocusable(true);
 		this.requestFocus();
         
-        //start camera and initialize world
+        //start camera
         Camera.centerCameraOn(new Point(-50, 300));
 
         //set a background

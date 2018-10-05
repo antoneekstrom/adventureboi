@@ -1,35 +1,35 @@
 package graphic;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Rectangle;
 
 import objects.GameObject;
 
 public class Dialog extends Graphic {
 
+    ResponsiveText rt;
+    int textWidth = 200, yOffset = -75;
+
     public Dialog(GameObject object) {
-        this.object = object;
+        setObject(object);
+
+        rt = new ResponsiveText("", textWidth);
     }
 
-    int xOffset = 0, yOffset = 0;
+    public void setyOffset(int yOffset) { this.yOffset = yOffset; }
+    public void setTextWidth(int textWidth) { this.textWidth = textWidth; }
 
-    void calc(Graphics2D g) {
-        int w = g.getFontMetrics().stringWidth(object.getText());
-        Rectangle r = object.get();
+    Point getDisplayLocation() {
+        Point p = object.getDisplayCenter();
 
-        xOffset = (r.width / 2) - (w / 2);
+        p.y -= (object.getHeight() / 2) + yOffset;
+        
+        return p;
     }
 
     @Override
     public void paint(Graphics2D g) {
-        //pre
-        Point p = object.getDisplayCoordinate();
-        calc(g);
-
-        //draw
-        g.setColor(Color.green);
-        g.drawString(object.getText(), p.x + xOffset, p.y + yOffset);
+        rt.setText(object.getText());
+        rt.paint(g, getDisplayLocation());
     }
 }

@@ -1,5 +1,7 @@
 package vendors;
 
+import java.awt.Graphics;
+
 import adventuregame.Images;
 import items.DeceasedAngryShroom;
 import objects.Player;
@@ -15,6 +17,12 @@ public class Shroomboi extends Vendor {
     }
 
     int price = 23;
+
+    @Override
+    public void paint(Graphics g) {
+        super.paint(g);
+
+    }
 
     @Override
     public boolean interact(Player player) {
