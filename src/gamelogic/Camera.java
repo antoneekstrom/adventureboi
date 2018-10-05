@@ -48,7 +48,7 @@ public class Camera {
     private static void followObject() {
         setFocusObject();
         if (focusedObject != null) {
-            centerCameraOn( new Point((int) focusedObject.get().getCenterX(), (int) focusedObject.get().getCenterY()) );
+            centerCameraOn( focusedObject.getCameraLocation() );
         }
     }
 

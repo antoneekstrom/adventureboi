@@ -1,13 +1,16 @@
 package graphic;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 
 import objects.GameObject;
 
 public abstract class Graphic {
 
     GameObject object;
+    private Graphics2D graphics;
 
     public Graphic(GameObject object) {
         this.object = object;
@@ -15,11 +18,27 @@ public abstract class Graphic {
 
     public Graphic() {}
 
-    public void setObject(GameObject object) {
-        this.object = object;
+    public void setObject(GameObject object) { this.object = object; }
+
+    private void setGraphics(Graphics2D g) { graphics = g; }
+
+    public Graphics2D getGraphics() { return graphics; }
+
+    /**
+     * Where the actual painting is being done. This one should never be called directly.
+     * @param g {@code Graphics2D} object that is used for painting.
+     */
+    public abstract void paintComponent(Graphics2D g);
+
+    private void paint(Graphics2D g) {
+        setGraphics(g);
+        paintComponent(g);
     }
 
-    public abstract void paint(Graphics2D g);
+    public void paint(Graphics g) {
+        Graphics2D g2d = (Graphics2D) g;
+        paint(g2d);
+    }
 
     public void paint(Graphics2D g, GameObject object) {
         setObject(object);
@@ -31,9 +50,10 @@ public abstract class Graphic {
         paint(g);
     }
 
-    public void paint(Graphics g) {
-        Graphics2D g2d = (Graphics2D) g;
-        paint(g2d);
+    public void drawRectangle(Rectangle r, Color c) {
+        Graphics2D g = getGraphics();
+        g.setColor(c);
+        g.fillRect(r.x, r.y, r.width, r.height);
     }
 
 }

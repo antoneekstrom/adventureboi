@@ -15,8 +15,6 @@ public class Shroomboi extends Vendor {
         get().setSize(150, 300);
     }
 
-    int price = 23;
-
     @Override
     public double getPrice(Item i) {
         return 23;

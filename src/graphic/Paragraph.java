@@ -25,7 +25,7 @@ public class Paragraph extends Graphic {
     public void setLocation(Point location) { this.location = location; }
 
     @Override
-    public void paint(Graphics2D g) {
+    public void paintComponent(Graphics2D g) {
 
         int yOffset = g.getFontMetrics().getHeight() + lineSpacing, yPointer = 0;
 
@@ -37,7 +37,7 @@ public class Paragraph extends Graphic {
     
     public void paint(Point p, Graphics2D g) {
         setLocation(p);
-        paint(g);
+        paintComponent(g);
     }
 
 }

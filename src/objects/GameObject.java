@@ -158,6 +158,10 @@ public class GameObject {
     }
     public boolean cameraFocus() {return cameraFocus;}
 
+    public Point getCameraLocation() {
+        return getCenter();
+    }
+
     //attributes
     Color color_fg = Color.white;
     Font font = new Font("Comic Sans MS", 40, 40);

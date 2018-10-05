@@ -18,6 +18,10 @@ public class GraphicMetrics {
         return g.getFontMetrics().stringWidth(s);
     }
 
+    public int fontHeight() {
+        return g.getFontMetrics().getHeight();
+    }
+
     public void useFont(Font font) {
         if (font != null) {
             g.setFont(font);

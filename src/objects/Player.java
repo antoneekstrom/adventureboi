@@ -10,7 +10,6 @@ import java.util.Iterator;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import UI.InventoryUI;
 import UI.OptionsUI;
 import UI.UIManager;
 import adventuregame.GameEnvironment;
@@ -21,7 +20,6 @@ import data.PlayerData;
 import data.Players;
 import gamelogic.AbilityValues;
 import gamelogic.Item;
-import gamelogic.ObjectStorage;
 import gamelogic.Camera;
 import items.Coin;
 import items.Currency;
@@ -292,10 +290,16 @@ public class Player extends GameObject implements ObjectMethods {
         }
     }
 
+    @Override
+    public Point getCameraLocation() {
+        Point p = super.getCameraLocation();
+        p.y += getCameraYOffset();
+        return p;
+    }
+
     public void logic() {
         movement();
         chargeAbility();
-        if (PLAYER_ID == 1) {centerCamera();}
         healthLogic();
         statLogic();
         debug();
@@ -641,8 +645,12 @@ public class Player extends GameObject implements ObjectMethods {
             Camera.centerCameraOn(new Point( (int) get().getCenterX(), CAMERA_Y ));
         }
         else {
-            Camera.centerCameraOn(new Point( (int) get().getCenterX(), (int) get().getCenterY()));
+            Camera.centerCameraOn(new Point( (int) get().getCenterX(), (int) get().getCenterY() + getCameraYOffset()));
         }
+    }
+
+    public int getCameraYOffset() {
+        return -150;
     }
     
     public void animate() {

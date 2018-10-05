@@ -1,5 +1,6 @@
 package graphic;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 
@@ -9,6 +10,8 @@ public class Dialog extends Graphic {
 
     ResponsiveText rt;
     int textWidth = 200, yOffset = -75;
+
+    public Color BACKGROUND_COLOR = new Color(0.78f, 0.78f, 0.78f, 0.7f);
 
     public Dialog(GameObject object) {
         setObject(object);
@@ -22,13 +25,19 @@ public class Dialog extends Graphic {
     Point getDisplayLocation() {
         Point p = object.getDisplayCenter();
 
-        p.y -= (object.getHeight() / 2) + yOffset;
+        p.y -= ((object.getHeight()) + yOffset);
+
+        p.x -= (rt.getmaxWidth() * 1.5);
         
         return p;
     }
 
+    void drawBackground(Graphics2D g) {
+        drawRectangle(rt.getBounds(), BACKGROUND_COLOR);
+    }
+
     @Override
-    public void paint(Graphics2D g) {
+    public void paintComponent(Graphics2D g) {
         rt.setText(object.getText());
         rt.paint(g, getDisplayLocation());
     }

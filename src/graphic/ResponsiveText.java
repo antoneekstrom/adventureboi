@@ -7,14 +7,14 @@ import java.awt.Rectangle;
 
 public class ResponsiveText extends Graphic {
 
-    int width = 1;
-    String rawText = "";
-    String[] rows = {""};
-    Font font;
-    Point location;
+    private int preferredWidth = 1;
+    private String rawText = "";
+    private String[] rows = {""};
+    private Font font;
+    private Point location;
 
-    GraphicMetrics gm;
-    Paragraph par;
+    private GraphicMetrics gm;
+    private Paragraph par;
 
     public ResponsiveText() {
         gm = new GraphicMetrics();
@@ -42,7 +42,7 @@ public class ResponsiveText extends Graphic {
 
         int fullWidth = gm.stringWidth(rawText);
 
-        int rowCount = Math.round((float)fullWidth / (float)width);
+        int rowCount = Math.round((float)fullWidth / (float)preferredWidth);
         rowCount = zeroCheck(rowCount, 1);
 
         rows = splitText(rowCount);
@@ -67,7 +67,7 @@ public class ResponsiveText extends Graphic {
 
             int lastIndex = pointer + rowLength;
             
-            arr[i] = rawText.substring(pointer, pointer + ( (lastIndex > textLength) ? (rawText.length()-1) : (lastIndex) ) );
+            arr[i] = rawText.substring(pointer, ( (lastIndex > textLength) ? (rawText.length()-1) : (lastIndex) ) );
             pointer += rowLength;
         }
 
@@ -75,13 +75,35 @@ public class ResponsiveText extends Graphic {
     }
 
     public Rectangle getBounds() {
-        return null;
+        gm.updateGraphics();
+        gm.useFont(font);
+        
+        Rectangle r = new Rectangle(getmaxWidth(), getTotalHeight());
+        r.setLocation(getLocation());
+        return r;
     }
 
-    public void setWidth(int width) { this.width = width; }
+    public void setWidth(int width) { this.preferredWidth = width; }
     public void setFont(Font font) { this.font = font; }
     public void setLocation(Point location) { this.location = location; }
     public Point getLocation() { return location; }
+    public int getPreferredWidth() { return preferredWidth; }
+    public int getRowCount() { return rows.length; }
+
+    public int getmaxWidth() {
+        int i = 0;
+
+        for (String s : rows) {
+            int w = gm.stringWidth(s);
+            if (w > i) { i = w; }
+        }
+
+        return i;
+    }
+
+    public int getTotalHeight() {
+        return getRowCount() * gm.fontHeight();
+    }
 
     public void useFont(Graphics2D g) {
         if (font != null) {
@@ -95,14 +117,14 @@ public class ResponsiveText extends Graphic {
     }
 
     @Override
-    public void paint(Graphics2D g) {
+    public void paintComponent(Graphics2D g) {
         useFont(g);
         par.paint(getLocation(), g);
     }
 
     public void paint(Graphics2D g, Point location) {
         setLocation(location);
-        paint(g);
+        paintComponent(g);
 
     }
 
