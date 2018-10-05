@@ -268,6 +268,11 @@ public class ObjectStorage {
     }
 
     public static Player[] findPlayersWithinRange(int range, Point point) {
+        ArrayList<Player> list = listPlayersWithinRange(range, point);
+        return list.toArray(new Player[list.size()]);
+    }
+
+    public static ArrayList<Player> listPlayersWithinRange(int range, Point point) {
         ArrayList<Player> pList = new ArrayList<>();
 
         for (Player p : players) {
@@ -276,7 +281,7 @@ public class ObjectStorage {
             }
         }
 
-        return pList.toArray(new Player[pList.size()]);
+        return pList;
     }
 
     public static double distanceToNearestPlayer(Point p) {

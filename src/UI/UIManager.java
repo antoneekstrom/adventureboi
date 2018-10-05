@@ -216,6 +216,12 @@ public class UIManager {
         return inv;
     }
 
+    public static InventoryUI getInventory(String player) {
+        InventoryUI inv = (InventoryUI) getGUI("Inventory");
+        inv.playerName = ObjectStorage.getPlayer(player).getName();
+        return inv;
+    }
+
     public static HUD getHUD() {
         return (HUD) getGUI("HUD");
     }
