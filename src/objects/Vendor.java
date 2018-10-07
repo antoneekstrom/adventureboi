@@ -29,8 +29,8 @@ public abstract class Vendor extends Interactable {
 
     public String
         GREETING = "Greetings",
-        ON_PURCHASE = "haha nice get scammed bitch that was way too expensive",
-        ON_FAIL = "Woah you are to poor to purchase my wares, that is very unfortunate.";
+        ON_PURCHASE = "It is very epic of you to trade with me, I am incredibly grateful.",
+        ON_FAIL = "You are too poor to purchase my wares, that is very unfortunate.";
 
     public boolean purchase(Item item, Player player) {
         int price = (int) getPrice(item);

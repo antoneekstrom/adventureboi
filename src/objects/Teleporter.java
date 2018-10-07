@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 
+import data.ObjectData;
+import data.TeleporterData;
 import gamelogic.ObjectStorage;
 import graphic.Dialog;
 
@@ -35,6 +37,11 @@ public class Teleporter extends GameObject {
         if (player.get().getMaxY() < get().getMaxY()) {
             activate(player);
         }
+    }
+
+    @Override
+    public ObjectData extractData() {
+        return new TeleporterData(this);
     }
 
     @Override

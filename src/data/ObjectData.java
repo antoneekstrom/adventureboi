@@ -59,7 +59,7 @@ public class ObjectData implements Serializable, Recreatable {
 
         ArrayList<ObjectData> l = new ArrayList<ObjectData>();
 
-        for (GameObject o : objectl){
+        for (GameObject o : objectl) {
             l.add(o.extractData());
         }
 

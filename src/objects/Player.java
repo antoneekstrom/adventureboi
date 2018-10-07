@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import UI.InventoryUI;
 import UI.OptionsUI;
 import UI.UIManager;
 import adventuregame.GameEnvironment;
@@ -372,7 +373,8 @@ public class Player extends GameObject implements ObjectMethods {
     }
 
     public void refreshInventory() {
-        UIManager.getInventory(getName()).refreshInv();
+        InventoryUI inv = UIManager.getInventory(getName());
+        inv.refreshInv();
     }
 
     public ArrayList<Item> getInventory() {

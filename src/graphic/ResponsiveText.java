@@ -1,5 +1,6 @@
 package graphic;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -10,7 +11,6 @@ public class ResponsiveText extends Graphic {
     private int preferredWidth = 1;
     private String rawText = "";
     private String[] rows = {""};
-    private Font font;
     private Point location;
 
     private GraphicMetrics gm;
@@ -38,7 +38,7 @@ public class ResponsiveText extends Graphic {
 
     private void adjustRows() {
         gm.updateGraphics();
-        gm.useFont(font);
+        gm.useFont(getFont());
 
         int fullWidth = gm.stringWidth(rawText);
 
@@ -76,15 +76,18 @@ public class ResponsiveText extends Graphic {
 
     public Rectangle getBounds() {
         gm.updateGraphics();
-        gm.useFont(font);
-        
+        gm.useFont(getFont());
+
         Rectangle r = new Rectangle(getmaxWidth(), getTotalHeight());
         r.setLocation(getLocation());
+        r.y -= gm.fontHeight() * 0.7;
         return r;
     }
 
     public void setWidth(int width) { this.preferredWidth = width; }
-    public void setFont(Font font) { this.font = font; }
+    public void setFont(Font font) { par.setFont(font); }
+    public Font getFont() { return par.getFont(); }
+    public void setFontColor(Color fontColor) { par.setFontColor(fontColor); }
     public void setLocation(Point location) { this.location = location; }
     public Point getLocation() { return location; }
     public int getPreferredWidth() { return preferredWidth; }
@@ -106,6 +109,7 @@ public class ResponsiveText extends Graphic {
     }
 
     public void useFont(Graphics2D g) {
+        Font font = getFont();
         if (font != null) {
             g.setFont(font);
         }
