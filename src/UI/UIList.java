@@ -10,16 +10,16 @@ import gamelogic.MouseFunctions;
 
 public class UIList extends UIObject {
 
-    private UIObject handle;
-    private int handleHeight = 50;
-    private double listContentHeight = 0;
+    protected UIObject handle;
+    protected int handleHeight = 50;
+    protected double listContentHeight = 0;
     /** How many percent larger/smaller the content of the list is than the list. */
-    private double listContentPercent = 0;
+    protected double listContentPercent = 0;
 
-    private boolean pressed = false;
-    private int contentSpacing = 50;
+    protected boolean pressed = false;
+    protected int contentSpacing = 50;
 
-    private int contentScrollHeight = 0;
+    protected int contentScrollHeight = 0;
     protected int entryHeight = 50;
     protected int entryWidth = 100;
     protected boolean entryFullWidth = true;
@@ -27,11 +27,11 @@ public class UIList extends UIObject {
     public float scrollSpeedMultiplier = 20;
 
     /** The distance the handle is offset from the mouse when holding/pressing on scrollbar. */
-    private int handleHoldOffset = 0;
+    protected int handleHoldOffset = 0;
     protected int scrollbarWidth = 50;
-    private Rectangle scrollbar;
+    protected Rectangle scrollbar;
 
-    private UIObject entry;
+    protected UIObject entry;
     public UIObject entry() {return entry;}
     public void setEntry(UIObject o) {entry = o;}
 
@@ -45,7 +45,7 @@ public class UIList extends UIObject {
         setEntry();
     }
 
-    private void setEntry() {
+    protected void setEntry() {
         entry = new UIObject(getParentName());
     }
     
@@ -112,10 +112,10 @@ public class UIList extends UIObject {
         determineHandleHeight();
     }
 
-    private void calcEntryHeight() {
+    protected void calcEntryHeight() {
     }
 
-    private void determineEntryLocation() {
+    protected void determineEntryLocation() {
         for (int i = 0; i < list.size(); i++) {
             list.get(i).get().y = get().y + (contentSpacing * (i)) + (i * entryHeight) + entry().getBackgroundPadding() / 2 + contentScrollHeight;
             list.get(i).get().x = get().x;
@@ -152,10 +152,10 @@ public class UIList extends UIObject {
         handle.get().height = (int) h;
     }
 
-    private boolean isPressed() {return handle.checkMouse() && MouseFunctions.getClickListener().isLeftPressed();}
+    protected boolean isPressed() {return handle.checkMouse() && MouseFunctions.getClickListener().isLeftPressed();}
     
     /** Move handle with mouse. */
-    private void moveHandle() {
+    protected void moveHandle() {
         //first press
         if (!pressed && isPressed()) {
             handleHoldOffset = handle.get().y - GlobalData.getMouse().y;
@@ -177,14 +177,14 @@ public class UIList extends UIObject {
         }
     }
 
-    private void hideOverflow(UIObject o) {
+    protected void hideOverflow(UIObject o) {
         if (o.get().getMinY() < get().getMinY() || o.get().getMaxY() > get().getMaxY()) {
             o.setVisible(false);
         }
         else {o.setVisible(true);}
     }
 
-    private void calculateScrollLength() {
+    protected void calculateScrollLength() {
         int handleDistance = (int) (get().getMinY() - handle.get().getMinY());
         double scrollRatio = ( ((double) handleDistance ) / get().height) + 1;        
         int scrollDistance = (int) ( (listContentHeight * scrollRatio) - listContentHeight);
@@ -194,7 +194,7 @@ public class UIList extends UIObject {
     }
 
     /** Prevent handle from leaving scrollbar area. */
-    private void limitHandle() {
+    protected void limitHandle() {
         if (handle.get().getMaxY() > get().getMaxY()) {
             handle.get().y = (int) get().getMaxY() - handle.get().height;
         }
