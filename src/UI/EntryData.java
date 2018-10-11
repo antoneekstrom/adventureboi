@@ -9,6 +9,8 @@ public abstract class EntryData {
 
     UIObject entry;
 
+    int listIndex;
+
     public EntryData() {}
 
     public EntryData(String text) {
@@ -37,15 +39,19 @@ public abstract class EntryData {
             return entry;
     }
 
-    protected void initEntry(GUI gui) {
+    protected void initEntry(GUI gui, int index) {
         entry = createEntry();
         gui.addObject(entry);
     }
 
     public static void initEntries(Collection<EntryData> c, GUI gui) {
+        int i = 0;
         for (EntryData d : c) {
-            d.initEntry(gui);
+            d.initEntry(gui, i);
+            i++;
         }
     }
+
+    public int getIndex() { return listIndex; }
 
 }
