@@ -1,5 +1,6 @@
 package UI;
 
+import java.awt.Graphics;
 import java.awt.Point;
 import java.util.Collection;
 
@@ -9,12 +10,21 @@ public class List extends UIObject {
 
     Collection<EntryData> entries;
 
+    int yMargin = 50, ySpacing = 50;
+
     public List(String parentname) {
         super(parentname);
+        style();
     }
 
-    public void giveList(Collection<EntryData> entries) {
-        this.entries = entries;
+    void style() {
+        setBackgroundColor(getParent().getUIBackgroundColor());
+        get().setSize(500, 500);
+    }
+
+    @SuppressWarnings("unchecked")
+    public void giveList(Collection<? extends EntryData> entries) {
+        this.entries = (Collection<EntryData>) entries;
         EntryData.initEntries(this.entries, getParent());
     }
 
@@ -34,7 +44,12 @@ public class List extends UIObject {
      * @return location of the entry
      */
     public Point getRelativeEntryLocation(EntryData e) {
-        return new Point(0,0);
+        Point p = new Point(0,0);
+
+        p.y = yMargin + e.getIndex() * (e.getEntry().getFullHeight() + ySpacing);
+        p.x = (getFullWidth() / 2) - (e.getEntry().getFullWidth());
+
+        return p;
     }
 
     /**
@@ -68,6 +83,7 @@ public class List extends UIObject {
         for (EntryData e : entries) {
             e.getEntry().get().translate(0, amount);
         }
+        limitEntries();
     }
 
     /**
@@ -101,16 +117,42 @@ public class List extends UIObject {
     /** Perform all neccessary refreshing on entries. */
     public void refresh() {
         refreshEntryLocations();
-        limitEntries();
+        //limitEntries();
     }
 
     /**
      * Refresh list while also giving it a new collection of entries before refreshing.
      * @param entries said collection of entries to be refreshed with.
      */
-    public void refresh(Collection<EntryData> entries) {
+    public void refresh(Collection<? extends EntryData> entries) {
         giveList(entries);
         refresh();
+    }
+
+    @Override
+    public void leftMouseReleased() {
+        super.leftMouseReleased();
+        for (EntryData d : entries) {
+            if (d.getEntry().checkMouse()) {
+                d.getEntry().leftMouseReleased();
+            }
+        }
+    }
+
+    @Override
+    public void update() {
+        super.update();
+        for (EntryData d : entries) {
+            d.getEntry().update();
+        }
+    }
+
+    @Override
+    public void paint(Graphics g) {
+        super.paint(g);
+        for (EntryData d : entries) {
+            d.getEntry().paint(g);
+        }
     }
 
 }

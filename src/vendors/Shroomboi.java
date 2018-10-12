@@ -1,8 +1,12 @@
 package vendors;
 
+import java.util.HashMap;
+
 import adventuregame.Images;
 import gamelogic.Item;
 import items.DeceasedAngryShroom;
+import items.Donut;
+import items.abilities.FireballItem;
 import objects.Player;
 import objects.Vendor;
 
@@ -13,6 +17,14 @@ public class Shroomboi extends Vendor {
         setPlayerRange(450);
         setImage(Images.getImage("longvendor"));
         get().setSize(150, 300);
+
+        setInv();
+    }
+
+    void setInv() {
+        addToInv(new DeceasedAngryShroom(), 10);
+        addToInv(new Donut(), 10);
+        addToInv(new FireballItem(), 50);
     }
 
     @Override
@@ -22,7 +34,8 @@ public class Shroomboi extends Vendor {
 
     @Override
     public boolean interact(Player player) {
-        return purchase(new DeceasedAngryShroom(), player);
+        openInventory();
+        return true;
     }
 
     @Override

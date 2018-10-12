@@ -41,7 +41,8 @@ public abstract class EntryData {
 
     protected void initEntry(GUI gui, int index) {
         entry = createEntry();
-        gui.addObject(entry);
+        listIndex = index;
+        entry.setVisible(true);
     }
 
     public static void initEntries(Collection<EntryData> c, GUI gui) {

@@ -69,6 +69,7 @@ public class UIManager {
         interfaces.add(new ObjectColor());
         interfaces.add(new CreateSpawnerUI());
         interfaces.add(new RandomLevelUI());
+        interfaces.add(new VendorUI());
     }
 
     static class UIColor extends ColorPickerUI {

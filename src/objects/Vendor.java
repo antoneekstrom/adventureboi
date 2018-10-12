@@ -2,7 +2,13 @@ package objects;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 
+import UI.UIManager;
+import UI.VendorItem;
+import UI.VendorUI;
 import gamelogic.Item;
 import graphic.Dialog;
 
@@ -22,10 +28,46 @@ public abstract class Vendor extends Interactable {
         }
     }
 
-    public abstract double getPrice(Item i);
-    public abstract boolean hasItem(Item i);
+    public double getPrice(Item i) {
+        if (hasItem(i)) {
+            return getInv().get(i);
+        }
+        return 0;
+    }
+
+    public boolean hasItem(Item i) {
+        return getInv().keySet().contains(i);
+    }
 
     Dialog dialog;
+
+    private HashMap<Item, Double> inv = new HashMap<Item, Double>();
+    public HashMap<Item, Double> getInv() { return inv; }
+    public void setInv(HashMap<Item, Double> i) { inv = i; }
+
+    public void addToInv(Item i, double price) {
+        getInv().put((Item) i, price);
+    }
+
+    public Collection<VendorItem> getListEntries(String parentname) {
+        Collection<VendorItem> c = new ArrayList<VendorItem>();
+
+        for (Item i : getInv().keySet()) {
+            c.add(new VendorItem(parentname, i, this));
+        }
+        return c;
+    }
+
+    public void openInventory() {
+        VendorUI ui = (VendorUI) UIManager.getGUI("vendor");
+
+        if (!ui.isVisible()) {
+            ui.enable(this);
+        }
+        else {
+            UIManager.enableHUD(true);
+        }
+    }
 
     public String
         GREETING = "Greetings",
