@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.util.Collection;
 
+import adventuregame.Position;
 import gamelogic.Numbers;
 
 public class List extends UIObject {
@@ -11,6 +12,7 @@ public class List extends UIObject {
     Collection<EntryData> entries;
 
     int yMargin = 50, ySpacing = 50;
+    int NAME_OFFSET = -50;
 
     public List(String parentname) {
         super(parentname);
@@ -18,7 +20,8 @@ public class List extends UIObject {
     }
 
     void style() {
-        setBackgroundColor(getParent().getUIBackgroundColor());
+        setBackgroundColor(getParent().getUITextColor());
+        setBorder(getParent().getUIBackgroundColor(), 15);
         get().setSize(500, 500);
     }
 
@@ -47,7 +50,9 @@ public class List extends UIObject {
         Point p = new Point(0,0);
 
         p.y = yMargin + e.getIndex() * (e.getEntry().getFullHeight() + ySpacing);
-        p.x = (getFullWidth() / 2) - (e.getEntry().getFullWidth());
+        
+        e.getEntry().setParentRectangle(this.get());
+        e.getEntry().centerInParentX(true);
 
         return p;
     }
@@ -147,8 +152,21 @@ public class List extends UIObject {
         }
     }
 
+    /**
+     * Display the name of this list above it using {@code getText()}.
+     * @param g graphics.
+     */
+    private void listNamePlacement(Graphics g) {
+        String text = getText();
+        int width = g.getFontMetrics().stringWidth(text), height = g.getFontMetrics().getHeight();
+
+        textCenterHeight = NAME_OFFSET - height;
+        textCenterWidth = (getFullWidth() / 2) - (width / 2);
+    }
+
     @Override
     public void paint(Graphics g) {
+        listNamePlacement(g);
         super.paint(g);
         for (EntryData d : entries) {
             d.getEntry().paint(g);

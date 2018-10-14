@@ -1,7 +1,5 @@
 package vendors;
 
-import java.util.HashMap;
-
 import adventuregame.Images;
 import gamelogic.Item;
 import items.DeceasedAngryShroom;
@@ -17,6 +15,7 @@ public class Shroomboi extends Vendor {
         setPlayerRange(450);
         setImage(Images.getImage("longvendor"));
         get().setSize(150, 300);
+        setName("shroomboi");
 
         setInv();
     }

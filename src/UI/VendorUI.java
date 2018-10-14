@@ -15,6 +15,7 @@ public class VendorUI extends GUI {
         super.start();
 
         list = new List(getName());
+        list.setText("nice");
         list.get().translate(0, 300);
         list.setBackgroundColor(getUITextColor());
         list.centerInParentX(true);
@@ -23,6 +24,7 @@ public class VendorUI extends GUI {
 
     public void enable(Vendor v) {
         list.refresh( v.getListEntries(getName()) );
+        list.setText("trade with " + v.getName());
         enable(false);
     }
 

@@ -59,7 +59,7 @@ public class UIObject {
     private int textHeight = 0;
     private boolean centerTextX = false;
     private boolean centerTextY = false;
-    private int textCenterWidth = 0;
+    protected int textCenterWidth = 0;
     protected int textCenterHeight = 0;
 
     private NavTask task;
@@ -214,6 +214,11 @@ public class UIObject {
 
     public void setBorderThickness(int i) {
         BORDER_THICKNESS = i;
+    }
+
+    public void setBorder(Color color, int thickness) {
+        setBorderThickness(thickness);
+        setBorderColor(color);
     }
 
     public void hoverColorChange(Color secondarycolor) {
