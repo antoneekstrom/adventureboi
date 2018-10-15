@@ -8,6 +8,7 @@ public class Coin extends Item implements Currency {
 
 	private static final long serialVersionUID = 1L;
     public static final String COPPER = "boin_copper", SILVER = "boin_silver", GOLD = "boin_gold2";
+    public static final String BOIN = "boin";
 
     double VALUE;
 
@@ -28,6 +29,7 @@ public class Coin extends Item implements Currency {
         effect = effect();
         addTag(Item.CURRENCY);
         addTag(Item.MISC);
+        addTag(BOIN);
         imageName(COPPER);
     }
 

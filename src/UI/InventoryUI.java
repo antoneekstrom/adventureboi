@@ -20,10 +20,6 @@ public class InventoryUI extends GUI {
     int buttonwidth = 175;
     int indentation = 100;
 
-    int boinCounterLength = 6;
-
-    static final String BOIN_COUNTER = "BoinCounter";
-
     public InventoryUI() {
         super("Inventory");
     }
@@ -37,20 +33,9 @@ public class InventoryUI extends GUI {
     }
 
     void updateBoinCounter() {
-        UIObject[] arr = getObjectsByTag(BOIN_COUNTER);
-        if (arr.length > 0) {
-            UIObject object = arr[0];
-            int b = ObjectStorage.getPlayer(playerName).boinCount();
-            int k = (int) Math.log10(b);
-            if (k < 0) {
-                k = 0;
-            }
-            String d = "";
-            for (int i  = 0; i < boinCounterLength - (k + 1); i++) {
-                d += "0";
-            }
-            d += b;
-            object.setText(d);
+        for (UIObject o : getObjectsByTag(BoinCounter.BOIN_COUNTER)) {
+            BoinCounter c = (BoinCounter) o;
+            c.updateValue();
         }
     }
 
@@ -141,6 +126,9 @@ public class InventoryUI extends GUI {
         //misc
         filterButton("Misc", "misc");
 
+        //boins
+        filterButton("Currency", Item.CURRENCY);
+
         //equipped
         filterButton("Equipped", "equipped");
 
@@ -165,14 +153,9 @@ public class InventoryUI extends GUI {
 
         
         //boincounter
-        addObject(new UIText(getName(), "7", false) {
+        addObject(new BoinCounter(playerName, getName()) {
             {
-                applyGeneralStyle(this);
                 get().setLocation(iplayer.get().x - getFullWidth() - 75, 100);
-                setTag(BOIN_COUNTER);
-                setBackgroundColor(getUIBackgroundColor());
-                textColor(Color.yellow);
-                setBorderColor(Color.yellow);
             }
         });
 

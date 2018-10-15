@@ -125,6 +125,13 @@ public class Item implements Serializable {
         return i;
     }
 
+    public Item duplicate(int level) {
+        Item i = this.duplicate();
+        i.level(level);
+
+        return i;
+    }
+
     /** Get a title to display in ex. a tooltip. */
     public String getTitle() {
         return "level " + level() + " " + name();

@@ -348,8 +348,9 @@ public class Player extends GameObject implements ObjectMethods {
                 }
                 else {
                     getInventory().remove((Item) c);
-                    val -= amount;
-                    addCurrencyAmount(val);
+                    int change = val -= amount;
+                    amount = 0;
+                    addCurrencyAmount(change);
                 }
             }
         }

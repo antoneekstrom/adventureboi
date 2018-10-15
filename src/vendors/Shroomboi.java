@@ -7,6 +7,7 @@ import items.Donut;
 import items.abilities.FireballItem;
 import objects.Player;
 import objects.Vendor;
+import objects.VendorItem;
 
 public class Shroomboi extends Vendor {
 
@@ -21,15 +22,11 @@ public class Shroomboi extends Vendor {
     }
 
     void setInv() {
-        addToInv(new DeceasedAngryShroom(), 10);
-        addToInv(new Donut(), 10);
-        addToInv(new FireballItem(), 50);
+        addToInv(new VendorItem(new DeceasedAngryShroom(), 10, 0));
+        addToInv(new VendorItem(new Donut(), 10, 0));
+        addToInv(new VendorItem(new Donut(), 99, 1000));
+        addToInv(new VendorItem(new FireballItem(), 50, 0));
     }
-
-    @Override
-    public double getPrice(Item i) {
-        return 23;
-	}
 
     @Override
     public boolean interact(Player player) {

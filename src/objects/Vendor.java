@@ -4,7 +4,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 
 import UI.UIManager;
 import UI.VendorItem;
@@ -30,29 +29,41 @@ public abstract class Vendor extends Interactable {
 
     public double getPrice(Item i) {
         if (hasItem(i)) {
-            return getInv().get(i);
+            for (objects.VendorItem vi : getInv()) {
+                if (vi.item.equals(i)) {
+                    return vi.price;
+                }
+            }
         }
         return 0;
     }
 
-    public boolean hasItem(Item i) {
-        return getInv().keySet().contains(i);
+    public boolean hasItem(Item specimen) {
+        boolean b = false;
+
+        for (objects.VendorItem i : getInv()) {
+            if (i.item.equals(specimen)) {
+                b = true;
+            }
+        }
+
+        return b;
     }
 
     Dialog dialog;
 
-    private HashMap<Item, Double> inv = new HashMap<Item, Double>();
-    public HashMap<Item, Double> getInv() { return inv; }
-    public void setInv(HashMap<Item, Double> i) { inv = i; }
+    private ArrayList<objects.VendorItem> inv = new ArrayList<>();
+    public ArrayList<objects.VendorItem> getInv() { return inv; }
+    public void setInv(ArrayList<objects.VendorItem> i) { inv = i; }
 
-    public void addToInv(Item i, double price) {
-        getInv().put((Item) i, price);
+    public void addToInv(objects.VendorItem item) {
+        getInv().add(item);
     }
 
     public Collection<VendorItem> getListEntries(String parentname) {
         Collection<VendorItem> c = new ArrayList<VendorItem>();
 
-        for (Item i : getInv().keySet()) {
+        for (objects.VendorItem i : getInv()) {
             c.add(new VendorItem(parentname, i, this));
         }
         return c;
@@ -69,6 +80,17 @@ public abstract class Vendor extends Interactable {
         }
     }
 
+    public objects.VendorItem getVendorItem(Item item) {
+
+        for (objects.VendorItem vi : getInv()) {
+
+            if (vi.item.equals(item)) {
+                return vi;
+            }
+        }
+        return null;
+    }
+
     public String
         GREETING = "Greetings",
         ON_PURCHASE = "It is very epic of you to trade with me, I am incredibly grateful.",
@@ -83,8 +105,9 @@ public abstract class Vendor extends Interactable {
 
         if (successful) {
             givePrompt(ON_PURCHASE);
-            player.addItem(item.duplicate());
+            player.addItem(item.duplicate(getVendorItem(item).level));
             player.refreshInventory();
+            VendorUI.updateValues();
         }
         else {
             givePrompt(ON_FAIL);
@@ -102,6 +125,13 @@ public abstract class Vendor extends Interactable {
     public void playerEntersRange(Player p) {
         super.playerEntersRange(p);
         givePrompt(addressNearbyPlayers());
+    }
+    
+    @Override
+    public void playerLeavesRange(Player p) {
+        super.playerLeavesRange(p);
+
+        UIManager.getGUI("vendor").setVisible(false);
     }
 
     @Override

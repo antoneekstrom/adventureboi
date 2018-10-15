@@ -6,17 +6,18 @@ import objects.Vendor;
 public class VendorItem extends EntryData {
 
     String parentname;
-    Item item;
+    objects.VendorItem vendorItem;
     Vendor vendor;
 
-    public VendorItem(String parentname, Item item, Vendor vendor) {
+    public VendorItem(String parentname, objects.VendorItem item, Vendor vendor) {
         this.parentname = parentname;
-        this.item = item;
+        this.vendorItem = item;
         this.vendor = vendor;
     }
 
     @Override
     public UIObject createEntry() {
+        Item item = vendorItem.item;
         UIText t = new UIText(parentname, item.displayName() + " [" + vendor.getPrice(item) + "]", false) {
             @Override
             public void leftMouseReleased() {
@@ -32,7 +33,7 @@ public class VendorItem extends EntryData {
         t.textColor(t.getParent().getUITextColor());
         t.setHoverTextColor(t.getParent().getUIBackgroundColor());
         t.hoverColorChange(t.getParent().getUITextColor());
-        t.enableTooltip(new UITooltip(t, item));
+        t.enableTooltip(new UITooltip(t, vendorItem.getCopy()));
 
         return t;
     }
