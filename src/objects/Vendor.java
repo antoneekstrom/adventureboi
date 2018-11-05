@@ -2,6 +2,7 @@ package objects;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -24,6 +25,12 @@ public abstract class Vendor extends Interactable {
 
         if (dialog == null) {
             dialog = new Dialog(this);
+        }
+    }
+
+    public void showPrompt(boolean visible) {
+        if (dialog != null) {
+            dialog.setVisible(visible);
         }
     }
 
@@ -51,6 +58,7 @@ public abstract class Vendor extends Interactable {
     }
 
     Dialog dialog;
+    public Dialog getDialog() { return dialog; }
 
     private ArrayList<objects.VendorItem> inv = new ArrayList<>();
     public ArrayList<objects.VendorItem> getInv() { return inv; }
@@ -71,12 +79,18 @@ public abstract class Vendor extends Interactable {
 
     public void openInventory() {
         VendorUI ui = (VendorUI) UIManager.getGUI("vendor");
+        String current = UIManager.getCurrentGUI().getName();
 
-        if (!ui.isVisible()) {
-            ui.enable(this);
-        }
-        else {
-            UIManager.enableHUD(true);
+        if (current.equals("HUD") || current.equals("vendor")) {
+            if (!ui.isVisible()) {
+                ui.enable(this);
+                showPrompt(false);
+            }
+            else {
+                UIManager.enableHUD(true);
+                showPrompt(true);
+                getDialog().setTextWidth(Dialog.DEFAULT_TEXT_WIDTH);
+            }
         }
     }
 
@@ -122,9 +136,18 @@ public abstract class Vendor extends Interactable {
     }
 
     @Override
+    public Point getCameraLocation() {
+        Point p = super.getCameraLocation();
+        p.y -= 200;
+        return p;
+    }
+
+    @Override
     public void playerEntersRange(Player p) {
         super.playerEntersRange(p);
+
         givePrompt(addressNearbyPlayers());
+        cameraFocus(true);
     }
     
     @Override
@@ -132,6 +155,7 @@ public abstract class Vendor extends Interactable {
         super.playerLeavesRange(p);
 
         UIManager.getGUI("vendor").setVisible(false);
+        p.cameraFocus(true);
     }
 
     @Override

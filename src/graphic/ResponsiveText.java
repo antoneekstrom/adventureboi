@@ -6,7 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 
-public class ResponsiveText extends Graphic {
+public class ResponsiveText extends Graphic implements TextGraphic {
 
     private int preferredWidth = 1;
     private String rawText = "";
@@ -47,6 +47,10 @@ public class ResponsiveText extends Graphic {
 
         rows = splitText(rowCount);
         par.setText(rows);
+    }
+
+    public void update() {
+        adjustRows();
     }
 
     public int zeroCheck(int i, int replacement) {
@@ -131,5 +135,4 @@ public class ResponsiveText extends Graphic {
         paintComponent(g);
 
     }
-
 }

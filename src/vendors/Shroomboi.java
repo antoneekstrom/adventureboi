@@ -1,5 +1,7 @@
 package vendors;
 
+import UI.HUD;
+import UI.UIManager;
 import adventuregame.Images;
 import gamelogic.Item;
 import items.DeceasedAngryShroom;

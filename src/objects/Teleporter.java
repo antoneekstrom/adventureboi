@@ -33,10 +33,6 @@ public class Teleporter extends GameObject {
     @Override
     public void playerContact(Player player) {
         super.playerContact(player);
-
-        if (player.get().getMaxY() < get().getMaxY()) {
-            activate(player);
-        }
     }
 
     @Override
@@ -47,6 +43,7 @@ public class Teleporter extends GameObject {
     @Override
     public void collide(GameObject collision) {
         super.collide(collision);
+        teleport(collision);
     }
 
     void activate(Player player) {
@@ -54,7 +51,10 @@ public class Teleporter extends GameObject {
     }
 
     void teleport(GameObject object) {
-        object.setLocation(getDestination());
+        if (object.get().getMaxY() < get().getMaxY()) {
+
+            object.setLocation(getDestination());
+        }
     }
 
     //info on proximity

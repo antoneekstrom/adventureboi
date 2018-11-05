@@ -1,6 +1,9 @@
 package UI;
 
+import java.awt.Graphics;
+
 import gamelogic.ObjectStorage;
+import graphic.Dialog;
 import objects.Vendor;
 
 public class VendorUI extends GUI {
@@ -11,6 +14,7 @@ public class VendorUI extends GUI {
 
     List list;
     BoinCounter boinCounter;
+    GraphicContainerUI text;
 
     @Override
     public void start() {
@@ -23,6 +27,11 @@ public class VendorUI extends GUI {
         list.setBackgroundColor(getUITextColor());
         list.centerInParentX(true);
         addObject(list);
+
+        //text
+        text = new GraphicContainerUI(getName());
+        text.get().setLocation(100, 100);
+        addObject(text);
 
         //boins
         boinCounter = new BoinCounter(ObjectStorage.getPlayer(1).getName(), getName());
@@ -48,12 +57,22 @@ public class VendorUI extends GUI {
         list.refresh( v.getListEntries(getName()) );
         list.setText("trade with " + v.getName());
 
+        //text
+        Dialog d = v.getDialog();
+        d.setVisible(true);
+        text.setGraphic(d);
+
         //counter
         boinCounter.setPlayerToClosest(v.getCenter());
         boinCounter.updateValue();
         setBoinCounterPosition();
 
         enable(false);
+    }
+
+    @Override
+    public void paint(Graphics g) {
+        super.paint(g);
     }
 
 }

@@ -2,7 +2,10 @@ package UI;
 
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.event.MouseWheelEvent;
 import java.util.Collection;
+
+import javax.swing.JOptionPane;
 
 import adventuregame.Position;
 import gamelogic.Numbers;
@@ -13,6 +16,7 @@ public class List extends UIObject {
 
     int yMargin = 50, ySpacing = 50;
     int NAME_OFFSET = -50;
+    public float SCROLL_MODIFIER = 10;
 
     public List(String parentname) {
         super(parentname);
@@ -75,9 +79,27 @@ public class List extends UIObject {
         }
     }
 
+    /**
+     * Translate an entry.
+     * @param d Entry to translate
+     * @param x Translation in x
+     * @param y Translation in y
+     */
     void moveEntry(EntryData d, int x, int y) {
         UIObject e = d.getEntry();
         e.get().translate(x, y);
+    }
+
+    EntryData[] entryListAsArray() {
+        return entries.toArray(new EntryData[entries.size()-1]);
+    }
+
+    /**
+     * Total height of all list entries. Could also be defined as the length between the first entry and the last one.
+     */
+    int totalListHeight() {
+        EntryData[] arr = entryListAsArray();
+        return (int) (arr[arr.length-1].getEntry().get().getMaxY() - arr[0].getEntry().get().y);
     }
 
     /**
@@ -86,9 +108,39 @@ public class List extends UIObject {
      */
     protected void scroll(int amount) {
         for (EntryData e : entries) {
-            e.getEntry().get().translate(0, amount);
+            
+            if (limitScroll(amount)) {
+
+                e.getEntry().get().translate(0, amount);
+                limitEntry(e);
+            }
         }
-        limitEntries();
+    }
+
+    /**
+     * Check an amount of scrolling to see if it is allowed. A scroll is allowed if the first element in
+     * the {@code List} does not go further than the bounds of the {@code List} box + the length of the list - height of the {@code List} box.
+     * @param scrollAmount amount of scrolling to be checked if it is allowed
+     */
+    private boolean limitScroll(int scrollAmount) {
+        EntryData first = (EntryData) entries.toArray()[0];
+
+        int ey = first.getEntry().get().y;
+        int listHeight = getFullHeight(), entryHeight = totalListHeight();
+        int minLim = first.getEntry().get().y + (entryHeight - listHeight);
+
+        return true;
+    }
+
+    @Override
+    public void scroll(MouseWheelEvent e) {
+        super.scroll(e);
+
+        int amount = (int) (e.getWheelRotation() * SCROLL_MODIFIER);
+
+        if (amount > 0) {
+            scroll(amount);
+        }
     }
 
     /**
@@ -99,10 +151,10 @@ public class List extends UIObject {
         UIObject e = d.getEntry();
         boolean visible = true;
 
-        if (Numbers.checkMaxLimit(e.get().getMaxY(), get().getMaxY())) {
+        if (!Numbers.checkMaxLimit(e.get().getMaxY(), get().getMaxY())) {
             visible = false;
         }
-        else if (Numbers.checkMinLimit(e.get().getMinY(), get().getMinY())) {
+        else if (!Numbers.checkMinLimit(e.get().getMinY(), get().getMinY())) {
             visible = false;
         }
 
@@ -122,7 +174,7 @@ public class List extends UIObject {
     /** Perform all neccessary refreshing on entries. */
     public void refresh() {
         refreshEntryLocations();
-        //limitEntries();
+        limitEntries();
     }
 
     /**

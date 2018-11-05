@@ -7,10 +7,11 @@ import java.awt.Point;
 
 import objects.GameObject;
 
-public class Dialog extends Graphic {
+public class Dialog extends Graphic implements TextGraphic {
 
     ResponsiveText rt;
-    int maxTextWidth = 500, yOffset = -10;
+    static public int DEFAULT_TEXT_WIDTH = 500;
+    int yOffset = -10, textWidth = DEFAULT_TEXT_WIDTH;
 
     public static final Color BACKGROUND_COLOR = new Color(0.38f, 0.38f, 0.38f, 0.6f), FONT_COLOR = Color.white;
     public static final Font DIALOG_FONT = new Font("Comic Sans MS", Font.PLAIN, 40);
@@ -18,13 +19,13 @@ public class Dialog extends Graphic {
     public Dialog(GameObject object) {
         setObject(object);
 
-        rt = new ResponsiveText("", maxTextWidth);
+        rt = new ResponsiveText("", DEFAULT_TEXT_WIDTH);
         rt.setFont(DIALOG_FONT);
         rt.setFontColor(FONT_COLOR);
     }
 
     public void setyOffset(int yOffset) { this.yOffset = yOffset; }
-    public void setTextWidth(int textWidth) { this.maxTextWidth = textWidth; }
+    public void setTextWidth(int textWidth) { textWidth = DEFAULT_TEXT_WIDTH; }
 
     Point getDisplayLocation() {
         Point p = object.getDisplayCenter();
@@ -48,5 +49,20 @@ public class Dialog extends Graphic {
         rt.setText(object.getText());
         drawBackground(g);
         rt.paint(g, getDisplayLocation());
+    }
+
+    @Override
+    public void update() {
+        rt.update();
+    }
+
+    @Override
+    public void setWidth(int i) {
+        rt.setWidth(i);
+    }
+
+    @Override
+    public int getTotalHeight() {
+        return rt.getTotalHeight();
     }
 }

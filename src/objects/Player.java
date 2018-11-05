@@ -415,6 +415,9 @@ public class Player extends GameObject implements ObjectMethods {
     }
 
     void dieTemporarily() {
+        this.cameraFocus(false);
+        Camera.centerCameraOn(get().getLocation());
+
         setVisibility(false);
         physics().setGravity(false);
         setCollision(false);
@@ -423,6 +426,8 @@ public class Player extends GameObject implements ObjectMethods {
     }
 
     void stopDyingTemporarily() {
+
+        this.cameraFocus(true);
         setVisibility(true);
         physics().setGravity(true);
         setCollision(true);
@@ -724,10 +729,12 @@ public class Player extends GameObject implements ObjectMethods {
 
     public void paint(Graphics g) {
         super.paint(g);
-        g.drawImage(statusImage, getDisplayCoordinate().x, getDisplayCoordinate().y + fallOffset, getWidth(), getHeight(), null);
-        if (showName) {
-            setColor(nameColor);
-            g.drawString(getName(), getDisplayCoordinate().x, getDisplayCoordinate().y - 50);
+        if (isVisible()) {
+            g.drawImage(statusImage, getDisplayCoordinate().x, getDisplayCoordinate().y + fallOffset, getWidth(), getHeight(), null);
+            if (showName) {
+                setColor(nameColor);
+                g.drawString(getName(), getDisplayCoordinate().x, getDisplayCoordinate().y - 50);
+            }
         }
     }
 

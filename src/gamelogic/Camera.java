@@ -20,7 +20,7 @@ public class Camera {
     /** Position camera wants to be at, used for slow/smooth camera. */
     private static Point cameraDestination = new Point(0,0);
     private static boolean smoothCamera = true;
-    private static GameObject focusedObject;
+    private static Point focusedPoint;
 
     /** Run the camera, position display coordinates
      *  relative to camera position for all objects */
@@ -40,15 +40,22 @@ public class Camera {
 
     private static void setFocusObject() {
         for (GameObject object : ObjectStorage.getObjectList()) {
-            if (object.cameraFocus()) {focusedObject = object;}
+            if (object.cameraFocus()) {focusedPoint = object.getCameraLocation();}
         }
+    }
+
+    public static void focusOn(Point p) {
+        for (GameObject o : ObjectStorage.getObjectList()) {
+            o.cameraFocus(false);
+        }
+        focusedPoint = p;
     }
 
     /** Set camera destination to object. */
     private static void followObject() {
         setFocusObject();
-        if (focusedObject != null) {
-            centerCameraOn( focusedObject.getCameraLocation() );
+        if (focusedPoint != null) {
+            centerCameraOn( focusedPoint );
         }
     }
 
@@ -67,7 +74,7 @@ public class Camera {
     public static void shake(int duration, int strength, int frequency) { new Screenshaker(duration, strength, frequency).run(); }
 
     /** Advance camera position towards destination. */
-    public static void moveCameraTo(Point p) {
+    private static void moveCameraTo(Point p) {
         //for x-axis
         int x = p.x - cameraPosition.x;
         cameraPosition.x += x / 10;

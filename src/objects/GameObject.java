@@ -57,6 +57,7 @@ public class GameObject {
     private boolean onGround = false;
 
     public void setVisibility(boolean b) {visible = b;}
+    public boolean isVisible() { return visible; }
 
     protected CollisionFilter colFilter = (GameObject col) -> (true);
 

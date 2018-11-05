@@ -12,6 +12,10 @@ public abstract class Graphic {
     GameObject object;
     private Graphics2D graphics;
 
+    boolean visible = true;
+    public void setVisible(boolean visible) { this.visible = visible; }
+    public boolean isVisible() { return visible; }
+
     public Graphic(GameObject object) {
         this.object = object;
     }
@@ -25,14 +29,16 @@ public abstract class Graphic {
     public Graphics2D getGraphics() { return graphics; }
 
     /**
-     * Where the actual painting is being done. This one should never be called directly.
+     * Where the actual painting is being done. This one should never be called explicitly.
      * @param g {@code Graphics2D} object that is used for painting.
      */
     public abstract void paintComponent(Graphics2D g);
 
     private void paint(Graphics2D g) {
         setGraphics(g);
-        paintComponent(g);
+        if (isVisible()) {
+            paintComponent(g);
+        }
     }
 
     public void paint(Graphics g) {
