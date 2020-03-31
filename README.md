@@ -1,7 +1,7 @@
 # adventureboi
 Adventure with the most epic boi of them all, adventureboi.
 
-### [Download Latest Version](https://github.com/zimbosaurus/adventureboi/releases/latest "Latest Version")
+### [Download Latest Version](https://github.com/zimbosaurus/adventureboi/releases "Latest Version")
 
 ## Features
 - epic boi
